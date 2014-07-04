@@ -24,8 +24,7 @@ from openerp.osv import fields, osv
 AVAILABLE_STATES = [
     ('draft', 'Draft'),
     ('confirm', 'Confirm'),
-    ('done', 'Done')
-]
+    ('done', 'Done')]
 
 class report_hotel_reservation_status(osv.Model):
     _name = "report.hotel.reservation.status"
@@ -50,6 +49,5 @@ class report_hotel_reservation_status(osv.Model):
                 group by c.state,c.reservation_no
             )""")
 
-report_hotel_reservation_status()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
