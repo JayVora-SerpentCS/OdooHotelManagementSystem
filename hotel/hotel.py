@@ -35,8 +35,6 @@ class hotel_floor(osv.Model):
         'sequence': fields.integer('Sequence', size=64),
     }
 
-hotel_floor()
-
 
 class product_category(osv.Model):
     _inherit = "product.category"
@@ -45,8 +43,6 @@ class product_category(osv.Model):
         'isamenitype':fields.boolean('Is amenities Type'),
         'isservicetype':fields.boolean('Is Service Type'),
     }
-
-product_category()
 
 
 class hotel_room_type(osv.Model):
@@ -60,8 +56,6 @@ class hotel_room_type(osv.Model):
         'isroomtype': 1,
     }
 
-hotel_room_type()
-
 
 class product_product(osv.Model):
     _inherit = "product.product"
@@ -70,8 +64,6 @@ class product_product(osv.Model):
         'iscategid':fields.boolean('Is categ id'),
         'isservice':fields.boolean('Is Service id'),
     }
-
-product_product()
 
 class hotel_room_amenities_type(osv.Model):
     _name = 'hotel.room.amenities.type'
@@ -83,8 +75,6 @@ class hotel_room_amenities_type(osv.Model):
     _defaults = {
         'isamenitype': 1,
     }
-
-hotel_room_amenities_type()
 
 class hotel_room_amenities(osv.Model):
     _name = 'hotel.room.amenities'
@@ -99,15 +89,11 @@ class hotel_room_amenities(osv.Model):
         'iscategid': 1,
     }
 
-hotel_room_amenities()
-
 
 class hotel_room(osv.Model):
     _name = 'hotel.room'
     _inherits = {'product.product': 'product_id'}
     _description = 'Hotel Room'
-
-
     
     _columns = {
         'product_id': fields.many2one('product.product', 'Product_id', required=True, ondelete='cascade'),
@@ -119,6 +105,7 @@ class hotel_room(osv.Model):
 
         'room_rent_ids':fields.one2many('room.rent', 'rent_id', 'Room Rent'),
     }
+    
     _defaults = {
         'isroom': 1,
         'rental': 1,
@@ -131,9 +118,6 @@ class hotel_room(osv.Model):
 
     def set_room_status_available(self, cr, uid, ids, context=None):
         return self.write(cr, uid, ids, {'status': 'available'}, context=context)
-
-
-hotel_room()
 
 
 class room_rent(osv.Model):
@@ -150,12 +134,7 @@ class room_rent(osv.Model):
         'sun': fields.boolean('Sunday'),
     }
 
-room_rent()
-
-
 class hotel_folio(osv.Model):
-
-
 
     def copy(self, cr, uid, id, default=None, context=None):
         return self.pool.get('sale.order').copy(cr, uid, id, default=None, context=None)
@@ -165,7 +144,6 @@ class hotel_folio(osv.Model):
 
     def _invoiced_search(self, cursor, user, obj, name, args):
         return self.pool.get('sale.order')._invoiced_search(cursor, user, obj, name, args)
-
 
 
     _name = 'hotel.folio'
@@ -256,16 +234,16 @@ class hotel_folio(osv.Model):
 
     def onchange_partner_id(self, cr, uid, ids, part, context=None):
         
-        partner_rec = self.pool.get('res.partner').browse(cr,uid,part,context=context)
+        partner_rec = self.pool.get('res.partner').browse(cr, uid, part, context=context)
         order_ids = [folio.order_id.id for folio in self.browse(cr, uid, ids, context=context)]
-        res={}
+        res = {}
         if not order_ids:
             res['value'] = {'partner_invoice_id': partner_rec.id}
             res['warning'] = {'title': _('Warning'), 'message': _('Not Any Order For  %s ' % (partner_rec.name))}
             
             return res
         else:
-            res['value'] = {'partner_invoice_id': partner_rec.id,'pricelist_id':partner_rec.property_product_pricelist.id}
+            res['value'] = {'partner_invoice_id': partner_rec.id, 'pricelist_id':partner_rec.property_product_pricelist.id}
             return res
 #            return self.pool.get('sale.order').onchange_partner_id(cr, uid, order_ids, part, context=None)
         
@@ -479,8 +457,6 @@ class hotel_service_line(osv.Model):
         line_id = self.browse(cr, uid, id).service_line_id.id
         return self.pool.get('sale.order.line').copy(cr, uid, line_id, default=None, context=context)
 
-
-
     def _amount_line(self, cr, uid, ids, field_name, arg, context):
         line_ids = [folio.service_line_id.id for folio in self.browse(cr, uid, ids)]
         return  self.pool.get('sale.order.line')._amount_line(cr, uid, line_ids, field_name, arg, context)
@@ -488,8 +464,6 @@ class hotel_service_line(osv.Model):
     def _number_packages(self, cr, uid, ids, field_name, arg, context):
         line_ids = [folio.service_line_id.id for folio in self.browse(cr, uid, ids)]
         return self.pool.get('sale.order.line')._number_packages(cr, uid, line_ids, field_name, arg, context)
-
-
 
     _name = 'hotel.service.line'
     _description = 'hotel Service line'
@@ -556,8 +530,6 @@ class hotel_service_line(osv.Model):
         line_id = self.browse(cr, uid, id).service_line_id.id
         return self.pool.get('sale.order.line').copy_data(cr, uid, line_id, default=default, context=context)
 
-hotel_service_line()
-
 
 class hotel_service_type(osv.Model):
     _name = "hotel.service.type"
@@ -569,8 +541,6 @@ class hotel_service_type(osv.Model):
     _defaults = {
         'isservicetype': 1,
     }
-
-hotel_service_type()
 
 
 class hotel_services(osv.Model):
@@ -584,15 +554,11 @@ class hotel_services(osv.Model):
         'isservice': 1,
     }
 
-hotel_services()
-
 
 class res_company(osv.Model):
     _inherit = 'res.company'
     _columns = {
         'additional_hours': fields.integer('Additional Hours', help="Provide the min hours value for check in, checkout days, whatever the hours will be provided here based on that extra days will be calculated."),
     }
-
-res_company()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
