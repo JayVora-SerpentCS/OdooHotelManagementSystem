@@ -65,18 +65,18 @@
                   parent="hotel_configuration_menu"/>
     
     <!--==================================================================== 
-                                amenities Type
+                                Amenities Type
         ====================================================================-->
 
         <record model="ir.ui.view" id="view_hotel_room_amenities_type_form">
             <field name="name">hotel.room_amenities_type_form</field>
             <field name="model">hotel.room.amenities.type</field>
             <field name="arch" type="xml">
-                <form string="Hotel Room amenities Type" version="7.0">
+                <form string="Hotel Room Amenities Type" version="7.0">
                   <sheet>
                    <group>
                     <field name="name"/>
-                    <field name="parent_id" domain="[('istype','=',True)]"/>
+                    <field name="parent_id" domain="[('isamenitytype','=',True)]"/>
                    </group>
                   </sheet>
                 </form>
@@ -86,37 +86,37 @@
             <field name="name">hotel.room_amenities_type_list</field>
             <field name="model">hotel.room.amenities.type</field>
             <field name="arch" type="xml">
-                <tree string="Hotel Room amenities Type">
+                <tree string="Hotel Room Amenities Type">
                     <field name="complete_name"/>
                     
                 </tree>
             </field>
         </record>
         <record model="ir.actions.act_window" id="action_hotel_room_amenities_type_view_form">
-            <field name="name">Hotel Room amenities Type</field>
+            <field name="name">Hotel Room Amenities Type</field>
             <field name="res_model">hotel.room.amenities.type</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
-        <menuitem  id="menu_ty" name="ty" parent="hotel.hotel_configuration_menu" sequence="2"/>
-        <menuitem name="ty Types"
+        <menuitem  id="menu_amenity" name="Amenity" parent="hotel.hotel_configuration_menu" sequence="2"/>
+        <menuitem name="Amenity Types"
                   id="menu_action_hotel_room_amenities_type_view_form"
                   action="action_hotel_room_amenities_type_view_form"
                   sequence="3"
-                  parent="hotel.menu_ty"/> 
+                  parent="hotel.menu_amenity"/> 
     
     <!--===============================================================
-                                Room amenities
+                                Room Amenities
         ===============================================================-->
         
         <record id="view_hotel_room_amenities_form" model="ir.ui.view" >
             <field name="name">hotel.room.amenities.form</field>
             <field name="model">hotel.room.amenities</field>
             <field name="arch" type="xml">
-                <form string="Hotel Room amenities" version="7.0">
+                <form string="Hotel Room Amenities" version="7.0">
                   <sheet>
                     <h1>
-                        <label string="ty" />
+                        <label string="Amenity" />
                         <field name="name" select="1"/>
                     </h1>
                     <group>
@@ -127,7 +127,6 @@
                            <group colspan="4" col="4">
                             <field name="type" select="2"/>
                             <field name="product_manager" select="2"/>
-                            <!-- <field name="procure_method"/> -->
                             <field name="state" select="2"/>
                             <field name="categ_id" select="1" domain="[('istype','=',True)]"/>
                             <field name="uom_id"/>
@@ -143,7 +142,6 @@
                         
                         <page string="Procurement">
                             <group colspan="4" col="4">
-                               <!--  <field name="supply_method"/> -->
                                 <field name="active" select="2"/>
                                 <field name="list_price"/>
                                 <field name="cost_method"/>
@@ -173,11 +171,11 @@
             </field>
         </record>
         
-        <record model="ir.ui.view" id="view_hotel_room_ameniamenities_search">
-            <field name="name">hotel.room_ameniamenities_search</field>
+        <record model="ir.ui.view" id="view_hotel_room_aenities_search">
+            <field name="name">hotel.room_amenities_search</field>
             <field name="model">hotel.room.amenities</field>
             <field name="arch" type="xml">
-                <search string="Hotel Room amenities">
+                <search string="Hotel Room Amenities">
                     <field name="name" />
                     <field name="categ_id" select="1"/>
                     <field name="list_price" string="ty rate"/>
@@ -193,7 +191,7 @@
             <field name="name">hotel.room_amenities_list</field>
             <field name="model">hotel.room.amenities</field>
             <field name="arch" type="xml">
-                <tree string="Hotel Room amenities">
+                <tree string="Hotel Room Amenities">
                     <field name="name" />
                     <field name="categ_id" select="1"/>
                     <field name="list_price" string="ty rate"/>
@@ -202,17 +200,17 @@
             </field>
         </record>
         <record model="ir.actions.act_window" id="action_hotel_room_amenities_view_form">
-            <field name="name">Hotel Room amenities</field>
+            <field name="name">Hotel Room Amenities</field>
             <field name="res_model">hotel.room.amenities</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="view_hotel_room_amenities_list"/>
         </record>
-        <menuitem name="amenities"
+        <menuitem name="Amenities"
                   id="menu_action_hotel_room_amenities_view_form"
                   action="action_hotel_room_amenities_view_form"
                   sequence="2"
-                  parent="hotel.menu_ty"/> 
+                  parent="hotel.menu_amenity"/> 
         
     <!--========================================================
                                 Room Type
@@ -292,8 +290,8 @@
                             <field name="taxes_id" colspan="4" nolabel='1' help='Customer taxes apply on the perticular room. '/>
                             
                         </page>
-                        <page string = "Room amenities">
-                            <separator string=" Room amenities"/>
+                        <page string = "Room Amenities">
+                            <separator string=" Room Amenities"/>
                             <field name="room_amenities" colspan="4" nolabel="1"/>
                         </page>
                         <page string="Procurement">
@@ -496,7 +494,6 @@
                           <group>
                           <group colspan="4" col="4">
                             <field name="type" select="2"/>
-                            <!-- <field name="procure_method"/> -->
                             <field name="state" select="2"/>
                             <field name="categ_id" domain="[('isservicetype','=',True)]" select="1"/>
                             <field name="product_manager" select="2"/>
@@ -513,7 +510,6 @@
                         </page>
                         <page string="Procurement">
                             <group colspan="4" col="4">
-                                <!-- <field name="supply_method"/> -->
                                 <field name="active" select="2"/>
                                 <field name="list_price"/>
                                 <field name="cost_method"/>
@@ -670,7 +666,6 @@
                                             <field name="product_uos"  />
                                             <field name="address_allotment_id" select="2"/>
                                             </group>
-                                            <!-- <separator string="Properamenities" colspan="4"/> -->
                                         </page>
                                         <page string="History">
                                             <separator string="Invoice Lines" colspan="4"/>
@@ -729,7 +724,6 @@
                                             <field name="product_uos"  />
                                             <field name="address_allotment_id" select="2"/>
                                             </group>
-                                            <!-- <separator string="Properamenities" colspan="4"/> -->
                                         </page>
                                         <page string="History">
                                             <separator string="Invoice Lines" colspan="4"/>
@@ -816,7 +810,7 @@
                   sequence="5"
                   parent ="menu_all_folio"/>
 
-        <!-- Categories for Room, amenities, Services -->
+        <!-- Categories for Room, Amenities, Services -->
         <record model="ir.actions.act_window" id="hotel_room_category_action">
             <field name="name">Rooms by Category</field>
             <field name="type">ir.actions.act_window</field>
@@ -832,18 +826,18 @@
                   parent="hotel.menu_hotel_room"/>
 
         <record model="ir.actions.act_window" id="hotel_ty_category_action">
-            <field name="name">amenities by Category</field>
+            <field name="name">Amenities by Category</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">product.category</field>
-            <field name="domain">[('parent_id','=',False),('istype','=',True)]</field>
+            <field name="domain">[('parent_id','=',False),('isamenitytype','=',True)]</field>
             <field name="view_type">tree</field>
             <field name="view_id" ref="product.product_category_tree_view"/>
         </record>
-        <menuitem name="amenities by Category" 
+        <menuitem name="Amenities by Category" 
                   id="menu_hotel_ty_category_action" 
                   action="hotel_ty_category_action"
                   sequence="4"
-                  parent="hotel.menu_ty"/>
+                  parent="hotel.menu_amenity"/>
 
         <record model="ir.actions.act_window" id="hotel_service_category_action">
             <field name="name">Services by Category</field>

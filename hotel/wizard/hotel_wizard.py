@@ -29,7 +29,6 @@ class folio_report_wizard(osv.TransientModel):
         'date_start':fields.datetime('Start Date'),
         'date_end':fields.datetime('End Date')
     }
-
     def print_report(self, cr, uid, ids, context=None):
         values = {
             'ids': ids,
@@ -41,7 +40,4 @@ class folio_report_wizard(osv.TransientModel):
             'report_name': 'folio.total',
             'datas': values,
         }
-
-folio_report_wizard()
-
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

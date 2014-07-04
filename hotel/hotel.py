@@ -30,20 +30,18 @@ from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 class hotel_floor(osv.Model):
     _name = "hotel.floor"
     _description = "Floor"
-    _columns = { 
+    _columns = {
         'name': fields.char('Floor Name', size=64, required=True, select=True),
         'sequence': fields.integer('Sequence', size=64),
     }
-
 
 class product_category(osv.Model):
     _inherit = "product.category"
     _columns = {
         'isroomtype':fields.boolean('Is Room Type'),
-        'isamenitype':fields.boolean('Is amenities Type'),
+        'isamenitytype':fields.boolean('Is Amenities Type'),
         'isservicetype':fields.boolean('Is Service Type'),
     }
-
 
 class hotel_room_type(osv.Model):
     _name = "hotel.room.type"
@@ -55,7 +53,6 @@ class hotel_room_type(osv.Model):
     _defaults = {
         'isroomtype': 1,
     }
-
 
 class product_product(osv.Model):
     _inherit = "product.product"
@@ -73,7 +70,7 @@ class hotel_room_amenities_type(osv.Model):
         'cat_id':fields.many2one('product.category', 'category', required=True, ondelete='cascade'),
     }
     _defaults = {
-        'isamenitype': 1,
+        'isamenitytype': 1,
     }
 
 class hotel_room_amenities(osv.Model):
@@ -83,7 +80,6 @@ class hotel_room_amenities(osv.Model):
     _columns = {
         'room_categ_id':fields.many2one('product.product', 'Product Category', required=True, ondelete='cascade'),
         'rcateg_id':fields.many2one('hotel.room.amenities.type', 'Amenity Catagory'),
-
     }
     _defaults = {
         'iscategid': 1,
@@ -94,7 +90,7 @@ class hotel_room(osv.Model):
     _name = 'hotel.room'
     _inherits = {'product.product': 'product_id'}
     _description = 'Hotel Room'
-    
+
     _columns = {
         'product_id': fields.many2one('product.product', 'Product_id', required=True, ondelete='cascade'),
         'floor_id':fields.many2one('hotel.floor', 'Floor No', help='At which floor the room is located.'),
@@ -102,17 +98,16 @@ class hotel_room(osv.Model):
         'max_child':fields.integer('Max Child'),
         'room_amenities':fields.many2many('hotel.room.amenities', 'temp_tab', 'room_amenities', 'rcateg_id', 'Room Amenities', help='List of room amenities. '),
         'status':fields.selection([('available', 'Available'), ('occupied', 'Occupied')], 'Status'),
-
         'room_rent_ids':fields.one2many('room.rent', 'rent_id', 'Room Rent'),
     }
-    
+
     _defaults = {
         'isroom': 1,
         'rental': 1,
         'status': 'available',
 
     }
-    
+
     def set_room_status_occupied(self, cr, uid, ids, context=None):
         return self.write(cr, uid, ids, {'status': 'occupied'}, context=context)
 
@@ -145,7 +140,6 @@ class hotel_folio(osv.Model):
     def _invoiced_search(self, cursor, user, obj, name, args):
         return self.pool.get('sale.order')._invoiced_search(cursor, user, obj, name, args)
 
-
     _name = 'hotel.folio'
     _description = 'hotel folio new'
     _inherits = {'sale.order': 'order_id'}
@@ -171,7 +165,7 @@ class hotel_folio(osv.Model):
 
     def _check_room_vacant(self, cr, uid, ids, context=None):
         folio = self.browse(cr, uid, ids[0], context=context)
-        rooms = [] 
+        rooms = []
         for room in folio.room_lines:
             if room.product_id in rooms:
                 return False
@@ -197,7 +191,7 @@ class hotel_folio(osv.Model):
             duration = 0
             if checkin_date and checkout_date:
                 chkin_dt = datetime.datetime.strptime(checkin_date, '%Y-%m-%d %H:%M:%S')
-                chkout_dt = datetime.datetime.strptime(checkout_date, '%Y-%m-%d %H:%M:%S') 
+                chkout_dt = datetime.datetime.strptime(checkout_date, '%Y-%m-%d %H:%M:%S')
                 dur = chkout_dt - chkin_dt
                 duration = dur.days
                 if configured_addition_hours > 0:
@@ -217,7 +211,6 @@ class hotel_folio(osv.Model):
         tmp_room_lines = vals.get('room_lines', [])
         vals['order_policy'] = vals.get('hotel_policy', 'manual')
         if not 'service_lines' and 'folio_id' in vals:
-
                 vals.update({'room_lines':[]})
                 folio_id = super(hotel_folio, self).create(cr, uid, vals, context=context)
                 for line in (tmp_room_lines):
@@ -233,20 +226,18 @@ class hotel_folio(osv.Model):
         return self.pool.get('sale.order').onchange_warehouse_id(cr, uid, order_ids, warehouse_id)
 
     def onchange_partner_id(self, cr, uid, ids, part, context=None):
-        
         partner_rec = self.pool.get('res.partner').browse(cr, uid, part, context=context)
         order_ids = [folio.order_id.id for folio in self.browse(cr, uid, ids, context=context)]
         res = {}
         if not order_ids:
             res['value'] = {'partner_invoice_id': partner_rec.id}
             res['warning'] = {'title': _('Warning'), 'message': _('Not Any Order For  %s ' % (partner_rec.name))}
-            
+
             return res
         else:
             res['value'] = {'partner_invoice_id': partner_rec.id, 'pricelist_id':partner_rec.property_product_pricelist.id}
             return res
-#            return self.pool.get('sale.order').onchange_partner_id(cr, uid, order_ids, part, context=None)
-        
+
     def button_dummy(self, cr, uid, ids, context=None):
         order_ids = [folio.order_id.id for folio in self.browse(cr, uid, ids)]
         return self.pool.get('sale.order').button_dummy(cr, uid, order_ids, context={})
@@ -255,7 +246,7 @@ class hotel_folio(osv.Model):
         order_ids = [folio.order_id.id for folio in self.browse(cr, uid, ids)]
         invoice_id = self.pool.get('sale.order').action_invoice_create(cr, uid, order_ids, grouped=False, states=['confirmed', 'done'])
         for line in self.browse(cr, uid, ids):
-            values = {  
+            values = {
                 'invoiced': True,
                 'state': 'progress' if grouped else 'progress',
             }
@@ -316,13 +307,9 @@ class hotel_folio(osv.Model):
             order.write ({'shipped':True})
         return res
 
-
-
     def has_stockable_products(self, cr, uid, ids, *args):
         order_ids = [folio.order_id.id for folio in self.browse(cr, uid, ids)]
         return self.pool.get('sale.order').has_stockable_products(cr, uid, order_ids, *args)
-
-
 
     def action_cancel_draft(self, cr, uid, ids, *args):
         if not len(ids):
@@ -341,14 +328,10 @@ class hotel_folio(osv.Model):
             self.log(cr, uid, id, message)
         return True
 
-hotel_folio()
-
-
 class hotel_folio_line(osv.Model):
 
     def copy(self, cr, uid, id, default=None, context=None):
         return self.pool.get('sale.order.line').copy(cr, uid, id, default=None, context=context)
-
 
     def _amount_line(self, cr, uid, ids, field_name, arg, context):
         return self.pool.get('sale.order.line')._amount_line(cr, uid, ids, field_name, arg, context)
@@ -356,8 +339,6 @@ class hotel_folio_line(osv.Model):
     def _number_packages(self, cr, uid, ids, field_name, arg, context):
         return self.pool.get('sale.order.line')._number_packages(cr, uid, ids, field_name, arg, context)
 
-
-    
     def _get_checkin_date(self, cr, uid, context=None):
         if 'checkin_date' in context:
             return context['checkin_date']
@@ -402,9 +383,7 @@ class hotel_folio_line(osv.Model):
     def product_id_change(self, cr, uid, ids, pricelist, product, qty=0,
             uom=False, qty_uos=0, uos=False, name='', partner_id=False,
             lang=False, update_tax=True, date_order=False):
-
         line_ids = [folio.order_line_id.id for folio in self.browse(cr, uid, ids)]
-
         return self.pool.get('sale.order.line').product_id_change(cr, uid, line_ids, pricelist, product, qty=0,
             uom=False, qty_uos=0, uos=False, name='', partner_id=partner_id,
             lang=False, update_tax=True, date_order=False)
@@ -447,9 +426,6 @@ class hotel_folio_line(osv.Model):
     def copy_data(self, cr, uid, id, default=None, context=None):
         line_id = self.browse(cr, uid, id).order_line_id.id
         return self.pool.get('sale.order.line').copy_data(cr, uid, line_id, default=None, context=context)
-
-hotel_folio_line()
-
 
 class hotel_service_line(osv.Model):
 
@@ -535,13 +511,12 @@ class hotel_service_type(osv.Model):
     _name = "hotel.service.type"
     _inherits = {'product.category':'ser_id'}
     _description = "Service Type"
-    _columns = { 
+    _columns = {
         'ser_id':fields.many2one('product.category', 'category', required=True, select=True, ondelete='cascade'),
     }
     _defaults = {
         'isservicetype': 1,
     }
-
 
 class hotel_services(osv.Model):
     _name = 'hotel.services'
@@ -553,7 +528,6 @@ class hotel_services(osv.Model):
     _defaults = {
         'isservice': 1,
     }
-
 
 class res_company(osv.Model):
     _inherit = 'res.company'
