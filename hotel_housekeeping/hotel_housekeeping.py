@@ -33,9 +33,6 @@ class product_category(osv.Model):
         'isactivitytype': lambda *a: True,
     }
 
-product_category()
-
-
 class hotel_housekeeping_activity_type(osv.Model):
     _name = 'hotel.housekeeping.activity.type'
     _description = 'Activity Type'
@@ -43,16 +40,6 @@ class hotel_housekeeping_activity_type(osv.Model):
     _columns = {
         'activity_id': fields.many2one('product.category', 'Category', required=True, ondelete='cascade'),
     }
-
-hotel_housekeeping_activity_type()
-
-# class product_product(osv.Model):
-#    _inherit = "product.product"
-#    _columns = {
-#        'isact':fields.boolean('Is Activity'),
-#    }
-#
-# product_product()
 
 class hotel_activity(osv.Model):
     _name = 'hotel.activity'
@@ -62,26 +49,20 @@ class hotel_activity(osv.Model):
         'h_id': fields.many2one('product.product', 'Product', required=True, ondelete='cascade'),
     }
 
-hotel_activity()
-
-
 class hotel_housekeeping(osv.Model):
 
     _name = "hotel.housekeeping"
     _description = "Reservation"
-
     _columns = {
         'current_date':fields.date("Today's Date", required=True),
         'clean_type':fields.selection([('daily', 'Daily'), ('checkin', 'Check-In'), ('checkout', 'Check-Out')], 'Clean Type', required=True),
         'room_no':fields.many2one('hotel.room', 'Room No', required=True),
         'activity_lines':fields.one2many('hotel.housekeeping.activities', 'a_list', 'Activities', help='Details of housekeeping activities.'),
-#        'room_no':fields.many2one('product.product','Room No',required=True),
         'inspector':fields.many2one('res.users', 'Inspector', required=True),
         'inspect_date_time':fields.datetime('Inspect Date Time', required=True),
         'quality':fields.selection([('bad', 'Bad'), ('good', 'Good'), ('ok', 'Ok')], 'Quality', required=True, help='Inspector inspect the room and mark as Bad, Good or Ok. '),
         'state': fields.selection([('dirty', 'Dirty'), ('clean', 'Clean'), ('inspect', 'Inspect'), ('done', 'Done'), ('cancel', 'Cancelled')], 'State', select=True, required=True, readonly=True),
     }
-
     _defaults = {
         'state': lambda *a: 'dirty',
         'current_date':lambda *a: time.strftime('%Y-%m-%d'),
@@ -118,8 +99,6 @@ class hotel_housekeeping(osv.Model):
         })
         return True
 
-hotel_housekeeping()
-
 class hotel_housekeeping_activities(osv.Model):
     _name = "hotel.housekeeping.activities"
     _description = "Housekeeping Activities "
@@ -152,7 +131,5 @@ class hotel_housekeeping_activities(osv.Model):
         if context['today_date']:
             res.update({'today_date':context['today_date']})
         return res
-
-hotel_housekeeping_activities()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -85,7 +85,6 @@
 					<field name="current_date" />
 					<field name="clean_type" />
 					<field name="room_no" />
-					<!-- <field name="activity_lines"/> -->
 					<field name="inspector" />
 					<field name="inspect_date_time" />
 					<field name="state" />
@@ -143,7 +142,7 @@
 			id="menu_action_hotel_housekeeping_activity_type_view_form" action="action_hotel_housekeeping_activity_type_view_form"
 			parent="menu_hotel_activity" sequence="12" />
 
-		<!-- activity as product -->
+		<!-- activity -->
 		<record model="ir.ui.view" id="view_h_activity_form">
 			<field name="name">hotel.activity.form</field>
 			<field name="model">hotel.activity</field>

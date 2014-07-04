@@ -42,6 +42,4 @@ class hotel_housekeeping_wizard(osv.TransientModel):
             'datas': values,
         }
 
-hotel_housekeeping_wizard()
-
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
