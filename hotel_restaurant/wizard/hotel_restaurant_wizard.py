@@ -40,7 +40,7 @@ class wizard_hotel_restaurant(osv.TransientModel):
             'report_name': 'hotel.table.res',
             'datas': values,
         }
-
+        
 wizard_hotel_restaurant()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -1,19 +1,6 @@
 <?xml version="1.0" ?>
 <openerp>
     <data>
-
-<!--		<wizard-->
-<!--			string="Make Kots"-->
-<!--			model="hotel.restaurant.order"-->
-<!--			name="hotel.kot.make_kot"-->
-<!--			id="wizard_hotel_kot_make_kot"/>-->
-
-<!--		<wizard-->
-<!--			string="Reservation List"-->
-<!--			model="hotel.restaurant.reservation"-->
-<!--			name="hotel.table.reservation"-->
-<!--			id="wizard_hotel_table_res"/>-->
-
         <record model="ir.ui.view" id="wizard_hotel_restaurant_form_view">
             <field name="name">wizard.hotel.restaurant.form</field>
             <field name="model">wizard.hotel.restaurant</field>

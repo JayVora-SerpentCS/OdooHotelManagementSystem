@@ -36,7 +36,6 @@ class product_product(osv.Model):
         'ismenucard': fields.boolean('Is Menucard'),
     }
 
-
 class hotel_menucard_type(osv.Model):
     _name = 'hotel.menucard.type'
     _description = 'Amenities Type'
@@ -59,8 +58,7 @@ class hotel_menucard(osv.Model):
     _defaults = {
         'ismenucard': 1,
     }
-
-
+    
 class hotel_restaurant_tables(osv.Model):
     _name = "hotel.restaurant.tables"
     _description = "Includes Hotel Restaurant Table"
@@ -68,8 +66,7 @@ class hotel_restaurant_tables(osv.Model):
         'name':fields.char('Table Number', size=64, required=True),
         'capacity':fields.integer('Capacity'),
     }
-
-
+    
 class hotel_restaurant_reservation(osv.Model):
 
     def create_order(self, cr, uid, ids, context=None):
@@ -213,8 +210,7 @@ class hotel_restaurant_order(osv.Model):
     _defaults = {
      'order_no': lambda obj, cr, uid, context: obj.pool.get('ir.sequence').get(cr, uid, 'hotel.restaurant.order'),
      }
-
-
+    
 class hotel_reservation_order(osv.Model):
 
     def _sub_total(self, cr, uid, ids, field_name, arg, context):
