@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<document filename="test.pdf">
+  <template pageSize="(595.0,842.0)" title="Test" author="Martin Simon" allowSplitting="20">
+    <pageTemplate id="first">
+      <frame id="first" x1="57.0" y1="57.0" width="481" height="728"/>
+    </pageTemplate>
+  </template>
+  <stylesheet>
+    <blockTableStyle id="Standard_Outline">
+      <blockAlignment value="LEFT"/>
+      <blockValign value="TOP"/>
+    </blockTableStyle>
+    <blockTableStyle id="Table1">
+      <blockAlignment value="LEFT"/>
+      <blockValign value="TOP"/>
+      <lineStyle kind="GRID" colorName="black"/>
+      <blockBackground colorName="#c0c0c0" start="0,0" stop="0,0"/>
+      <blockBackground colorName="#c0c0c0" start="1,0" stop="1,0"/>
+      <blockBackground colorName="#c0c0c0" start="2,0" stop="2,0"/>
+      <blockBackground colorName="#c0c0c0" start="3,0" stop="3,0"/>
+      <blockBackground colorName="#c0c0c0" start="4,0" stop="4,0"/>
+    </blockTableStyle>
+    <blockTableStyle id="Table2">
+      <blockAlignment value="LEFT"/>
+      <blockValign value="TOP"/>
+      <lineStyle kind="GRID" colorName="black"/>
+      <blockBackground colorName="#ffffff" start="0,0" stop="0,0"/>
+      <blockBackground colorName="#c0c0c0" start="1,0" stop="1,0"/>
+    </blockTableStyle>
+    <initialize>
+      <paraStyle name="all" alignment="justify"/>
+    </initialize>
+    <paraStyle name="P1" fontName="Times-Roman" fontSize="10.0" leading="13" alignment="LEFT"/>
+    <paraStyle name="P2" fontName="Times-Roman" fontSize="10.0" leading="13" alignment="CENTER"/>
+    <paraStyle name="P3" fontName="Times-Roman" fontSize="11.0" leading="14" alignment="LEFT"/>
+    <paraStyle name="P4" fontName="Times-Roman" fontSize="9.0" leading="11" alignment="CENTER"/>
+    <paraStyle name="P5" fontName="Times-Roman" fontSize="10.0" leading="13" alignment="CENTER"/>
+    <paraStyle name="P6" fontName="Times-Roman" fontSize="9.0" leading="11" alignment="CENTER"/>
+    <paraStyle name="P7" fontName="Times-Roman" fontSize="9.0" leading="11" alignment="CENTER" backColor="#c0c0c0"/>
+    <paraStyle name="P8" fontName="Times-Roman" fontSize="9.0" leading="11" alignment="CENTER" backColor="#ffffff"/>
+    <paraStyle name="P9" fontName="Times-Roman" fontSize="11.0" leading="14" alignment="RIGHT"/>
+    <paraStyle name="P10" fontName="Times-Roman" fontSize="10.0" leading="13" alignment="LEFT"/>
+    <paraStyle name="P11" fontName="Times-Roman" fontSize="10.0" leading="13" alignment="LEFT" spaceBefore="0.0" spaceAfter="6.0"/>
+    <paraStyle name="P12" fontName="Times-Roman" fontSize="10.0" leading="13" alignment="CENTER"/>
+    <paraStyle name="Standard" fontName="Times-Roman"/>
+    <paraStyle name="Heading" fontName="Helvetica" fontSize="14.0" leading="17" spaceBefore="12.0" spaceAfter="6.0"/>
+    <paraStyle name="Text body" fontName="Times-Roman" spaceBefore="0.0" spaceAfter="6.0"/>
+    <paraStyle name="List" fontName="Times-Roman" spaceBefore="0.0" spaceAfter="6.0"/>
+    <paraStyle name="Caption" fontName="Times-Italic" fontSize="12.0" leading="15" spaceBefore="6.0" spaceAfter="6.0"/>
+    <paraStyle name="Index" fontName="Times-Roman"/>
+    <paraStyle name="Table Contents" fontName="Times-Roman"/>
+  </stylesheet>
+  <story>
+    <para style="P2">
+      <font color="white"> </font>
+    </para>
+    <para style="P2">
+      <font color="white"> </font>
+    </para>
+    <para style="P2">
+      <font color="white"> </font>
+    </para>
+    <para style="P9" alignment="CENTER"><b>Total Collection</b></para>
+    <para style="P2">
+      <font color="white"> </font>
+    </para>
+    <para style="P10">[[repeatIn(objects,'o')]]</para>
+    <para style="P12"><b>From "</b>[[ formatLang(data['form']['date_start'],date=True) ]]<b>" To "</b>[[ formatLang(data['form']['date_end'],date=True) ]]<b>"</b></para>
+    <para style="P4">
+      <font color="white"> </font>
+    </para>
+    <blockTable colWidths="90.0,129.0,98.0,96.0,69.0" style="Table1">
+      <tr>
+        <td>
+          <para style="P5">Folio No.</para>
+        </td>
+        <td>
+          <para style="P5">Customer Name</para>
+        </td>
+        <td>
+          <para style="P5">CheckIn</para>
+        </td>
+        <td>
+          <para style="P5">CheckOut</para>
+        </td>
+        <td>
+          <para style="P5">Total</para>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <para style="P6">[[ repeatIn(get_data(data['form']['date_start'],data['form']['date_end']) ,'o') ]]</para>
+          <para style="P4">[[o.name or '' ]]</para>
+        </td>
+        <td>
+          <para style="P4" alignment="LEFT">[[o.partner_id and o.partner_id.name or '']]</para>
+        </td>
+        <td>
+          <para style="P4">[[ formatLang(o.checkin_date, date=True) ]]</para>
+        </td>
+        <td>
+          <para style="P4">[[ formatLang(o.checkout_date, date=True) ]]</para>
+        </td>
+        <td>
+          <para style="P4" alignment="RIGHT">[[formatLang(get_total(o.amount_total), digits=get_digits(dp='Account')) ]]</para>
+        </td>
+      </tr>
+    </blockTable>
+    <blockTable colWidths="317.0,96.0,69.0" style="Table2">
+      <tr>
+        <td>
+          <para style="P8">
+            <font color="#ffffff"> </font>
+          </para>
+        </td>
+        <td>
+          <para style="P7">Net Total :-</para>
+        </td>
+        <td>
+          <para style="P4" alignment="RIGHT">[[formatLang(get_Total(), digits=get_digits(dp='Account')) ]]</para>
+        </td>
+      </tr>
+    </blockTable>
+   </story>
+</document>
+

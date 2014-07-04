@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding='UTF-8'?>
+<openerp>
+    <data>
+        <record model="ir.cron" id="room_analytic_cron">
+            <field name="name">Room analysis</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model" eval="'hotel.room'"/>
+            <field name="function" eval="'cron_room_line'"/>
+            <field name="args" eval="'()'" />
+        </record>
+    </data>
+</openerp>

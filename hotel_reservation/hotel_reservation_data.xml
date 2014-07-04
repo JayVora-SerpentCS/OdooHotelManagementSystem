@@ -1,0 +1,105 @@
+<?xml version="1.0" ?>
+<openerp>
+	<data noupdate="1">
+		<record id="hotel_reservation_0" model="hotel.reservation">
+			<field eval="&quot;2013-05-05 12:09:00&quot;" name="checkout"/>
+			<field eval="&quot;2013-05-02 12:09:00&quot;" name="checkin"/>
+ 			<field name="warehouse_id" ref="stock.warehouse0"/> 
+			<field name="pricelist_id" ref="product.list0"/>
+            <field name="partner_id" ref="base.res_partner_2"/>
+            <field name="partner_invoice_id" ref="base.res_partner_2"/>
+            <field name="partner_shipping_id" ref="base.res_partner_2"/>
+			<field eval="&quot;R/00002&quot;" name="reservation_no"/>
+		</record>
+		<record id="hotel_reservation_line_0" model="hotel_reservation.line">
+			<field name="line_id" ref="hotel_reservation_0"/>
+			<field name="categ_id" ref="hotel.hotel_room_type_1"/>
+			<field eval="[(6,0,[ref('hotel.hotel_room_0')])]" name="reserve"/>
+		</record>
+		<record id="hotel_reservation_1" model="hotel.reservation">
+			<field eval="&quot;2013-05-05 12:11:00&quot;" name="checkout"/>
+			<field eval="&quot;2013-05-02 12:11:00&quot;" name="checkin"/>
+            <field name="warehouse_id" ref="stock.warehouse0"/> 
+			<field name="pricelist_id" ref="product.list0"/>
+            <field name="partner_id" ref="base.res_partner_5"/>
+            <field name="partner_invoice_id" ref="base.res_partner_5"/>
+            <field name="partner_shipping_id" ref="base.res_partner_5"/>
+			<field eval="&quot;2013-05-02&quot;" name="date_order"/>
+			<field eval="&quot;R/00003&quot;" name="reservation_no"/>
+		</record>
+		<record id="hotel_reservation_line_1" model="hotel_reservation.line">
+			<field name="line_id" ref="hotel_reservation_1"/>
+			<field name="categ_id" ref="hotel.hotel_room_type_1"/>
+			<field eval="[(6,0,[ref('hotel.hotel_room_1')])]" name="reserve"/>
+		</record>
+		<record id="hotel_reservation_2" model="hotel.reservation">
+			<field eval="&quot;2013-05-05 12:20:00&quot;" name="checkout"/>
+			<field eval="&quot;2013-05-02 12:22:00&quot;" name="checkin"/>
+			<field eval="&quot;2013-05-02&quot;" name="date_order"/>
+			<field name="partner_id" ref="base.res_partner_9"/>
+            <field name="warehouse_id" ref="stock.warehouse0"/> 
+            <field name="pricelist_id" ref="product.list0"/>
+            <field name="partner_invoice_id" ref="base.res_partner_9"/>
+            <field name="partner_shipping_id" ref="base.res_partner_9"/>
+			<field eval="&quot;R/00004&quot;" name="reservation_no"/>
+		</record>
+		<record id="hotel_reservation_line_2" model="hotel_reservation.line">
+			<field name="line_id" ref="hotel_reservation_2"/>
+			<field name="categ_id" ref="hotel.hotel_room_type_1"/>
+			<field eval="[(6,0,[ref('hotel.hotel_room_2')])]" name="reserve"/>
+		</record>
+		<record id="hotel_reservation_3" model="hotel.reservation">
+			<field eval="&quot;2013-05-02 12:30:00&quot;" name="checkout"/>
+			<field eval="&quot;2013-04-28 12:33:00&quot;" name="checkin"/>
+            <field name="warehouse_id" ref="stock.warehouse0"/> 
+            <field name="pricelist_id" ref="product.list0"/>
+            <field name="partner_id" ref="base.res_partner_3"/>
+            <field name="partner_invoice_id" ref="base.res_partner_3"/>
+            <field name="partner_shipping_id" ref="base.res_partner_3"/>
+
+			<field eval="&quot;R/00005&quot;" name="reservation_no"/>
+		</record>
+		<record id="hotel_reservation_line_3" model="hotel_reservation.line">
+			<field name="line_id" ref="hotel_reservation_3"/>
+			<field name="categ_id" ref="hotel.hotel_room_type_2"/>
+			<field eval="[(6,0,[ref('hotel.hotel_room_3')])]" name="reserve"/>
+		</record>
+		<workflow action="confirm" model="hotel.reservation" ref="hotel_reservation_3"/>
+		<record id="hotel_reservation_4" model="hotel.reservation">
+			<field eval="&quot;2013-05-02 12:50:00&quot;" name="checkout"/>
+			<field eval="&quot;2013-04-28 12:55:00&quot;" name="checkin"/>
+			<field name="pricelist_id" ref="product.list0"/>
+			<field eval="&quot;2013-05-02&quot;" name="date_order"/>
+			<field name="partner_id" ref="base.res_partner_14"/>
+            <field name="warehouse_id" ref="stock.warehouse0"/> 
+            <field name="partner_invoice_id" ref="base.res_partner_14"/>
+            <field name="partner_shipping_id" ref="base.res_partner_14"/>
+
+			<field eval="&quot;R/00006&quot;" name="reservation_no"/>
+		</record>
+		<record id="hotel_reservation_line_4" model="hotel_reservation.line">
+			<field name="line_id" ref="hotel_reservation_4"/>
+			<field name="categ_id" ref="hotel.hotel_room_type_2"/>
+			<field eval="[(6,0,[ref('hotel.hotel_room_4')])]" name="reserve"/>
+		</record>
+		<workflow action="confirm" model="hotel.reservation" ref="hotel_reservation_4"/>
+		<record id="hotel_reservation_5" model="hotel.reservation">
+			<field eval="&quot;2013-05-02 01:09:00&quot;" name="checkout"/>
+			<field eval="&quot;2013-04-28 01:09:00&quot;" name="checkin"/>
+			<field eval="&quot;2013-05-02&quot;" name="date_order"/>
+			<field name="partner_id" ref="base.res_partner_4"/>
+            <field name="warehouse_id" ref="stock.warehouse0"/> 
+            <field name="pricelist_id" ref="product.list0"/>
+            <field name="partner_invoice_id" ref="base.res_partner_4"/>
+            <field name="partner_shipping_id" ref="base.res_partner_4"/>
+
+			<field eval="&quot;R/00007&quot;" name="reservation_no"/>
+		</record>
+		<record id="hotel_reservation_line_5" model="hotel_reservation.line">
+			<field name="line_id" ref="hotel_reservation_5"/>
+			<field name="categ_id" ref="hotel.hotel_room_type_2"/>
+			<field eval="[(6,0,[ref('hotel.hotel_room_5')])]" name="reserve"/>
+		</record>
+		<workflow action="confirm" model="hotel.reservation" ref="hotel_reservation_5"/>
+	</data>
+</openerp>

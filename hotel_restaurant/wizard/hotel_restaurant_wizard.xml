@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+
+<!--		<wizard-->
+<!--			string="Make Kots"-->
+<!--			model="hotel.restaurant.order"-->
+<!--			name="hotel.kot.make_kot"-->
+<!--			id="wizard_hotel_kot_make_kot"/>-->
+
+<!--		<wizard-->
+<!--			string="Reservation List"-->
+<!--			model="hotel.restaurant.reservation"-->
+<!--			name="hotel.table.reservation"-->
+<!--			id="wizard_hotel_table_res"/>-->
+
+        <record model="ir.ui.view" id="wizard_hotel_restaurant_form_view">
+            <field name="name">wizard.hotel.restaurant.form</field>
+            <field name="model">wizard.hotel.restaurant</field>
+            <field name="arch" type="xml">
+                <form string="Reservation List" version="7.0">
+                  <group col="4">
+                     <field name="date_start"/>
+                     <field name="date_end"/>
+                  </group>
+                  <footer>
+                      <button name="print_report" string="Table Reservation List" type="object" class="oe_highlight"/>
+                      or
+                      <button string="Cancel" class="oe_link" special="cancel"/>
+                  </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="action_wizard_hotel_restaurant" model="ir.actions.act_window">
+            <field name="name">Reservation List</field>
+            <field name="res_model">wizard.hotel.restaurant</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+            name="Table Reservation List" 
+            action="action_wizard_hotel_restaurant" 
+            parent="hotel.hotel_report_menu"
+            id="wizard_list_menu"
+            sequence="30"/>
+
+    </data>
+</openerp>

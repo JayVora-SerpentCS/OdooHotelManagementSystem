@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+        <record model="ir.actions.act_window" id="action_view_frontdesk_cal">
+            <field name="name">FrontDesk</field>
+            <field name="res_model">hotel.reservation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="view_id" ref="hotel_reservation.hotel_calendar_view"/>
+        </record>
+
+        <record model="ir.ui.view" id="board_frontdesk_form">
+            <field name="name">board.frontdesk.form</field>
+            <field name="model">board.board</field>
+            <field name="arch" type="xml">
+                <form string="FrontDesk board" version="7.0">
+                    <board style="2-1">
+                        <column>
+                            <action string="Reservation" name="%(action_view_frontdesk_cal)d"/>
+                        </column>
+                    </board>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="open_board_frontdesk">
+            <field name="name">FrontDesk Dashboard</field>
+            <field name="res_model">board.board</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="board_frontdesk_form"/>
+        </record>
+
+        <menuitem id="menu_board_frontdesk"
+            name="Hotel FrontDesk Board"
+            action="open_board_frontdesk"
+            sequence="46"
+            parent="base.menu_reporting_dashboard"/>
+
+    </data>
+</openerp>

@@ -1,0 +1,8 @@
+============================================================================================================================
+ Version Change Log (report_hotel_reservation)
+============================================================================================================================
+0.03 on 2014-01-07 by Krunal Soni
+    * Added Accurate licensing terms and Copyright(C) on top inside license info in each py file.
+    
+0.02 on 2013-11-13 by Sudhir Arya
+    * Standardized the module as per v7 standards.

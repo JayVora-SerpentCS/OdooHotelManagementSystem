@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <!-- Sequences for hotel.folio -->
+        <record model="ir.sequence.type" id="seq_type_hotel_folio">
+            <field name="name">Hotel Folio</field>
+            <field name="code">hotel.folio</field>
+        </record>
+        <record model="ir.sequence" id="seq_hotel_folio">
+            <field name="name">Hotel Folio</field>
+            <field name="code">hotel.folio</field>
+            <field name="prefix">Folio/</field>
+            <field name="padding">5</field>
+        </record>
+
+    </data>
+</openerp>

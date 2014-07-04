@@ -1,0 +1,595 @@
+<?xml version="1.0"?>
+<openerp>
+	<data>
+	<menuitem  id="hotel_restaurant_menu" name="Restaurant" parent="hotel.hotel_management_menu" sequence="3"/>
+		<!-- ==============================
+			Table Master
+		============================== -->
+		<record model="ir.ui.view" id="view_hotel_restaurant_tables_form">
+			<field name="name">hotel_restaurant_tables.form</field>
+			<field name="model">hotel.restaurant.tables</field>
+			<field name="arch" type="xml">
+				<form string="Tables Detail" version="7.0">
+                  <sheet>
+                   <group>
+					<field name="name" colspan="1" select="1"/>
+					<newline/>
+					<field name="capacity"/>
+                   </group>
+                  </sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record model="ir.ui.view" id="view_hotel_restaurant_tables_search">
+            <field name="name">hotel_restaurant_tables.search</field>
+            <field name="model">hotel.restaurant.tables</field>
+            <field name="arch" type="xml">
+                <search string="Tables Detail">
+                    <field name="name"/>
+                    <field name="capacity"/>
+                    <newline/>
+                    <group expand="0" string="Group By...">
+                        <filter name="capacity" string="Capacity" icon="terp-stock_symbol-selection" context="{'group_by':'capacity'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+		
+		<record model="ir.ui.view" id="view_hotel_restaurant_tables_tree">
+			<field name="name">hotel_restaurant_tables.tree</field>
+			<field name="model">hotel.restaurant.tables</field>
+			<field name="arch" type="xml">
+				<tree string="Tables Detail">
+					<field name="name"/>
+					<field name="capacity"/>
+				</tree>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="open_view_hotel_restaurant_tables_form_tree">
+			<field name="name">Tables Details</field>
+			<field name="res_model">hotel.restaurant.tables</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		<menuitem name="Tables"
+		          id="menu_open_view_hotel_restaurant_tables_form_tree"
+				  action="open_view_hotel_restaurant_tables_form_tree"
+				  parent="hotel.hotel_configuration_menu"/>
+
+		<!--
+		==============================
+			Table Reservation
+		==============================
+		 -->
+		<record model="ir.ui.view" id="view_hotel_restaurant_reservation_form">
+			<field name="name">hotel_restaurant_reservation.form</field>
+			<field name="model">hotel.restaurant.reservation</field>
+			<field name="arch" type="xml">
+				<form string="Table Reservation" version="7.0">
+                 <header>
+                     <button string="Confirm" name="confirm" states="draft" type="workflow" icon="gtk-ok"/>
+                     <button string="Done" name="done" states="confirm" type="workflow" icon="gtk-apply"/>
+                     <button string="Cancel" name="cancel" states="confirm" type="workflow" icon="gtk-cancel"/>
+                     <button string="Set to Draft" name="action_set_to_draft" states="cancel" type="object" icon="gtk-file"/>
+                     <button string="Create Order" name="create_order" type="object" states="done" icon="gtk-new"/>
+                     <field name="state" widget="statusbar"/>
+                 </header>
+                  <sheet>
+                    <h1>
+                       <label string="Table Booking" colspan="4" />
+                       <field name="reservation_id" colspan="4" select="1" />
+                    </h1>
+                    <group>
+                        <group colspan="2" >
+                           <field name="room_no" /> 
+                        </group>
+    					<newline/>
+                        <group colspan="4" col="4">
+        					<field name="start_date"/>
+        					<field name="end_date"/>
+        					<field name="cname" on_change="onchange_partner_id(cname)"/>
+        					<field name="partner_address_id"/>
+                        </group>
+                        <group colspan="4">
+        					<separator colspan='4' string="Table List"/>
+        					<field name="tableno" colspan="4" nolabel='1'/>
+                        </group>
+                    </group> 
+                  </sheet>
+				</form>
+			</field>
+		</record>
+		<record model="ir.ui.view" id="view_hotel_restaurant_reservation_tree">
+			<field name="name">hotel_restaurant_reservation.tree</field>
+			<field name="model">hotel.restaurant.reservation</field>
+			<field name="arch" type="xml">
+				<tree string="Table Reservation">
+					<field name="reservation_id"/>
+					<field name="room_no"/>
+					<field name="start_date"/>
+					<field name="end_date"/>
+					<field name="cname"/>
+					<field name="partner_address_id"/>
+					<field name="tableno"/>
+				</tree>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="open_view_hotel_restaurant_reservation_form_tree">
+			<field name="name">Table Reservation</field>
+			<field name="res_model">hotel.restaurant.reservation</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		<menuitem name="Table Booking"
+		          id="menu_open_view_hotel_restaurant_reservation_form_tree"
+				  action="open_view_hotel_restaurant_reservation_form_tree"
+				  parent="hotel_restaurant_menu"/>
+
+		<!--
+		======================
+		Orders for Reservation
+		======================
+		 -->
+
+		<record model="ir.ui.view" id="view_hotel_reservation_order_form">
+			<field name="name">hotel_reservation_order.form</field>
+			<field name="model">hotel.reservation.order</field>
+			<field name="arch" type="xml">
+				<form string="Order" version="7.0">
+                 <header>
+                  <button string="Generate KOT" name="reservation_generate_kot" type="object" icon="gtk-go-forward"/>   
+                 </header>
+                 <sheet>
+                    <h1>
+                        <label string="Order" colspan="4" />
+                        <field name="order_number" colspan="4"/>
+                    </h1>        
+                   <group>
+                    <group colspan="2">
+					<field name="reservationno"/>
+				    </group>
+                    <group colspan="4" col="4" >
+                    <field name="date1" />
+					<field name="waitername" />
+					</group>
+                    <newline/>
+					<separator colspan='4' string='Table List' />
+					<field name="table_no" colspan="4" nolabel='1' />
+					<newline/>
+					<separator colspan='4' string='Order List' />
+					<field name="order_list" colspan="4" nolabel='1'>
+						<form string="Order List">
+							<field name="name" on_change="on_change_item_name(name)"/>
+							<field name="item_qty"/>
+							<field name="item_rate"/>
+
+						</form>
+						<tree string="Order List">
+							<field name="name" />
+							<field name="item_qty"/>
+							<field name="item_rate"/>
+							<field name="price_subtotal"/>
+						</tree>
+					</field>
+					<newline/>
+					<group colspan="2" class="oe_subtotal_footer oe_right">
+						<field name="amount_subtotal" widget='monetary'/>
+						<field name="tax" widget='monetary'/>
+                        <div class="oe_subtotal_footer_separator oe_inline">
+                          <label for="amount_total" />
+                        </div>
+                        <field name="amount_total" nolabel="1" widget='monetary'/>
+					</group>
+                   </group>
+                  </sheet>
+				</form>
+			</field>
+		</record>
+		<record model="ir.ui.view" id="view_hotel_reservation_order_tree">
+			<field name="name">hotel_reservation_order.tree</field>
+			<field name="model">hotel.reservation.order</field>
+			<field name="arch" type="xml">
+				<tree string="Order">
+					<field name="order_number"/>
+					<field name="reservationno"/>
+					<field name="date1"/>
+					<field name="waitername"/>
+					<field name="table_no"/>
+					<field name="order_list" />
+
+				</tree>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="open_view_hotel_reservation_order_form_tree">
+			<field name="name">Order Generate</field>
+			<field name="res_model">hotel.reservation.order</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+
+		</record>
+		<menuitem name="Orders"
+		          id="menu_open_view_hotel_reservation_order_form_tree"
+				  action="open_view_hotel_reservation_order_form_tree"
+				  parent="hotel_restaurant_menu"/>
+
+		<!--
+		==============================
+			Table Order
+		==============================
+		 -->
+
+		<record model="ir.ui.view" id="view_hotel_restaurant_order_form">
+			<field name="name">hotel_restaurant_order.form</field>
+			<field name="model">hotel.restaurant.order</field>
+			<field name="arch" type="xml">
+				<form string="Order" version="7.0">
+                 <header>
+                     <button string="Generate KOT" name="generate_kot" type="object" icon="gtk-go-forward"/>
+                 </header>
+                   <sheet>
+                    <h1>
+                      <label string="Table Order" colspan="4" />
+                      <field name="order_no" colspan="4"/>
+                    </h1>
+                    <group>
+                     <group>   
+    					<field name="o_date" />
+                     </group>
+                     <group colspan="2" col="4">
+    					<field name="room_no"/>
+    					<field name="waiter_name"/>
+                     </group>
+					<newline/>
+					<separator colspan='4' string='Table List'/>
+                    <field name="table_no" colspan="4" nolabel='1'/>
+					<newline/>
+                    <separator colspan='4' string='Order List'/>
+                    <field name="order_list" colspan="4" nolabel='1'>
+						<form string="Order List">
+							<field name="name" on_change="on_change_item_name(name)"/>
+							<field name="item_qty"/>
+							<field name="item_rate"/>
+
+						</form>
+						<tree string="Order List">
+							<field name="name" />
+							<field name="item_qty"/>
+							<field name="item_rate"/>
+							<field name="price_subtotal"/>
+
+						</tree>
+					</field>
+                    </group>
+					<newline/>
+					<group col="2" class="oe_subtotal_footer oe_right">
+						<field name="amount_subtotal" widget="monetary"/>
+						<field name="tax" widget='monetary'/>
+                        <div class="oe_subtotal_footer_separator oe_inline">
+                        <label for="amount_total" />
+                        </div>
+						<field name="amount_total" nolabel="1" widget='monetary'/>
+					</group>
+                   <div class="oe_clear"/>
+                  </sheet>
+				</form>
+			</field>
+		</record>
+		<record model="ir.ui.view" id="view_hotel_restaurant_order_tree">
+			<field name="name">hotel_restaurant_order.tree</field>
+			<field name="model">hotel.restaurant.order</field>
+			<field name="arch" type="xml">
+				<tree string="Order">
+					<field name="order_no"/>
+					<field name="o_date"/>
+					<field name="table_no"/>
+					<field name="room_no"/>
+					<field name="waiter_name"/>
+					<field name="order_list"/>
+
+				</tree>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="open_view_hotel_restaurant_order_form_tree">
+			<field name="name">Order Generate</field>
+			<field name="res_model">hotel.restaurant.order</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+
+		</record>
+		<menuitem name="Table Order"
+		          id="menu_open_view_hotel_restaurant_order_form_tree"
+				  action="open_view_hotel_restaurant_order_form_tree"
+				  sequence="11"
+				  parent="hotel_restaurant_menu"/>
+
+	<!-- ==============================
+			Kitchen Order List
+		==============================  -->
+
+		<record model="ir.ui.view" id="view_hotel_restaurant_kitchen_order_tickets_form">
+			<field name="name">hotel_restaurant_kitchen_order_tickets.form</field>
+			<field name="model">hotel.restaurant.kitchen.order.tickets</field>
+			<field name="arch" type="xml">
+				<form string="KOT List" version="7.0">
+                  <sheet>
+                   <group>
+                    <group colspan="4">   
+                		<field name="orderno"/>
+                		<field name="resno" />
+                    </group>
+    					<field name="kot_date"/>
+                    <group colspan="4" col="4">
+    					<field name="room_no"/>
+    					<field name="w_name"/>
+                    </group>
+					<newline/>
+					<separator colspan='4' string='Table List'/>
+					<field name="tableno" select="1" colspan="4" nolabel='1'/>
+					<newline/>
+					<separator colspan='4' string='Order List'/>
+					<field name="kot_list" colspan="4" nolabel='1'>
+						<form string="Order List">
+							<field name="name" on_change="on_change_item_name(name)"/>
+							<field name="item_qty"/>
+							<field name="item_rate"/>
+
+						</form>
+						<tree string="Order List">
+							<field name="name" />
+							<field name="item_qty"/>
+
+						</tree>
+					</field>
+                   </group>
+                  </sheet>
+				</form>
+			</field>
+		</record>
+
+
+		<record model="ir.ui.view" id="view_hotel_restaurant_kitchen_order_tickets_tree">
+			<field name="name">hotel_restaurant_kitchen_order_tickets.tree</field>
+			<field name="model">hotel.restaurant.kitchen.order.tickets</field>
+			<field name="arch" type="xml">
+				<tree string="KOT List">
+					<field name="orderno" />
+					<field name="resno"/>
+					<field name="kot_date"/>
+					<field name="room_no"/>
+					<field name="w_name"/>
+					<field name="tableno"/>
+					<!-- <field name="kot_list"/> -->
+				</tree>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="open_view_hotel_restaurant_kitchen_order_tickets_form_tree">
+			<field name="name">Kitchen Order Tickets</field>
+			<field name="res_model">hotel.restaurant.kitchen.order.tickets</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		<menuitem name="Kitchen Order Ticket"
+		          id="menu_open_view_hotel_restaurant_kitchen_order_tickets_form_tree"
+				  action="open_view_hotel_restaurant_kitchen_order_tickets_form_tree"
+				  sequence="12"
+				  parent="hotel_restaurant_menu"/>
+
+		<!-- Menucard Category -->
+
+
+		<record model="ir.ui.view" id="view_hotel_menucard_type_form">
+			<field name="name">hotel_menucard_type_form</field>
+			<field name="model">hotel.menucard.type</field>
+			<field name="arch" type="xml">
+				<form string="Hotel Food Items Type" version="7.0">
+                 <sheet>
+                   <group>
+					<field name="name"/>
+					<field name="parent_id" domain="[('ismenutype','=',True)]"/>
+                   </group>
+				 </sheet>
+                </form>
+			</field>
+		</record>
+		<record model="ir.ui.view" id="view_hotel_menucard_type_list">
+			<field name="name">hotel_menucard_type_list</field>
+			<field name="model">hotel.menucard.type</field>
+			<field name="arch" type="xml">
+				<tree string="Hotel Food Items Type">
+					<field name="complete_name"/>
+
+				</tree>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="action_hotel_menucard_type_view_form">
+			<field name="name">Hotel Food Item Type</field>
+			<field name="res_model">hotel.menucard.type</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+	   	</record>
+	   	<menuitem  id="menu_hotel_food_item" name="Food Item" parent="hotel.hotel_configuration_menu" sequence="2"/>
+		<menuitem name="Food Item Types"
+				  id="menu_action_hotel_menucard_type_view_form"
+				  action="action_hotel_menucard_type_view_form"
+				  parent="menu_hotel_food_item" sequence="12"/>
+
+		<record model="ir.ui.view" id="view_hotel_menucard_form">
+			<field name="name">hotel.menucard.form</field>
+			<field name="model">hotel.menucard</field>
+			<field name="arch" type="xml">
+				<form string="Hotel Menucard" version="7.0">
+                <sheet>
+                   <field name="image" widget="image" class="oe_avatar oe_left"/>
+                   <div class="oe_title">
+                     <div class="oe_edit_only">
+                      <label for="name" string="Food Item" />
+                     </div>
+                     <h1>
+                         <field name="name" select="1" />
+                     </h1>
+                     <label for="categ_id" class="oe_edit_only"/>
+                     <h2>
+                         <field name="categ_id" select="1" domain="[('ismenutype','=',True)]" />
+                     </h2>
+                   </div>
+				<notebook>
+						<page string="Information">
+                           <group colspan="4" col="2">                             
+                             <group colspan="4" col="4">
+    							<field name="type" select="2"/>
+                                <field name="product_manager" select="2"/>
+    							<!-- <field name="procure_method"/> -->
+                             <!-- </group>
+                             <group colspan="4" col="4"> -->
+    							<field name="uom_id"/>
+    							<field name="uom_po_id"/>
+                             </group>
+                           </group>
+							<newline/>
+                            <separator string="Supplier Taxes" colspan='4' />
+							<field name="supplier_taxes_id" colspan="4" help='List of supplier taxes applied on the perticular Food Item. '/>
+                            <newline/>
+                            <separator string="Customer Taxes" colspan='4' />
+							<field name="taxes_id" colspan="4" help='List of customer taxes applied on the perticular Food Item.' />
+						</page>
+						<page string="Procurement">
+                          <group colspan="4" col="4">
+                            <!-- <field name="supply_method"/> -->
+							<field name="cost_method"/>
+                            <field name="active" select="2"/>
+							<field name="list_price"/>
+                            <field name="sale_ok" select="2"/>
+                            <field name="standard_price"/>
+                            <field name="rental" select="2"/>
+                            <field name="price_margin"/>
+                            <field name="price_extra"/>
+                            <field name="uos_id" />
+                            <field name="uos_coeff" />
+							<!-- <field name="purchase_ok" select="2"/> -->
+                            <separator string="Suppliers" colspan='4' />
+							<field name="seller_ids" colspan="4" nolabel="1" widget="one2many_list"/>
+                         </group>
+						</page>
+						<page string="Descriptions">
+							<separator string="Description" />
+							<field name="description" colspan="4" nolabel="1" />
+							<separator string="Sale Description"/>
+							<field name="description_sale" colspan="4" nolabel="1"/>
+							<separator string="Purchase Description"/>
+							<field name="description_purchase" colspan="4" nolabel="1"/>
+						</page>
+				</notebook>
+                </sheet>
+				</form>
+			</field>
+		</record>
+		
+		<record model="ir.ui.view" id="view_hotel_menucard_search">
+            <field name="name">hotel.menucard.search</field>
+            <field name="model">hotel.menucard</field>
+            <field name="arch" type="xml">
+                <search string="Hotel Menucard" >
+                    <field name="name" />
+                    <field name="categ_id" select="1"/>
+                    <field name="list_price" string="Item Rate"/>
+                </search>
+            </field>
+        </record>
+		
+		<record model="ir.ui.view" id="view_hotel_menucard_tree">
+			<field name="name">hotel.menucard.tree</field>
+			<field name="model">hotel.menucard</field>
+			<field name="arch" type="xml">
+				<tree string="Hotel Menucard" >
+					<field name="name" />
+					<field name="categ_id" select="1"/>
+					<field name="list_price" string="Item Rate"/>
+				</tree>
+			</field>
+		</record>
+  
+        <record model="ir.ui.view" id="hotel_manucard_kanban_view">
+            <field name="name">Menucard Kanban</field>
+            <field name="model">hotel.menucard</field>
+            <field name="arch" type="xml">
+                <kanban class="oe_kanban_quickcreate_textarea" version="7.0">
+                    <field name="name"/>
+                    <field name="image"/>
+                    <field name="list_price"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_vignette oe_semantic_html_override">
+                                <a type="open"><img t-att-src="kanban_image('hotel.menucard', 'image', record.id.value)" class="oe_kanban_image"/></a>
+                                <div class="oe_kanban_details">
+                                    <h4>
+                                        <a type="open">
+                                             <t t-if="record.code.raw_value">[<field name="code"/>]</t> <field name="name"/>
+                                        </a>
+                                    </h4>
+                                    <div name="tags"/>
+                                    <ul>
+                                        <li>Price: <field name="lst_price"></field></li>
+                                        <li>Category: <field name="categ_id"></field></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates> 
+                    <!-- <templates>
+                        <t t-name="kanban-box">
+            
+                          <t t-set="record.group_fancy" t-value="1"  groups="note.group_note_fancy"/>
+            
+                          <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_global_click_edit oe_semantic_html_override oe_kanban_card #{record.group_fancy==1 ? 'oe_kanban_card_fancy' : ''}">
+                            <div class="oe_dropdown_kanban">
+            
+                              dropdown menu
+                              <span class="oe_dropdown_toggle">
+                                <span class="oe_e">í</span>
+                                <ul class="oe_dropdown_menu">
+                                  <li><a type="delete">Delete</a></li>
+                                  <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
+                                </ul>
+                              </span>
+                              <div style="display: inline">
+                                <a name="onclick_note_is_done" type="object" t-if="record.open.raw_value" class="oe_e">W</a>
+                                <a name="onclick_note_not_done" type="object" t-if="!record.open.raw_value" class="oe_e">W</a>
+                              </div>
+                            </div>
+                            kanban note
+                            <div t-attf-class="oe_kanban_content #{record.open.raw_value ? '' : 'note_text_line_through'}">
+                              title
+                              <field name="name"/>
+                            </div>
+                            <div class="oe_clear"></div>
+                            <field name="tag_ids"/>
+                            <div class="oe_right">
+                              <t t-foreach="record.message_follower_ids.raw_value" t-as="follower">
+                                <img t-if="record.current_partner_id.raw_value!=follower" t-att-src="kanban_image('res.partner', 'image_small', follower)" width="24" height="24" class="oe_kanban_avatar" t-att-data-member_id="follower"/>
+                              </t>
+                            </div>
+                            <div class="oe_clear"></div>
+                          </div>
+                        </t>
+              </templates> -->
+                    
+                </kanban>
+            </field>
+        </record>              
+  
+		<record model="ir.actions.act_window" id="action_hotel_menucard_form">
+			<field name="name">Hotel Menucard</field>
+			<field name="res_model">hotel.menucard</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,kanban</field>
+		</record>
+
+		<menuitem name="Food Items"
+					 id="menu_open_hotel_menucard_form"
+					 action="action_hotel_menucard_form"
+					 parent="menu_hotel_food_item"/>
+
+
+	</data>
+</openerp>

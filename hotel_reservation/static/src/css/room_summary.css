@@ -1,0 +1,25 @@
+
+.table_header
+{
+	text-align: center;
+	min-width:100px;
+	vertical-align: middle;
+}
+
+.table_reserved
+{
+	background-color: red;
+	color: white;
+	text-align: center;
+	min-width:100px;
+	vertical-align: middle;
+}
+.table_free
+{
+	background-color: green;
+	color: white;
+	text-align: center;
+	min-width:100px;
+	vertical-align: middle;
+	cursor:pointer;
+}

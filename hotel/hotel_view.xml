@@ -1,0 +1,862 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    <menuitem id="hotel_management_menu" name="Hotel Management" web_icon="data/hotel-grey.png"
+                  web_icon_hover="data/hotel-color.png"/>
+    <menuitem id="hotel_configuration_menu" name="Configuration" sequence="20" parent ="hotel_management_menu"/>
+    <menuitem id="hotel_report_menu" name="Reports" sequence="6" parent="hotel_management_menu"/>
+    
+	<!-- ###############################################
+		 #############Company Configuration#############
+   	     ###############################################
+   -->
+    
+		<record id="res_company_inherit_config_hotel" model="ir.ui.view">
+			<field name="name">res.company.inherit.config.hotel</field>
+			<field name="model">res.company</field>
+			<field name="inherit_id" ref="base.view_company_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='currency_id']" position="after">
+					<field name="additional_hours"/>
+				</xpath>
+			</field>
+		</record>
+    <!--====================================================
+                                Floor
+        ==================================================== -->
+        
+        <record model="ir.ui.view" id="view_hotel_floor_form">
+            <field name="name">hotel.floor.form</field>
+            <field name="model">hotel.floor</field>
+            <field name="arch" type="xml">
+                <form string=" Hotel Floor" version="7.0">
+                 <sheet>
+                   <group>
+                    <field name="name" colspan="1"/>
+                    <field name="sequence" select="1"/>
+                   </group>
+                 </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_hotel_floor_tree">
+            <field name="name">hotel.floor.tree</field>
+            <field name="model">hotel.floor</field>
+            <field name="arch" type="xml">
+                <tree string=" Hotel Floors">
+                    <field name="name" colspan="1"/>
+                    <field name="sequence" select="1"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="open_hotel_floor_form_tree">
+            <field name="name">Floor Structure</field>
+            <field name="res_model">hotel.floor</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem name="Floor"
+                  id="menu_open_hotel_floor_form_tree" 
+                  action="open_hotel_floor_form_tree"
+                  sequence="21"
+                  parent="hotel_configuration_menu"/>
+    
+    <!--==================================================================== 
+                                amenities Type
+        ====================================================================-->
+
+        <record model="ir.ui.view" id="view_hotel_room_amenities_type_form">
+            <field name="name">hotel.room_amenities_type_form</field>
+            <field name="model">hotel.room.amenities.type</field>
+            <field name="arch" type="xml">
+                <form string="Hotel Room amenities Type" version="7.0">
+                  <sheet>
+                   <group>
+                    <field name="name"/>
+                    <field name="parent_id" domain="[('istype','=',True)]"/>
+                   </group>
+                  </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_hotel_room_amenities_type_list">
+            <field name="name">hotel.room_amenities_type_list</field>
+            <field name="model">hotel.room.amenities.type</field>
+            <field name="arch" type="xml">
+                <tree string="Hotel Room amenities Type">
+                    <field name="complete_name"/>
+                    
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_hotel_room_amenities_type_view_form">
+            <field name="name">Hotel Room amenities Type</field>
+            <field name="res_model">hotel.room.amenities.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem  id="menu_ty" name="ty" parent="hotel.hotel_configuration_menu" sequence="2"/>
+        <menuitem name="ty Types"
+                  id="menu_action_hotel_room_amenities_type_view_form"
+                  action="action_hotel_room_amenities_type_view_form"
+                  sequence="3"
+                  parent="hotel.menu_ty"/> 
+    
+    <!--===============================================================
+                                Room amenities
+        ===============================================================-->
+        
+        <record id="view_hotel_room_amenities_form" model="ir.ui.view" >
+            <field name="name">hotel.room.amenities.form</field>
+            <field name="model">hotel.room.amenities</field>
+            <field name="arch" type="xml">
+                <form string="Hotel Room amenities" version="7.0">
+                  <sheet>
+                    <h1>
+                        <label string="ty" />
+                        <field name="name" select="1"/>
+                    </h1>
+                    <group>
+                        <field name="default_code" select="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Information">
+                           <group colspan="4" col="4">
+                            <field name="type" select="2"/>
+                            <field name="product_manager" select="2"/>
+                            <!-- <field name="procure_method"/> -->
+                            <field name="state" select="2"/>
+                            <field name="categ_id" select="1" domain="[('istype','=',True)]"/>
+                            <field name="uom_id"/>
+                            <field name="uom_po_id"/>
+                           </group>
+                           <newline/>
+                           <separator colspan='4' string="Supplier Taxes"/>
+                           <field name="supplier_taxes_id" colspan="4" nolabel='1' help='Define supplier taxes if there any on the ty. '/>
+                           <newline/>
+                           <separator colspan='4' string="Customer Taxes"/>
+                           <field name="taxes_id" colspan="4" nolabel='1' help='List of customer taxes applied on the ty. '/>
+                        </page>
+                        
+                        <page string="Procurement">
+                            <group colspan="4" col="4">
+                               <!--  <field name="supply_method"/> -->
+                                <field name="active" select="2"/>
+                                <field name="list_price"/>
+                                <field name="cost_method"/>
+                                <field name="sale_ok" select="2"/>
+                                <field name="standard_price"/>
+                                <field name="rental" select="2"/>
+                                <field name="uos_id" />
+                                <field name="uos_coeff" />
+                             </group>
+                            <newline />
+                            <group>
+                                <separator string="Suppliers" />
+                                <field name="seller_ids" colspan="4" nolabel="1" widget="one2many_list"/>
+                            </group>
+                        </page>
+                        <page string="Descriptions">
+                            <separator string="Description" />
+                            <field name="description" colspan="4" nolabel="1" />
+                            <separator string="Sale Description"/>
+                            <field name="description_sale" colspan="4" nolabel="1"/>
+                            <separator string="Purchase Description"/>
+                            <field name="description_purchase" colspan="4" nolabel="1"/>
+                        </page>
+                    </notebook>
+                   </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_hotel_room_ameniamenities_search">
+            <field name="name">hotel.room_ameniamenities_search</field>
+            <field name="model">hotel.room.amenities</field>
+            <field name="arch" type="xml">
+                <search string="Hotel Room amenities">
+                    <field name="name" />
+                    <field name="categ_id" select="1"/>
+                    <field name="list_price" string="ty rate"/>
+                    <newline/>
+                    <group expand="0" string="Group By...">
+                        <filter name="categ_id" string="Catagory" icon="terp-stock_symbol-selection" domain="[]" context="{'group_by':'categ_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_hotel_room_amenities_list">
+            <field name="name">hotel.room_amenities_list</field>
+            <field name="model">hotel.room.amenities</field>
+            <field name="arch" type="xml">
+                <tree string="Hotel Room amenities">
+                    <field name="name" />
+                    <field name="categ_id" select="1"/>
+                    <field name="list_price" string="ty rate"/>
+                    
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_hotel_room_amenities_view_form">
+            <field name="name">Hotel Room amenities</field>
+            <field name="res_model">hotel.room.amenities</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_hotel_room_amenities_list"/>
+        </record>
+        <menuitem name="amenities"
+                  id="menu_action_hotel_room_amenities_view_form"
+                  action="action_hotel_room_amenities_view_form"
+                  sequence="2"
+                  parent="hotel.menu_ty"/> 
+        
+    <!--========================================================
+                                Room Type
+        ========================================================-->
+        <record model="ir.ui.view" id="view_hotel_room_type_form">
+            <field name="name">hotel.room_type.form</field>
+            <field name="model">hotel.room.type</field>
+            <field name="arch" type="xml">
+                <form string=" Hotel Room Type" version="7.0">
+                  <sheet>
+                   <group>
+                    <field name="name" select="1"/>
+                    <field name="parent_id" domain="[('isroomtype','=',True)]" select="1"/>
+                   </group>
+                  </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_hotel_room_type_tree">
+            <field name="name">hotel.room_type.tree</field>
+            <field name="model">hotel.room.type</field>
+            <field name="arch" type="xml">
+                <tree string=" Hotel Room Type">
+                    <field name="complete_name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="open_hotel_room_type_form_tree">
+            <field name="name">Room Type</field>
+            <field name="res_model">hotel.room.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem  id="menu_hotel_room" name="Room" parent="hotel.hotel_configuration_menu" sequence="2"/>
+        <menuitem name="Room Types"
+                  id="menu_open_hotel_room_type_form_tree" 
+                  action="open_hotel_room_type_form_tree"
+                  sequence="6"
+                  parent="hotel.menu_hotel_room"/>
+                 
+    <!--===================================================
+                                Rooms
+        =================================================== -->
+
+        <record model="ir.ui.view" id="view_hotel_room_form">
+            <field name="name">hotel.room.form</field>
+            <field name="model">hotel.room</field>
+            <field name="arch" type="xml">
+                <form string="Hotel Room" version="7.0">
+                <header>
+                    <field name="state" string="Room Status" widget='statusbar'/>
+                </header>
+                <sheet>
+                <div class="oe_title">
+			        <label for="name" string="Name" />
+			        <h1>
+			            <field name="name" select="1"/>
+			        </h1>
+			        <label for="status" string="Status" />
+			        <h2>
+			            <field name="status" />
+			        </h2>
+				</div>
+				<notebook>
+						<page string="Information">
+                         <group colspan="4" col="4">
+                            <field name="floor_id" string = "Floor" />
+                            <field name="categ_id" select="1" domain="[('isroomtype','=',True)]"/>
+                            <field name="product_manager" select="2"/>
+                            <field name="uom_id" invisible="1"/>
+                          </group>
+                            <newline/>
+                            <separator colspan='4' string="Supplier Taxes"/>
+                            <field name="supplier_taxes_id" colspan="4" nolabel='1' help='List of supplier taxes if there any on the defined room. '/>
+                            <newline/>
+                            <separator colspan='4' string="Customer Taxes"/>
+                            <field name="taxes_id" colspan="4" nolabel='1' help='Customer taxes apply on the perticular room. '/>
+                            
+                        </page>
+                        <page string = "Room amenities">
+                            <separator string=" Room amenities"/>
+                            <field name="room_amenities" colspan="4" nolabel="1"/>
+                        </page>
+                        <page string="Procurement">
+                          <group colspan="4" col="4">
+                            <field name="active" select="2"/>
+                            <field name="list_price"/> -->
+                            <field name="rental" select="2"/>
+                            <field name="standard_price"/>
+                            <field name="cost_method"/>
+                            <field name="uos_id"/>
+                            <field name="uos_coeff" />
+                            <newline/>
+                            <separator string="Room Rent" />
+                              <field name="room_rent_ids" colspan="4" nolabel='1' >
+                                <form string="Room Rent" version="7.0">
+                                    <group colspan="4" col="2">
+                                   		<field name="price"/>
+                                   	</group>
+                                   	<group colspan="4" col="8">
+	                                    <field name="mon"/>
+	                                    <field name="tue"/>
+	                                    <field name="wed"/>
+	                                    <field name="thu"/>
+	                                    <field name="fri"/>
+	                                    <field name="sat"/>
+	                                    <field name="sun"/>
+	                                </group>
+                                </form>
+                                <tree string="Room Rent" editable="bottom" >
+                                   		<field name="price"/>
+	                                    <field name="mon"/>
+	                                    <field name="tue"/>
+	                                    <field name="wed"/>
+	                                    <field name="thu"/>
+	                                    <field name="fri"/>
+	                                    <field name="sat"/>
+	                                    <field name="sun"/>
+                                </tree>
+                            </field>
+                          </group>
+                          <newline/>
+                          <group>
+                            <separator string="Suppliers" />
+                            <field name="seller_ids" colspan="4" nolabel="1" widget="one2many_list"/>
+                          </group>
+                        </page>
+                        <page string="Descriptions">
+                            <separator string="Description" />
+                            <field name="description" colspan="4" nolabel="1" />
+                        </page>
+                </notebook>
+                </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_hotel_room_search">
+            <field name="name">hotel.room.search</field>
+            <field name="model">hotel.room</field>
+            <field name="arch" type="xml">
+                <search string="Hotel Room" >
+                    <field name="name" />
+                    <field name="categ_id" select="1"/>
+                    <field name="list_price" string="Room rate"/>
+                    <field name="state" string="Status"/>
+                    <newline/>
+                    <filter string="Available" domain="[('state','=', 'unassigned')]" help="Available Rooms" />
+                    <group expand="0" string="Group By...">
+                        <filter name="state" string="state" domain="[]" context="{'group_by':'state'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+		<record model="ir.ui.view" id="view_hotel_room_tree">
+			<field name="name">hotel.room.tree</field>
+			<field name="model">hotel.room</field>
+			<field name="arch" type="xml">
+				<tree string="Hotel Room" >
+					<field name="name" />
+					<field name="categ_id" select="1"/>
+					<field name="list_price" string="Room rate"/>
+					<field name="status"/>
+				</tree>
+			</field>
+		</record>
+
+		<record model="ir.ui.view" id="view_hotel_room_kanban">
+			<field name="name">hotel.room.kanban</field>
+			<field name="model">hotel.room</field>
+			<field name="arch" type="xml">
+				<kanban version="7.0" default_group_by="status" >
+					<field name="name" />
+					<field name="status" />
+					<field name="color" />
+					<field name="lst_price"/>
+					<templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_vignette oe_semantic_html_override oe_kanban_card oe_kanban_project oe_kanban_global_click">
+	                            <div class="oe_dropdown_toggle oe_dropdown_kanban" groups="base.group_user">
+	                            <span class="oe_e">í</span>
+	                                    <ul class="oe_dropdown_menu">
+				                            <t t-if="widget.view.is_action_enabled('edit')"><li><a type="edit">Edit</a></li></t>
+		                                    <t t-if="widget.view.is_action_enabled('delete')"><li><a type="delete">Delete</a></li></t>
+		                                    <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
+	                                    </ul>
+	                            </div>
+	                            <div class="oe_kanban_details" style='margin-top: -10px;'>
+	                               <div class="oe_kanban_content"> 
+	                                   <div class="oe_kanban_project_list">
+		                                   <H3>
+		                                   <a type="open">
+		                                       <t t-if="record.code.raw_value" style="margin-right: 10px">[<field name="code" />] </t> <field name="name"/>
+	                                       </a>
+	                                       </H3>
+	                                   </div>
+	                                   <div name="tags"/>
+	                                        <ul>
+		                                        <li>Status: <field name="status"></field></li>
+		                                        <li>Rate: <field name="lst_price"></field></li>
+		                                    </ul>   
+	                               </div>
+	                               <div class="oe_kanban_bottom_right">
+	                                     <a t-if="record.status.raw_value === 'available'" type="object" string="Available" name="set_room_status_occupied" class="oe_kanban_status oe_kanban_status_green "> </a>
+	                                     <a t-if="record.status.raw_value === 'occupied'" type="object" string="occupied" name="set_room_status_available" class="oe_kanban_status oe_kanban_status_red " > </a>
+	                                </div>
+	                            </div>
+                            </div>
+                        </t>
+                    </templates>
+				</kanban>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="action_hotel_room_form">
+			<field name="name">Hotel Room</field>
+			<field name="res_model">hotel.room</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">kanban,tree,form</field>
+		</record>
+
+		<menuitem name="Rooms"
+				  id="menu_open_hotel_room_form" 
+				  action="action_hotel_room_form"
+				  sequence="5"
+				  parent="hotel.menu_hotel_room"/>
+
+		<!-- Services -->
+		<record model="ir.ui.view" id="view_hotel_service_type_form">
+			<field name="name">hotel.service_type.form</field>
+			<field name="model">hotel.service.type</field>
+			<field name="arch" type="xml">
+				<form string="Service Type" version="7.0">
+                  <sheet>
+                   <group>
+                    <field name="name" select="1"/>
+                    <field name="parent_id" domain="[('isservicetype','=',True)]" select="1"/>
+                   </group>
+                  </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_hotel_service_type_tree">
+            <field name="name">hotel.service_type.tree</field>
+            <field name="model">hotel.service.type</field>
+            <field name="arch" type="xml">
+                <tree string="Service Type">
+                    <field name="complete_name"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="open_hotel_service_type_form_tree">
+            <field name="name">Service Type</field>
+            <field name="res_model">hotel.service.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <menuitem id="menu_hotel_service" name="Services" parent="hotel.hotel_configuration_menu" sequence="2"/>
+        <menuitem name="Service Types"
+                  id="menu_open_hotel_service_type_form_tree" 
+                  action="open_hotel_service_type_form_tree"
+                  sequence="9"
+                  parent="hotel.menu_hotel_service"/>
+
+        <record model="ir.ui.view" id="view_hotel_services_form">
+            <field name="name">.hotel.services.form</field>
+            <field name="model">hotel.services</field>
+            <field name="arch" type="xml">
+                <form string="Hotel Services" version="7.0">
+                <sheet>
+                <h1>
+                    <label string="Service" />
+                    <field name="name" select="1"/>
+                </h1>
+                <group>
+                    <field name="default_code" select="1" />
+                </group>
+                <notebook>
+                        <page string="Information">
+                          <group>
+                          <group colspan="4" col="4">
+                            <field name="type" select="2"/>
+                            <!-- <field name="procure_method"/> -->
+                            <field name="state" select="2"/>
+                            <field name="categ_id" domain="[('isservicetype','=',True)]" select="1"/>
+                            <field name="product_manager" select="2"/>
+                            <field name="uom_id"/>
+                            <field name="uom_po_id"/>
+                          </group>
+                          </group>
+                            <newline/>
+                            <separator colspan='4' string="Supplier Taxes"/>
+                            <field name="supplier_taxes_id" colspan="4" nolabel='1' help='List of supplier taxes related to the service provided by hotel.'/>
+                            <newline/>
+                            <separator colspan='4' string="Customer Taxes"/>
+                            <field name="taxes_id" colspan="4" nolabel='1' help='Customer taxes applied on the service.'/>
+                        </page>
+                        <page string="Procurement">
+                            <group colspan="4" col="4">
+                                <!-- <field name="supply_method"/> -->
+                                <field name="active" select="2"/>
+                                <field name="list_price"/>
+                                <field name="cost_method"/>
+                                <field name="sale_ok" select="2"/>
+                                <field name="standard_price"/>
+                                <field name="rental" select="2"/>
+                                <field name="uos_id" />
+                                <field name="uos_coeff" />
+                             </group>
+                            <newline />
+                            <group>
+                                <separator string="Suplliers" />
+                                <field name="seller_ids" colspan="4" nolabel="1" widget="one2many_list"/>
+                            </group>
+                        </page>
+                        <page string="Descriptions">
+                            <separator string="Description" />
+                            <field name="description" colspan="4" nolabel="1" />
+                            <separator string="Sale Description"/>
+                            <field name="description_sale" colspan="4" nolabel="1"/>
+                            <separator string="Purchase Description"/>
+                            <field name="description_purchase" colspan="4" nolabel="1"/>
+                        </page>
+                </notebook>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_hotel_services_search">
+            <field name="name">hotel.services.search</field>
+            <field name="model">hotel.services</field>
+            <field name="arch" type="xml">
+                <search string="Hotel Services" >
+                    <field name="name" />
+                    <field name="categ_id" select="1"/>
+                    <field name="list_price" string="Service rate"/>
+                    <newline/>
+                    <group expand="0" string="Group By...">
+                        <filter name="categ_id" string="Catagory" icon="terp-stock_symbol-selection" domain="[]" context="{'group_by':'categ_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_hotel_services_tree">
+            <field name="name">hotel.services.tree</field>
+            <field name="model">hotel.services</field>
+            <field name="arch" type="xml">
+                <tree string="Hotel Services" >
+                    <field name="name" />
+                    <field name="categ_id" select="1"/>
+                    <field name="list_price" string="Service rate"/>
+                </tree>
+            </field>
+        </record>
+        <record model="ir.actions.act_window" id="action_hotel_services_form">
+            <field name="name">Hotel Services</field>
+            <field name="res_model">hotel.services</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Services"
+                  id="menu_open_hotel_services_form" 
+                  action="action_hotel_services_form"
+                  sequence="8"
+                  parent="hotel.menu_hotel_service"/>
+
+    <!--========================================================
+                                Hotel Folio
+        ========================================================-->
+        <record model="ir.ui.view" id="view_hotel_folio1_form">
+            <field name="name">hotel.folio.form</field>
+            <field name="model">hotel.folio</field>
+            <field name="arch" type="xml">
+                <form string="Folio" version="7.0">
+                 <header>
+                     <button name="order_confirm" string="Confirm Folio" states="draft" icon="gtk-apply" class="oe_highlight"/>
+                     <button name="invoice_recreate" string="Recreate Invoice" states="invoice_except" icon="gtk-redo"/>
+                     <button name="invoice_corrected" string="Invoice Corrected" states="invoice_except" icon="gtk-paste-v"/>
+                     <button name="ship_recreate" string="Recreate Procurement" states="shipping_except" icon="gtk-redo"/>
+                     <button name="ship_corrected" string="Procurement Corrected" states="shipping_except" icon="gtk-paste-v"/>
+                     <button name="manual_invoice" states="manual" string="Create Invoice" icon="gtk-new"/>
+                     <button name="ship_cancel" string="Cancel Folio" states="shipping_except" icon="gtk-cancel" class="oe_highlight" />
+                     <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object" icon="gtk-file"/>
+                     <button name="action_cancel" string="Cancel Folio" states="manual,progress" type="object" icon="gtk-cancel"/>
+                     <button name="cancel" string="Cancel Folio" states="draft" icon="gtk-cancel"/>
+                     <button name="invoice_cancel" string="Cancel Folio" states="invoice_except" icon="gtk-cancel"/>
+                     <field name="state" select="2" widget="statusbar" statusbar_visible="draft,sent,invoiced,done"/>
+                 </header>
+                  <sheet>
+                    <label string="Folio Number"/>
+                    <h1>
+                     <field name="name" colspan="4"/>
+                    </h1>
+                    <group colspan="4" col="4">
+                        <field name="date_order"/>
+                        <field name="invoiced"/> 
+           <field name="warehouse_id" string="Branch"/> -->
+                    </group>
+                    <notebook colspan="4">
+                        <page string="Folio">
+                         <group colspan="4" col="4">
+                            <field name="partner_id" on_change="onchange_partner_id(partner_id)" required="1" string="Guest Name"/>
+                            <field name="partner_invoice_id"/>
+                            <field name="pricelist_id"  domain="[('type','=','sale')]" />
+                            <field name="project_id"/>
+                            <field name="partner_shipping_id" domain="[('partner_id','=',partner_id)]" invisible="1" />
+                         </group>
+                            <newline/>
+                            <group colspan="4" col="6">
+                                <field name="checkin_date" on_change="onchange_dates(checkin_date,checkout_date)" />
+                                <field name="checkout_date" on_change="onchange_dates(checkin_date,checkout_date)"/>
+                                <field name="duration" on_change="onchange_dates(checkin_date,False,duration)"/>
+                            </group>
+                            <separator string="Room Lines" colspan="4"/>
+                            <field name="room_lines"  colspan="4" string="Room Line" default_get="{'checkin_date': checkin_date,'checkout_date':checkout_date}" nolabel="1">
+                                <form string="Room Line"  version="7.0">
+                                    <notebook>
+                                        <page string="Folio Line">
+                                            <group>
+                                            <field name="checkin_date"/>
+                                            <field name="checkout_date" on_change="on_change_checkout(checkin_date,checkout_date)" />
+                                            <separator string="Automatic Declaration" colspan="4"/>
+                                            <field name="product_uom_qty"
+                                                on_change="product_id_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, False, parent.date_order)"
+                                                context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'uom':product_uom}"
+                                                invisible="1"/>
+                                            <field name="product_uom"
+                                                on_change="product_uom_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, False, parent.date_order)"
+                                                string="Rent(UOM)"/>
+                                            <field name="product_id"
+                                                on_change="product_id_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, True, parent.date_order)"
+                                                context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'uom':product_uom}"
+                                                colspan="4" select="1" domain="[('isroom','=',True)]" string="Room No"/>
+                                            </group>
+                                            <separator string="Manual Description"
+                                                colspan="4" />
+                                            <field name="name" colspan="4" select="2" placeholder="---Description---"/>
+                                            <group>
+                                            <field name="price_unit" select="2" string="Rent"/>
+                                            <field name="discount"/>
+                                            <newline/>
+                                            <field name="tax_id" colspan="4" nolabel="1"/>
+                                            <separator string="States" colspan="4"/>
+                                            <field name="state" select="2"/>
+                                            <field name="invoiced" select="2"/>
+                                            </group>
+                                        </page>
+                                        <page string="Extra Info">
+                                            <group>
+                                            <field name="product_uos_qty"/>
+                                            <field name="product_uos"  />
+                                            <field name="address_allotment_id" select="2"/>
+                                            </group>
+                                            <!-- <separator string="Properamenities" colspan="4"/> -->
+                                        </page>
+                                        <page string="History">
+                                            <separator string="Invoice Lines" colspan="4"/>
+                                            <field name="invoice_lines" colspan="4" nolabel="1"/>
+                                        </page>
+                                    </notebook>
+                                </form>
+                                <tree string = "Room Line">
+                                    <field name="name"/>
+                                    <field name="checkin_date"/>
+                                    <field name="checkout_date"/>
+                                    <field name="product_id" string="Room No"/>
+                                    <field name="product_uom" string="Rent(UOM)"/>
+                                    <field name="price_unit" string="Rent"/>
+                                    <field name="price_subtotal"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                            <separator string="Service Lines" colspan="4"/>
+                            <field name="service_lines"  colspan="4" string = "Service Line" nolabel="1">
+                                <form string="Service Line"  version="7.0">
+                                    <notebook>
+                                        <page string="Service Line">
+                                            <separator string="Automatic Declaration" colspan="4"/>
+                                            <group>
+                                            <field name="product_uom_qty"
+                                                on_change="product_id_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, False, parent.date_order)"
+                                                context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'hotel':parent.warehouse_id,'uom':product_uom}"
+                                                select="1"/>
+                                            <field name="product_uom"
+                                                on_change="product_uom_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, False, parent.date_order)"
+                                                />
+                                            <field name="product_id"
+                                                on_change="product_id_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, True, parent.date_order)"
+                                                context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'hotel':parent.warehouse_id,'uom':product_uom}"
+                                                select="1" domain="[('isservice','=',True)]" />
+                                            </group>
+                                            <separator string="Manual Description"
+                                                colspan="4"/>
+                                            <field name="name" colspan="4" select="2" placeholder="---Description---"/>
+                                            <group>
+                                            <field name="price_unit" select="2"/>
+                                            <field name="discount"/>
+                                            </group>
+                                            <newline/>
+                                            <field name="tax_id" colspan="4"/>
+                                            <group>
+                                            <separator string="States" colspan="4"/>
+                                            <field name="state" select="2"/>
+                                            <field name="invoiced" select="2"/>
+                                            </group>
+                                        </page>
+                                        <page string="Extra Info">
+                                            <group>
+                                            <field name="product_uos_qty"/>
+                                            <field name="product_uos"  />
+                                            <field name="address_allotment_id" select="2"/>
+                                            </group>
+                                            <!-- <separator string="Properamenities" colspan="4"/> -->
+                                        </page>
+                                        <page string="History">
+                                            <separator string="Invoice Lines" colspan="4"/>
+                                            <field name="invoice_lines" colspan="4" nolabel="1"/>
+                                        </page>
+                                    </notebook>
+                                </form>
+                                <tree string="Service Line">
+                                    <field name="name"/>
+                                    <field name="product_id" />
+                                    <field name="product_uom_qty"/>
+                                    <field name="price_unit"/>
+                                    <field name="price_subtotal"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                            <group colspan="2" class="oe_subtotal_footer oe_right">
+                                <field name="amount_untaxed" sum="Untaxed amount" widget='monetary' />
+                                <field name="amount_tax" widget='monetary'/>
+                                   <div class="oe_subtotal_footer_separator oe_inline">
+                                    <label for="amount_total" />
+                                    <button name="button_dummy" string="Compute" states="draft" type="object" icon="terp-sale" class="oe_highlight"/>
+                                   </div>
+                                <field name="amount_total" nolabel="1" sum="Total amount" widget='monetary'/>
+                            </group>
+                           <div class="oe_clear"/>
+                        </page>
+                        <page string="Other data">
+                          <group>
+                            <field name="user_id"/>
+                            <field name="order_policy" invisible="1"/>
+                            <field name="hotel_policy" attrs="{'readonly':[('state','not in',('draft'))]}"/>
+                            <field name="client_order_ref" />   
+                          </group>
+                        </page>
+                        <page string="History">
+                            <separator string="Related invoices" colspan="4"/>
+                            <field name="invoice_ids" colspan="4" nolabel="1"/>
+                        </page>
+                    </notebook>
+                 </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="view_hotel_folio1_tree">
+            <field name="name">hotel.folio.tree</field>
+            <field name="model">hotel.folio</field>
+            <field name="arch" type="xml">
+                <tree string="Hotel Folio" colors="blue:state == 'draft';gray:state == 'done'">
+                    <field name="checkin_date" />
+                    <field name="checkout_date" />
+                    <field name="name" select="1"/>
+                    <field name="partner_id"  select="1"/>
+                    <field name="date_order" select="1"/>
+                    <field name="state"/>
+                    <field name="amount_total" sum="Total amount"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="hotel_folio_calendar_view">
+            <field name="name">Hotel- Folios Calendar</field>
+            <field name="model">hotel.folio</field>
+            <field name="arch" type="xml">
+                <calendar string="Folios" date_start="checkin_date" color="user_id" date_stop="checkout_date">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="duration"/>
+                </calendar>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="open_hotel_folio1_form_tree_all">
+            <field name="name">Hotel Folio</field>
+            <field name="res_model">hotel.folio</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,calendar</field>
+        </record>
+
+        <menuitem  id="menu_all_folio" name="Folio" parent="hotel.hotel_management_menu" sequence="4"/>
+        <menuitem name="Generate Folio"
+                  id="menu_open_hotel_folio1_form_tree_all"
+                  action="open_hotel_folio1_form_tree_all"
+                  sequence="5"
+                  parent ="menu_all_folio"/>
+
+        <!-- Categories for Room, amenities, Services -->
+        <record model="ir.actions.act_window" id="hotel_room_category_action">
+            <field name="name">Rooms by Category</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.category</field>
+            <field name="domain">[('parent_id','=',False),('isroomtype','=',True)]</field>
+            <field name="view_type">tree</field>
+            <field name="view_id" ref="product.product_category_tree_view"/>
+        </record>
+        <menuitem name="Room by Category" 
+                  id="menu_hotel_room_category_action" 
+                  action="hotel_room_category_action"
+                  sequence="7"
+                  parent="hotel.menu_hotel_room"/>
+
+        <record model="ir.actions.act_window" id="hotel_ty_category_action">
+            <field name="name">amenities by Category</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.category</field>
+            <field name="domain">[('parent_id','=',False),('istype','=',True)]</field>
+            <field name="view_type">tree</field>
+            <field name="view_id" ref="product.product_category_tree_view"/>
+        </record>
+        <menuitem name="amenities by Category" 
+                  id="menu_hotel_ty_category_action" 
+                  action="hotel_ty_category_action"
+                  sequence="4"
+                  parent="hotel.menu_ty"/>
+
+        <record model="ir.actions.act_window" id="hotel_service_category_action">
+            <field name="name">Services by Category</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.category</field>
+            <field name="domain">[('parent_id','=',False),('isservicetype','=',True)]</field>
+            <field name="view_type">tree</field>
+            <field name="view_id" ref="product.product_category_tree_view"/>
+        </record>
+        <menuitem name="Services by Category" 
+                  id="menu_hotel_service_category_action" 
+                  action="hotel_service_category_action"
+                  sequence="10"
+                  parent="hotel.menu_hotel_service"/>
+    </data>
+</openerp>
