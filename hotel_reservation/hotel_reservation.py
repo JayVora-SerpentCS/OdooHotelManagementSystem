@@ -31,12 +31,9 @@ class hotel_folio(osv.Model):
     _columns = {
         'reservation_id': fields.many2one('hotel.reservation', 'Reservation Id'),
     }
-hotel_folio()
-
-
+    
 class hotel_reservation(osv.Model):
     _name = "hotel.reservation"
-   
     _rec_name = "reservation_no"
     _description = "Reservation"
     _order = 'reservation_no desc'
@@ -57,7 +54,6 @@ class hotel_reservation(osv.Model):
         'state': fields.selection([('draft', 'Draft'), ('confirm', 'Confirm'), ('cancel', 'Cancel'), ('done', 'Done')], 'State', readonly=True),
         'folio_id': fields.many2many('hotel.folio', 'hotel_folio_reservation_rel', 'order_id', 'invoice_id', 'Folio'),
         'dummy': fields.datetime('Dummy'),
-#        'hotel_id': fields.many2one('hotel.hotel', required=True),
     }
     _defaults = {
         'reservation_no': lambda obj, cr, uid, context: obj.pool.get('ir.sequence').get(cr, uid, 'hotel.reservation'),
@@ -110,7 +106,6 @@ class hotel_reservation(osv.Model):
                 for line_id in reservation.reservation_line:
                     line_id = line_id.reserve
                     for room_id in line_id:
-                        print '\n\n:: in else for for roomid =', room_id
                         vals = {
                             'room_id': room_id.id,
                             'check_in': reservation.checkin,
@@ -160,9 +155,6 @@ class hotel_reservation(osv.Model):
             self.write(cr, uid, ids, {'state': 'done'}, context=context)
         return True
 
-hotel_reservation()
-
-
 class hotel_reservation_line(osv.Model):
     _name = "hotel_reservation.line"
     _description = "Reservation Line"
@@ -189,9 +181,6 @@ class hotel_reservation_line(osv.Model):
                 room_ids.append(room.id)
         domain = {'reserve': [('id', 'in', room_ids)]}
         return {'domain': domain}
-
-hotel_reservation_line()
-
 
 class hotel_room_reservation_line(osv.Model):
     _name = 'hotel.room.reservation.line'
@@ -230,10 +219,6 @@ class hotel_room(osv.Model):
                 status = {'status': 'available'}
             self.write(cr, uid, [room.id], status, context=context)
         return True
-
-
-hotel_room()
-
 
 class room_reservation_summary(osv.Model):
     _name = 'room.reservation.summary'
@@ -300,9 +285,6 @@ class room_reservation_summary(osv.Model):
                             if reservation_line_ids:
                                 room_list_stats.append({'state':'Reserved', 'date':chk_date, 'room_id':room.id})
                                 break
-#                                 if l.check_in <= chk_date and l.check_out >= chk_date:
-#                                     room_list_stats.append({'state':'Reserved','date':chk_date, 'room_id':room.id})
-#                                     break
                             else:
                                 room_list_stats.append({'state':'Free', 'date':chk_date, 'room_id':room.id})
                                 break
@@ -311,9 +293,6 @@ class room_reservation_summary(osv.Model):
             main_header.append({'header':summary_header_list})
             res.update({'value':{'summary_header': str(main_header), 'room_summary':str(all_room_detail)}})
         return res
-
-room_reservation_summary()
-
 
 class quick_room_reservation(osv.TransientModel):
     _name = 'quick.room.reservation'
@@ -353,7 +332,5 @@ class quick_room_reservation(osv.TransientModel):
                             'name':room_resv.room_id and room_resv.room_id.name or ''})]
                         }, context=context)
         return True
-
-quick_room_reservation()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

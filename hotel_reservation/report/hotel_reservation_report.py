@@ -31,7 +31,6 @@ class reservation_detail_report(report_sxw.rml_parse):
             'get_data': self.get_data,
             'get_checkin': self.get_checkin,
             'get_checkout': self.get_checkout,
-#            'get_room':self.get_room,
             'get_room_type':self._get_room_type,
             'get_room_nos':self._get_room_nos,
             'get_room_used_detail':self._get_room_used_detail,
@@ -89,16 +88,6 @@ class reservation_detail_report(report_sxw.rml_parse):
                     room_used_details.append(details)
         return room_used_details
 
-#    def get_room(self, date_start, date_end):
-#        self.cr.execute("select pt.name,count(pt.name) as No_of_times from hotel_reservation as hr " \
-#                   "inner join hotel_reservation_line as hrl on hrl.line_id=hr.id " \
-#                   "inner join hotel_reservation_line_room_rel as hrlrr on hrlrr.room_id=hrl.id " \
-#                   "inner join product_product as pp on pp.product_tmpl_id=hrlrr.hotel_reservation_line_id " \
-#                   "inner join product_template as pt on pt.id=pp.product_tmpl_id " \
-#                   "where hr.state<>'draft' and hr.checkin >= %s and hr.checkout <= %s group by pt.name " \
-#                   ,(date_start,date_end))
-#        res2=self.cr.dictfetchall()
-#        return res2
 
 report_sxw.report_sxw('report.reservation.detail', 'hotel.reservation', 'addons/hotel_reservation/report/room_res.rml', parser=reservation_detail_report)
 report_sxw.report_sxw('report.checkin.detail', 'hotel.reservation', 'addons/hotel_reservation/report/checkinlist.rml', parser=reservation_detail_report)
