@@ -30,16 +30,11 @@ class product_category(osv.Model):
         'ismenutype': fields.boolean('Is Menu Type'),
     }
 
-product_category()
-
-
 class product_product(osv.Model):
     _inherit = "product.product"
     _columns = {
         'ismenucard': fields.boolean('Is Menucard'),
     }
-
-product_product()
 
 
 class hotel_menucard_type(osv.Model):
@@ -53,9 +48,6 @@ class hotel_menucard_type(osv.Model):
         'ismenutype': 1,
     }
 
-hotel_menucard_type()
-
-
 class hotel_menucard(osv.Model):
     _name = 'hotel.menucard'
     _inherits = {'product.product':'product_id'}
@@ -68,8 +60,6 @@ class hotel_menucard(osv.Model):
         'ismenucard': 1,
     }
 
-hotel_menucard()
-
 
 class hotel_restaurant_tables(osv.Model):
     _name = "hotel.restaurant.tables"
@@ -78,8 +68,6 @@ class hotel_restaurant_tables(osv.Model):
         'name':fields.char('Table Number', size=64, required=True),
         'capacity':fields.integer('Capacity'),
     }
-
-hotel_restaurant_tables()
 
 
 class hotel_restaurant_reservation(osv.Model):
@@ -159,8 +147,6 @@ class hotel_restaurant_reservation(osv.Model):
         ('check_dates', 'CHECK (start_date<=end_date)', 'Start Date Should be less than the End Date!'),
     ]
 
-hotel_restaurant_reservation()
-
 
 class hotel_restaurant_kitchen_order_tickets(osv.Model):
     _name = "hotel.restaurant.kitchen.order.tickets"
@@ -174,8 +160,6 @@ class hotel_restaurant_kitchen_order_tickets(osv.Model):
         'tableno':fields.many2many('hotel.restaurant.tables', 'temp_table3', 'table_no', 'name', 'Table Number', size=64, help="Table reservation detail."),
         'kot_list':fields.one2many('hotel.restaurant.order.list', 'kot_order_list', 'Order List', help="Kitchen order list"),
     }
-
-hotel_restaurant_kitchen_order_tickets()
 
 
 class hotel_restaurant_order(osv.Model):
@@ -229,8 +213,6 @@ class hotel_restaurant_order(osv.Model):
     _defaults = {
      'order_no': lambda obj, cr, uid, context: obj.pool.get('ir.sequence').get(cr, uid, 'hotel.restaurant.order'),
      }
-
-hotel_restaurant_order()
 
 
 class hotel_reservation_order(osv.Model):
@@ -287,8 +269,6 @@ class hotel_reservation_order(osv.Model):
         'order_number':lambda obj, cr, uid, context: obj.pool.get('ir.sequence').get(cr, uid, 'hotel.reservation.order'),
     }
 
-hotel_reservation_order()
-
 
 class hotel_restaurant_order_list(osv.Model):
 
@@ -315,7 +295,5 @@ class hotel_restaurant_order_list(osv.Model):
         'item_rate':fields.float('Rate', size=64),
         'price_subtotal': fields.function(_sub_total, method=True, string='Subtotal'),
     }
-
-hotel_restaurant_order_list()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
