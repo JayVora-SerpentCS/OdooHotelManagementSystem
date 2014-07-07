@@ -316,7 +316,9 @@
                                 <field name="orderno"/>
                                 <field name="resno" />
                             </group>
+                            <group>
                             <field name="kot_date"/>
+                            </group>
                             <group colspan="4" col="4">
                                 <field name="room_no"/>
                                 <field name="w_name"/>
