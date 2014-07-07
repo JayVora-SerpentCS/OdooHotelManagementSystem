@@ -241,7 +241,7 @@
                             <field name="check_in"/>
                             <field name="check_out"/>
                             <field name="warehouse_id"/>
-                            -->
+                            
                             <field name="pricelist_id"/>
                         </group>
                     </sheet>
