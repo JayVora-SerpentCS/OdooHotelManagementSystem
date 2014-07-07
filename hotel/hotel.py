@@ -302,10 +302,10 @@ class hotel_folio(osv.Model):
 
     def action_ship_end(self, cr, uid, ids, context=None):
         order_ids = [folio.order_id.id for folio in self.browse(cr, uid, ids)]
-        res = self.pool.get('sale.order').action_ship_end(cr, uid, order_ids, context=context)
+        # res = self.pool.get('sale.order').action_ship_end(cr, uid, order_ids, context=context)
         for order in self.browse(cr, uid, ids, context=context):
             order.write ({'shipped':True})
-        return res
+        # return res
 
     def has_stockable_products(self, cr, uid, ids, *args):
         order_ids = [folio.order_id.id for folio in self.browse(cr, uid, ids)]
