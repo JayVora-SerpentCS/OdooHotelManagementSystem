@@ -588,24 +588,28 @@
             <field name="arch" type="xml">
                 <form string="Folio" version="7.0">
                  <header>
-                     <button name="order_confirm" string="Confirm Folio" states="draft" icon="gtk-apply" class="oe_highlight"/>
-                     <button name="invoice_recreate" string="Recreate Invoice" states="invoice_except" icon="gtk-redo"/>
-                     <button name="invoice_corrected" string="Invoice Corrected" states="invoice_except" icon="gtk-paste-v"/>
-                     <button name="ship_recreate" string="Recreate Procurement" states="shipping_except" icon="gtk-redo"/>
-                     <button name="ship_corrected" string="Procurement Corrected" states="shipping_except" icon="gtk-paste-v"/>
-                     <button name="manual_invoice" states="manual" string="Create Invoice" icon="gtk-new"/>
-                     <button name="ship_cancel" string="Cancel Folio" states="shipping_except" icon="gtk-cancel" class="oe_highlight" />
-                     <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object" icon="gtk-file"/>
-                     <button name="action_cancel" string="Cancel Folio" states="manual,progress" type="object" icon="gtk-cancel"/>
-                     <button name="cancel" string="Cancel Folio" states="draft" icon="gtk-cancel"/>
-                     <button name="invoice_cancel" string="Cancel Folio" states="invoice_except" icon="gtk-cancel"/>
+                   
                      <field name="state" select="2" widget="statusbar" statusbar_visible="draft,sent,invoiced,done"/>
                  </header>
                   <sheet>
                     <label string="Folio Number"/>
+                    <h1 align="right">
+                      <button name="order_confirm" string="Confirm Folio" states="draft" icon="gtk-apply" class="oe_highlight oe_stat_button"/>
+                     <button name="invoice_recreate" string="Recreate Invoice" states="invoice_except" icon="gtk-redo" class="oe_stat_button"/>
+                     <button name="invoice_corrected" string="Invoice Corrected" states="invoice_except" icon="gtk-paste-v" class="oe_stat_button"/>
+                     <button name="ship_recreate" string="Recreate Procurement" states="shipping_except" icon="gtk-redo" class="oe_stat_button"/>
+                     <button name="ship_corrected" string="Procurement Corrected" states="shipping_except" icon="gtk-paste-v" class="oe_stat_button"/>
+                     <button name="manual_invoice" states="manual" string="Create Invoice" icon="gtk-new" class="oe_stat_button"/>
+                     <button name="ship_cancel" string="Cancel Folio" states="shipping_except" icon="gtk-cancel" class="oe_highlight oe_stat_button" />
+                     <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object" icon="gtk-file" class="oe_stat_button"/>
+                     <button name="action_cancel" string="Cancel Folio" states="manual,progress" type="object" icon="gtk-cancel" class="oe_stat_button"/>
+                     <button name="cancel" string="Cancel Folio" states="draft" icon="gtk-cancel" class="oe_stat_button"/>
+                     <button name="invoice_cancel" string="Cancel Folio" states="invoice_except" icon="gtk-cancel" class="oe_stat_button"/>                   
+                    </h1>
                     <h1>
                      <field name="name" colspan="4"/>
                     </h1>
+                    
                     <group colspan="4" col="4">
                         <field name="date_order"/>
                         <field name="invoiced"/> 
