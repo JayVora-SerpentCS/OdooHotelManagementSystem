@@ -383,7 +383,7 @@
 			<field name="name">hotel.room.kanban</field>
 			<field name="model">hotel.room</field>
 			<field name="arch" type="xml">
-				<kanban version="7.0" default_group_by="status" >
+				<kanban filter="status" >
 					<field name="name" />
 					<field name="status" />
 					<field name="color" />
