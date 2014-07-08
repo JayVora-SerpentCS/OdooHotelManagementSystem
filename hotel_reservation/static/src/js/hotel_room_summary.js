@@ -3,7 +3,7 @@
     _lt = openerp.web._lt;
     var QWeb = openerp.web.qweb;
     
-
+    console.log("asdasdasdasdasdas");
     openerp.hotel_reservation.RoomSummary = openerp.web.form.FormWidget.extend(openerp.web.form.ReinitializeWidgetMixin, {
     	
     	display_name: _lt('Form'),
