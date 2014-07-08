@@ -31,7 +31,7 @@ class hotel_folio(osv.Model):
     _columns = {
         'reservation_id': fields.many2one('hotel.reservation', 'Reservation Id'),
     }
-    
+
 class hotel_reservation(osv.Model):
     _name = "hotel.reservation"
     _rec_name = "reservation_no"
@@ -146,7 +146,7 @@ class hotel_reservation(osv.Model):
                         'name': reservation['reservation_no'],
                         'product_uom': r['uom_id'].id,
                         'price_unit': r['lst_price'],
-                        'product_uom_qty': (datetime.datetime(*time.strptime(reservation['checkout'], '%Y-%m-%d %H:%M:%S')[:5]) - datetime.datetime(*time.strptime(reservation['checkin'], '%Y-%m-%d %H:%M:%S')[:5])).days   
+                        'product_uom_qty': (datetime.datetime(*time.strptime(reservation['checkout'], '%Y-%m-%d %H:%M:%S')[:5]) - datetime.datetime(*time.strptime(reservation['checkin'], '%Y-%m-%d %H:%M:%S')[:5])).days
                     }))
                     room_obj.write(cr, uid, [r.id], {'status': 'occupied'}, context=context)
             folio_vals.update({'room_lines': folio_lines})
@@ -215,7 +215,7 @@ class hotel_room(osv.Model):
             reservation_line_ids = reservation_line_obj.search(cr, uid, [('id', 'in', reservation_line_ids), ('check_in', '<=', curr_date), ('check_out', '>=', curr_date)], context=context)
             if reservation_line_ids:
                 status = {'status': 'occupied'}
-            else: 
+            else:
                 status = {'status': 'available'}
             self.write(cr, uid, [room.id], status, context=context)
         return True
@@ -267,7 +267,7 @@ class room_reservation_summary(osv.Model):
                 summary_header_list.append(val)
                 date_range_list.append(temp_date.strftime(DEFAULT_SERVER_DATETIME_FORMAT))
                 temp_date = temp_date + datetime.timedelta(days=1)
-            all_detail.append(summary_header_list) 
+            all_detail.append(summary_header_list)
             room_ids = room_obj.search(cr, uid, [], context=context)
             all_room_detail = []
             for room in room_obj.browse(cr, uid, room_ids, context=context):

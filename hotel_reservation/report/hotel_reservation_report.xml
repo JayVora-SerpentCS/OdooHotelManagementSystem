@@ -12,12 +12,11 @@
 		<report id="hotel_checkin_details"
 			string="CheckIn Detail"
 			model="hotel.reservation"
-			name="checkin.detail"
-			rml="hotel_reservation/report/checkinlist.rml"
-			menu="False"
-			auto="False"/>
+			report_type="qweb-pdf"
+			file="hotel_reservation.report_checkin_qweb"
+            name="hotel_reservation.report_checkin_qweb"  />
 			
-		<report id="hotel_checkin_details"
+		<report id="hotel_checkout_details"
 			string="CheckOut Detail"
 			model="hotel.reservation"
 			name="checkout.detail"

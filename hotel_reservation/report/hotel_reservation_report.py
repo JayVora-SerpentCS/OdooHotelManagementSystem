@@ -19,14 +19,14 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 ##############################################################################
-
+from openerp.osv import osv
 import time
 from openerp.report import report_sxw
 
 class reservation_detail_report(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
         super(reservation_detail_report, self).__init__(cr, uid, name, context)
-        self.localcontext.update( {
+        self.localcontext.update({
             'time': time,
             'get_data': self.get_data,
             'get_checkin': self.get_checkin,
@@ -35,7 +35,7 @@ class reservation_detail_report(report_sxw.rml_parse):
             'get_room_nos':self._get_room_nos,
             'get_room_used_detail':self._get_room_used_detail,
         })
-        self.context=context
+        self.context = context
 
     def _get_room_type(self, reservation_line):
         room_types = ''
@@ -43,7 +43,7 @@ class reservation_detail_report(report_sxw.rml_parse):
             if line.categ_id:
                 room_types += line.categ_id.name
                 room_types += ' '
-                
+
         return room_types
 
     def _get_room_nos(self, reservation_line):
@@ -66,10 +66,10 @@ class reservation_detail_report(report_sxw.rml_parse):
         res = reservation_obj.browse(self.cr, self.uid, tids)
         return res
 
-    def get_checkout(self,date_start,date_end):
+    def get_checkout(self, date_start, date_end):
         reservation_obj = self.pool.get('hotel.reservation')
-        tids = reservation_obj.search(self.cr,self.uid,[('checkout', '>=', date_start),('checkout', '<=', date_end)])
-        res = reservation_obj.browse(self.cr,self.uid,tids)
+        tids = reservation_obj.search(self.cr, self.uid, [('checkout', '>=', date_start), ('checkout', '<=', date_end)])
+        res = reservation_obj.browse(self.cr, self.uid, tids)
         return res
 
     def _get_room_used_detail(self, date_start, date_end):
@@ -89,9 +89,15 @@ class reservation_detail_report(report_sxw.rml_parse):
         return room_used_details
 
 
-report_sxw.report_sxw('report.reservation.detail', 'hotel.reservation', 'addons/hotel_reservation/report/room_res.rml', parser=reservation_detail_report)
-report_sxw.report_sxw('report.checkin.detail', 'hotel.reservation', 'addons/hotel_reservation/report/checkinlist.rml', parser=reservation_detail_report)
-report_sxw.report_sxw('report.checkout.detail', 'hotel.reservation', 'addons/hotel_reservation/report/checkoutlist.rml', parser=reservation_detail_report)
-report_sxw.report_sxw('report.maxroom.detail', 'hotel.reservation', 'addons/hotel_reservation/report/maxroom.rml', parser=reservation_detail_report)
+
+class report_test(osv.AbstractModel):
+    _name = "report.hotel_reservation.report_checkin_qweb"
+    _inherit = "report.abstract_report"
+    _template = "hotel_reservation.report_checkin_qweb"
+    _wrapped_report_class = reservation_detail_report
+# report_sxw.report_sxw('report.reservation.detail', 'hotel.reservation', 'addons/hotel_reservation/report/room_res.rml', parser=reservation_detail_report)
+# report_sxw.report_sxw('report.checkin.detail', 'hotel.reservation', 'addons/hotel_reservation/report/checkinlist.rml', parser=reservation_detail_report)
+# report_sxw.report_sxw('report.checkout.detail', 'hotel.reservation', 'addons/hotel_reservation/report/checkoutlist.rml', parser=reservation_detail_report)
+# report_sxw.report_sxw('report.maxroom.detail', 'hotel.reservation', 'addons/hotel_reservation/report/maxroom.rml', parser=reservation_detail_report)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

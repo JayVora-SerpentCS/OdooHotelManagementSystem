@@ -21,15 +21,16 @@
 ##############################################################################
 
 from openerp.osv import osv, fields
+import time
 
 class hotel_reservation_wizard(osv.TransientModel):
     _name = 'hotel.reservation.wizard'
     _columns = {
-        'date_start': fields.datetime('Start Date',required=True),
-        'date_end': fields.datetime('End Date',required=True),
+        'date_start': fields.datetime('Start Date', required=True),
+        'date_end': fields.datetime('End Date', required=True),
     }
 
-    def report_reservation_detail(self,cr,uid,ids,context=None):
+    def report_reservation_detail(self, cr, uid, ids, context=None):
         values = {
             'ids': ids,
             'model': 'hotel.reservation',
@@ -41,31 +42,22 @@ class hotel_reservation_wizard(osv.TransientModel):
             'datas': values,
         }
 
-    def report_checkin_detail(self,cr,uid,ids,context=None):
+    def report_checkin_detail(self, cr, uid, ids, context=None):
+        values = {
+            'ids': ids,
+            'model': 'hotel.reservation',
+            'form': self.read(cr, uid, ids, context=context)[0],
+        }
+        return self.pool['report'].get_action(cr, uid, [], 'hotel_reservation.report_checkin_qweb', data=values, context=context)
+
+    def report_checkout_detail(self, cr, uid, ids, context=None):
         values = {
             'ids': ids,
             'model': 'hotel.reservation',
             'form': self.read(cr, uid, ids, context=context)[0]
         }
-        return {
-            'type': 'ir.actions.report.xml',
-            'report_name': 'checkin.detail',
-            'datas': values,
-        }
-
-    def report_checkout_detail(self,cr,uid,ids,context=None):
-        values = {
-            'ids': ids,
-            'model': 'hotel.reservation',
-            'form': self.read(cr, uid, ids, context=context)[0]
-        }
-        return {
-            'type': 'ir.actions.report.xml',
-            'report_name': 'checkout.detail',
-            'datas': values,
-        }
-
-    def report_maxroom_detail(self,cr,uid,ids,context=None):
+        return self.pool['report'].get_action(cr, uid, [], 'hotel_reservation.report_checkin', data=values, context=context)
+    def report_maxroom_detail(self, cr, uid, ids, context=None):
         values = {
             'ids': ids,
             'model': 'hotel.reservation',
@@ -96,7 +88,7 @@ class make_folio_wizard(osv.TransientModel):
             for folio in order.folio_id:
                 newinv.append(folio.id)
         return {
-            'domain': "[('id','in', ["+','.join(map(str, newinv))+"])]",
+            'domain': "[('id','in', [" + ','.join(map(str, newinv)) + "])]",
             'name': 'Folios',
             'view_type': 'form',
             'view_mode': 'tree,form',
