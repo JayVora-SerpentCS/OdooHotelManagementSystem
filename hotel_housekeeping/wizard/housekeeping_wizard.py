@@ -36,10 +36,12 @@ class hotel_housekeeping_wizard(osv.TransientModel):
             'model': 'hotel.housekeeping',
             'form': self.read(cr, uid, ids, context=context)[0]
         }
-        return {
-            'type': 'ir.actions.report.xml',
-            'report_name': 'activity.detail',
-            'datas': values,
-        }
+        print "valuessssss",values
+#        return {
+#            'type': 'ir.actions.report.xml',
+#            'report_name': 'hotel_housekeeping.report_housekeeping',
+#            'datas': values,
+#        }
+        return self.pool['report'].get_action(cr, uid, [], 'hotel_housekeeping.report_housekeeping', data=values, context=context)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

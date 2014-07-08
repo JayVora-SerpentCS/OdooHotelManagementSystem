@@ -1,9 +1,19 @@
 <?xml version="1.0"?>
 <openerp>
 	<data>
+	<!--
 		<report id="housekeeping_activity_detail" string="Activity Detail"
 			model="hotel.housekeeping" name="activity.detail"
-			rml="hotel_housekeeping/report/activity_detail.rml" auto="False"
-			menu="False" />
+			rml="hotel_housekeeping/view/activity_detail.xml" auto="False"
+			menu="True" />
+	-->
+      <report 
+            id="report_housekeeping_activity_detail"
+            string="Activity Detail"
+            model="hotel.housekeeping" 
+            report_type="qweb-pdf"
+            file="hotel_housekeeping.report_housekeeping"
+            name="hotel_housekeeping.report_housekeeping"
+        />
 	</data>
 </openerp>
