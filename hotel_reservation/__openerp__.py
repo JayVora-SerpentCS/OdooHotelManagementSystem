@@ -32,7 +32,7 @@
       Different reports are also provided, mainly for hotel statistics.
     """,
     "website": ["http://www.serpentcs.com", "http://www.openerp.com"],
-    "depends" : ["hotel","stock"],
+    "depends" : ["hotel", "stock"],
     "data" : [
         "security/ir.model.access.csv",
         "wizard/hotel_reservation_wizard.xml",
@@ -41,9 +41,11 @@
         "hotel_reservation_workflow.xml",
         "hotel_reservation_view.xml",
         "hotel_scheduler.xml",
+        "views/report_checkin.xml",
+
     ],
     "demo": [
-        'hotel_reservation_data.xml',
+        # 'hotel_reservation_data.xml',
     ],
     'js': ["static/src/js/hotel_room_summary.js", ],
     'qweb': ['static/src/xml/hotel_room_summary.xml'],
