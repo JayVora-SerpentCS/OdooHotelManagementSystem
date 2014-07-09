@@ -136,10 +136,12 @@ class hotel_restaurant_reservation(osv.Model):
         'tableno':fields.many2many('hotel.restaurant.tables', 'reservation_table', 'reservation_table_id', 'name', 'Table Number', help="Table reservation detail. "),
         'state' : fields.selection([('draft', 'Draft'), ('confirm', 'Confirmed'), ('done', 'Done'), ('cancel', 'Cancelled')], 'state', select=True, required=True, readonly=True),
         }
+
     _defaults = {
         'state': lambda * a: 'draft',
         'reservation_id':lambda obj, cr, uid, context: obj.pool.get('ir.sequence').get(cr, uid, 'hotel.restaurant.reservation'),
     }
+
     _sql_constraints = [
         ('check_dates', 'CHECK (start_date<=end_date)', 'Start Date Should be less than the End Date!'),
     ]

@@ -52,6 +52,7 @@ class hotel_reservation_wizard(osv.TransientModel):
             'form': self.read(cr, uid, ids, context=context)[0]
         }
         return self.pool['report'].get_action(cr, uid, [], 'hotel_reservation.report_checkout_qweb', data=values, context=context)
+    
     def report_maxroom_detail(self, cr, uid, ids, context=None):
         values = {
             'ids': ids,
@@ -61,14 +62,10 @@ class hotel_reservation_wizard(osv.TransientModel):
         return self.pool['report'].get_action(cr, uid, [], 'hotel_reservation.report_maxroom_qweb', data=values, context=context)
 
 
-
 class make_folio_wizard(osv.TransientModel):
     _name = 'wizard.make.folio'
     _columns = {
         'grouped': fields.boolean('Group the Folios'),
-    }
-    _defaults = {
-        'grouped': False,
     }
 
     def makeFolios(self, cr, uid, data, context=None):
