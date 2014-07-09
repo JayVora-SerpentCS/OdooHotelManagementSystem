@@ -123,7 +123,7 @@ class hotel_housekeeping_activities(osv.Model):
         @param context: A standard dictionary 
         @return: A dictionary which of fields with values. 
         """ 
-        if not context:
+        if context is None:
             context = {}
         res = super(hotel_housekeeping_activities, self).default_get(cr, uid, fields, context=context)
         if context['room_id']:

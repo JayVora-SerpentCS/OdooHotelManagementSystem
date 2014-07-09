@@ -21,7 +21,6 @@
 ##############################################################################
 
 from openerp.osv import osv, fields
-import time
 
 class hotel_reservation_wizard(osv.TransientModel):
     _name = 'hotel.reservation.wizard'
