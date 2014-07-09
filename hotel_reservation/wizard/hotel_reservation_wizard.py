@@ -36,11 +36,7 @@ class hotel_reservation_wizard(osv.TransientModel):
             'model': 'hotel.reservation',
             'form': self.read(cr, uid, ids, context=context)[0]
         }
-        return {
-            'type': 'ir.actions.report.xml',
-            'report_name': 'reservation.detail',
-            'datas': values,
-        }
+        return self.pool['report'].get_action(cr, uid, [], 'hotel_reservation.report_roomres_qweb', data=values, context=context)
 
     def report_checkin_detail(self, cr, uid, ids, context=None):
         values = {
@@ -56,20 +52,15 @@ class hotel_reservation_wizard(osv.TransientModel):
             'model': 'hotel.reservation',
             'form': self.read(cr, uid, ids, context=context)[0]
         }
-        return self.pool['report'].get_action(cr, uid, [], 'hotel_reservation.report_checkin', data=values, context=context)
+        return self.pool['report'].get_action(cr, uid, [], 'hotel_reservation.report_checkout_qweb', data=values, context=context)
     def report_maxroom_detail(self, cr, uid, ids, context=None):
         values = {
             'ids': ids,
             'model': 'hotel.reservation',
             'form': self.read(cr, uid, ids, context=context)[0]
         }
-        return {
-            'type': 'ir.actions.report.xml',
-            'report_name': 'maxroom.detail',
-            'datas': values,
-        }
+        return self.pool['report'].get_action(cr, uid, [], 'hotel_reservation.report_maxroom_qweb', data=values, context=context)
 
-hotel_reservation_wizard()
 
 
 class make_folio_wizard(osv.TransientModel):

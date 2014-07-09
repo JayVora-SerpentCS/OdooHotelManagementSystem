@@ -1,15 +1,6 @@
 ============================================================================================================================
  Version Change Log (hotel_reservation)
 ============================================================================================================================
-
-0.07 on 2014-07-09 by Kazim Mirza
-    * Add Qweb Report For Reservation
-        - CheckIn Report
-        - CheckOut Report
-        - Room Max Report
-        - Reservation Report 
-    * Remove RML Report
-
 0.06 on 2014-01-11 by Krunal Soni
     * Checked code quality and improved report format.
 

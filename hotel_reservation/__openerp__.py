@@ -22,7 +22,7 @@
 
 {
     "name" : "Hotel Reservation Management",
-    "version" : "0.06",
+    "version" : "0.07",
     "author": ["Serpent Consulting Services Pvt. Ltd.", "OpenERP SA" ],
     "category" : "Generic Modules/Hotel Reservation",
     "description": """
@@ -32,7 +32,7 @@
       Different reports are also provided, mainly for hotel statistics.
     """,
     "website": ["http://www.serpentcs.com", "http://www.openerp.com"],
-    "depends" : ["hotel", "stock"],
+    "depends" : ["hotel", "stock", "report_extended"],
     "data" : [
         "security/ir.model.access.csv",
         "wizard/hotel_reservation_wizard.xml",
@@ -42,6 +42,9 @@
         "hotel_reservation_view.xml",
         "hotel_scheduler.xml",
         "views/report_checkin.xml",
+        "views/report_checkout.xml",
+        "views/max_room.xml",
+        "views/room_res.xml",
 
     ],
     "demo": [
