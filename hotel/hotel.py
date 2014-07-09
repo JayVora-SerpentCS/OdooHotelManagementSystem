@@ -105,7 +105,6 @@ class hotel_room(osv.Model):
         'isroom': 1,
         'rental': 1,
         'status': 'available',
-
     }
 
     def set_room_status_occupied(self, cr, uid, ids, context=None):
