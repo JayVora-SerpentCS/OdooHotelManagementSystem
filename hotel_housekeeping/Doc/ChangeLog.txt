@@ -1,6 +1,10 @@
 ============================================================================================================================
  Version Change Log (hotel_housekeeping)
 ============================================================================================================================
+0.05 on 2014-07-09 by Vacha Trivedi
+    * Add Qweb Report Of Housekeeping.
+    * Remove RML Report
+
 0.04 on 2014-01-11 by Krunal Soni
     * Checked code quality and improved report format.
 
@@ -12,3 +16,7 @@
 
 1.01 --> Oct 1,2013 : Anil Kesariya
 	* Added Access control for manager user Improved label name.
+	
+	
+	
+	
