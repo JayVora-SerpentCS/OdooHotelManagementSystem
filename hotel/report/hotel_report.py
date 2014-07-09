@@ -21,7 +21,10 @@
 ##############################################################################
 
 import time
+from openerp.osv import osv
 from openerp.report import report_sxw
+from datetime import datetime
+from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 class folio_report(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
@@ -36,8 +39,10 @@ class folio_report(report_sxw.rml_parse):
 
     def get_data(self, date_start, date_end):
         folio_obj = self.pool.get('hotel.folio')
+        partner_obj = self.pool.get('res.partner')
         tids = folio_obj.search(self.cr, self.uid, [('checkin_date', '>=', date_start), ('checkout_date', '<=', date_end)])
-        res = folio_obj.browse(self.cr, self.uid, tids)
+        res = folio_obj.browse(self.cr, self.uid, 1)
+        res1 = partner_obj.browse(self.cr, self.uid, 1)
         return res
 
     def gettotal(self, total):
@@ -46,7 +51,13 @@ class folio_report(report_sxw.rml_parse):
 
     def getTotal(self):
         return self.temp
+    
+class report_lunchorder(osv.AbstractModel):
+    _name = 'report.hotel.report_hotel_folio'
+    _inherit = 'report.abstract_report'
+    _template = 'hotel.report_hotel_folio'
+    _wrapped_report_class = folio_report
 
-report_sxw.report_sxw('report.folio.total', 'hotel.folio', 'addons/hotel/report/total_folio.rml', parser=folio_report)
+# report_sxw.report_sxw('report.folio.total', 'hotel.folio', 'addons/hotel/report/total_folio.rml', parser=folio_report)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:                 

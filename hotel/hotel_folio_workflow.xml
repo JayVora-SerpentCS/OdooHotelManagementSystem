@@ -190,11 +190,11 @@
 			<field name="act_to" ref="act_invoice_except"/>
 			<field name="signal">subflow.cancel</field>
 		</record>
-		<record model="workflow.transition" id="trans_invoice_except_invoice">
-			<field name="act_from" ref="act_invoice_except"/>
-			<field name="act_to" ref="act_invoice"/>
-			<field name="signal">invoice_recreate</field>
-		</record>
+<!-- 		<record model="workflow.transition" id="trans_invoice_except_invoice"> -->
+<!-- 			<field name="act_from" ref="act_invoice_except"/> -->
+<!-- 			<field name="act_to" ref="act_invoice"/> -->
+<!-- 			<field name="signal">invoice_recreate</field> -->
+<!-- 		</record> -->
 		<record model="workflow.transition" id="trans_invoice_except_invoice_end">
 			<field name="act_from" ref="act_invoice_except"/>
 			<field name="act_to" ref="act_invoice_end"/>

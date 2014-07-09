@@ -379,58 +379,58 @@
 			</field>
 		</record>
 
-		<record model="ir.ui.view" id="view_hotel_room_kanban">
-			<field name="name">hotel.room.kanban</field>
-			<field name="model">hotel.room</field>
-			<field name="arch" type="xml">
-				<kanban filter="status" >
-					<field name="name" />
-					<field name="status" />
-					<field name="color" />
-					<field name="lst_price"/>
-					<templates>
-                        <t t-name="kanban-box">
-                            <div class="oe_kanban_vignette oe_semantic_html_override oe_kanban_card oe_kanban_project oe_kanban_global_click">
-	                            <div class="oe_dropdown_toggle oe_dropdown_kanban" groups="base.group_user">
-	                            <span class="oe_e">í</span>
-	                                    <ul class="oe_dropdown_menu">
-				                            <t t-if="widget.view.is_action_enabled('edit')"><li><a type="edit">Edit</a></li></t>
-		                                    <t t-if="widget.view.is_action_enabled('delete')"><li><a type="delete">Delete</a></li></t>
-		                                    <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
-	                                    </ul>
-	                            </div>
-	                            <div class="oe_kanban_details" style='margin-top: -10px;'>
-	                               <div class="oe_kanban_content"> 
-	                                   <div class="oe_kanban_project_list">
-		                                   <H3>
-		                                   <a type="open">
-		                                       <t t-if="record.code.raw_value" style="margin-right: 10px">[<field name="code" />] </t> <field name="name"/>
-	                                       </a>
-	                                       </H3>
-	                                   </div>
-	                                   <div name="tags"/>
-	                                        <ul>
-		                                        <li>Status: <field name="status"></field></li>
-		                                        <li>Rate: <field name="lst_price"></field></li>
-		                                    </ul>   
-	                               </div>
-	                               <div class="oe_kanban_bottom_right">
-	                                     <a t-if="record.status.raw_value === 'available'" type="object" string="Available" name="set_room_status_occupied" class="oe_kanban_status oe_kanban_status_green "> </a>
-	                                     <a t-if="record.status.raw_value === 'occupied'" type="object" string="occupied" name="set_room_status_available" class="oe_kanban_status oe_kanban_status_red " > </a>
-	                                </div>
-	                            </div>
-                            </div>
-                        </t>
-                    </templates>
-				</kanban>
-			</field>
-		</record>
+<!-- 		<record model="ir.ui.view" id="view_hotel_room_kanban"> -->
+<!-- 			<field name="name">hotel.room.kanban</field> -->
+<!-- 			<field name="model">hotel.room</field> -->
+<!-- 			<field name="arch" type="xml"> -->
+<!-- 				<kanban filter="status" > -->
+<!-- 					<field name="name" /> -->
+<!-- 					<field name="status" /> -->
+<!-- 					<field name="color" /> -->
+<!-- 					<field name="lst_price"/> -->
+<!-- 					<templates> -->
+<!--                         <t t-name="kanban-box"> -->
+<!--                             <div class="oe_kanban_vignette oe_semantic_html_override oe_kanban_card oe_kanban_project oe_kanban_global_click"> -->
+<!-- 	                            <div class="oe_dropdown_toggle oe_dropdown_kanban" groups="base.group_user"> -->
+<!-- 	                            <span class="oe_e">í</span> -->
+<!-- 	                                    <ul class="oe_dropdown_menu"> -->
+<!-- 				                            <t t-if="widget.view.is_action_enabled('edit')"><li><a type="edit">Edit</a></li></t> -->
+<!-- 		                                    <t t-if="widget.view.is_action_enabled('delete')"><li><a type="delete">Delete</a></li></t> -->
+<!-- 		                                    <li><ul class="oe_kanban_colorpicker" data-field="color"/></li> -->
+<!-- 	                                    </ul> -->
+<!-- 	                            </div> -->
+<!-- 	                            <div class="oe_kanban_details" style='margin-top: -10px;'> -->
+<!-- 	                               <div class="oe_kanban_content">  -->
+<!-- 	                                   <div class="oe_kanban_project_list"> -->
+<!-- 		                                   <H3> -->
+<!-- 		                                   <a type="open"> -->
+<!-- 		                                       <t t-if="record.code.raw_value" style="margin-right: 10px">[<field name="code" />] </t> <field name="name"/> -->
+<!-- 	                                       </a> -->
+<!-- 	                                       </H3> -->
+<!-- 	                                   </div> -->
+<!-- 	                                   <div name="tags"/> -->
+<!-- 	                                        <ul> -->
+<!-- 		                                        <li>Status: <field name="status"></field></li> -->
+<!-- 		                                        <li>Rate: <field name="lst_price"></field></li> -->
+<!-- 		                                    </ul>    -->
+<!-- 	                               </div> -->
+<!-- 	                               <div class="oe_kanban_bottom_right"> -->
+<!-- 	                                     <a t-if="record.status.raw_value === 'available'" type="object" string="Available" name="set_room_status_occupied" class="oe_kanban_status oe_kanban_status_green "> </a> -->
+<!-- 	                                     <a t-if="record.status.raw_value === 'occupied'" type="object" string="occupied" name="set_room_status_available" class="oe_kanban_status oe_kanban_status_red " > </a> -->
+<!-- 	                                </div> -->
+<!-- 	                            </div> -->
+<!--                             </div> -->
+<!--                         </t> -->
+<!--                     </templates> -->
+<!-- 				</kanban> -->
+<!-- 			</field> -->
+<!-- 		</record> -->
 
 		<record model="ir.actions.act_window" id="action_hotel_room_form">
 			<field name="name">Hotel Room</field>
 			<field name="res_model">hotel.room</field>
 			<field name="view_type">form</field>
-			<field name="view_mode">kanban,tree,form</field>
+			<field name="view_mode">tree,form</field>
 		</record>
 
 		<menuitem name="Rooms"
