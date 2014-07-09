@@ -36,7 +36,7 @@
     Different reports are also provided, mainly for Restaurant.
     """,
     "website": "http://www.serpentcs.com",
-    "depends" : ["hotel"],
+    "depends" : ["hotel", "report_extended"],
     "demo" : [
       #  "hotel_restaurant_data.xml",
     ],
