@@ -21,6 +21,7 @@
 ##############################################################################
 
 import time
+from openerp.osv import osv
 from openerp.report import report_sxw
 
 class hotel_restaurant_report(report_sxw.rml_parse):
@@ -38,8 +39,22 @@ class hotel_restaurant_report(report_sxw.rml_parse):
         res = rest_reservation_obj.browse(self.cr, self.uid, tids)
         return res
 
-report_sxw.report_sxw('report.hotel.kot', 'hotel.restaurant.order', 'addons/hotel_restaurant/report/kot.rml', parser=hotel_restaurant_report)
-report_sxw.report_sxw('report.hotel.bill', 'hotel.restaurant.order', 'addons/hotel_restaurant/report/bill.rml', parser=hotel_restaurant_report)
-report_sxw.report_sxw('report.hotel.table.res', 'hotel.restaurant.reservation', 'addons/hotel_restaurant/report/res_table.rml', parser=hotel_restaurant_report)
-
+class report_lunchorder(osv.AbstractModel):
+    _name = 'report.hotel_restaurant.report_res_table'
+    _inherit = 'report.abstract_report'
+    _template = 'hotel_restaurant.report_res_table'
+    _wrapped_report_class = hotel_restaurant_report
+    
+class report_kot(osv.AbstractModel):
+    _name = 'report.hotel_restaurant.report_hotel_order_kot'
+    _inherit = 'report.abstract_report'
+    _template = 'hotel_restaurant.report_hotel_order_kot'
+    _wrapped_report_class = hotel_restaurant_report
+    
+class report_bill(osv.AbstractModel):
+    _name = 'report.hotel_restaurant.report_hotel_order_kot'
+    _inherit = 'report.abstract_report'
+    _template = 'hotel_restaurant.report_hotel_order_kot'
+    _wrapped_report_class = hotel_restaurant_report
+    
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

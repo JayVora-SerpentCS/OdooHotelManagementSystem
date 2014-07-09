@@ -22,7 +22,7 @@
 
 {
     "name" : "Hotel Restaurant Management",
-    "version" : "0.04",
+    "version" : "0.05",
     "author": ["Serpent Consulting Services Pvt. Ltd.", "OpenERP SA" ],
     "category" : "Generic Modules/Hotel Restaurant",
     "description": """
@@ -44,6 +44,9 @@
         "security/ir.model.access.csv",
         "report/hotel_restaurant_report.xml",
         "wizard/hotel_restaurant_wizard.xml",
+        "views/res_table.xml",
+        "views/kot.xml",
+        "views/bill.xml",
         "hotel_restaurant_workflow.xml",
         "hotel_restaurant_sequence.xml",
         "hotel_restaurant_view.xml",

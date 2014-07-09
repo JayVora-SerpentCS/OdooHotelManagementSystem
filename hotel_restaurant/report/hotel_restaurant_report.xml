@@ -1,26 +1,35 @@
 <?xml version="1.0"?>
 <openerp>
 	<data>
-		<report id="hotel_res_order_kot"
-			string="Kitchen Order Tickets"
-			model="hotel.restaurant.order"
-			name="hotel.kot"
-			rml="hotel_restaurant/report/kot.rml"
-			auto="False"/>
 		
-		<report id="hotel_res_order_bill"
+		<report 
+			id="report_hotel_res_order_kot"
+			string="Kitchen Order Tickets"
+			model="hotel.restaurant.order" 
+			report_type="qweb-pdf"
+			file="hotel_restaurant.report_hotel_order_kot"
+			name="hotel_restaurant.report_hotel_order_kot"
+			menu="True"
+		/>
+		
+		<report 
+			id="report_hotel_res_order_bill"
 			string="Customer Bill"
-			model="hotel.restaurant.order"
-			name="hotel.bill"
-			rml="hotel_restaurant/report/bill.rml"
-			auto="False"/>
+			model="hotel.restaurant.order" 
+			report_type="qweb-pdf"
+			file="hotel_restaurant.report_order_bill"
+			name="hotel_restaurant.report_order_bill"
+			menu="True" 
+		/>
 			
-		<report id="hotel_table_res"
+		<report 
+			id="report_hotel_table_res"
 			string="Table Reservation List"
-			model="hotel.restaurant.reservation"
-			name="hotel.table.res"
-			rml="hotel_restaurant/report/res_table.rml"
-			auto="False"
-			menu="False"/>
+			model="hotel.restaurant.reservation" 
+			report_type="qweb-pdf"
+			file="hotel_restaurant.report_res_table"
+			name="hotel_restaurant.report_res_table"
+		/>
+		
 	</data>
 </openerp>

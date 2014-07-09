@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+<template id="report_res_table">
+    <t t-call="report.html_container">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="report.external_layout">
+                <div class="page">
+                        <div class="row">
+                            <h2>
+                                <span><strong><center>Table Reservation List</center></strong></span>
+                            </h2>
+                        </div>
+
+                        <div class="row mt32 mb32">
+                            <div class="text-center">
+                                <strong>From:</strong>
+                                <font t-esc="formatLang(data['form']['date_start'],date=True)"/>
+                                <strong>To:</strong>
+                                <font t-esc="formatLang(data['form']['date_end'],date=True)"/>
+                            </div>
+                        </div>
+                        
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th><strong>Reservation No</strong></th>
+                                <th><strong>Customer Name</strong></th>
+                                <th><strong>Start Date</strong></th>
+                                <th><strong>End Date</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="get_res_data(data['form']['date_start'],data['form']['date_end'])" t-as="o">
+                                <td style="white-space: nowrap;">
+                                    <span t-esc="o.reservation_id"/>
+                                </td>
+                                <td style="white-space: nowrap;">
+                                    <span t-att-style="style" t-esc="o.cname.name"/>
+                                </td>
+                                <td style="white-space: nowrap;">
+                                    <span t-att-style="style" t-esc="formatLang(o.start_date, date=True)"/>
+                                </td>
+                                <td style="white-space: nowrap;">
+                                    <span t-att-style="style" t-esc="formatLang(o.end_date, date=True)"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+            </t>
+        </t>
+</template>
+</data>
+</openerp>

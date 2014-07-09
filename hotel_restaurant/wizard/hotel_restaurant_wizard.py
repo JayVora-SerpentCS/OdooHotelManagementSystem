@@ -35,12 +35,14 @@ class wizard_hotel_restaurant(osv.TransientModel):
             'model': 'hotel.restaurant.reservation',
             'form': self.read(cr, uid, ids, context=context)[0]
         }
-        return {
-            'type': 'ir.actions.report.xml',
-            'report_name': 'hotel.table.res',
-            'datas': values,
-        }
+#        return {
+#            'type': 'ir.actions.report.xml',
+#            'report_name': 'hotel.table.res',
+#            'datas': values,
+#        }
         
+        return self.pool['report'].get_action(cr, uid, [], 'hotel_restaurant.report_res_table', data=values, context=context)
+    
 wizard_hotel_restaurant()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

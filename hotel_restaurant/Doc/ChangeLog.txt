@@ -1,6 +1,9 @@
 ============================================================================================================================
  Version Change Log (hotel_restaurant)
 ============================================================================================================================
+0.05 on 2014-07-09 by Vacha Trivedi
+    * Added qweb report for restaurant order,kitchen order ticket and customer bill. 
+    
 0.04 on 2014-01-11 by Krunal Soni
     * Checked code quality and improved report format.
 

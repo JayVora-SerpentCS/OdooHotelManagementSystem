@@ -160,9 +160,11 @@
                             <separator colspan='4' string='Order List' />
                             <field name="order_list" colspan="4" nolabel='1'>
                                 <form string="Order List">
+                                    <group>
                                     <field name="name" on_change="on_change_item_name(name)"/>
                                     <field name="item_qty"/>
                                     <field name="item_rate"/>
+                                    </group>
 
                                 </form>
                                 <tree string="Order List">
@@ -246,9 +248,11 @@
                             <separator colspan='4' string='Order List'/>
                             <field name="order_list" colspan="4" nolabel='1'>
                                 <form string="Order List">
+                                    <group>
                                     <field name="name" on_change="on_change_item_name(name)"/>
                                     <field name="item_qty"/>
                                     <field name="item_rate"/>
+                                    </group>
 
                                 </form>
                                 <tree string="Order List">
