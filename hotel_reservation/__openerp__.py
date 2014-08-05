@@ -45,7 +45,7 @@
         "views/report_checkout.xml",
         "views/max_room.xml",
         "views/room_res.xml",
-
+        "views/room_summ_view.xml",
     ],
     "demo": [
         # 'hotel_reservation_data.xml',
