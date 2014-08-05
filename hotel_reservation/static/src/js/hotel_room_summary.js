@@ -13,8 +13,8 @@
             this._super.apply(this, arguments);
 	    	if(this.field_manager.model == "room.reservation.summary")
 	    	{
-	    		$(".oe_view_manager_buttons").hide()
-	    		$(".oe_view_manager_header").hide()
+	    		$(".oe_view_manager_buttons").hide();
+	    		$(".oe_view_manager_header").hide();
 	   		}
             this.set({
                 date_to: false,
@@ -22,7 +22,7 @@
                 summary_header: false,
                 room_summary: false,
             });
-            this.summary_header = []
+            this.summary_header = [];
             this.room_summary = [];
             this.field_manager.on("field_changed:date_from", this, function() {
                 this.set({"date_from": openerp.web.str_to_datetime(this.field_manager.get_field_value("date_from"))});
@@ -65,8 +65,8 @@
             this.room_summary = py.eval(this.get("room_summary"));
            }
            	
-           this.renderElement()
-           this.view_loading()
+           this.renderElement();
+           this.view_loading();
         },
         
         view_loading: function(r) {
@@ -83,7 +83,7 @@
                         views: [[false, 'form']],
                         target: 'new',
                         context: {"room_id": $(this).attr("data"), 'date': $(this).attr("date")},
-                    })
+                });
             });
         
         },

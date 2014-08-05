@@ -60,7 +60,7 @@ class hotel_reservation(osv.Model):
         'state': lambda *a: 'draft',
         'date_order': lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'),
     }
-    
+
 
     def on_change_checkin(self, cr, uid, ids, date_order, checkin_date=time.strftime('%Y-%m-%d %H:%M:%S'), context=None):
         if date_order and checkin_date:
@@ -224,118 +224,120 @@ class hotel_room(osv.Model):
             self.write(cr, uid, [room.id], status, context=context)
         return True
 
-# class room_reservation_summary(osv.Model):
-#     _name = 'room.reservation.summary'
-#     _description = 'Room reservation summary'
-#     _columns = {
-#         'date_from':fields.datetime('Date From'),
-#         'date_to':fields.datetime('Date To'),
-#         'summary_header':fields.text('Summary Header'),
-#         'room_summary':fields.text('Room Summary'),
-#     }
-#     
-#     def room_reservation(self, cr, uid, ids, context=None):
-#         mod_obj = self.pool.get('ir.model.data')
-#         if context is None:
-#             context = {}
-#         model_data_ids = mod_obj.search(cr, uid, [('model', '=', 'ir.ui.view'), ('name', '=', 'view_hotel_reservation_form')], context=context)
-#         resource_id = mod_obj.read(cr, uid, model_data_ids, fields=['res_id'], context=context)[0]['res_id']
-#         return {
-#             'name': _('Reconcile Write-Off'),
-#             'context': context,
-#             'view_type': 'form',
-#             'view_mode': 'form',
-#             'res_model': 'hotel.reservation',
-#             'views': [(resource_id, 'form')],
-#             'type': 'ir.actions.act_window',
-#             'target': 'new',
-#         }
-#     
-#     def get_room_summary(self, cr, uid, ids, date_from, date_to, context=None):
-#         res = {}
-#         all_detail = []
-#         room_obj = self.pool.get('hotel.room')
-#         reservation_line_obj = self.pool.get('hotel.room.reservation.line')
-#         date_range_list = []
-#         main_header = []
-#         summary_header_list = ['Rooms']
-#         if date_from and date_to:
-#             if date_from > date_to:
-#                 raise osv.except_osv(_('User Error!'), _('Please Check Time period Date From can\'t be greater than Date To !'))
-#             d_frm_obj = datetime.datetime.strptime(date_from, DEFAULT_SERVER_DATETIME_FORMAT)
-#             d_to_obj = datetime.datetime.strptime(date_to, DEFAULT_SERVER_DATETIME_FORMAT)
-#             temp_date = d_frm_obj
-#             while(temp_date <= d_to_obj):
-#                 val = ''
-#                 val = str(temp_date.strftime("%a")) + ' ' + str(temp_date.strftime("%b")) + ' ' + str(temp_date.strftime("%d"))
-#                 summary_header_list.append(val)
-#                 date_range_list.append(temp_date.strftime(DEFAULT_SERVER_DATETIME_FORMAT))
-#                 temp_date = temp_date + datetime.timedelta(days=1)
-#             all_detail.append(summary_header_list)
-#             room_ids = room_obj.search(cr, uid, [], context=context)
-#             all_room_detail = []
-#             for room in room_obj.browse(cr, uid, room_ids, context=context):
-#                 room_detail = {}
-#                 room_list_stats = []
-#                 room_detail.update({'name':room.name or ''})
-#                 if not room.room_reservation_line_ids:
-#                     for chk_date in date_range_list:
-#                         room_list_stats.append({'state':'Free', 'date':chk_date})
-#                 else:
-#                     for chk_date in date_range_list:
-#                         for room_res_line in room.room_reservation_line_ids:
-#                             reservation_line_ids = [i.id for i in room.room_reservation_line_ids]
-#                             reservation_line_ids = reservation_line_obj.search(cr, uid, [('id', 'in', reservation_line_ids), ('check_in', '<=', chk_date), ('check_out', '>=', chk_date)])
-#                             if reservation_line_ids:
-#                                 room_list_stats.append({'state':'Reserved', 'date':chk_date, 'room_id':room.id})
-#                                 break
-#                             else:
-#                                 room_list_stats.append({'state':'Free', 'date':chk_date, 'room_id':room.id})
-#                                 break
-#                 room_detail.update({'value':room_list_stats})
-#                 all_room_detail.append(room_detail)
-#             main_header.append({'header':summary_header_list})
-#             res.update({'value':{'summary_header': str(main_header), 'room_summary':str(all_room_detail)}})
-#         return res
-#    
-# class quick_room_reservation(osv.TransientModel):
-#     _name = 'quick.room.reservation'
-#     _description = 'Quick Room Reservation'
-#     _columns = {
-#         'partner_id':fields.many2one('res.partner', string="Customer", required=True),
-#         'check_in':fields.datetime('Check In', required=True),
-#         'check_out':fields.datetime('Check Out', required=True),
-#         'room_id':fields.many2one('hotel.room', 'Room', required=True),
-#         'warehouse_id':fields.many2one('stock.warehouse', 'Hotel', required=True),
-#         'pricelist_id':fields.many2one('product.pricelist', 'pricelist', required=True)
-#     }
-#    
-#     def default_get(self, cr, uid, fields, context=None):
-#         if context is None:
-#             context = {}
-#         print " contexty s lkal snkja ;;;", context
-#         res = super(quick_room_reservation, self).default_get(cr, uid, fields, context=context)
-#         if context:
-#             keys = context.keys()
-#             if 'date' in keys:
-#                 res.update({'check_in': context['date']})
-#             if 'room_id' in keys:
-#                 res.update({'room_id': [context['room_id']]})
-#         return res
-#  
-#     def room_reserve(self, cr, uid, ids, context=None):
-#         hotel_res_obj = self.pool.get('hotel.reservation')
-#         for room_resv in self.browse(cr, uid, ids, context=context):
-#             hotel_res_obj.create(cr, uid, {
-#                          'partner_id':room_resv.partner_id.id,
-#                          'checkin':room_resv.check_in,
-#                          'checkout':room_resv.check_out,
-#                          'warehouse_id':room_resv.warehouse.id,
-#                          'pricelist_id':room_resv.pricelist_id.id,
-#                          'reservation_line':[(0, 0, {
-#                          'reserve': [(6, 0, [room_resv.room_id.id])],
-#                          'name':room_resv.room_id and room_resv.room_id.name or ''})]
-#                         }, context=context)
-#         return True
+class room_reservation_summary(osv.Model):
+    _name = 'room.reservation.summary'
+    _description = 'Room reservation summary'
+    _columns = {
+        'date_from':fields.datetime('Date From'),
+        'date_to':fields.datetime('Date To'),
+        'summary_header':fields.text('Summary Header'),
+        'room_summary':fields.text('Room Summary'),
+    }
+
+    def room_reservation(self, cr, uid, ids, context=None):
+        mod_obj = self.pool.get('ir.model.data')
+        if context is None:
+            context = {}
+        model_data_ids = mod_obj.search(cr, uid, [('model', '=', 'ir.ui.view'), ('name', '=', 'view_hotel_reservation_form')], context=context)
+        resource_id = mod_obj.read(cr, uid, model_data_ids, fields=['res_id'], context=context)[0]['res_id']
+        print model_data_ids, resource_id
+        return {
+            'name': _('Reconcile Write-Off'),
+            'context': context,
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'hotel.reservation',
+            'views': [(resource_id, 'form')],
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+        }
+
+    def get_room_summary(self, cr, uid, ids, date_from, date_to, context=None):
+
+        res = {}
+        all_detail = []
+        room_obj = self.pool.get('hotel.room')
+        reservation_line_obj = self.pool.get('hotel.room.reservation.line')
+        date_range_list = []
+        main_header = []
+        summary_header_list = ['Rooms']
+        if date_from and date_to:
+            if date_from > date_to:
+                raise osv.except_osv(_('User Error!'), _('Please Check Time period Date From can\'t be greater than Date To !'))
+            d_frm_obj = datetime.datetime.strptime(date_from, DEFAULT_SERVER_DATETIME_FORMAT)
+            d_to_obj = datetime.datetime.strptime(date_to, DEFAULT_SERVER_DATETIME_FORMAT)
+            temp_date = d_frm_obj
+            while(temp_date <= d_to_obj):
+                val = ''
+                val = str(temp_date.strftime("%a")) + ' ' + str(temp_date.strftime("%b")) + ' ' + str(temp_date.strftime("%d"))
+                summary_header_list.append(val)
+                date_range_list.append(temp_date.strftime(DEFAULT_SERVER_DATETIME_FORMAT))
+                temp_date = temp_date + datetime.timedelta(days=1)
+            all_detail.append(summary_header_list)
+            room_ids = room_obj.search(cr, uid, [], context=context)
+            all_room_detail = []
+            for room in room_obj.browse(cr, uid, room_ids, context=context):
+                room_detail = {}
+                room_list_stats = []
+                room_detail.update({'name':room.name or ''})
+                if not room.room_reservation_line_ids:
+                    for chk_date in date_range_list:
+                        room_list_stats.append({'state':'Free', 'date':chk_date})
+                else:
+                    for chk_date in date_range_list:
+                        for room_res_line in room.room_reservation_line_ids:
+                            reservation_line_ids = [i.id for i in room.room_reservation_line_ids]
+                            reservation_line_ids = reservation_line_obj.search(cr, uid, [('id', 'in', reservation_line_ids), ('check_in', '<=', chk_date), ('check_out', '>=', chk_date)])
+                            if reservation_line_ids:
+                                room_list_stats.append({'state':'Reserved', 'date':chk_date, 'room_id':room.id})
+                                break
+                            else:
+                                room_list_stats.append({'state':'Free', 'date':chk_date, 'room_id':room.id})
+                                break
+                room_detail.update({'value':room_list_stats})
+                all_room_detail.append(room_detail)
+            main_header.append({'header':summary_header_list})
+            res.update({'value':{'summary_header': str(main_header), 'room_summary':str(all_room_detail)}})
+        return res
+
+class quick_room_reservation(osv.TransientModel):
+    _name = 'quick.room.reservation'
+    _description = 'Quick Room Reservation'
+    _columns = {
+        'partner_id':fields.many2one('res.partner', string="Customer", required=True),
+        'check_in':fields.datetime('Check In', required=True),
+        'check_out':fields.datetime('Check Out', required=True),
+        'room_id':fields.many2one('hotel.room', 'Room', required=True),
+        'warehouse_id':fields.many2one('stock.warehouse', 'Hotel', required=True),
+        'pricelist_id':fields.many2one('product.pricelist', 'pricelist', required=True)
+    }
+
+    def default_get(self, cr, uid, fields, context=None):
+        if context is None:
+            context = {}
+        print " contexty s lkal snkja ;;;", context
+        res = super(quick_room_reservation, self).default_get(cr, uid, fields, context=context)
+        if context:
+            keys = context.keys()
+            if 'date' in keys:
+                res.update({'check_in': context['date']})
+            if 'room_id' in keys:
+                res.update({'room_id': [context['room_id']]})
+        return res
+
+    def room_reserve(self, cr, uid, ids, context=None):
+        hotel_res_obj = self.pool.get('hotel.reservation')
+        for room_resv in self.browse(cr, uid, ids, context=context):
+            hotel_res_obj.create(cr, uid, {
+                         'partner_id':room_resv.partner_id.id,
+                         'checkin':room_resv.check_in,
+                         'checkout':room_resv.check_out,
+                         'warehouse_id':room_resv.warehouse.id,
+                         'pricelist_id':room_resv.pricelist_id.id,
+                         'reservation_line':[(0, 0, {
+                         'reserve': [(6, 0, [room_resv.room_id.id])],
+                         'name':room_resv.room_id and room_resv.room_id.name or ''})]
+                        }, context=context)
+        return True
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
