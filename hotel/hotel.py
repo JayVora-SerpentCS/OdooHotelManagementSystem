@@ -284,17 +284,17 @@ class hotel_folio(osv.Model):
     def test_state(self, cr, uid, ids, mode, *args):
         write_done_ids = []
         write_cancel_ids = []
-        res = self.pool.get('sale.order').test_state(cr, uid, ids, mode, *args)
+        # res = self.pool.get('sale.order').test_state(cr, uid, ids, mode, *args)
         if write_done_ids:
             self.pool.get('sale.order.line').write(cr, uid, write_done_ids, {'state': 'done'})
         if write_cancel_ids:
             self.pool.get('sale.order.line').write(cr, uid, write_cancel_ids, {'state': 'cancel'})
-        return res
+        # return res
 
     def procurement_lines_get(self, cr, uid, ids, *args):
         order_ids = [folio.order_id.id for folio in self.browse(cr, uid, ids)]
-        return self.pool.get('sale.order').procurement_lines_get(cr, uid, order_ids, *args)
-
+        # return self.pool.get('sale.order').procurement_lines_get(cr, uid, order_ids, *args)
+        return True
     def action_ship_create(self, cr, uid, ids, context=None):
         order_ids = [folio.order_id.id for folio in self.browse(cr, uid, ids)]
         return self.pool.get('sale.order').action_ship_create(cr, uid, order_ids, context=None)
