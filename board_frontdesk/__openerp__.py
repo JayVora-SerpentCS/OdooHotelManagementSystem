@@ -35,7 +35,9 @@
     * Calendar view of Weekly Check-In and Check-Out
     * Calendar view of Monthly Check-In and Check-Out
     """,
-    "data":["board_frontdesk_view.xml"],
+    "data":[
+        "board_frontdesk_view.xml"
+    ],
     "auto_install": False,
     "installable": True
 }

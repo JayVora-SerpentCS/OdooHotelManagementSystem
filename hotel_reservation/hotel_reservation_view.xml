@@ -11,15 +11,11 @@
             <field name="arch" type="xml">
                 <form string="Reservation" version="7.0">
                     <header>
+                        <button name="confirm" string="Confirm" states="draft" class="oe_highlight"/>
+                        <button name="done" string="Create Folio" states="confirm" class="oe_highlight"/>
                         <field name="state" widget="statusbar"/>
-
                     </header>
                     <sheet>
-                        <h1 align="right">
-                            <button name="confirm" string="Confirm" states="draft" class="oe_inline oe_stat_button"/>
-                            <button name="done" string="Create Folio" states="confirm" class="oe_inline oe_stat_button"/>
-
-                        </h1>
                         <label string="Reservation No"/>
                         <h1>
                             <field name="reservation_no" class="oe_inline"/>

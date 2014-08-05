@@ -35,6 +35,5 @@ class folio_report_wizard(osv.TransientModel):
             'model': 'hotel.folio',
             'form': self.read(cr, uid, ids, context=context)[0]
         }
-        print':::::VALUSE',values
         return self.pool['report'].get_action(cr, uid, [], 'hotel.report_hotel_folio', data=values, context=context)
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

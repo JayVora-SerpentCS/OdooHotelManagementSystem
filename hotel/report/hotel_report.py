@@ -23,8 +23,6 @@
 import time
 from openerp.osv import osv
 from openerp.report import report_sxw
-from datetime import datetime
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 class folio_report(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):

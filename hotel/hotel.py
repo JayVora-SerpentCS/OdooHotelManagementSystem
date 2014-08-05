@@ -25,7 +25,6 @@ import time
 from openerp import netsvc
 import datetime
 from openerp.tools.translate import _
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 class hotel_floor(osv.Model):
     _name = "hotel.floor"

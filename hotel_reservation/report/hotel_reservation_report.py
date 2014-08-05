@@ -89,8 +89,6 @@ class reservation_detail_report(report_sxw.rml_parse):
 
         return room_used_details
 
-
-
 class report_test_checkin(osv.AbstractModel):
     _name = "report.hotel_reservation.report_checkin_qweb"
     _inherit = "report.abstract_report"
