@@ -63,10 +63,10 @@
                                     </div>
                                 </div>
                             </form>
-                            <tree string="Activity Lines">
+                            <tree string="Activity Lines" editable="buttom">
                                 <field name="activity_name" />
                                 <field name="housekeeper" />
-                                <field name="room_id" />
+                                <!-- <field name="room_id" /> -->
                                 <field name="today_date" />
                                 <field name="clean_start_time" />
                                 <field name="clean_end_time" />
