@@ -224,17 +224,16 @@ class hotel_folio(osv.Model):
         return self.pool.get('sale.order').onchange_warehouse_id(cr, uid, order_ids, warehouse_id)
 
     def onchange_partner_id(self, cr, uid, ids, part, context=None):
-        partner_rec = self.pool.get('res.partner').browse(cr, uid, part, context=context)
-        order_ids = [folio.order_id.id for folio in self.browse(cr, uid, ids, context=context)]
         res = {}
-        if not order_ids:
-            res['value'] = {'partner_invoice_id': partner_rec.id}
-            res['warning'] = {'title': _('Warning'), 'message': _('Not Any Order For  %s ' % (partner_rec.name))}
-
-            return res
-        else:
-            res['value'] = {'partner_invoice_id': partner_rec.id, 'pricelist_id':partner_rec.property_product_pricelist.id}
-            return res
+        if part:
+            partner_rec = self.pool.get('res.partner').browse(cr, uid, part, context=context)
+            order_ids = [folio.order_id.id for folio in self.browse(cr, uid, ids, context=context)]
+            if not order_ids:
+                res['value'] = {'partner_invoice_id': partner_rec.id , 'pricelist_id':partner_rec.property_product_pricelist.id}
+                res['warning'] = {'title': _('Warning'), 'message': _('Not Any Order For  %s ' % (partner_rec.name))}
+            else:
+                res['value'] = {'partner_invoice_id': partner_rec.id, 'pricelist_id':partner_rec.property_product_pricelist.id}
+        return res
 
     def button_dummy(self, cr, uid, ids, context=None):
         order_ids = [folio.order_id.id for folio in self.browse(cr, uid, ids)]

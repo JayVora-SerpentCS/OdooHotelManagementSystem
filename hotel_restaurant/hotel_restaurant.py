@@ -58,7 +58,7 @@ class hotel_menucard(osv.Model):
     _defaults = {
         'ismenucard': 1,
     }
-    
+
 class hotel_restaurant_tables(osv.Model):
     _name = "hotel.restaurant.tables"
     _description = "Includes Hotel Restaurant Table"
@@ -66,14 +66,14 @@ class hotel_restaurant_tables(osv.Model):
         'name':fields.char('Table Number', size=64, required=True),
         'capacity':fields.integer('Capacity'),
     }
-    
+
 class hotel_restaurant_reservation(osv.Model):
 
     def create_order(self, cr, uid, ids, context=None):
         proxy = self.pool.get('hotel.reservation.order')
         for record in self.browse(cr, uid, ids):
             table_ids = [tableno.id for tableno in record.tableno]
-            values = {  
+            values = {
                 'reservationno':record.reservation_id,
                 'date1':record.start_date,
                 'table_no':[(6, 0, table_ids)],
@@ -121,7 +121,7 @@ class hotel_restaurant_reservation(osv.Model):
     def table_done(self, cr, uid, ids, *args):
         self.write(cr, uid, ids, {
             'state':'done'
-        })  
+        })
         return True
 
     _name = "hotel.restaurant.reservation"
@@ -212,7 +212,7 @@ class hotel_restaurant_order(osv.Model):
     _defaults = {
      'order_no': lambda obj, cr, uid, context: obj.pool.get('ir.sequence').get(cr, uid, 'hotel.restaurant.order'),
      }
-    
+
 class hotel_reservation_order(osv.Model):
 
     def _sub_total(self, cr, uid, ids, field_name, arg, context):
