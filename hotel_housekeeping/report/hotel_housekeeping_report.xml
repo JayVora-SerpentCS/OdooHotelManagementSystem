@@ -14,6 +14,7 @@
             report_type="qweb-pdf"
             file="hotel_housekeeping.report_housekeeping"
             name="hotel_housekeeping.report_housekeeping"
+            menu="False"
         />
 	</data>
 </openerp>
