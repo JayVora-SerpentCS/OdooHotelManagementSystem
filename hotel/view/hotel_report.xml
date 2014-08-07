@@ -8,6 +8,7 @@
             report_type="qweb-pdf"
             file="hotel.report_hotel_folio" 
             name="hotel.report_hotel_folio" 
+            menu="False"
         />
 	</data>
 </openerp>
