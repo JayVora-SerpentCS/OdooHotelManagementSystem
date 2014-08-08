@@ -135,7 +135,7 @@
             <field name="arch" type="xml">
                 <form string="Order" version="7.0">
                     <header>
-                        <button string="Generate KOT" name="reservation_generate_kot" type="object" class="gtk-go-forward"/>
+                        <button string="Generate KOT" name="reservation_generate_kot" type="object" icon="gtk-go-forward"/>
                     </header>
                     <sheet>
                         <h1>
