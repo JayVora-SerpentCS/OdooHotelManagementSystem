@@ -126,9 +126,9 @@ class hotel_housekeeping_activities(osv.Model):
         if context is None:
             context = {}
         res = super(hotel_housekeeping_activities, self).default_get(cr, uid, fields, context=context)
-        if context['room_id']:
+        if context.get('room_id', False):
             res.update({'room_id':context['room_id']})
-        if context['today_date']:
+        if context.get('today_date', False):
             res.update({'today_date':context['today_date']})
         return res
 
