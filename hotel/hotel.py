@@ -97,7 +97,7 @@ class hotel_room(osv.Model):
         'max_child':fields.integer('Max Child'),
         'room_amenities':fields.many2many('hotel.room.amenities', 'temp_tab', 'room_amenities', 'rcateg_id', 'Room Amenities', help='List of room amenities. '),
         'status':fields.selection([('available', 'Available'), ('occupied', 'Occupied')], 'Status'),
-        'room_rent_ids':fields.one2many('room.rent', 'rent_id', 'Room Rent'),
+#         'room_rent_ids':fields.one2many('room.rent', 'rent_id', 'Room Rent'),
     }
 
     _defaults = {
@@ -113,19 +113,19 @@ class hotel_room(osv.Model):
         return self.write(cr, uid, ids, {'status': 'available'}, context=context)
 
 
-class room_rent(osv.Model):
-    _name = 'room.rent'
-    _columns = {
-        'rent_id': fields.many2one('hotel.room', 'Room Rent'),
-        'price': fields.float('Price (Per night)'),
-        'mon': fields.boolean('Monday'),
-        'tue': fields.boolean('Tuesday'),
-        'wed': fields.boolean('Wednesday'),
-        'thu': fields.boolean('Thursday'),
-        'fri': fields.boolean('Friday'),
-        'sat': fields.boolean('Saturday'),
-        'sun': fields.boolean('Sunday'),
-    }
+# class room_rent(osv.Model):
+#     _name = 'room.rent'
+#     _columns = {
+#         'rent_id': fields.many2one('hotel.room', 'Room Rent'),
+#         'price': fields.float('Price (Per night)'),
+#         'mon': fields.boolean('Monday'),
+#         'tue': fields.boolean('Tuesday'),
+#         'wed': fields.boolean('Wednesday'),
+#         'thu': fields.boolean('Thursday'),
+#         'fri': fields.boolean('Friday'),
+#         'sat': fields.boolean('Saturday'),
+#         'sun': fields.boolean('Sunday'),
+#     }
 
 class hotel_folio(osv.Model):
 

@@ -303,34 +303,34 @@
                             <field name="cost_method"/>
                             <field name="uos_id"/>
                             <field name="uos_coeff" />
-                            <newline/>
-                            <separator string="Room Rent" />
-                              <field name="room_rent_ids" colspan="4" nolabel='1' >
-                                <form string="Room Rent" version="7.0">
-                                    <group colspan="4" col="2">
-                                   		<field name="price"/>
-                                   	</group>
-                                   	<group colspan="4" col="8">
-	                                    <field name="mon"/>
-	                                    <field name="tue"/>
-	                                    <field name="wed"/>
-	                                    <field name="thu"/>
-	                                    <field name="fri"/>
-	                                    <field name="sat"/>
-	                                    <field name="sun"/>
-	                                </group>
-                                </form>
-                                <tree string="Room Rent" editable="bottom" >
-                                   		<field name="price"/>
-	                                    <field name="mon"/>
-	                                    <field name="tue"/>
-	                                    <field name="wed"/>
-	                                    <field name="thu"/>
-	                                    <field name="fri"/>
-	                                    <field name="sat"/>
-	                                    <field name="sun"/>
-                                </tree>
-                            </field>
+<!--                             <newline/> -->
+<!--                             <separator string="Room Rent" /> -->
+<!--                               <field name="room_rent_ids" colspan="4" nolabel='1' > -->
+<!--                                 <form string="Room Rent" version="7.0"> -->
+<!--                                     <group colspan="4" col="2"> -->
+<!--                                    		<field name="price"/> -->
+<!--                                    	</group> -->
+<!--                                    	<group colspan="4" col="8"> -->
+<!-- 	                                    <field name="mon"/> -->
+<!-- 	                                    <field name="tue"/> -->
+<!-- 	                                    <field name="wed"/> -->
+<!-- 	                                    <field name="thu"/> -->
+<!-- 	                                    <field name="fri"/> -->
+<!-- 	                                    <field name="sat"/> -->
+<!-- 	                                    <field name="sun"/> -->
+<!-- 	                                </group> -->
+<!--                                 </form> -->
+<!--                                 <tree string="Room Rent" editable="bottom" > -->
+<!--                                    		<field name="price"/> -->
+<!-- 	                                    <field name="mon"/> -->
+<!-- 	                                    <field name="tue"/> -->
+<!-- 	                                    <field name="wed"/> -->
+<!-- 	                                    <field name="thu"/> -->
+<!-- 	                                    <field name="fri"/> -->
+<!-- 	                                    <field name="sat"/> -->
+<!-- 	                                    <field name="sun"/> -->
+<!--                                 </tree> -->
+<!--                             </field> -->
                           </group>
                           <newline/>
                           <group>

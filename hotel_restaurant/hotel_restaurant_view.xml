@@ -134,13 +134,10 @@
             <field name="model">hotel.reservation.order</field>
             <field name="arch" type="xml">
                 <form string="Order" version="7.0">
-
+                    <header>
+                        <button string="Generate KOT" name="reservation_generate_kot" type="object" class="gtk-go-forward"/>
+                    </header>
                     <sheet>
-
-                        <h1 align="right">
-                            <button string=" Generate KOT" name="reservation_generate_kot" type="object" class="oe_inline oe_stat_button"/>
-
-                        </h1>
                         <h1>
                             <label string="Order" colspan="4" />
                             <field name="order_number" colspan="4"/>
@@ -253,14 +250,12 @@
                                     <field name="item_qty"/>
                                     <field name="item_rate"/>
                                     </group>
-
                                 </form>
                                 <tree string="Order List">
                                     <field name="name" />
                                     <field name="item_qty"/>
                                     <field name="item_rate"/>
                                     <field name="price_subtotal"/>
-
                                 </tree>
                             </field>
                         </group>
