@@ -15,15 +15,15 @@
                     <sheet>
                         <h1 align="right">
                             <button string="Clean" name="clean" states="dirty" type="workflow"
-                            icon="gtk-clear" class="oe_stat_button" />
+                            icon="gtk-clear" class="oe_stat_button oe_highlight" />
                             <button string="Inspect" name="inspect" states="clean"
-                            type="workflow" icon="gtk-find" class="oe_stat_button" />
+                            type="workflow" icon="gtk-find" class="oe_stat_button oe_highlight" />
                             <button string="Done" name="done" states="inspect" type="workflow"
-                            icon="terp-camera_test" class="oe_stat_button" />
+                            icon="terp-camera_test" class="oe_stat_button oe_highlight" />
                             <button string="Cancel" name="cancel" states="clean,inspect"
-                            type="workflow" icon="gtk-cancel" class="oe_stat_button"/>
+                            type="workflow" icon="gtk-cancel" class="oe_stat_button oe_highlight"/>
                             <button string="Set to Dirty" name="action_set_to_dirty"
-                            states="cancel" type="object" icon="gtk-index" class="oe_stat_button"/>
+                            states="cancel" type="object" icon="gtk-index" class="oe_stat_button oe_highlight"/>
                         </h1>
                         <h1>
                             <label string="Housekeeping" />
