@@ -272,12 +272,21 @@ class hotel_folio(osv.Model):
         return rv
 
     def action_wait(self, cr, uid, ids, *args):
-        order_ids = [folio.order_id.id for folio in self.browse(cr, uid, ids)]
-        res = self.pool.get('sale.order').action_wait(cr, uid, order_ids, *args)
-        for order in self.browse(cr, uid, ids):
-            state = ('progress', 'manual')[int(order.order_policy == 'manual' and not order.invoice_ids)]
-            order.write({'state': state})
+        sale_order_obj = self.pool.get('sale.order')
+        res = False
+        for o in self.browse(cr, uid, ids):
+            res = sale_order_obj.action_wait(cr, uid, [o.order_id.id], *args)
+            if (o.order_policy == 'manual') and (not o.invoice_ids):
+                self.write(cr, uid, [o.id], {'state': 'manual'})
+            else:
+                self.write(cr, uid, [o.id], {'state': 'progress'})
         return res
+#         order_ids = [folio.order_id.id for folio in self.browse(cr, uid, ids)]
+#         res = self.pool.get('sale.order').action_wait(cr, uid, order_ids, *args)
+#         for order in self.browse(cr, uid, ids):
+#             state = ('progress', 'manual')[int(order.order_policy == 'manual' and not order.invoice_ids)]
+#             order.write({'state': state})
+#         return res
 
     def test_state(self, cr, uid, ids, mode, *args):
         write_done_ids = []

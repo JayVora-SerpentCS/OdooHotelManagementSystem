@@ -126,6 +126,8 @@ class hotel_reservation(osv.Model):
         for reservation in self.browse(cr, uid, ids, context=context):
             folio_lines = []
             checkin_date, checkout_date = reservation['checkin'], reservation['checkout']
+            if not checkin_date < checkout_date:
+                raise osv.except_osv(_('Error'), _('Invalid values in reservation.\nCheckout date should be greater than the Checkin date.'))
             duration_vals = hotel_folio_obj.onchange_dates(cr, uid, [], checkin_date=checkin_date, checkout_date=checkout_date, duration=False)
             duration = duration_vals.get('value', False) and duration_vals['value'].get('duration') or 0.0
             folio_vals = {
