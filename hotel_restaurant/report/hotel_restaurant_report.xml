@@ -29,6 +29,7 @@
 			report_type="qweb-pdf"
 			file="hotel_restaurant.report_res_table"
 			name="hotel_restaurant.report_res_table"
+			menu="False"
 		/>
 		
 	</data>

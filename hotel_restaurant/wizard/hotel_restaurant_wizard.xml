@@ -1,11 +1,13 @@
 <?xml version="1.0" ?>
 <openerp>
     <data>
+
+        <!--Form view for wizard hotel restaurant -->
         <record model="ir.ui.view" id="wizard_hotel_restaurant_form_view">
             <field name="name">wizard.hotel.restaurant.form</field>
             <field name="model">wizard.hotel.restaurant</field>
             <field name="arch" type="xml">
-                <form string="Reservation List" version="7.0">
+                <form string="Reservation List" >
                   <group col="4">
                      <field name="date_start"/>
                      <field name="date_end"/>
@@ -18,7 +20,8 @@
                 </form>
             </field>
         </record>
-        
+
+        <!--Action for wizard hotel restaurant -->
         <record id="action_wizard_hotel_restaurant" model="ir.actions.act_window">
             <field name="name">Reservation List</field>
             <field name="res_model">wizard.hotel.restaurant</field>

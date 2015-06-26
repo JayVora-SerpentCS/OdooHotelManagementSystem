@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <openerp>
 	<data>
+
+        <!--Report for hotel folio -->
 		<report id="hotel_folio_details"
 			string="Folio Total"
 			model="hotel.folio"
@@ -8,6 +10,6 @@
 			rml="hotel/report/total_folio.rml"
 			menu="False"
 			auto="False"/>
-		
+
 	</data>
 </openerp>

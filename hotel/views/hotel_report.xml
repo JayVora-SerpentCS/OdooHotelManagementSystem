@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+		<!--Report for hotel folio -->
+
+	    <report 
+            id="report_hotel_management"
+            string="Hotel Folio"
+            model="hotel.folio" 
+            report_type="qweb-pdf"
+            file="hotel.report_hotel_folio" 
+            name="hotel.report_hotel_folio" 
+            menu="False"
+        />
+	</data>
+</openerp>

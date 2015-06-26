@@ -34,7 +34,7 @@
     """,
     "data": [
         "security/ir.model.access.csv",
-        "report_hotel_restaurant_view.xml",
+        "views/report_hotel_restaurant_view.xml",
     ],
     'installable': True,
     'auto_install': False,

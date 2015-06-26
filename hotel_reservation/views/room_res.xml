@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
 <data>
+
+<!--Template for hotel reservation -->
 <template id="report_roomres_qweb">
     <t t-call="report.html_container">
         <t t-foreach="docs" t-as="o">
@@ -14,9 +16,9 @@
                     <div class="row mt32 mb32">
 	                    <div class="text-center">
 	                        <strong>From:</strong>
-	                        <font t-esc="formatLang(data['form']['date_start'],date=True)"/>
+	                        <span t-esc="formatLang(data['form']['date_start'],date_time=True)"/>
 	                        <strong>To:</strong>
-	                        <font t-esc="formatLang(data['form']['date_end'],date=True)"/>
+	                        <span t-esc="formatLang(data['form']['date_end'],date_time=True)"/>
 	                    </div>
                 	</div>
                 	<table class="table table-condensed">
@@ -24,7 +26,7 @@
 						    <td><strong>#No</strong></td>
 						    <td><strong>Guest Name</strong></td>
 						    <td><strong>Check-In Date</strong></td>
-						    <td><strong>Check-In Date</strong></td>
+						    <td><strong>Check-Out Date</strong></td>
 						    <td><strong>Room Details</strong></td>
 						</tr>
 						<tr t-foreach="get_data(data['form']['date_start'],data['form']['date_end'])" t-as="info">
@@ -43,7 +45,6 @@
 						    	</table>
 						   </td>
 						</tr>
-						
                      </table>
                 </div>
             </t>

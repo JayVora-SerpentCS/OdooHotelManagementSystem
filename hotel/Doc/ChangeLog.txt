@@ -1,6 +1,18 @@
 ============================================================================================================================
  Version Change Log (hotel)
 ============================================================================================================================
+0.11 on 2015-06-04 by Malay Khamar
+    * Standardized the code as per v8
+
+0.10 on 2015-03-03 by Dhwani Vora
+    * Corrected the Services type relation with product category to correct the demo data,
+    * Corrected the rooms and amenities and services data.
+
+0.09 on 2015-03-03 by Dhwani Vora
+    * Corrected the amenity type relation with product category to correct the demo data.
+
+0.08 on 2015-03-02 by Dhwani Vora
+    * Corrected the room type relation with product category to correct the demo data.
 
 0.07 on 2014-07-09 by Naitik Maheta
     * Add Qweb Report For Folio 

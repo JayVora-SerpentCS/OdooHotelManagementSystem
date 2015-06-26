@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
 <data>
+
+<!--Template for hotel restaurant -->
+
 <template id="report_res_table">
     <t t-call="report.html_container">
         <t t-foreach="docs" t-as="o">
@@ -11,16 +14,15 @@
                                 <span><strong><center>Table Reservation List</center></strong></span>
                             </h2>
                         </div>
-
                         <div class="row mt32 mb32">
                             <div class="text-center">
                                 <strong>From:</strong>
-                                <font t-esc="formatLang(data['form']['date_start'],date=True)"/>
+                                <span t-esc="formatLang(data['form']['date_start'],date=True)"/>
                                 <strong>To:</strong>
-                                <font t-esc="formatLang(data['form']['date_end'],date=True)"/>
+                                <span t-esc="formatLang(data['form']['date_end'],date=True)"/>
                             </div>
                         </div>
-                        
+
                     <table class="table table-condensed">
                         <thead>
                             <tr>

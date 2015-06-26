@@ -44,9 +44,10 @@
         "views/res_table.xml",
         "views/kot.xml",
         "views/bill.xml",
-        "hotel_restaurant_workflow.xml",
-        "hotel_restaurant_sequence.xml",
-        "hotel_restaurant_view.xml",
+        "views/hotel_restaurant_workflow.xml",
+        "views/hotel_restaurant_sequence.xml",
+        "views/hotel_restaurant_view.xml",
+        "views/hotel_restaurant_data.xml",
     ],
     "active": False,
     "installable": True

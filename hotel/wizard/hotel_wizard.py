@@ -20,20 +20,21 @@
 #
 ################################################################################
 
-from openerp.osv import osv, fields
+from openerp import models,fields,api
 
-class folio_report_wizard(osv.TransientModel):
+class folio_report_wizard(models.TransientModel):
     _name = 'folio.report.wizard'
     _rec_name = 'date_start'
-    _columns = {
-        'date_start':fields.datetime('Start Date'),
-        'date_end':fields.datetime('End Date')
-    }
-    def print_report(self, cr, uid, ids, context=None):
-        values = {
-            'ids': ids,
+    
+    date_start = fields.Datetime('Start Date')
+    date_end = fields.Datetime('End Date')
+
+    @api.multi 
+    def print_report(self):
+        data = {
+            'ids': self.ids,
             'model': 'hotel.folio',
-            'form': self.read(cr, uid, ids, context=context)[0]
+            'form': self.read(['date_start','date_end'])[0]
         }
-        return self.pool['report'].get_action(cr, uid, [], 'hotel.report_hotel_folio', data=values, context=context)
+        return self.env['report'].get_action(self, 'hotel.report_hotel_folio', data=data)
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

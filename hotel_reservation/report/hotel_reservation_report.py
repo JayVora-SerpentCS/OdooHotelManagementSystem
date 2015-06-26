@@ -19,7 +19,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 ##############################################################################
-from openerp.osv import osv
+from openerp import models
 import time
 from openerp.report import report_sxw
 
@@ -73,6 +73,7 @@ class reservation_detail_report(report_sxw.rml_parse):
         return res
 
     def _get_room_used_detail(self, date_start, date_end):
+        
         room_used_details = []
         hotel_room_obj = self.pool.get('hotel.room')
         room_ids = hotel_room_obj.search(self.cr, self.uid, [])
@@ -89,25 +90,25 @@ class reservation_detail_report(report_sxw.rml_parse):
 
         return room_used_details
 
-class report_test_checkin(osv.AbstractModel):
+class report_test_checkin(models.AbstractModel):
     _name = "report.hotel_reservation.report_checkin_qweb"
     _inherit = "report.abstract_report"
     _template = "hotel_reservation.report_checkin_qweb"
     _wrapped_report_class = reservation_detail_report
 
-class report_test_checkout(osv.AbstractModel):
+class report_test_checkout(models.AbstractModel):
     _name = "report.hotel_reservation.report_checkout_qweb"
     _inherit = "report.abstract_report"
     _template = "hotel_reservation.report_checkout_qweb"
     _wrapped_report_class = reservation_detail_report
 
-class report_test_maxroom(osv.AbstractModel):
+class report_test_maxroom(models.AbstractModel):
     _name = "report.hotel_reservation.report_maxroom_qweb"
     _inherit = "report.abstract_report"
     _template = "hotel_reservation.report_maxroom_qweb"
     _wrapped_report_class = reservation_detail_report
 
-class report_test_roomres(osv.AbstractModel):
+class report_test_roomres(models.AbstractModel):
     _name = "report.hotel_reservation.report_roomres_qweb"
     _inherit = "report.abstract_report"
     _template = "hotel_reservation.report_roomres_qweb"

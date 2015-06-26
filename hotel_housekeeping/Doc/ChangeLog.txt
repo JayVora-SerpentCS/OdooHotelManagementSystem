@@ -1,6 +1,9 @@
 ============================================================================================================================
  Version Change Log (hotel_housekeeping)
 ============================================================================================================================
+0.06 on 2015-06-04 by Malay Khamar
+    * Standardized the code as per v8.
+
 0.05 on 2014-07-09 by Vacha Trivedi
     * Add Qweb Report Of Housekeeping.
     * Remove RML Report

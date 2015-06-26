@@ -20,7 +20,7 @@
 #
 ##############################################################################
 
-from . import hotel_restaurant
+from . import models
 from . import report
 from . import wizard
 

@@ -20,28 +20,22 @@
 #
 ##############################################################################
 
-from openerp.osv import osv, fields
+from openerp import models,fields,api,_
 
-class hotel_housekeeping_wizard(osv.TransientModel):
+class hotel_housekeeping_wizard(models.TransientModel):
     _name = 'hotel.housekeeping.wizard'
-    _columns = {
-        'date_start': fields.datetime('Activity Start Date', required=True),
-        'date_end': fields.datetime('Activity End Date', required=True),
-        'room_no': fields.many2one('hotel.room', 'Room No', required=True),
-    }
 
-    def print_report(self, cr, uid, ids, context=None):
-        values = {
-            'ids': ids,
+    date_start = fields.Datetime('Activity Start Date', required=True)
+    date_end = fields.Datetime('Activity End Date', required=True)
+    room_no = fields.Many2one('hotel.room', 'Room No', required=True)
+
+    @api.multi
+    def print_report(self):
+        data = {
+            'ids': self.ids,
             'model': 'hotel.housekeeping',
-            'form': self.read(cr, uid, ids, context=context)[0]
+            'form': self.read(['date_start', 'date_end', 'room_no'])[0]
         }
-        print "valuessssss",values
-#        return {
-#            'type': 'ir.actions.report.xml',
-#            'report_name': 'hotel_housekeeping.report_housekeeping',
-#            'datas': values,
-#        }
-        return self.pool['report'].get_action(cr, uid, [], 'hotel_housekeeping.report_housekeeping', data=values, context=context)
+        return self.env['report'].get_action(self,'hotel_housekeeping.report_housekeeping', data=data)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

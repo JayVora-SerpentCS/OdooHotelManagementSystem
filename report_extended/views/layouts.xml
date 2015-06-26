@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
 	<data>
+
+        <!--Template for external header layout-->
 		<template id="report.external_layout_header">
 			<div class="header">
 				<div class="row">

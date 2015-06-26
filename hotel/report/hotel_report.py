@@ -21,7 +21,7 @@
 ##############################################################################
 
 import time
-from openerp.osv import osv
+from openerp import models
 from openerp.report import report_sxw
 
 class folio_report(report_sxw.rml_parse):
@@ -39,10 +39,10 @@ class folio_report(report_sxw.rml_parse):
         folio_obj = self.pool.get('hotel.folio')
         partner_obj = self.pool.get('res.partner')
         tids = folio_obj.search(self.cr, self.uid, [('checkin_date', '>=', date_start), ('checkout_date', '<=', date_end)])
-        res = folio_obj.browse(self.cr, self.uid, 1)
-        res1 = partner_obj.browse(self.cr, self.uid, 1)
+        res = folio_obj.browse(self.cr, self.uid, tids)    
+        res1 = partner_obj.browse(self.cr, self.uid, tids)
         return res
-
+        
     def gettotal(self, total):
         self.temp = self.temp + float(total)
         return total
@@ -50,7 +50,7 @@ class folio_report(report_sxw.rml_parse):
     def getTotal(self):
         return self.temp
     
-class report_lunchorder(osv.AbstractModel):
+class report_lunchorder(models.AbstractModel):
     _name = 'report.hotel.report_hotel_folio'
     _inherit = 'report.abstract_report'
     _template = 'hotel.report_hotel_folio'

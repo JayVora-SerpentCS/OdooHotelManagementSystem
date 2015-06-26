@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
 <data>
+
+<!--Template for hotel reservation -->
 <template id="report_checkin_qweb">
     <t t-call="report.html_container">
         <t t-foreach="docs" t-as="o">
             <t t-call="report.external_layout">
                 <div class="page">
                     <div class="row">
-                    
                         <h2>
 	                        <span><center>Check-In Guest List</center></span>
                    		</h2>
@@ -35,12 +36,10 @@
 						    <td><span t-esc="get_room_type(info.reservation_line)"/></td>
 						    <td><span t-esc="get_room_nos(info.reservation_line)"/></td>
 						</tr>
-						
                      </table>
                 </div>
             </t>
         </t>
-       
 		</t>
    </template>
 </data>

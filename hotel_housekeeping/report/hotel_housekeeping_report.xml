@@ -1,12 +1,8 @@
 <?xml version="1.0"?>
 <openerp>
 	<data>
-	<!--
-		<report id="housekeeping_activity_detail" string="Activity Detail"
-			model="hotel.housekeeping" name="activity.detail"
-			rml="hotel_housekeeping/view/activity_detail.xml" auto="False"
-			menu="True" />
-	-->
+
+      <!--Report for hotel housekeeping -->
       <report 
             id="report_housekeeping_activity_detail"
             string="Activity Detail"

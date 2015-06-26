@@ -1,0 +1,79 @@
+<openerp>
+    <data>
+        <!-- EDI related Email Templates menu -->
+        <record model="ir.actions.act_window" id="action_hotel_reservation_template">
+            <field name="name">Email Templates</field>
+            <field name="res_model">email.template</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="view_id" ref="email_template.email_template_tree" />
+            <field name="search_view_id" ref="email_template.view_email_template_search"/>
+            <field name="context" eval="{'search_default_model_id': ref('hotel_reservation.model_hotel_reservation')}"/>
+        </record>
+    </data>
+
+
+    <data noupdate="0">
+
+        <!--Email template for hotel reservation-->
+        <record id="email_template_hotel_reservation" model="email.template">
+            <field name="name">Reservation-Send by Email</field>
+            <field name="email_from">${(object.warehouse_id.partner_id.email or '')}</field>
+            <field name="subject">Hotel Reservation Detail</field>
+            <field name="email_to">${(object.partner_id.email or '')}</field>
+            <field name="model_id" ref="hotel_reservation.model_hotel_reservation"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html"><![CDATA[
+	            <p>Hello <strong>${object.partner_id.name}</strong>,</p>
+                <p>This is to confirm your booking for a room at <strong>${object.warehouse_id.name} Hotel</strong>,&nbsp; 
+                   <strong>${object.warehouse_id.partner_id.city}</strong>,&nbsp; 
+                   <strong>${object.warehouse_id.partner_id.country_id.name}</strong>.&nbsp;  
+                   On behalf of the hotel, we would like to express our gratitude to you for choosing our services. 
+                   Please find all the details regarding the confirmation of the reservation on Date <strong>${object.date_order}</strong> are listed below:
+                </p> 
+                &nbsp;&nbsp;<strong>Details :</strong><br/>
+                <p style="border-left: 1px solid #8e0000; margin-left: 30px;">
+                &nbsp;&nbsp;Name Of Guest : <strong>${object.partner_id.name}</strong><br />
+                &nbsp;&nbsp;Date Of Arrival : <strong>${object.checkin}</strong><br />
+                &nbsp;&nbsp;Date Of Departure : <strong>${object.checkout}</strong><br />
+                &nbsp;&nbsp;Reservation Number : <strong>${object.reservation_no}</strong><br />
+                &nbsp;&nbsp;Number Of Persons : <strong>${object.adults}</strong> Adults and <strong>${object.children}</strong> Childrens<br />
+                </p>
+                &nbsp;&nbsp;<strong>Rooms Rates Per Night :</strong><br/>
+                <br/>
+                <table border="1" cellpadding="4" style="margin-left: 30px;">
+                        <tr>
+                            <th>Room No</th>
+                            <th>Amount</th>
+                        </tr>
+                        %for line in object.reservation_line:
+                            %for line2 in line.reserve:
+                                <tr >
+                                    <td>${line2.product_id.name}</td>
+                                    <td>${line2.product_id.list_price}</td>
+                                </tr>
+                            %endfor
+                        %endfor
+                </table>
+               <br /> 
+               <p> 
+We would appreciate it if you could let us know in case there are any changes in your schedule or program. 
+In case you require check-in facilities at an earlier time due to flight changes or any other reasons, kindly inform us. 
+We are sure that you will find our services satisfactory. In case you need to cancel your reservation, 
+please Reply or Call us within 24 hours before the day of the check-in. 
+We look forward to providing you quality services at our hotel. 
+               </p>
+               <br />
+<strong>Kind Regards<strong>,<br />
+<br />
+<strong>Reservations Team <strong><br />
+[<strong>${object.warehouse_id.name} Hotel</strong>]<br />
+<strong>${object.warehouse_id.partner_id.street}</strong><br />
+<strong>${object.warehouse_id.partner_id.city}</strong>,<br />
+<strong>${object.warehouse_id.partner_id.country_id.name}</strong>,<br />
+<br />
+<strong>${object.warehouse_id.partner_id.website}</strong> <br />
+    		 ]]></field>
+  		</record>
+	</data>
+</openerp>

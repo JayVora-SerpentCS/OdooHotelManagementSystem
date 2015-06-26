@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <openerp>
 	<data>
+
+        <!--Report for hotel roomres details -->
+
 		<report id="hotel_roomres_details"
 			string="Room Reservation Detail"
 			model="hotel.reservation"
@@ -8,7 +11,9 @@
 			file="hotel_reservation.report_roomres_qweb"
             name="hotel_reservation.report_roomres_qweb"
             menu="False"/>
-			
+
+        <!--Report for hotel checkin details -->
+
 		<report id="hotel_checkin_details"
 			string="CheckIn Detail"
 			model="hotel.reservation"
@@ -16,7 +21,9 @@
 			file="hotel_reservation.report_checkin_qweb"
             name="hotel_reservation.report_checkin_qweb"
             menu="False"/>
-			
+
+        <!--Report for hotel checkout details -->
+
 		<report id="hotel_checkout_details"
 			string="CheckOut Detail"
 			model="hotel.reservation"
@@ -24,8 +31,9 @@
 			file="hotel_reservation.report_checkout_qweb"
             name="hotel_reservation.report_checkout_qweb"
             menu="False"/>
-			
-		
+
+        <!--Report for hotel maxroom details -->
+
 		<report id="hotel_maxroom_details"
 			string="MaxRoom Detail"
 			model="hotel.reservation"
@@ -33,6 +41,5 @@
 			file="hotel_reservation.report_maxroom_qweb"
             name="hotel_reservation.report_maxroom_qweb"
             menu="False"/>
-		
 	</data>
 </openerp>

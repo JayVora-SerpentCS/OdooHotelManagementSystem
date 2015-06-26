@@ -22,7 +22,7 @@
 
 {
     "name" : "Hotel Management",
-    "version" : "0.07",
+    "version" : "0.10",
     "author": ["Serpent Consulting Services Pvt. Ltd.", "OpenERP SA" ],
     "category" : "Generic Modules/Hotel Management",
     "description": """
@@ -37,20 +37,17 @@
     """,
     "website": ["http://www.serpentcs.com", "http://www.openerp.com"],
     "depends" : ["sale_stock", "report_extended"],
-    "demo" : [
-    ],
     "data": [
         "security/hotel_security.xml",
         "security/ir.model.access.csv",
-        "hotel_sequence.xml",
-        "hotel_folio_workflow.xml",
-#        "hotel_scheduler.xml",
-        "report/hotel_report.xml",
-        "hotel_view.xml",
-       # "hotel_data.xml",
+        "views/hotel_sequence.xml",
+        "views/hotel_folio_workflow.xml",
+#        "report/hotel_report.xml",
+        "views/hotel_view.xml",
+        "views/hotel_data.xml",
         "wizard/hotel_wizard.xml",
-        "view/hotel_report.xml",
-        "view/report_hotel_management.xml",
+        "views/hotel_report.xml",
+        "views/report_hotel_management.xml",
     ],
     'css': ["static/src/css/room_kanban.css"],
     "auto_install": False,

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
 <data>
+
+<!--Template for hotel restaurant -->
+
 <template id="report_hotel_order_kot">
     <t t-call="report.html_container">
         <t t-foreach="docs" t-as="o">
@@ -11,7 +14,6 @@
                                 <span><strong><center>Kitchen Order Ticket</center></strong></span>
                             </h2>
                         </div>
-
                     <table class="table table-condensed">
                         <thead>
                             <tr>
@@ -36,7 +38,7 @@
                                 </td>
                         </tbody>
                     </table>
-                    
+
                     <table class="table table-condensed">
                         <thead>
                             <tr>

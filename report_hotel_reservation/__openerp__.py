@@ -34,7 +34,7 @@
     """,
     "data": [
         "security/ir.model.access.csv",
-        "report_hotel_reservation_view.xml",
+        "views/report_hotel_reservation_view.xml",
     ],
     'installable': True,
     'auto_install': False,
