@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
 <data>
+
 <!--Template for hotel reservation -->
+
 <template id="report_checkout_qweb">
     <t t-call="report.html_container">
         <t t-foreach="docs" t-as="o">

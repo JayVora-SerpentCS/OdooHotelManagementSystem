@@ -195,7 +195,6 @@
                            <separator colspan='4' string="Customer Taxes"/>
                            <field name="taxes_id" colspan="4" nolabel='1' help='List of customer taxes applied on the ty. '/>
                         </page>
-
                         <page string="Procurement">
                             <group colspan="4" col="4">
                                 <field name="active" select="2"/>
@@ -697,7 +696,6 @@
         </field>
     </record>
 
-
         <!-- Action for hotel folio  -->
         <record model="ir.actions.act_window" id="open_hotel_folio1_form_tree_all">
             <field name="name">Hotel Folio</field>
@@ -945,7 +943,8 @@
                        <field name="today_date"/><newline/>
                     </group>
                     <group colspan="2" col="4">
-                       <field name="folionumber" required="1"/>
+                       <field name="so_number" required="1"/>
+                       <field name="folio_no" />
                        <field name="guest_name" required="1"/>
                        <field name="room_number" required="1"/>
                        <field name="type"/>
@@ -999,6 +998,6 @@
                   action="open_currency_exchange_tree"
                   sequence="22"
                   parent="hotel_configuration_menu"/>
-        
+
     </data>
 </openerp>

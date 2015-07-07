@@ -44,17 +44,17 @@ class report_lunchorder(models.AbstractModel):
     _inherit = 'report.abstract_report'
     _template = 'hotel_restaurant.report_res_table'
     _wrapped_report_class = hotel_restaurant_report
-    
+
 class report_kot(models.AbstractModel):
     _name = 'report.hotel_restaurant.report_hotel_order_kot'
     _inherit = 'report.abstract_report'
     _template = 'hotel_restaurant.report_hotel_order_kot'
     _wrapped_report_class = hotel_restaurant_report
-    
+
 class report_bill(models.AbstractModel):
     _name = 'report.hotel_restaurant.report_hotel_order_kot'
     _inherit = 'report.abstract_report'
     _template = 'hotel_restaurant.report_hotel_order_kot'
     _wrapped_report_class = hotel_restaurant_report
-    
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

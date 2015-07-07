@@ -4,7 +4,7 @@
 
 		<!--Report for hotel folio -->
 
-	    <report 
+        <report 
             id="report_hotel_management"
             string="Hotel Folio"
             model="hotel.folio" 
@@ -23,6 +23,7 @@
             file="hotel.report_currency_exchange" 
             name="hotel.report_currency_exchange"
             menu="False" 
-        /> 
+        />
+
 	</data>
 </openerp>

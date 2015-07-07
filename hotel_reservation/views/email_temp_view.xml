@@ -1,4 +1,5 @@
 <openerp>
+
     <data>
         <!-- EDI related Email Templates menu -->
         <record model="ir.actions.act_window" id="action_hotel_reservation_template">
@@ -11,7 +12,6 @@
             <field name="context" eval="{'search_default_model_id': ref('hotel_reservation.model_hotel_reservation')}"/>
         </record>
     </data>
-
 
     <data noupdate="1">
 

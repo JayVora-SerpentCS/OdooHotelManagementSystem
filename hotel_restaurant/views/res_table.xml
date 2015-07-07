@@ -22,7 +22,6 @@
                                 <span t-esc="formatLang(data['form']['date_end'],date=True)"/>
                             </div>
                         </div>
-
                     <table class="table table-condensed">
                         <thead>
                             <tr>

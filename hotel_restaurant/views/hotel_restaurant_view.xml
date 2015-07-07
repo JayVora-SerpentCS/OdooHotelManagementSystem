@@ -126,7 +126,6 @@
             </field>
         </record>
 
-
         <!-- Search view of hotel restaurant reservation -->
         <record model="ir.ui.view" id="view_hotel_restaurant_reservation_search">
             <field name="name">hotel.restaurant.reservation.search</field>
@@ -151,7 +150,6 @@
                 </search>
             </field>
         </record>
-
 
         <!-- Action of hotel restaurant reservation -->
         <record model="ir.actions.act_window" id="open_view_hotel_restaurant_reservation_form_tree">
@@ -258,7 +256,6 @@
                 </search>
             </field>
         </record>
-
 
         <!-- Action of hotel reservation order-->
         <record model="ir.actions.act_window" id="open_view_hotel_reservation_order_form_tree">
@@ -367,7 +364,6 @@
                 </search>
             </field>
         </record>
-
 
         <!-- Action of hotel restaurant order-->
         <record model="ir.actions.act_window" id="open_view_hotel_restaurant_order_form_tree">
@@ -679,7 +675,6 @@
         id="menu_open_hotel_menucard_form"
         action="action_hotel_menucard_form"
         parent="menu_hotel_food_item"/>
-        
 
         <record model="ir.actions.act_window" id="hotel_restaurent_food_category_action">
             <field name="name">Foods by Category</field>

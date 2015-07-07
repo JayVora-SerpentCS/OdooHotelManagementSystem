@@ -65,7 +65,6 @@ class hotel_reservation_wizard(models.TransientModel):
         }
         return self.env['report'].get_action(self,'hotel_reservation.report_maxroom_qweb',data=data)
 
-
 class make_folio_wizard(models.TransientModel):
 
     _name = 'wizard.make.folio'

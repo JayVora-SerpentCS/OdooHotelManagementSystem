@@ -19,10 +19,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 ##############################################################################
-from openerp.exceptions import except_orm, Warning
-from openerp import models,fields,api,_
-from openerp import netsvc
-
+from openerp.exceptions import except_orm, ValidationError
+from openerp import models, fields, api, _, netsvc
 
 class product_category(models.Model):
 
@@ -41,17 +39,15 @@ class hotel_menucard_type(models.Model):
     _name = 'hotel.menucard.type'
     _description = 'Amenities Type'
 
-    menu_id = fields.Many2one('product.category','Category',required=True, delegate=True, ondelete='cascade')
-
+    menu_id = fields.Many2one('product.category', 'Category', required=True, delegate=True, ondelete='cascade')
 
 class hotel_menucard(models.Model):
 
     _name = 'hotel.menucard'
     _description = 'Hotel Menucard'
 
-    product_id = fields.Many2one('product.product','Product',required=True, delegate=True, ondelete='cascade')
+    product_id = fields.Many2one('product.product', 'Product', required=True, delegate=True, ondelete='cascade')
     image = fields.Binary("Image", help="This field holds the image used as image for the product, limited to 1024x1024px.")
-
 
 class hotel_restaurant_tables(models.Model):
 
@@ -83,7 +79,6 @@ class hotel_restaurant_reservation(models.Model):
             }
             proxy.create(values)
         return True
-
 
     @api.onchange('cname')
     def onchange_partner_id(self):
@@ -135,7 +130,6 @@ class hotel_restaurant_reservation(models.Model):
                 self.write({'state':'confirm'})
             return True
 
-
     @api.multi
     def table_cancel(self):
         """
@@ -167,11 +161,10 @@ class hotel_restaurant_reservation(models.Model):
     end_date = fields.Datetime('End Time', required=True)
     cname = fields.Many2one('res.partner', string='Customer Name', size=64, required=True)
     partner_address_id = fields.Many2one('res.partner', string='Address')
-    tableno = fields.Many2many('hotel.restaurant.tables',relation='reservation_table',column1='reservation_table_id',column2='name',string='Table Number',help="Table reservation detail. ")
-    state = fields.Selection([('draft', 'Draft'), ('confirm', 'Confirmed'), ('done', 'Done'), ('cancel', 'Cancelled')], 'state', select=True, required=True, readonly=True,default=lambda * a: 'draft')
+    tableno = fields.Many2many('hotel.restaurant.tables', relation='reservation_table', column1='reservation_table_id', column2='name', string='Table Number', help="Table reservation detail. ")
+    state = fields.Selection([('draft', 'Draft'), ('confirm', 'Confirmed'), ('done', 'Done'), ('cancel', 'Cancelled')], 'state', select=True, required=True, readonly=True, default=lambda * a: 'draft')
 
-
-    @api.constrains('start_date','end_date')
+    @api.constrains('start_date', 'end_date')
     def check_start_dates(self):
         '''
         This method is used to validate the start_date and end_date.
@@ -180,8 +173,7 @@ class hotel_restaurant_reservation(models.Model):
         @return : raise a warning depending on the validation
         '''
         if self.start_date >= self.end_date:
-            raise except_orm(_('Warning'),_('Start Date Should be less than the End Date!'))
-
+            raise ValidationError(_('Start Date Should be less than the End Date!'))
 
 class hotel_restaurant_kitchen_order_tickets(models.Model):
 
@@ -193,8 +185,8 @@ class hotel_restaurant_kitchen_order_tickets(models.Model):
     kot_date = fields.Datetime('Date')
     room_no = fields.Char('Room No', size=64, readonly=True)
     w_name = fields.Char('Waiter Name', size=64, readonly=True)
-    tableno = fields.Many2many('hotel.restaurant.tables','temp_table3','table_no','name','Table Number' ,size=64, help="Table reservation detail.")
-    kot_list = fields.One2many('hotel.restaurant.order.list','kot_order_list','Order List' ,help="Kitchen order list")
+    tableno = fields.Many2many('hotel.restaurant.tables', 'temp_table3', 'table_no', 'name', 'Table Number' , size=64, help="Table reservation detail.")
+    kot_list = fields.One2many('hotel.restaurant.order.list', 'kot_order_list', 'Order List' , help="Kitchen order list")
 
 class hotel_restaurant_order(models.Model):
 
@@ -219,7 +211,7 @@ class hotel_restaurant_order(models.Model):
         '''
         for line in self:
             line.amount_total = line.amount_subtotal + (line.amount_subtotal * line.tax) / 100
-    
+
     @api.multi
     def generate_kot(self):
         """
@@ -251,21 +243,19 @@ class hotel_restaurant_order(models.Model):
     _name = "hotel.restaurant.order"
     _description = "Includes Hotel Restaurant Order"
 
-    _rec_name="order_no"
+    _rec_name = "order_no"
 
-    order_no = fields.Char('Order Number', size=64, required=True,default=lambda obj: obj.env['ir.sequence'].get('hotel.restaurant.order'))
+    order_no = fields.Char('Order Number', size=64, required=True, default=lambda obj: obj.env['ir.sequence'].get('hotel.restaurant.order'))
     o_date = fields.Datetime('Date', required=True)
-    room_no = fields.Many2one('hotel.room','Room No')
-    waiter_name = fields.Many2one('res.partner','Waiter Name')
-    table_no = fields.Many2many('hotel.restaurant.tables','temp_table2','table_no','name','Table Number')
-    order_list = fields.One2many('hotel.restaurant.order.list','o_list','Order List')
+    room_no = fields.Many2one('hotel.room', 'Room No')
+    waiter_name = fields.Many2one('res.partner', 'Waiter Name')
+    table_no = fields.Many2many('hotel.restaurant.tables', 'temp_table2', 'table_no', 'name', 'Table Number')
+    order_list = fields.One2many('hotel.restaurant.order.list', 'o_list', 'Order List')
     tax = fields.Float('Tax (%) ')
     amount_subtotal = fields.Float(compute='_sub_total', method=True, string='Subtotal')
     amount_total = fields.Float(compute='_total', method=True, string='Total1')
 
-
 class hotel_reservation_order(models.Model):
-
 
     @api.multi
     @api.depends('order_list')
@@ -278,7 +268,6 @@ class hotel_reservation_order(models.Model):
        for sale in self:
             sale.amount_subtotal = sum(line.price_subtotal for line in sale.order_list)
 
-
     @api.multi
     @api.depends('amount_subtotal')
     def _total(self):
@@ -289,7 +278,6 @@ class hotel_reservation_order(models.Model):
         '''
         for line in self:
             line.amount_total = line.amount_subtotal + (line.amount_subtotal * line.tax) / 100.0
-
 
     @api.multi
     def reservation_generate_kot(self):
@@ -323,23 +311,22 @@ class hotel_reservation_order(models.Model):
     _name = "hotel.reservation.order"
     _description = "Reservation Order"
 
-    _rec_name="order_number"
+    _rec_name = "order_number"
 
-    order_number = fields.Char('Order No', size=64,default=lambda obj: obj.env['ir.sequence'].get('hotel.reservation.order'))
+    order_number = fields.Char('Order No', size=64, default=lambda obj: obj.env['ir.sequence'].get('hotel.reservation.order'))
     reservationno = fields.Char('Reservation No', size=64)
     date1 = fields.Datetime('Date', required=True)
-    waitername = fields.Many2one('res.partner','Waiter Name')
-    table_no = fields.Many2many('hotel.restaurant.tables','temp_table4','table_no','name','Table Number')
-    order_list = fields.One2many('hotel.restaurant.order.list','o_l','Order List')
+    waitername = fields.Many2one('res.partner', 'Waiter Name')
+    table_no = fields.Many2many('hotel.restaurant.tables', 'temp_table4', 'table_no', 'name', 'Table Number')
+    order_list = fields.One2many('hotel.restaurant.order.list', 'o_l', 'Order List')
     tax = fields.Float('Tax (%) ', size=64)
     amount_subtotal = fields.Float(compute='_sub_total', method=True, string='Subtotal')
     amount_total = fields.Float(compute='_total', method=True, string='Total')
 
-
 class hotel_restaurant_order_list(models.Model):
 
     @api.one
-    @api.depends('item_qty','item_rate')
+    @api.depends('item_qty', 'item_rate')
     def _sub_total(self):
         '''
         price_subtotal will display on change of item_rate
@@ -347,8 +334,7 @@ class hotel_restaurant_order_list(models.Model):
         @param self : object pointer
         '''
         for line in self:
-            line.price_subtotal=line.item_rate * int(line.item_qty)
-
+            line.price_subtotal = line.item_rate * int(line.item_qty)
 
     @api.onchange('name')
     def on_change_item_name(self):
@@ -358,17 +344,17 @@ class hotel_restaurant_order_list(models.Model):
         @param self : object pointer
         '''
         if self.name:
-            self.item_rate=self.name.list_price
+            self.item_rate = self.name.list_price
 
     _name = "hotel.restaurant.order.list"
     _description = "Includes Hotel Restaurant Order"
 
-    o_list = fields.Many2one('hotel.restaurant.order','Restaurant Order')
-    o_l = fields.Many2one('hotel.reservation.order','Reservation Order')
-    kot_order_list = fields.Many2one('hotel.restaurant.kitchen.order.tickets','Kitchen Order Tickets')
-    name = fields.Many2one('hotel.menucard','Item Name',required=True)
+    o_list = fields.Many2one('hotel.restaurant.order', 'Restaurant Order')
+    o_l = fields.Many2one('hotel.reservation.order', 'Reservation Order')
+    kot_order_list = fields.Many2one('hotel.restaurant.kitchen.order.tickets', 'Kitchen Order Tickets')
+    name = fields.Many2one('hotel.menucard', 'Item Name', required=True)
     item_qty = fields.Char('Qty', size=64, required=True)
     item_rate = fields.Float('Rate', size=64)
     price_subtotal = fields.Float(compute='_sub_total', method=True, string='Subtotal')
 
-## vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+# # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

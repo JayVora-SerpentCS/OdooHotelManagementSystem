@@ -23,9 +23,9 @@
 {
     "name" : "Hotel Management",
     "version" : "0.10",
-    "author": ["Serpent Consulting Services Pvt. Ltd.", "OpenERP SA" ],
+    "author" : ["Serpent Consulting Services Pvt. Ltd.", "OpenERP SA" ],
     "category" : "Generic Modules/Hotel Management",
-    "description": """
+    "description" : """
     Module for Hotel/Resort/Property management. You can manage:
     * Configure Property
     * Hotel Configuration
@@ -35,24 +35,22 @@
 
     Different reports are also provided, mainly for hotel statistics.
     """,
-    "website": ["http://www.serpentcs.com", "http://www.openerp.com"],
+    "website" : ["http://www.serpentcs.com", "http://www.openerp.com"],
     "depends" : ["sale_stock", "report_extended"],
-    "demo": ["views/hotel_data.xml"],
-
-    "data": [
+    "demo" : ["views/hotel_data.xml"],
+    "data" : [
         "security/hotel_security.xml",
         "security/ir.model.access.csv",
         "views/hotel_sequence.xml",
         "views/hotel_folio_workflow.xml",
-#        "report/hotel_report.xml",
         "views/hotel_report.xml",
         "views/report_hotel_management.xml",
         "views/hotel_view.xml",
         "wizard/hotel_wizard.xml",
     ],
-    'css': ["static/src/css/room_kanban.css"],
-    "auto_install": False,
-    "installable": True
+    'css' : ["static/src/css/room_kanban.css"],
+    "auto_install" : False,
+    "installable" : True
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

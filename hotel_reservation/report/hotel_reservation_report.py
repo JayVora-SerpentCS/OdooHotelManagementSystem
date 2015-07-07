@@ -87,7 +87,6 @@ class reservation_detail_report(report_sxw.rml_parse):
                 if counter >= 1:
                     details.update({'name': room.name or '', 'no_of_times_used': counter})
                     room_used_details.append(details)
-
         return room_used_details
 
 class report_test_checkin(models.AbstractModel):
@@ -113,9 +112,5 @@ class report_test_roomres(models.AbstractModel):
     _inherit = "report.abstract_report"
     _template = "hotel_reservation.report_roomres_qweb"
     _wrapped_report_class = reservation_detail_report
-# report_sxw.report_sxw('report.reservation.detail', 'hotel.reservation', 'addons/hotel_reservation/report/room_res.rml', parser=reservation_detail_report)
-# report_sxw.report_sxw('report.checkin.detail', 'hotel.reservation', 'addons/hotel_reservation/report/checkinlist.rml', parser=reservation_detail_report)
-# report_sxw.report_sxw('report.checkout.detail', 'hotel.reservation', 'addons/hotel_reservation/report/checkoutlist.rml', parser=reservation_detail_report)
-# report_sxw.report_sxw('report.maxroom.detail', 'hotel.reservation', 'addons/hotel_reservation/report/maxroom.rml', parser=reservation_detail_report)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

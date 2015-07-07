@@ -20,7 +20,7 @@
 #
 ##############################################################################
 
-from openerp import models,fields,api,_
+from openerp import models,fields,api
 
 class hotel_housekeeping_wizard(models.TransientModel):
     _name = 'hotel.housekeeping.wizard'

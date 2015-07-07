@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
 <data>
+
 <!--Template for hotel housekeeping -->
 <template id="report_housekeeping">
     <t t-call="report.html_container">

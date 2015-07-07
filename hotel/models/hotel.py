@@ -20,10 +20,9 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 ##############################################################################
-from openerp.exceptions import except_orm, Warning
-from openerp import models,fields,api,_
+from openerp.exceptions import except_orm, Warning, ValidationError
+from openerp import models, fields, api, _, netsvc
 from openerp.tools import misc
-from openerp import netsvc
 from decimal import Decimal
 import datetime
 import urllib2
@@ -45,13 +44,12 @@ class product_category(models.Model):
     isamenitytype = fields.Boolean('Is Amenities Type')
     isservicetype = fields.Boolean('Is Service Type')
 
-
 class hotel_room_type(models.Model):
 
     _name = "hotel.room.type"
     _description = "Room Type"
 
-    cat_id = fields.Many2one('product.category','category', required=True, delegate=True, select=True, ondelete='cascade')
+    cat_id = fields.Many2one('product.category', 'category', required=True, delegate=True, select=True, ondelete='cascade')
 
 class product_product(models.Model):
 
@@ -66,28 +64,29 @@ class hotel_room_amenities_type(models.Model):
     _name = 'hotel.room.amenities.type'
     _description = 'amenities Type'
 
-    cat_id = fields.Many2one('product.category','category', required=True, delegate=True, ondelete='cascade')
+    cat_id = fields.Many2one('product.category', 'category', required=True, delegate=True, ondelete='cascade')
 
 class hotel_room_amenities(models.Model):
 
     _name = 'hotel.room.amenities'
     _description = 'Room amenities'
 
-    room_categ_id = fields.Many2one('product.product','Product Category' ,required=True, delegate=True, ondelete='cascade')
-    rcateg_id = fields.Many2one('hotel.room.amenities.type','Amenity Catagory')
+    room_categ_id = fields.Many2one('product.product', 'Product Category' , required=True, delegate=True, ondelete='cascade')
+    rcateg_id = fields.Many2one('hotel.room.amenities.type', 'Amenity Catagory')
 
 class hotel_room(models.Model):
 
     _name = 'hotel.room'
     _description = 'Hotel Room'
 
-    product_id = fields.Many2one('product.product','Product_id' ,required=True, delegate=True, ondelete='cascade')
-    floor_id = fields.Many2one('hotel.floor','Floor No',help='At which floor the room is located.')
+    product_id = fields.Many2one('product.product', 'Product_id' , required=True, delegate=True, ondelete='cascade')
+    floor_id = fields.Many2one('hotel.floor', 'Floor No', help='At which floor the room is located.')
     max_adult = fields.Integer('Max Adult')
     max_child = fields.Integer('Max Child')
-    room_amenities = fields.Many2many('hotel.room.amenities','temp_tab','room_amenities','rcateg_id',string='Room Amenities',help='List of room amenities. ')
-    status = fields.Selection([('available', 'Available'), ('occupied', 'Occupied')], 'Status',default='available')
+    room_amenities = fields.Many2many('hotel.room.amenities', 'temp_tab', 'room_amenities', 'rcateg_id', string='Room Amenities', help='List of room amenities. ')
+    status = fields.Selection([('available', 'Available'), ('occupied', 'Occupied')], 'Status', default='available')
     capacity = fields.Integer('Capacity')
+
     @api.multi
     def set_room_status_occupied(self):
         return self.write({'status': 'occupied'})
@@ -96,11 +95,10 @@ class hotel_room(models.Model):
     def set_room_status_available(self):
         return self.write({'status': 'available'})
 
-
 class hotel_folio(models.Model):
 
     @api.multi
-    def copy(self,default=None):
+    def copy(self, default=None):
         '''
         @param self : object pointer
         @param default : dict of default values to be set
@@ -117,7 +115,7 @@ class hotel_folio(models.Model):
         return self.env['sale.order']._invoiced(name, arg)
 
     @api.multi
-    def _invoiced_search(self ,obj, name, args):
+    def _invoiced_search(self , obj, name, args):
         '''
         @param self : object pointer
         @param name: Names of fields.
@@ -130,23 +128,31 @@ class hotel_folio(models.Model):
     _rec_name = 'order_id'
     _order = 'id desc'
 
-    name = fields.Char('Folio Number', size=24,default=lambda obj: obj.env['ir.sequence'].get('hotel.folio'),readonly=True)
-    order_id = fields.Many2one('sale.order','Order',  delegate=True, required=True, ondelete='cascade')
+    name = fields.Char('Folio Number', size=24, default=lambda obj: obj.env['ir.sequence'].get('hotel.folio'), readonly=True)
+    order_id = fields.Many2one('sale.order', 'Order', delegate=True, required=True, ondelete='cascade')
     checkin_date = fields.Datetime('Check In', required=True, readonly=True, states={'draft':[('readonly', False)]})
     checkout_date = fields.Datetime('Check Out', required=True, readonly=True, states={'draft':[('readonly', False)]})
-    room_lines = fields.One2many('hotel.folio.line','folio_id', readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, help="Hotel room reservation detail.")
-    service_lines = fields.One2many('hotel.service.line','folio_id', readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, help="Hotel services detail provide to customer and it will include in main Invoice.")
-    hotel_policy = fields.Selection([('prepaid', 'On Booking'), ('manual', 'On Check In'), ('picking', 'On Checkout')], 'Hotel Policy',default='manual', help="Hotel policy for payment that either the guest has to payment at booking time or check-in check-out time.")
+    room_lines = fields.One2many('hotel.folio.line', 'folio_id', readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, help="Hotel room reservation detail.")
+    service_lines = fields.One2many('hotel.service.line', 'folio_id', readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, help="Hotel services detail provide to customer and it will include in main Invoice.")
+    hotel_policy = fields.Selection([('prepaid', 'On Booking'), ('manual', 'On Check In'), ('picking', 'On Checkout')], 'Hotel Policy', default='manual', help="Hotel policy for payment that either the guest has to payment at booking time or check-in check-out time.")
     duration = fields.Float('Duration in Days', help="Number of days which will automatically count from the check-in and check-out date. ")
-    currrency_ids = fields.One2many('currency.exchange','folionumber', readonly=True)
+    currrency_ids = fields.One2many('currency.exchange', 'so_number', readonly=True)
 
     @api.multi
     def go_to_currency_exchange(self):
+        '''
+         when Money Exchange button is clicked then this method is called.
+        -------------------------------------------------------------------
+        @param self : object pointer
+        '''
         cr, uid, context = self.env.args
         context = dict(context)
         for rec in self:
-            context.update({'folioid':rec.id,'guest':rec.partner_id.id,'room_no':rec.room_lines[0].product_id.name,'hotel':rec.warehouse_id.id})
-            self.env.args = cr, uid, misc.frozendict(context)
+            if rec.partner_id.id and len(rec.room_lines) != 0:
+                context.update({'folioid':rec.id, 'guest':rec.partner_id.id, 'room_no':rec.room_lines[0].product_id.name, 'hotel':rec.warehouse_id.id})
+                self.env.args = cr, uid, misc.frozendict(context)
+            else:
+                raise except_orm(_('Warning'), _('Please Reserve Any Room.'))
         return {
             'name': _('Currency Exchange'),
             'res_model': 'currency.exchange',
@@ -154,22 +160,11 @@ class hotel_folio(models.Model):
             'view_id': False,
             'view_mode': 'form,tree',
             'view_type': 'form',
-            'context':{'default_folionumber':context.get('folioid'),'default_hotel_id':context.get('hotel'),'default_guest_name':context.get('guest'),'default_room_number':context.get('room_no')},
+            'context':{'default_so_number':context.get('folioid'), 'default_hotel_id':context.get('hotel'), 'default_guest_name':context.get('guest'), 'default_room_number':context.get('room_no')},
         }
 
-    @api.constrains('checkin_date','checkout_date')
-    def check_dates(self):
-        '''
-        This method is used to validate the checkin_date and checkout_date.
-        -------------------------------------------------------------------
-        @param self : object pointer
-        @return : raise warning depending on the validation
-        '''
-        if self.checkin_date >= self.checkout_date:
-                raise except_orm(_('Warning'),_('Check in Date Should be less than the Check Out Date!'))
-
     @api.constrains('room_lines')
-    def check_folio_room_line(self):
+    def folio_room_lines(self):
         '''
         This method is used to validate the room_lines.
         ------------------------------------------------
@@ -179,10 +174,21 @@ class hotel_folio(models.Model):
         folio_rooms = []
         for room in self[0].room_lines:
             if room.product_id.id in folio_rooms:
-                raise except_orm(_('Warning'),_('You Cannot Take Same Room Twice'))
+                raise ValidationError(_('You Cannot Take Same Room Twice'))
             folio_rooms.append(room.product_id.id)
 
-    @api.onchange('checkout_date','checkin_date')
+    @api.constrains('checkin_date', 'checkout_date')
+    def check_dates(self):
+        '''
+        This method is used to validate the checkin_date and checkout_date.
+        -------------------------------------------------------------------
+        @param self : object pointer
+        @return : raise warning depending on the validation
+        '''
+        if self.checkin_date >= self.checkout_date:
+                raise ValidationError(_('Check in Date Should be less than the Check Out Date!'))
+
+    @api.onchange('checkout_date', 'checkin_date')
     def onchange_dates(self):
         '''
         This mathod gives the duration between check in checkout if customer will leave only for some
@@ -210,7 +216,7 @@ class hotel_folio(models.Model):
         self.duration = myduration
 
     @api.model
-    def create(self, vals,check=True):
+    def create(self, vals, check=True):
         """
         Overrides orm create method.
         @param self: The object pointer
@@ -230,7 +236,6 @@ class hotel_folio(models.Model):
             folio_id = super(hotel_folio, self).create(vals)
         return folio_id
 
-
     @api.onchange('warehouse_id')
     def onchange_warehouse_id(self):
         '''
@@ -243,7 +248,6 @@ class hotel_folio(models.Model):
             order = folio.order_id
             x = order.onchange_warehouse_id(folio.warehouse_id.id)
         return x
-
 
     @api.onchange('partner_id')
     def onchange_partner_id(self):
@@ -276,15 +280,14 @@ class hotel_folio(models.Model):
             x = order.button_dummy()
         return x
 
-
     @api.multi
-    def action_invoice_create(self,grouped=False, states=['confirmed', 'done']):
+    def action_invoice_create(self, grouped=False, states=['confirmed', 'done']):
         '''
         @param self : object pointer
         '''
         order_ids = [folio.order_id.id for folio in self]
         sale_obj = self.env['sale.order'].browse(order_ids)
-        invoice_id = sale_obj.action_invoice_create(grouped=False,states=['confirmed', 'done'])
+        invoice_id = sale_obj.action_invoice_create(grouped=False, states=['confirmed', 'done'])
         for line in self:
             values = {
                 'invoiced': True,
@@ -292,7 +295,6 @@ class hotel_folio(models.Model):
             }
             line.write(values)
         return invoice_id
-
 
     @api.multi
     def action_invoice_cancel(self):
@@ -341,9 +343,8 @@ class hotel_folio(models.Model):
                 o.write({'state': 'progress'})
         return res
 
-
     @api.multi
-    def test_state(self,mode):
+    def test_state(self, mode):
         '''
         @param self : object pointer
         @param mode : state of workflow
@@ -396,15 +397,15 @@ class hotel_folio(models.Model):
         query = "select id from sale_order_line where order_id IN %s and state=%s"
         self._cr.execute(query, (tuple(self._ids), 'cancel'))
         cr1 = self._cr
-        line_ids = map(lambda x: x[0],cr1.fetchall())
+        line_ids = map(lambda x: x[0], cr1.fetchall())
         self.write({'state': 'draft', 'invoice_ids': [], 'shipped': 0})
         sale_line_obj = self.env['sale.order.line'].browse(line_ids)
         sale_line_obj.write({'invoiced': False, 'state': 'draft', 'invoice_lines': [(6, 0, [])]})
         wf_service = netsvc.LocalService("workflow")
         for inv_id in self._ids:
             # Deleting the existing instance of workflow for SO
-            wf_service.trg_delete(self._uid,'sale.order', inv_id,self._cr)
-            wf_service.trg_create(self._uid,'sale.order', inv_id,self._cr)
+            wf_service.trg_delete(self._uid, 'sale.order', inv_id, self._cr)
+            wf_service.trg_create(self._uid, 'sale.order', inv_id, self._cr)
         for (id, name) in self.name_get():
             message = _("The sales order '%s' has been set in draft state.") % (name,)
             self.log(message)
@@ -413,7 +414,7 @@ class hotel_folio(models.Model):
 class hotel_folio_line(models.Model):
 
     @api.one
-    def copy(self,default=None):
+    def copy(self, default=None):
         '''
         @param self : object pointer
         @param default : dict of default values to be set
@@ -421,7 +422,7 @@ class hotel_folio_line(models.Model):
         return self.env['sale.order.line'].copy(default=default)
 
     @api.multi
-    def _amount_line(self,field_name, arg):
+    def _amount_line(self, field_name, arg):
         '''
         @param self : object pointer
         @param field_name: Names of fields.
@@ -430,7 +431,7 @@ class hotel_folio_line(models.Model):
         return self.env['sale.order.line']._amount_line(field_name, arg)
 
     @api.multi
-    def _number_packages(self,field_name, arg):
+    def _number_packages(self, field_name, arg):
         '''
         @param self : object pointer
         @param field_name: Names of fields.
@@ -453,13 +454,13 @@ class hotel_folio_line(models.Model):
     _name = 'hotel.folio.line'
     _description = 'hotel folio1 room line'
 
-    order_line_id = fields.Many2one('sale.order.line',string='Order Line' ,required=True, delegate=True, ondelete='cascade')
-    folio_id = fields.Many2one('hotel.folio',string='Folio', ondelete='cascade')
-    checkin_date = fields.Datetime('Check In', required=True,default = _get_checkin_date)
-    checkout_date = fields.Datetime('Check Out', required=True,default = _get_checkout_date)
+    order_line_id = fields.Many2one('sale.order.line', string='Order Line' , required=True, delegate=True, ondelete='cascade')
+    folio_id = fields.Many2one('hotel.folio', string='Folio', ondelete='cascade')
+    checkin_date = fields.Datetime('Check In', required=True, default=_get_checkin_date)
+    checkout_date = fields.Datetime('Check Out', required=True, default=_get_checkout_date)
 
     @api.model
-    def create(self,vals,check=True):
+    def create(self, vals, check=True):
         """
         Overrides orm create method.
         @param self: The object pointer
@@ -470,7 +471,6 @@ class hotel_folio_line(models.Model):
             folio = self.env["hotel.folio"].browse(vals['folio_id'])
             vals.update({'order_id':folio.order_id.id})
         return super(models.Model, self).create(vals)
-
 
     @api.multi
     def unlink(self):
@@ -497,7 +497,7 @@ class hotel_folio_line(models.Model):
         return x
 
     @api.multi
-    def product_id_change(self,pricelist, product, qty=0,
+    def product_id_change(self, pricelist, product, qty=0,
             uom=False, qty_uos=0, uos=False, name='', partner_id=False,
             lang=False, update_tax=True, date_order=False):
         '''
@@ -522,8 +522,7 @@ class hotel_folio_line(models.Model):
                 uom=False, qty_uos=0, uos=False, name='', partner_id=partner_id,
                 lang=False, update_tax=True, date_order=False)
 
-
-    @api.onchange('checkin_date','checkout_date')
+    @api.onchange('checkin_date', 'checkout_date')
     def on_change_checkout(self):
         '''
         When you change checkin_date or checkout_date it will checked it
@@ -537,14 +536,13 @@ class hotel_folio_line(models.Model):
             self.checkout_date = time.strftime('%Y-%m-%d %H:%M:%S')
         qty = 1
         if self.checkout_date < self.checkin_date:
-            raise except_orm(_('Warning'),_('Checkout must be greater or equal to checkin date'))
+            raise except_orm(_('Warning'), _('Checkout must be greater or equal to checkin date'))
         if self.checkin_date:
             diffDate = datetime.datetime(*time.strptime(self.checkout_date, '%Y-%m-%d %H:%M:%S')[:5]) - datetime.datetime(*time.strptime(self.checkin_date, '%Y-%m-%d %H:%M:%S')[:5])
             qty = diffDate.days
             if qty == 0:
                 qty = 1
         self.product_uom_qty = qty
-
 
     @api.multi
     def button_confirm(self):
@@ -571,7 +569,7 @@ class hotel_folio_line(models.Model):
         return res
 
     @api.one
-    def copy_data(self,default=None):
+    def copy_data(self, default=None):
         '''
         @param self : object pointer
         @param default : dict of default values to be set
@@ -579,7 +577,6 @@ class hotel_folio_line(models.Model):
         line_id = self.order_line_id.id 
         sale_line_obj = self.env['sale.order.line'].browse(line_id)
         return sale_line_obj.copy_data(default=default)
-
 
 class hotel_service_line(models.Model):
 
@@ -594,7 +591,7 @@ class hotel_service_line(models.Model):
         return sale_line_obj.copy(default=default)
 
     @api.multi
-    def _amount_line(self,field_name, arg):
+    def _amount_line(self, field_name, arg):
         '''
         @param self : object pointer
         @param field_name: Names of fields.
@@ -606,7 +603,7 @@ class hotel_service_line(models.Model):
         return x
 
     @api.multi
-    def _number_packages(self,field_name, arg):
+    def _number_packages(self, field_name, arg):
         '''
         @param self : object pointer
         @param field_name: Names of fields.
@@ -632,13 +629,13 @@ class hotel_service_line(models.Model):
     _name = 'hotel.service.line'
     _description = 'hotel Service line'
     
-    service_line_id = fields.Many2one('sale.order.line','Service Line', required=True, delegate=True, ondelete='cascade')
-    folio_id = fields.Many2one('hotel.folio','Folio',ondelete='cascade')
-    ser_checkin_date = fields.Datetime('From Date', required=True,default = _service_checkin_date)
-    ser_checkout_date = fields.Datetime('To Date', required=True,default = _service_checkout_date)
+    service_line_id = fields.Many2one('sale.order.line', 'Service Line', required=True, delegate=True, ondelete='cascade')
+    folio_id = fields.Many2one('hotel.folio', 'Folio', ondelete='cascade')
+    ser_checkin_date = fields.Datetime('From Date', required=True, default=_service_checkin_date)
+    ser_checkout_date = fields.Datetime('To Date', required=True, default=_service_checkout_date)
 
     @api.model
-    def create(self,vals,check=True):
+    def create(self, vals, check=True):
         """
         Overrides orm create method.
         @param self: The object pointer
@@ -666,7 +663,7 @@ class hotel_service_line(models.Model):
         return super(hotel_service_line, self).unlink()
 
     @api.multi
-    def product_id_change(self,pricelist, product, qty=0,
+    def product_id_change(self, pricelist, product, qty=0,
             uom=False, qty_uos=0, uos=False, name='', partner_id=False,
             lang=False, update_tax=True, date_order=False):
         '''
@@ -678,7 +675,6 @@ class hotel_service_line(models.Model):
             return sale_line_obj.product_id_change(pricelist, product, qty=0,
                 uom=False, qty_uos=0, uos=False, name='', partner_id=partner_id,
                 lang=False, update_tax=True, date_order=False)
-
 
     @api.multi
     def product_uom_change(self, pricelist, product, qty=0,
@@ -692,7 +688,7 @@ class hotel_service_line(models.Model):
                 uom=False, qty_uos=0, uos=False, name='', partner_id=partner_id,
                 lang=False, update_tax=True, date_order=False)
 
-    @api.onchange('ser_checkin_date','ser_checkout_date')
+    @api.onchange('ser_checkin_date', 'ser_checkout_date')
     def on_change_service_date(self):
         '''
         When you change checkin_date or checkout_date it will checked it
@@ -700,7 +696,6 @@ class hotel_service_line(models.Model):
         -----------------------------------------------------------------
         @param self : object pointer
         '''
-
         if not self.ser_checkin_date:
             self.ser_checkin_date = time.strftime('%Y-%m-%d %H:%M:%S')
         if not self.ser_checkout_date:
@@ -735,7 +730,7 @@ class hotel_service_line(models.Model):
         return x
 
     @api.one
-    def copy_data(self,default=None):
+    def copy_data(self, default=None):
         '''
         @param self : object pointer
         @param default : dict of default values to be set
@@ -749,7 +744,7 @@ class hotel_service_type(models.Model):
     _name = "hotel.service.type"
     _description = "Service Type"
 
-    ser_id = fields.Many2one('product.category','category', required=True, delegate=True, select=True, ondelete='cascade')
+    ser_id = fields.Many2one('product.category', 'category', required=True, delegate=True, select=True, ondelete='cascade')
 
 
 class hotel_services(models.Model):
@@ -757,7 +752,7 @@ class hotel_services(models.Model):
     _name = 'hotel.services'
     _description = 'Hotel Services and its charges'
 
-    service_id = fields.Many2one('product.product','Service_id',required=True, ondelete='cascade', delegate=True)
+    service_id = fields.Many2one('product.product', 'Service_id', required=True, ondelete='cascade', delegate=True)
 
 class res_company(models.Model):
 
@@ -765,42 +760,46 @@ class res_company(models.Model):
 
     additional_hours = fields.Integer('Additional Hours', help="Provide the min hours value for check in, checkout days, whatever the hours will be provided here based on that extra days will be calculated.")
 
-
 class CurrencyExchangeRate(models.Model):
 
     _name = "currency.exchange"
     _description = "currency"
 
-    name = fields.Char('Reg Number', size=24,default=lambda obj: obj.env['ir.sequence'].get('currency.exchange'),readonly=True)
-    today_date = fields.Datetime('Date Ordered', required=True,default=lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'))
-    input_curr = fields.Many2one('res.currency', string='Input Currency',track_visibility='always')
-    in_amount = fields.Float('Amount Taken', size=64 ,default = 1.0)
-    out_curr = fields.Many2one('res.currency', string='Output Currency',track_visibility='always')
+    name = fields.Char('Reg Number', size=24, default=lambda obj: obj.env['ir.sequence'].get('currency.exchange'), readonly=True)
+    today_date = fields.Datetime('Date Ordered', required=True, default=lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'))
+    input_curr = fields.Many2one('res.currency', string='Input Currency', track_visibility='always')
+    in_amount = fields.Float('Amount Taken', size=64 , default=1.0)
+    out_curr = fields.Many2one('res.currency', string='Output Currency', track_visibility='always')
     out_amount = fields.Float('Subtotal', size=64)
-    folionumber = fields.Many2one('hotel.folio','Folio Number')
-    guest_name = fields.Many2one('res.partner',string='Guest Name')
+    so_number = fields.Many2one('hotel.folio', 'Sale Order Number')
+    folio_no = fields.Char(string='Folio Number')
+    guest_name = fields.Many2one('res.partner', string='Guest Name')
     room_number = fields.Char(string='Room Number')
-    state = fields.Selection([('draft','Draft'),('done','Done'),('cancel','Cancel')], 'State', default='draft')
-    rate =  fields.Float('Rate(per unit)', size=64)
-    hotel_id = fields.Many2one('stock.warehouse','Hotel Name')
-    type = fields.Selection([('cash', 'Cash')], 'Type',default='cash')
-    tax = fields.Selection([('2','2%'),('5','5%'),('10','10%')], 'Service Tax', default='2')
+    state = fields.Selection([('draft', 'Draft'), ('done', 'Done'), ('cancel', 'Cancel')], 'State', default='draft')
+    rate = fields.Float('Rate(per unit)', size=64)
+    hotel_id = fields.Many2one('stock.warehouse', 'Hotel Name')
+    type = fields.Selection([('cash', 'Cash')], 'Type', default='cash')
+    tax = fields.Selection([('2', '2%'), ('5', '5%'), ('10', '10%')], 'Service Tax', default='2')
     total = fields.Float('Amount Given')
-    c1 = fields.Char('c1')
-    c2 = fields.Char('c2')
-    @api.onchange('folionumber')
-    def get_folionumber(self):
+
+    @api.onchange('so_number')
+    def get_folio_no(self):
         '''
-        When you change folionumber ,based on that it will update 
+        When you change so_number, based on that it will update 
         the guest_name ,hotel_id and room_number as well
         ---------------------------------------------------------
         @param self : object pointer
         '''
-        if self.folionumber:
-            for rec in self:
-                self.guest_name = self.folionumber.partner_id.id
-                self.hotel_id = self.folionumber.warehouse_id.id
-                self.room_number = self.folionumber.room_lines[0].product_id.name
+        for rec in self:
+            self.guest_name = False
+            self.hotel_id = False
+            self.room_number = False
+            self.folio_no = False
+            if rec.so_number and len(rec.so_number.room_lines) != 0:
+                self.guest_name = rec.so_number.partner_id.id
+                self.hotel_id = rec.so_number.warehouse_id.id
+                self.room_number = rec.so_number.room_lines[0].product_id.name
+                self.folio_no = rec.so_number.name
 
     @api.multi
     def act_cur_done(self):
@@ -835,7 +834,6 @@ class CurrencyExchangeRate(models.Model):
         self.write({'state' : 'draft'})
         return True
 
-
     @api.model
     def get_rate(self, a, b):
         '''
@@ -850,8 +848,8 @@ class CurrencyExchangeRate(models.Model):
         except:
             return Decimal('-1.00')
 
-    @api.onchange('input_curr','out_curr','in_amount')
-    def mycurrency(self):
+    @api.onchange('input_curr', 'out_curr', 'in_amount')
+    def get_currency(self):
         '''
         When you change input_curr , out_curr or in_amount 
         it will update the out_amount of the currency exchange
@@ -866,7 +864,7 @@ class CurrencyExchangeRate(models.Model):
                         self.rate = result or 0.0
                         self.out_amount = (float(result) * float(self.in_amount))
 
-    @api.onchange('out_amount','tax')
+    @api.onchange('out_amount', 'tax')
     def tax_change(self):
         '''
         When you change out_amount or tax 
@@ -876,10 +874,8 @@ class CurrencyExchangeRate(models.Model):
         '''
         if self.out_amount:
             for rec in self:
-                ser_tax = ((self.out_amount)*(float(self.tax)))/100 
+                ser_tax = ((self.out_amount) * (float(self.tax))) / 100 
                 self.total = self.out_amount - ser_tax
 
 
-
-
-## vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+# # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

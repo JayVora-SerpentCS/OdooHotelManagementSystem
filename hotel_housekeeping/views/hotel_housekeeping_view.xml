@@ -93,7 +93,6 @@
             </field>
         </record>
 
-
         <!-- Search view of hotel housekeeping -->
         <record model="ir.ui.view" id="view_hotel_housekeeping_search">
             <field name="name">hotel.housekeeping.search</field>
@@ -117,7 +116,6 @@
                 </search>
             </field>
         </record>
-
 
         <!-- Action for hotel housekeeping -->
         <record model="ir.actions.act_window" id="open_hotel_housekeeping_form_tree">
