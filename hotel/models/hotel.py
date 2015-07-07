@@ -145,9 +145,8 @@ class hotel_folio(models.Model):
         cr, uid, context = self.env.args
         context = dict(context)
         for rec in self:
-            context.update({'folioid':rec.id,'guest':self.partner_id.id,'room_no':self.room_lines.product_id.name,'hotel':self.warehouse_id.id})
+            context.update({'folioid':rec.id,'guest':rec.partner_id.id,'room_no':rec.room_lines[0].product_id.name,'hotel':rec.warehouse_id.id})
             self.env.args = cr, uid, misc.frozendict(context)
-            print'guestname---------------',context
         return {
             'name': _('Currency Exchange'),
             'res_model': 'currency.exchange',
@@ -801,7 +800,7 @@ class CurrencyExchangeRate(models.Model):
             for rec in self:
                 self.guest_name = self.folionumber.partner_id.id
                 self.hotel_id = self.folionumber.warehouse_id.id
-                self.room_number = self.folionumber.room_lines.product_id.name
+                self.room_number = self.folionumber.room_lines[0].product_id.name
 
     @api.multi
     def act_cur_done(self):

@@ -186,21 +186,18 @@
             <field name="name">Toiletries</field>
             <field name="iscategid">1</field>
             <field name="categ_id" search="[('isamenitytype','=',True), ('name', '=', 'All Aminities')]"/>
-            <field name="isamenitytype">1</field> 
         </record>
 
         <record id="hotel_room_amenities_2" model="hotel.room.amenities">
             <field name="name">Iron</field>
             <field name="iscategid">1</field>
             <field name="categ_id" search="[('isamenitytype','=',True), ('name', '=', 'All Aminities')]"/>
-            <field name="isamenitytype">1</field> 
         </record>
 
         <record id="hotel_room_amenities_3" model="hotel.room.amenities">
             <field name="name">Irons Boards</field>
             <field name="iscategid">1</field>
             <field name="categ_id" search="[('isamenitytype','=',True), ('name', '=', 'All Aminities')]"/>
-            <field name="isamenitytype">1</field> 
         </record>
 
     </data>
