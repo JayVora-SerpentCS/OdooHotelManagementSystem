@@ -27,7 +27,7 @@
     "website": ["http://www.serpentcs.com", "http://www.openerp.com"],
     "depends" : ["hotel_reservation"],
     "category" : "Generic Modules/Hotel Reservation",
-     "description": """
+    "description": """
     Module shows the status of room reservation
      * Current status of reserved room
      * List status of room as draft or done state
