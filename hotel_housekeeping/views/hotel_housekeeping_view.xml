@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-        <!--============================================================ Housekeeping
+        <!--============================================================ 
+                                Housekeeping
         ============================================================ -->
 
         <!-- Form view of hotel housekeeping -->
@@ -110,7 +111,7 @@
                     <field name="quality"/>
                     <field name="state"/>
                     <newline/>
-                    <group expand="0" string="Group By...">
+                    <group expand="0" string="Group By">
                         <filter name="inspector" string="Inspector Name" icon="terp-personal" domain="[]" context="{'group_by':'inspector'}"/>
                     </group>
                 </search>

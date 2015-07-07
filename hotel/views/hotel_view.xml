@@ -379,7 +379,7 @@
         <record model="ir.ui.view" id="view_hotel_room_kanban">
             <field name="name">hotel.room.kanban</field>
                 <field name="model">hotel.room</field>
-            <field name="arch" type="xml">
+                <field name="arch" type="xml">
                 <kanban filter="status" >
                     <field name="name" />
                     <field name="status" />
@@ -464,6 +464,9 @@
                      <field name="state" select="2" widget="statusbar" statusbar_visible="draft,sent,invoiced,done"/>
                  </header>
                   <sheet>
+                    <div class="oe_right oe_button_box">
+                         <button name="go_to_currency_exchange" string="Money Exchange" icon="fa-refresh" class="oe_stat_button" type="object"/> 
+                    </div>
                     <label string="Folio Number"/>
                     <h1>
                      <field name="name" colspan="4"/>
@@ -545,6 +548,10 @@
                                 <form string="Service Line"  >
                                     <notebook>
                                         <page string="Service Line">
+                                            <group> 
+                                                <field name="ser_checkin_date"/>
+                                                <field name="ser_checkout_date" />
+                                            </group>
                                             <separator string="Automatic Declaration" colspan="4"/>
                                             <group>
                                             <field name="product_uom_qty" select="1" context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'hotel':parent.warehouse_id,'uom':product_uom}"  on_change="product_id_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, False, parent.date_order)"/>
@@ -611,6 +618,20 @@
                             <separator string="Related invoices" colspan="4"/>
                             <field name="invoice_ids" colspan="4" nolabel="1"/>
                         </page>
+                        <page string="Foreign Exchange">
+                             <separator string="Foreign Exchange" colspan="4"/>
+                             <field name="currrency_ids" colspan="4" nolabel="1"> 
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="today_date"/>
+                                    <field name="type"/>
+                                    <field name="in_amount"/>
+                                    <field name="input_curr"/>
+                                    <field name="total" sum="Total Amount"/>
+                                    <field name="out_curr"/>
+                                </tree>
+                             </field>
+                        </page>
                     </notebook>
                  </sheet>
                 </form>
@@ -625,7 +646,7 @@
                 <tree string="Hotel Folio" colors="blue:state == 'draft';gray:state == 'done'">
                     <field name="checkin_date" />
                     <field name="checkout_date" />
-                    <field name="name" select="1"/>
+                    <field name="name"/>
                     <field name="partner_id"  select="1"/>
                     <field name="date_order" select="1"/>
                     <field name="state"/>
@@ -641,27 +662,30 @@
             <field name="arch" type="xml">
                 <calendar string="Folios" date_start="checkin_date" color="user_id" date_stop="checkout_date">
                     <field name="name"/>
-                    <field name="partner_id"/>
+                    <field name="partner_id" />
                     <field name="duration"/>
                 </calendar>
             </field>
         </record>
 
-        <!-- Search view of hotel restaurant tables -->
+        <!-- Search view of hotel folio -->
         <record model="ir.ui.view" id="view_hotel_folio_search">
             <field name="name">hotel.folio.search</field>
             <field name="model">hotel.folio</field>
             <field name="arch" type="xml">
                 <search string="Tables Detail">
+                     <field name="partner_id" />
+                    <field name="name"/>
+                    <filter string="Current Booking" domain="[('checkout_date','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('checkin_date','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]" help="Current Booking" />
                     <group expand="0" string="Group By">
-                        <filter string="Order Month" domain="[]" context="{'group_by':'date_order'}"/>
+                        <filter string="Order By Month" domain="[]" context="{'group_by':'date_order'}"/>
                         <filter name="partner_id" string="Customer" icon="terp-stock_symbol-selection" context="{'group_by':'partner_id'}" />
                     </group>
                 </search>
             </field>
         </record>
 
-    <!--graph view-->
+    <!--graph view of hotel folio-->
     <record id="view_hotel_folio_graph" model="ir.ui.view">
         <field name="name">view.hotel.folio.graph</field>
         <field name="model">hotel.folio</field>
@@ -671,7 +695,7 @@
                 <field name="amount_total" type="measure"/>
             </graph>
         </field>
-    </record>       
+    </record>
 
 
         <!-- Action for hotel folio  -->
@@ -689,7 +713,10 @@
                   sequence="5"
                   parent ="menu_all_folio"/> 
 
-		<!-- Services -->
+       <!--========================================================
+                            Hotel Service Type 
+        ========================================================-->
+
 		<!-- Form view of hotel service type  -->
 		<record model="ir.ui.view" id="view_hotel_service_type_form">
 			<field name="name">hotel.service_type.form</field>
@@ -732,6 +759,10 @@
                   action="open_hotel_service_type_form_tree"
                   sequence="9"
                   parent="hotel.menu_hotel_service"/>
+
+       <!--========================================================
+                             Hotel Service 
+        ========================================================-->
 
         <!-- Form view of hotel service -->
         <record model="ir.ui.view" id="view_hotel_services_form">
@@ -797,7 +828,7 @@
             </field>
         </record>
 
-        <!-- Tree view of hotel service -->
+        <!-- search view of hotel service -->
 		<record model="ir.ui.view" id="view_hotel_services_search">
             <field name="name">hotel.services.search</field>
             <field name="model">hotel.services</field>
@@ -884,5 +915,90 @@
                   action="hotel_service_category_action"
                   sequence="10"
                   parent="hotel.menu_hotel_service"/>	
+
+    <!--====================================================
+                                Currency
+        ==================================================== -->
+
+    <!-- Form view of currency exchange -->
+    <record model="ir.ui.view" id="view_currency_exchange_form">
+            <field name="name">currency.exchange.form</field>
+            <field name="model">currency.exchange</field>
+            <field name="arch" type="xml">
+                <form string=" Currency Exchange" >
+                <header>
+                        <button name="cur_confirm" string="Done" states='draft' icon="gtk-ok"/>
+                        <button name="cur_cancel" string="Cancel" states='draft' icon="gtk-cancel"/>
+                        <button name="cur_cancel_draft" string="do_draft" states='cancel' icon="gtk-ok"/>
+                        <button name="%(report_hotel_currency)d" states='done' type="action" string="Print" class = "oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                </header>
+                 <sheet>
+                    <div class="oe_title ">
+                        <label for="name" string="Name" />
+                        <h1>
+                            <field name="name" select="1"/>
+                        </h1>
+                    </div>
+                    <separator string="Details"/><newline/>
+                    <group colspan="2" col="4">
+                       <field name="today_date"/><newline/>
+                    </group>
+                    <group colspan="2" col="4">
+                       <field name="folionumber" required="1"/>
+                       <field name="guest_name" required="1"/>
+                       <field name="room_number" required="1"/>
+                       <field name="type"/>
+                    </group>
+                    <separator string="Currency Exchange"/><newline/>
+                   <group colspan="2" col="4">
+                       <field name="input_curr" />
+                       <field name="in_amount" select="1" widget="monetary" options="{'currency_field': 'input_curr'}"/>
+                       <field name="out_curr"/>
+                       <field name="rate"/>
+                   </group>
+                   <group colspan="2" col="4">
+                       <field name="out_amount" widget="monetary" options="{'currency_field': 'out_curr'}"/><newline/>
+                       <field name="tax" style="width:15%%;"/>
+                   </group>
+                       <separator string="Total Amount"/><newline/>
+                       <h1>
+                            <field name="total" widget="monetary" options="{'currency_field': 'out_curr'}"/>
+                       </h1>
+                   <group colspan="2" col="4"> 
+                   </group>
+                 </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Tree view of currency exchange -->
+        <record model="ir.ui.view" id="view_currency_exchange_tree">
+            <field name="name">currency.exchange.tree</field>
+            <field name="model">currency.exchange</field>
+            <field name="arch" type="xml">
+                <tree string=" Currency Exchange">
+                       <field name="name"/>
+                       <field name="today_date"/>
+                       <field name="guest_name"/>
+                       <field name="total" sum="Total"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action of currency exchange -->
+	    <record model="ir.actions.act_window" id="open_currency_exchange_tree">
+            <field name="name">Currency Exchange</field>
+            <field name="res_model">currency.exchange</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem name="Currency Exchange"
+                  id="menu_currency_exchange_tree" 
+                  action="open_currency_exchange_tree"
+                  sequence="22"
+                  parent="hotel_configuration_menu"/>
+        
     </data>
 </openerp>

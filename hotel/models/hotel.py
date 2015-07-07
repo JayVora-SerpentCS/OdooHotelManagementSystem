@@ -22,8 +22,11 @@
 ##############################################################################
 from openerp.exceptions import except_orm, Warning
 from openerp import models,fields,api,_
+from openerp.tools import misc
 from openerp import netsvc
+from decimal import Decimal
 import datetime
+import urllib2
 import time
 
 class hotel_floor(models.Model):
@@ -135,6 +138,25 @@ class hotel_folio(models.Model):
     service_lines = fields.One2many('hotel.service.line','folio_id', readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, help="Hotel services detail provide to customer and it will include in main Invoice.")
     hotel_policy = fields.Selection([('prepaid', 'On Booking'), ('manual', 'On Check In'), ('picking', 'On Checkout')], 'Hotel Policy',default='manual', help="Hotel policy for payment that either the guest has to payment at booking time or check-in check-out time.")
     duration = fields.Float('Duration in Days', help="Number of days which will automatically count from the check-in and check-out date. ")
+    currrency_ids = fields.One2many('currency.exchange','folionumber', readonly=True)
+
+    @api.multi
+    def go_to_currency_exchange(self):
+        cr, uid, context = self.env.args
+        context = dict(context)
+        for rec in self:
+            context.update({'folioid':rec.id,'guest':self.partner_id.id,'room_no':self.room_lines.product_id.name,'hotel':self.warehouse_id.id})
+            self.env.args = cr, uid, misc.frozendict(context)
+            print'guestname---------------',context
+        return {
+            'name': _('Currency Exchange'),
+            'res_model': 'currency.exchange',
+            'type': 'ir.actions.act_window',
+            'view_id': False,
+            'view_mode': 'form,tree',
+            'view_type': 'form',
+            'context':{'default_folionumber':context.get('folioid'),'default_hotel_id':context.get('hotel'),'default_guest_name':context.get('guest'),'default_room_number':context.get('room_no')},
+        }
 
     @api.constrains('checkin_date','checkout_date')
     def check_dates(self):
@@ -596,12 +618,25 @@ class hotel_service_line(models.Model):
             x = line._number_packages(field_name, arg)
         return x
 
+    @api.model
+    def _service_checkin_date(self):
+        if 'checkin_date' in self._context:
+            return self._context['checkout_date']
+        return time.strftime('%Y-%m-%d %H:%M:%S')
+
+    @api.model
+    def _service_checkout_date(self):
+        if 'checkin_date' in self._context:
+            return self._context['checkout_date']
+        return time.strftime('%Y-%m-%d %H:%M:%S')
 
     _name = 'hotel.service.line'
     _description = 'hotel Service line'
     
     service_line_id = fields.Many2one('sale.order.line','Service Line', required=True, delegate=True, ondelete='cascade')
     folio_id = fields.Many2one('hotel.folio','Folio',ondelete='cascade')
+    ser_checkin_date = fields.Datetime('From Date', required=True,default = _service_checkin_date)
+    ser_checkout_date = fields.Datetime('To Date', required=True,default = _service_checkout_date)
 
     @api.model
     def create(self,vals,check=True):
@@ -658,8 +693,8 @@ class hotel_service_line(models.Model):
                 uom=False, qty_uos=0, uos=False, name='', partner_id=partner_id,
                 lang=False, update_tax=True, date_order=False)
 
-    @api.onchange('checkin_date','checkout_date')
-    def on_change_checkout(self):
+    @api.onchange('ser_checkin_date','ser_checkout_date')
+    def on_change_service_date(self):
         '''
         When you change checkin_date or checkout_date it will checked it
         and update the qty of hotel service line
@@ -667,15 +702,16 @@ class hotel_service_line(models.Model):
         @param self : object pointer
         '''
 
-        if not self.checkin_date:
-            self.checkin_date = time.strftime('%Y-%m-%d %H:%M:%S')
-        if not self.checkout_date:
-            self.checkout_date = time.strftime('%Y-%m-%d %H:%M:%S')
+        if not self.ser_checkin_date:
+            self.ser_checkin_date = time.strftime('%Y-%m-%d %H:%M:%S')
+        if not self.ser_checkout_date:
+            self.ser_checkout_date = time.strftime('%Y-%m-%d %H:%M:%S')
         qty = 1
-        if self.checkout_date < self.checkin_date:
+        if self.ser_checkout_date < self.ser_checkin_date:
             raise Warning('Checkout must be greater or equal checkin date')
-        if self.checkin_date:
-            diffDate = datetime.datetime(*time.strptime(self.checkout_date, '%Y-%m-%d %H:%M:%S')[:5]) - datetime.datetime(*time.strptime(self.checkin_date, '%Y-%m-%d %H:%M:%S')[:5])
+
+        if self.ser_checkin_date:
+            diffDate = datetime.datetime(*time.strptime(self.ser_checkout_date, '%Y-%m-%d %H:%M:%S')[:5]) - datetime.datetime(*time.strptime(self.ser_checkin_date, '%Y-%m-%d %H:%M:%S')[:5])
             qty = diffDate.days
         self.product_uom_qty = qty
 
@@ -729,5 +765,122 @@ class res_company(models.Model):
     _inherit = 'res.company'
 
     additional_hours = fields.Integer('Additional Hours', help="Provide the min hours value for check in, checkout days, whatever the hours will be provided here based on that extra days will be calculated.")
+
+
+class CurrencyExchangeRate(models.Model):
+
+    _name = "currency.exchange"
+    _description = "currency"
+
+    name = fields.Char('Reg Number', size=24,default=lambda obj: obj.env['ir.sequence'].get('currency.exchange'),readonly=True)
+    today_date = fields.Datetime('Date Ordered', required=True,default=lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'))
+    input_curr = fields.Many2one('res.currency', string='Input Currency',track_visibility='always')
+    in_amount = fields.Float('Amount Taken', size=64 ,default = 1.0)
+    out_curr = fields.Many2one('res.currency', string='Output Currency',track_visibility='always')
+    out_amount = fields.Float('Subtotal', size=64)
+    folionumber = fields.Many2one('hotel.folio','Folio Number')
+    guest_name = fields.Many2one('res.partner',string='Guest Name')
+    room_number = fields.Char(string='Room Number')
+    state = fields.Selection([('draft','Draft'),('done','Done'),('cancel','Cancel')], 'State', default='draft')
+    rate =  fields.Float('Rate(per unit)', size=64)
+    hotel_id = fields.Many2one('stock.warehouse','Hotel Name')
+    type = fields.Selection([('cash', 'Cash')], 'Type',default='cash')
+    tax = fields.Selection([('2','2%'),('5','5%'),('10','10%')], 'Service Tax', default='2')
+    total = fields.Float('Amount Given')
+    c1 = fields.Char('c1')
+    c2 = fields.Char('c2')
+    @api.onchange('folionumber')
+    def get_folionumber(self):
+        '''
+        When you change folionumber ,based on that it will update 
+        the guest_name ,hotel_id and room_number as well
+        ---------------------------------------------------------
+        @param self : object pointer
+        '''
+        if self.folionumber:
+            for rec in self:
+                self.guest_name = self.folionumber.partner_id.id
+                self.hotel_id = self.folionumber.warehouse_id.id
+                self.room_number = self.folionumber.room_lines.product_id.name
+
+    @api.multi
+    def act_cur_done(self):
+        """
+        This method is used to change the state 
+        to done of the currency exchange
+        ---------------------------------------
+        @param self : object pointer
+        """
+        self.write({'state' : 'done'})
+        return True
+
+    @api.multi
+    def act_cur_cancel(self):
+        """
+        This method is used to change the state 
+        to cancel of the currency exchange
+        ---------------------------------------
+        @param self : object pointer
+        """
+        self.write({'state' : 'cancel'})
+        return True
+
+    @api.multi
+    def act_cur_cancel_draft(self):
+        """
+        This method is used to change the state 
+        to draft of the currency exchange
+        ---------------------------------------
+        @param self : object pointer
+        """
+        self.write({'state' : 'draft'})
+        return True
+
+
+    @api.model
+    def get_rate(self, a, b):
+        '''
+        Calculate rate between two currency
+        ----------------------------------- 
+        @param self : object pointer
+        '''
+        try:
+            url = 'http://finance.yahoo.com/d/quotes.csv?s=%s%s=X&f=l1' % (a, b)
+            rate = urllib2.urlopen(url).read().rstrip()
+            return Decimal(rate)
+        except:
+            return Decimal('-1.00')
+
+    @api.onchange('input_curr','out_curr','in_amount')
+    def mycurrency(self):
+        '''
+        When you change input_curr , out_curr or in_amount 
+        it will update the out_amount of the currency exchange
+        ------------------------------------------------------
+        @param self : object pointer
+        '''
+        self.out_amount = 0.0
+        if self.input_curr:
+            for rec in self:
+                result = rec.get_rate(self.input_curr.name, self.out_curr.name)
+                if self.out_curr:
+                        self.rate = result or 0.0
+                        self.out_amount = (float(result) * float(self.in_amount))
+
+    @api.onchange('out_amount','tax')
+    def tax_change(self):
+        '''
+        When you change out_amount or tax 
+        it will update the total of the currency exchange
+        ----------------------------------------------------------
+        @param self : object pointer
+        '''
+        if self.out_amount:
+            for rec in self:
+                ser_tax = ((self.out_amount)*(float(self.tax)))/100 
+                self.total = self.out_amount - ser_tax
+
+
+
 
 ## vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

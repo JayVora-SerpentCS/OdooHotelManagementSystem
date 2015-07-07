@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
 <data noupdate="1">
+
+    <!--Group for hotel manager -->
     <record id="group_hotel_manager" model="res.groups">
         <field name="name">Hotel Management/ Manager</field>
     </record>
+
+    <!--Group for hotel user -->
     <record id="group_hotel_user" model="res.groups">
         <field name="name">Hotel Management / User</field>
     </record>

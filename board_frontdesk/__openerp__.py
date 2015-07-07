@@ -21,13 +21,12 @@
 {
     "name":"Board for Hotel FrontDesk",
     "version":"1.0",
-    "author":"Tiny",
+    "author":"['Serpent Consulting Services Pvt. Ltd.', 'OpenERP SA']",
     "category":"Board/Hotel FrontDesk",
     "depends":[
         "board",
         "report_hotel_restaurant"
         ],
-    "demo_xml":[],
     "data":[
         "views/board_frontdesk_view.xml"
     ],

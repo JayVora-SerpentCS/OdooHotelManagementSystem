@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <openerp>
-	<data noupdate="1">
+	<data noupdate="0">
 
 	 <!-- Table Data --> 
 		<record id="hotel_restaurant_tables_table0" model="hotel.restaurant.tables">
@@ -200,6 +200,7 @@
 			<field eval="&quot;2013-04-25 15:09:00&quot;" name="start_date"/>
 		</record>
 
+<!--
 		<record id="hotel_restaurant_reservation_1" model="hotel.restaurant.reservation">
 			<field eval="[(6,0,[ref('hotel_restaurant.hotel_restaurant_tables_table2'),ref('hotel_restaurant.hotel_restaurant_tables_table3')])]" name="tableno"/>
 			<field name="room_no" ref="hotel.hotel_room_0"/>
@@ -211,6 +212,7 @@
 			<field eval="&quot;2013-04-23 11:09:00&quot;" name="start_date"/>
 		</record>
 
+-->
 		<record id="hotel_reservation_order_0" model="hotel.reservation.order">
 			<field eval="[(6,0,[ref('hotel_restaurant.hotel_restaurant_tables_table2'),ref('hotel_restaurant.hotel_restaurant_tables_table3')])]" name="table_no"/>
 			<field eval="&quot;2013-04-25 15:09:00&quot;" name="date1"/>

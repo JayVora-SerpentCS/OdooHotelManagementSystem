@@ -260,8 +260,8 @@ class hotel_restaurant_order(models.Model):
     table_no = fields.Many2many('hotel.restaurant.tables','temp_table2','table_no','name','Table Number')
     order_list = fields.One2many('hotel.restaurant.order.list','o_list','Order List')
     tax = fields.Float('Tax (%) ')
-    amount_subtotal = fields.Float(compute=_sub_total, method=True, string='Subtotal')
-    amount_total = fields.Float(compute=_total, method=True, string='Total')
+    amount_subtotal = fields.Float(compute='_sub_total', method=True, string='Subtotal')
+    amount_total = fields.Float(compute='_total', method=True, string='Total1')
 
 
 class hotel_reservation_order(models.Model):

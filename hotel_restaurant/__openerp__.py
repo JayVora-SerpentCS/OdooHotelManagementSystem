@@ -37,9 +37,8 @@
     """,
     "website": "http://www.serpentcs.com",
     "depends" : ["hotel", "report_extended"],
-    "demo" : [
-        "views/hotel_restaurant_data.xml",
-    ],
+    "demo": ["views/hotel_restaurant_data.xml"],
+
     "data" : [
         "security/ir.model.access.csv",
         "report/hotel_restaurant_report.xml",
@@ -51,6 +50,8 @@
         "views/hotel_restaurant_sequence.xml",
         "views/hotel_restaurant_view.xml",
     ],
+
+
     "active": False,
     "installable": True
 }

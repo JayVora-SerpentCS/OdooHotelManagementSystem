@@ -13,7 +13,7 @@
     </data>
 
 
-    <data noupdate="0">
+    <data noupdate="1">
 
         <!--Email template for hotel reservation-->
         <record id="email_template_hotel_reservation" model="email.template">

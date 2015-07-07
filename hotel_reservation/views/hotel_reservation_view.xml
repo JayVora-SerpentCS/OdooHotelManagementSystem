@@ -12,7 +12,6 @@
             <field name="arch" type="xml">
                 <form string="Reservation" >
                     <header>
-                        <button name="action_for_hotel" type="object" string="send" states="draft" class="oe_highlight"/>
                         <button name="confirm" string="Confirm" states="draft" class="oe_highlight"/>
                         <button name="done" string="Create Folio" states="confirm" class="oe_highlight"/> 
                         <field name="state" widget="statusbar"/>
@@ -90,13 +89,14 @@
             <field name="arch" type="xml">
                 <search string="Reservation">
                     <group string='Filters'>
-                        <filter icon="terp-document-new" domain="[('state','=','draft')]" string="Draft"/>
-                        <filter icon="terp-camera_test" domain="[('state','=','confirm')]" string="Confirm"/>
-                        <filter icon="terp-dialog-close" domain="[('state','=','cancel')]" string="Cancel"/>
-                        <filter icon="terp-check" domain="[('state','=','done')]" string="Done"/>
+                        <filter string="Current Reservations" domain="[('checkout','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('checkin','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]" help="Current Reservations" />
+                        <filter domain="[('state','=','draft')]" string="Draft"/>
+                        <filter domain="[('state','=','confirm')]" string="Confirm"/>
+                        <filter domain="[('state','=','cancel')]" string="Cancel"/>
+                        <filter domain="[('state','=','done')]" string="Done"/>
                     </group>
-                    <field name="reservation_no"/>
                     <field name="partner_id" select="1"/>
+                    <field name="reservation_no"/>
                     <field name="checkin"/>
                     <field name="checkout"/>
                     <field name="state"/>

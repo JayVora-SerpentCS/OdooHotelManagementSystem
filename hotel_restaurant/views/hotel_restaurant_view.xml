@@ -240,7 +240,7 @@
                     <field name="date1"/>
                     <field name="waitername"/>
                     <field name="table_no"/>
-               		<field name="order_list" /> 
+               		<field name="amount_total" sum = "Order Total" /> 
                 </tree>
             </field>
         </record>
@@ -312,7 +312,7 @@
                                     <field name="name"/> 
                                     <field name="item_qty"/>
                                     <field name="item_rate"/>
-                                    <field name="price_subtotal" invisible="1"/>
+                                    <field name="price_subtotal"/>
                                     </group>
                                 </form>
                                 <tree string="Order List">
@@ -349,7 +349,7 @@
                     <field name="table_no"/>
                     <field name="room_no"/>
                     <field name="waiter_name"/>
-                    <field name="order_list"/> 
+                    <field name="amount_total" sum = "Table Order Total"/> 
                 </tree>
             </field>
         </record>

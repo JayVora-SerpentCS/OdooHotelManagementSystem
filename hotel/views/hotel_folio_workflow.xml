@@ -225,5 +225,63 @@
 			<field name="signal">ship_cancel</field>
 		</record>
 
+#--------------------------------------------
+		Currency Exchange
+#--------------------------------------------
+		
+        <record id="wkf_currency" model="workflow">
+            <field name="name">currency.exchange.basic</field>
+            <field name="osv">currency.exchange</field>
+            <field name="on_create">True</field>
+        </record>
+
+        <!-- Activity -->
+			     <record id="act_cur_draft" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_currency"/>
+            <field name="flow_start">True</field>
+            <field name="name">draft</field>
+        </record>
+        <record id="act_cur_done" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_currency"/>
+            <field name="name">done</field>
+            <field name="kind">function</field>
+            <field name="action">act_cur_done()</field>
+            <field name="flow_stop">true</field>
+        </record>
+        
+        <record id="act_cur_cancel" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_currency"/>
+            <field name="name">cancel</field>
+            <field name="kind">function</field>
+            <field name="action">act_cur_cancel()</field>
+        </record>
+
+        <record id="act_cur_cancel_draft" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_currency"/>
+            <field name="name">do_draft</field>
+            <field name="kind">function</field>
+            <field name="action">act_cur_cancel_draft()</field>
+        </record>
+
+        <!--  Transitions  -->
+        <record id="trans_cur_draft" model="workflow.transition">
+            <field name="act_from" ref="act_cur_draft"/>
+            <field name="act_to" ref="act_cur_done"/>
+            <field name="signal">cur_confirm</field>
+        </record>
+        
+        <record id="trans_cur_cancel" model="workflow.transition">
+            <field name="act_from" ref="act_cur_draft"/>
+            <field name="act_to" ref="act_cur_cancel"/>
+            <field name="signal">cur_cancel</field>
+        </record>
+		
+        <record id="trans_cancel_draft" model="workflow.transition">
+            <field name="act_from" ref="act_cur_cancel"/>
+            <field name="act_to" ref="act_cur_cancel_draft"/>
+            <field name="signal">cur_cancel_draft</field>
+        </record>
+
+
 	</data>
 </openerp>
