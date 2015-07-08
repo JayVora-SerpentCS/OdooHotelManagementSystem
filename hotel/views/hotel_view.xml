@@ -943,9 +943,9 @@
                        <field name="today_date"/><newline/>
                     </group>
                     <group colspan="2" col="4">
-                       <field name="so_number" required="1"/>
-                       <field name="folio_no" />
                        <field name="guest_name" required="1"/>
+                       <field name="so_number" required="1" domain="[('partner_id','=',guest_name),('checkin_date','&lt;=',datetime.datetime.now()),('checkout_date','&gt;',datetime.datetime.now())]"/>
+                       <field name="folio_no" required="1"/>
                        <field name="room_number" required="1"/>
                        <field name="type"/>
                     </group>

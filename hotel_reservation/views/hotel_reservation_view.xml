@@ -12,6 +12,7 @@
             <field name="arch" type="xml">
                 <form string="Reservation" >
                     <header>
+                        <button name="send_reservation_maill" type="object" string="Send Reservation Email" states="confirm" class="oe_highlight"/>
                         <button name="confirm" string="Confirm" states="draft" class="oe_highlight"/>
                         <button name="done" string="Create Folio" states="confirm" class="oe_highlight"/> 
                         <field name="state" widget="statusbar"/>

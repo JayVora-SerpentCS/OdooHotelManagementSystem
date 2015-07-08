@@ -97,6 +97,13 @@ class hotel_room(models.Model):
 
 class hotel_folio(models.Model):
 
+    @api.model
+    def _needaction_count(self, domain=None):
+        """
+         Show a count of draft state folio on the menu badge.
+         """
+        return self.search_count([('state', '=', 'draft')])
+
     @api.multi
     def copy(self, default=None):
         '''
@@ -127,6 +134,7 @@ class hotel_folio(models.Model):
     _description = 'hotel folio new'
     _rec_name = 'order_id'
     _order = 'id desc'
+    _inherit = ['ir.needaction_mixin']
 
     name = fields.Char('Folio Number', size=24, default=lambda obj: obj.env['ir.sequence'].get('hotel.folio'), readonly=True)
     order_id = fields.Many2one('sale.order', 'Order', delegate=True, required=True, ondelete='cascade')
@@ -208,7 +216,7 @@ class hotel_folio(models.Model):
             chkin_dt = datetime.datetime.strptime(self.checkin_date, '%Y-%m-%d %H:%M:%S')
             chkout_dt = datetime.datetime.strptime(self.checkout_date, '%Y-%m-%d %H:%M:%S')
             dur = chkout_dt - chkin_dt
-            myduration = dur.days
+            myduration = dur.days + 1
             if configured_addition_hours > 0:
                 additional_hours = abs((dur.seconds / 60) / 60)
                 if additional_hours >= configured_addition_hours:
@@ -534,15 +542,12 @@ class hotel_folio_line(models.Model):
             self.checkin_date = time.strftime('%Y-%m-%d %H:%M:%S')
         if not self.checkout_date:
             self.checkout_date = time.strftime('%Y-%m-%d %H:%M:%S')
-        qty = 1
         if self.checkout_date < self.checkin_date:
             raise except_orm(_('Warning'), _('Checkout must be greater or equal to checkin date'))
-        if self.checkin_date:
+        if self.checkin_date and self.checkout_date:
             diffDate = datetime.datetime(*time.strptime(self.checkout_date, '%Y-%m-%d %H:%M:%S')[:5]) - datetime.datetime(*time.strptime(self.checkin_date, '%Y-%m-%d %H:%M:%S')[:5])
-            qty = diffDate.days
-            if qty == 0:
-                qty = 1
-        self.product_uom_qty = qty
+            qty = diffDate.days + 1
+            self.product_uom_qty = qty
 
     @api.multi
     def button_confirm(self):
@@ -669,7 +674,7 @@ class hotel_service_line(models.Model):
         '''
         @param self : object pointer
         '''
-        line_ids = [folio.order_line_id.id for folio in self]
+        line_ids = [folio.service_line_id.id for folio in self]
         if product:
             sale_line_obj = self.env['sale.order.line'].browse(line_ids)
             return sale_line_obj.product_id_change(pricelist, product, qty=0,
@@ -700,14 +705,12 @@ class hotel_service_line(models.Model):
             self.ser_checkin_date = time.strftime('%Y-%m-%d %H:%M:%S')
         if not self.ser_checkout_date:
             self.ser_checkout_date = time.strftime('%Y-%m-%d %H:%M:%S')
-        qty = 1
         if self.ser_checkout_date < self.ser_checkin_date:
             raise Warning('Checkout must be greater or equal checkin date')
-
-        if self.ser_checkin_date:
+        if self.ser_checkin_date and self.ser_checkout_date:
             diffDate = datetime.datetime(*time.strptime(self.ser_checkout_date, '%Y-%m-%d %H:%M:%S')[:5]) - datetime.datetime(*time.strptime(self.ser_checkin_date, '%Y-%m-%d %H:%M:%S')[:5])
-            qty = diffDate.days
-        self.product_uom_qty = qty
+            qty = diffDate.days + 1
+            self.product_uom_qty = qty
 
     @api.multi 
     def button_confirm(self):
@@ -735,8 +738,7 @@ class hotel_service_line(models.Model):
         @param self : object pointer
         @param default : dict of default values to be set
         '''
-        line_id = self.service_line_id.id
-        sale_line_obj = self.env['sale.order.line'].browse(line_id)
+        sale_line_obj = self.env['sale.order.line'].browse(self.service_line_id.id)
         return sale_line_obj.copy_data(default=default)
 
 class hotel_service_type(models.Model):
@@ -791,7 +793,7 @@ class CurrencyExchangeRate(models.Model):
         @param self : object pointer
         '''
         for rec in self:
-            self.guest_name = False
+#            self.guest_name = False
             self.hotel_id = False
             self.room_number = False
             self.folio_no = False

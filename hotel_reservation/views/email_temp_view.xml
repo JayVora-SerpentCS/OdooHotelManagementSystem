@@ -20,14 +20,18 @@
             <field name="name">Reservation-Send by Email</field>
             <field name="email_from">${(object.warehouse_id.partner_id.email or '')}</field>
             <field name="subject">Hotel Reservation Detail</field>
-            <field name="email_to">${(object.partner_id.email or '')}</field>
+            <field name="partner_to">${(object.partner_id.id or '')}</field>
             <field name="model_id" ref="hotel_reservation.model_hotel_reservation"/>
             <field name="auto_delete" eval="True"/>
             <field name="body_html"><![CDATA[
 	            <p>Hello <strong>${object.partner_id.name}</strong>,</p>
-                <p>This is to confirm your booking for a room at <strong>${object.warehouse_id.name} Hotel</strong>,&nbsp; 
-                   <strong>${object.warehouse_id.partner_id.city}</strong>,&nbsp; 
-                   <strong>${object.warehouse_id.partner_id.country_id.name}</strong>.&nbsp;  
+                <p>This is to confirm your booking for a room at the <strong>${object.warehouse_id.name} Hotel</strong>,&nbsp;
+                   % if object.warehouse_id.partner_id.city: 
+                   <strong>${object.warehouse_id.partner_id.city}</strong>,&nbsp;
+                   % endif 
+                   % if object.warehouse_id.partner_id.country_id.name:
+                   <strong>${object.warehouse_id.partner_id.country_id.name}</strong>.&nbsp;
+                   % endif
                    On behalf of the hotel, we would like to express our gratitude to you for choosing our services. 
                    Please find all the details regarding the confirmation of the reservation on Date <strong>${object.date_order}</strong> are listed below:
                 </p> 
@@ -56,7 +60,7 @@
                         %endfor
                 </table>
                <br /> 
-               <p> 
+               <p>
 We would appreciate it if you could let us know in case there are any changes in your schedule or program. 
 In case you require check-in facilities at an earlier time due to flight changes or any other reasons, kindly inform us. 
 We are sure that you will find our services satisfactory. In case you need to cancel your reservation, 
@@ -68,11 +72,19 @@ We look forward to providing you quality services at our hotel.
 <br />
 <strong>Reservations Team <strong><br />
 [<strong>${object.warehouse_id.name} Hotel</strong>]<br />
+% if object.warehouse_id.partner_id.street:
 <strong>${object.warehouse_id.partner_id.street}</strong><br />
+% endif
+% if object.warehouse_id.partner_id.city:
 <strong>${object.warehouse_id.partner_id.city}</strong>,<br />
+% endif
+% if object.warehouse_id.partner_id.country_id.name:
 <strong>${object.warehouse_id.partner_id.country_id.name}</strong>,<br />
+% endif
 <br />
+% if object.warehouse_id.partner_id.website:
 <strong>${object.warehouse_id.partner_id.website}</strong> <br />
+% endif
     		 ]]></field>
   		</record>
 	</data>

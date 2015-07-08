@@ -128,5 +128,20 @@
          parent="menu_hotel_reporting" 
           />
 
+         <!-- Action for currency exchange-->
+         <record model="ir.actions.act_window" id="action_desk_currency_exchange">
+             <field name="name">action.desk.currency.exchange</field>
+             <field name="type">ir.actions.act_window</field>
+             <field name="res_model">currency.exchange</field>
+             <field name="view_type">form</field>
+             <field name="view_mode">form</field>
+         </record>
+
+         <menuitem name="Currency Exchange"
+         id="menu_action_desk_currency_exchange"
+         action="action_desk_currency_exchange" 
+         parent="menu_hotel_reporting" 
+          />
+
 	</data>
 </openerp>

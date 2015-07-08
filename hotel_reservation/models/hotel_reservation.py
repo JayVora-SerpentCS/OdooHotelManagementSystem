@@ -39,7 +39,7 @@ class hotel_reservation(models.Model):
     _rec_name = "reservation_no"
     _description = "Reservation"
     _order = 'reservation_no desc'
-    _inherit = ['mail.thread']
+    _inherit = ['mail.thread','ir.needaction_mixin']
 
     reservation_no = fields.Char('Reservation No', size=64, readonly=True, default=lambda obj: obj.env['ir.sequence'].get('hotel.reservation'))
     date_order = fields.Datetime('Date Ordered', required=True, readonly=True, states={'draft':[('readonly', False)]}, default=lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'))
@@ -57,6 +57,13 @@ class hotel_reservation(models.Model):
     state = fields.Selection([('draft', 'Draft'), ('confirm', 'Confirm'), ('cancel', 'Cancel'), ('done', 'Done')], 'State', readonly=True, default=lambda *a: 'draft')
     folio_id = fields.Many2many('hotel.folio', 'hotel_folio_reservation_rel', 'order_id', 'invoice_id', string='Folio')
     dummy = fields.Datetime('Dummy')
+
+    @api.model
+    def _needaction_count(self, domain=None):
+        """
+         Show a count of draft state reservations on the menu badge.
+         """
+        return self.search_count([('state', '=', 'draft')])
 
     @api.onchange('date_order', 'checkin')
     def on_change_checkin(self):
@@ -140,8 +147,8 @@ class hotel_reservation(models.Model):
             roomcount = res and res[0] or 0.0
             if roomcount:
                 raise except_orm(_('Warning'), _('You tried to confirm reservation with room those already reserved in this reservation period'))
-            if len(reservation.reservation_line) == 0:
-                raise except_orm(_('Warning'), _('Please select room to confirm reservation'))
+            if len(reservation.reservation_line.reserve) == 0:
+                raise except_orm(_('Warning'), _('Please Select Room To Confirm Reservation'))
             else:
                 self.write({'state':'confirm'})
                 for line_id in reservation.reservation_line:
@@ -155,23 +162,44 @@ class hotel_reservation(models.Model):
                             'reservation_id': reservation.id,
                         }
                         reservation_line_obj.create(vals)
-                reservation.send_my_maill()
         return True
 
     @api.multi
-    def send_my_maill(self):
-        """Generates a new mail message for the Reservation template and schedules it,
-           for delivery through the ``mail`` module's scheduler.
-           @param self: The object pointer
-        """
-        template_id = self.env.ref('hotel_reservation.email_template_hotel_reservation', False)
-        if template_id.id:
-            for user in self:
-                if not user.partner_id.email:
-                    raise except_orm(("Cannot send email: user has no email address."), user.partner_id.name)
-                myobj = self.env['email.template'].browse(template_id.id)
-                myobj.send_mail(user.id, force_send=True, raise_exception=True)
-            return True 
+    def send_reservation_maill(self):
+        '''
+        This function opens a window to compose an email, template message loaded by default
+        '''
+        assert len(self._ids) == 1, 'This option should only be used for a single id at a time.'
+        ir_model_data = self.env['ir.model.data']
+        try:
+            template_id = ir_model_data.get_object_reference('hotel_reservation', 'email_template_hotel_reservation')[1]
+        except ValueError:
+            template_id = False
+        try:
+            compose_form_id = ir_model_data.get_object_reference('mail', 'email_compose_message_wizard_form')[1]
+        except ValueError:
+            compose_form_id = False 
+        ctx = dict()
+        ctx.update({
+            'default_model': 'hotel.reservation',
+            'default_res_id': self._ids[0],
+            'default_use_template': bool(template_id),
+            'default_template_id': template_id,
+            'default_composition_mode': 'comment',
+            'force_send' : True,
+            'mark_so_as_sent': True
+        })
+        return {
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'mail.compose.message',
+            'views': [(compose_form_id, 'form')],
+            'view_id': compose_form_id,
+            'target': 'new',
+            'context': ctx,
+            'force_send' : True
+        }
 
     @api.multi
     def _create_folio(self):
@@ -213,7 +241,7 @@ class hotel_reservation(models.Model):
                         'name': reservation['reservation_no'],
                         'product_uom': r['uom_id'].id,
                         'price_unit': r['lst_price'],
-                        'product_uom_qty': (datetime.datetime(*time.strptime(reservation['checkout'], '%Y-%m-%d %H:%M:%S')[:5]) - datetime.datetime(*time.strptime(reservation['checkin'], '%Y-%m-%d %H:%M:%S')[:5])).days
+                        'product_uom_qty': ((datetime.datetime(*time.strptime(reservation['checkout'], '%Y-%m-%d %H:%M:%S')[:5]) - datetime.datetime(*time.strptime(reservation['checkin'], '%Y-%m-%d %H:%M:%S')[:5])).days) + 1 
                     }))
                     res_obj = room_obj.browse([r.id]) 
                     res_obj.write({'status': 'occupied'})
@@ -244,7 +272,7 @@ class hotel_reservation(models.Model):
             chkin_dt = datetime.datetime.strptime(checkin_date, '%Y-%m-%d %H:%M:%S')
             chkout_dt = datetime.datetime.strptime(checkout_date, '%Y-%m-%d %H:%M:%S')
             dur = chkout_dt - chkin_dt
-            duration = dur.days
+            duration = dur.days + 1
             if configured_addition_hours > 0:
                 additional_hours = abs((dur.seconds / 60) / 60)
                 if additional_hours >= configured_addition_hours:
