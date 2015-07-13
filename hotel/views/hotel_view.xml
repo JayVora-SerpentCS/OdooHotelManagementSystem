@@ -353,7 +353,7 @@
                     <field name="list_price" string="Room rate"/>
                     <field name="state" string="Status"/>
                     <newline/>
-                    <filter string="Available" domain="[('status','=', 'available')]" help="Available Rooms" />
+                    <filter name="available" string="Available" domain="[('status','=', 'available')]" help="Available Rooms" />
                     <filter string="Reserved" domain="[('status','=', 'occupied')]" help="Reserved Rooms" />
                 </search>
             </field>
@@ -491,12 +491,12 @@
                                 <field name="duration"/>
                             </group>
                             <separator string="Room Lines" colspan="4"/>
-                            <field name="room_lines"  colspan="4" string="Room Line" default_get="{'checkin_date': checkin_date,'checkout_date':checkout_date}" nolabel="1">
-                                <form string="Room Line"  >
+                            <field name="room_lines"  colspan="4" string="Room Line"  nolabel="1" default_get="{'checkin_date': checkin_date,'checkout_date':checkout_date}">
+                                <form string="Room Line">
                                     <notebook>
                                         <page string="Folio Line">
                                             <group>
-                                            <field name="checkin_date"/>
+                                            <field name="checkin_date" />
                                             <field name="checkout_date" />
                                             <separator string="Automatic Declaration" colspan="4"/>
                                             <field name="product_uom_qty" context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'uom':product_uom}"
@@ -673,9 +673,9 @@
             <field name="model">hotel.folio</field>
             <field name="arch" type="xml">
                 <search string="Tables Detail">
-                     <field name="partner_id" />
+                    <field name="partner_id" />
                     <field name="name"/>
-                    <filter string="Current Booking" domain="[('checkout_date','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('checkin_date','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]" help="Current Booking" />
+                    <filter string="Current Booking" domain="[('checkout_date','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('checkin_date','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]" help="Current Booking"/>
                     <group expand="0" string="Group By">
                         <filter string="Order By Month" domain="[]" context="{'group_by':'date_order'}"/>
                         <filter name="partner_id" string="Customer" icon="terp-stock_symbol-selection" context="{'group_by':'partner_id'}" />

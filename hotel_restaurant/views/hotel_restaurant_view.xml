@@ -81,7 +81,7 @@
                         <button string="Cancel" name="cancel" states="confirm" type="workflow" icon="gtk-cancel"/>
                         <button string="Set to Draft" name="action_set_to_draft" states="cancel" type="object" icon="gtk-file"/>
                         <button string="Create Order" name="create_order" type="object" states="done" icon="gtk-new"/>
-                        <field name="state" widget="statusbar"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
                     </header>
                     <sheet>
                         <h1>
@@ -114,7 +114,7 @@
             <field name="name">hotel_restaurant_reservation.tree</field>
             <field name="model">hotel.restaurant.reservation</field>
             <field name="arch" type="xml">
-                <tree string="Table Reservation">
+                <tree string="Table Reservation" colors="blue:state == 'draft';red:state == 'cancel';grey:state == 'done';green:state == 'confirm'" toolbar="1">
                     <field name="reservation_id"/>
                     <field name="room_no"/>
                     <field name="start_date"/>
@@ -122,6 +122,7 @@
                     <field name="cname"/>
                     <field name="partner_address_id"/>
                     <field name="tableno"/>
+                    <field name="state"/>
                 </tree>
             </field>
         </record>
@@ -132,11 +133,13 @@
             <field name="model">hotel.restaurant.reservation</field>
             <field name="arch" type="xml">
                 <search string="Restaurant Reservation">
-                    <group string='Filters'>
-                        <filter domain="[('state','=','draft')]" string="Draft"/>
-                        <filter domain="[('state','=','confirm')]" string="Confirm"/>
-                        <filter domain="[('state','=','cancel')]" string="Cancel"/>
-                        <filter domain="[('state','=','done')]" string="Done"/>
+                    <filter domain="[('state','=','confirm'),('start_date','&lt;=',datetime.datetime.now()),('end_date','&gt;',datetime.datetime.now())]" string="Current Booking"/><separator/>
+                    <filter name="today" domain="[('start_date','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('end_date','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]" string="Today's Booking"/><separator/>
+                    <group string="States">
+	                    <filter icon="terp-check" domain="[('state','=','draft')]" string="Draft"/>
+	                    <filter domain="[('state','=','confirm')]" string="Confirm"/>
+	                    <filter domain="[('state','=','cancel')]" string="Cancel"/>
+	                    <filter domain="[('state','=','done')]" string="Done"/>
                     </group>
                     <field name="room_no" select="1"/>
                     <field name="start_date"/>
@@ -157,6 +160,7 @@
             <field name="res_model">hotel.restaurant.reservation</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_hotel_restaurant_reservation_tree"/>
         </record>
         <menuitem name="Table Booking"
         id="menu_open_view_hotel_restaurant_reservation_form_tree"
@@ -249,10 +253,12 @@
             <field name="model">hotel.reservation.order</field>
             <field name="arch" type="xml">
                 <search string="Reservation Order">
-                    <group expand="0" string="Group By">
-                        <filter name="waitername" string="waiter name" icon="terp-personal" domain="[]" context="{'group_by':'waitername'}"/>
-                        <filter name="date1" string="date"  domain="[]" context="{'group_by':'date1'}"/>
-                    </group>
+                        <filter name="today" domain="[('date1','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('date1','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]" string="Today's Orders"/>
+                        <field name="reservationno"/>
+                        <group expand="0" string="Group By">
+	                        <filter name="waitername" string="waiter name" icon="terp-personal" domain="[]" context="{'group_by':'waitername'}"/>
+	                        <filter name="date1" string="date"  domain="[]" context="{'group_by':'date1'}"/>
+                        </group>
                 </search>
             </field>
         </record>
@@ -263,7 +269,6 @@
             <field name="res_model">hotel.reservation.order</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-
         </record>
         <menuitem name="Orders"
         id="menu_open_view_hotel_reservation_order_form_tree"
@@ -357,6 +362,8 @@
             <field name="model">hotel.restaurant.order</field>
             <field name="arch" type="xml">
                 <search string="Restaurant Order">
+                    <filter name="today" domain="[('o_date','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('o_date','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]" string="Today's Orders"/>
+                    <field name="order_no"/>
                     <group expand="0" string="Group By">
                         <filter name="waiter_name" string="waiter name" icon="terp-personal" domain="[]" context="{'group_by':'waiter_name'}"/>
                         <filter name="o_date" string="date"  domain="[]" context="{'group_by':'o_date'}"/>
@@ -448,10 +455,7 @@
             <field name="model">hotel.restaurant.kitchen.order.tickets</field>
             <field name="arch" type="xml">
                 <search string="Restaurant kitchen Order">
-                    <group string='Filters'>
-                        <filter icon="terp-check" domain="[('kot_date','&gt;=',datetime.datetime.today().replace(hour=0, minute=0, second=0)),('kot_date','&lt;=',datetime.datetime.today().replace(hour=23, minute=59, second=59))]" string="Today's Orders"/>
-                        <filter icon="terp-check" domain="[('kot_date','&gt;=',datetime.datetime.today().replace(hour=0, minute=0, second=0))]" string="Upcoming Order's"/>
-                    </group>
+                    <filter name="today" domain="[('kot_date','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('kot_date','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]" string="Today's Orders"/>
                     <group expand="0" string="Group By">
                         <filter name="w_name" string="Waiter Name" icon="terp-personal" domain="[]" context="{'group_by':'w_name'}"/>
                         <filter name="kot_date" string="Date"  domain="[]" context="{'group_by':'kot_date'}"/>

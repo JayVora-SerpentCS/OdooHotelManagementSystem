@@ -89,20 +89,18 @@
             <field name="model">hotel.reservation</field>
             <field name="arch" type="xml">
                 <search string="Reservation">
-                    <group string='Filters'>
-                        <filter string="Current Reservations" domain="[('checkout','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('checkin','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]" help="Current Reservations" />
-                        <filter domain="[('state','=','draft')]" string="Draft"/>
-                        <filter domain="[('state','=','confirm')]" string="Confirm"/>
-                        <filter domain="[('state','=','cancel')]" string="Cancel"/>
-                        <filter domain="[('state','=','done')]" string="Done"/>
-                    </group>
+                    <filter string="Current Reservations" domain="[('checkout','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('checkin','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]" help="Current Reservations" />
+                    <filter domain="[('state','=','draft')]" string="Draft"/>
+                    <filter domain="[('state','=','confirm')]" string="Confirm"/>
+                    <filter domain="[('state','=','cancel')]" string="Cancel"/>
+                    <filter domain="[('state','=','done')]" string="Done"/>
                     <field name="partner_id" select="1"/>
                     <field name="reservation_no"/>
                     <field name="checkin"/>
                     <field name="checkout"/>
                     <field name="state"/>
                     <newline/>
-                    <group expand="0" string="Group By...">
+                    <group expand="0" string="Group By">
                         <filter name="partner_id" string="Guest Name" icon="terp-personal" domain="[]" context="{'group_by':'partner_id'}"/>
                     </group>
                 </search>

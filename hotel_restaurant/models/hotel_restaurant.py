@@ -78,6 +78,7 @@ class hotel_restaurant_reservation(models.Model):
                 'table_no':[(6, 0, table_ids)],
             }
             proxy.create(values)
+        self.write({'state':'order'})
         return True
 
     @api.onchange('cname')
@@ -162,7 +163,7 @@ class hotel_restaurant_reservation(models.Model):
     cname = fields.Many2one('res.partner', string='Customer Name', size=64, required=True)
     partner_address_id = fields.Many2one('res.partner', string='Address')
     tableno = fields.Many2many('hotel.restaurant.tables', relation='reservation_table', column1='reservation_table_id', column2='name', string='Table Number', help="Table reservation detail. ")
-    state = fields.Selection([('draft', 'Draft'), ('confirm', 'Confirmed'), ('done', 'Done'), ('cancel', 'Cancelled')], 'state', select=True, required=True, readonly=True, default=lambda * a: 'draft')
+    state = fields.Selection([('draft', 'Draft'), ('confirm', 'Confirmed'), ('done', 'Done'), ('cancel', 'Cancelled'),('order', 'Order Created')], 'state', select=True, required=True, readonly=True, default=lambda * a: 'draft')
 
     @api.constrains('start_date', 'end_date')
     def check_start_dates(self):

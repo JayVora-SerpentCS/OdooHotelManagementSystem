@@ -452,7 +452,7 @@ class hotel_folio_line(models.Model):
         if 'checkin_date' in self._context:
             return self._context['checkin_date']
         return time.strftime('%Y-%m-%d %H:%M:%S')
-#
+
     @api.model
     def _get_checkout_date(self):
         if 'checkin_date' in self._context:
@@ -633,7 +633,7 @@ class hotel_service_line(models.Model):
 
     _name = 'hotel.service.line'
     _description = 'hotel Service line'
-    
+
     service_line_id = fields.Many2one('sale.order.line', 'Service Line', required=True, delegate=True, ondelete='cascade')
     folio_id = fields.Many2one('hotel.folio', 'Folio', ondelete='cascade')
     ser_checkin_date = fields.Datetime('From Date', required=True, default=_service_checkin_date)
@@ -694,7 +694,7 @@ class hotel_service_line(models.Model):
                 lang=False, update_tax=True, date_order=False)
 
     @api.onchange('ser_checkin_date', 'ser_checkout_date')
-    def on_change_service_date(self):
+    def on_change_checkout(self):
         '''
         When you change checkin_date or checkout_date it will checked it
         and update the qty of hotel service line

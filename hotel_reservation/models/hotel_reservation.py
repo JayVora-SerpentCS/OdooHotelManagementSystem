@@ -145,6 +145,12 @@ class hotel_reservation(models.Model):
                         , (reservation.checkin, reservation.checkout, str(reservation.id), str(reservation.id)))
             res = self._cr.fetchone()
             roomcount = res and res[0] or 0.0
+            if reservation.adults or reservation.children:
+                cap = 0
+                for rec in reservation.reservation_line.reserve:
+                    cap += rec.capacity
+                if (reservation.adults + reservation.children) > cap :
+                    raise except_orm(_('Room Capacity Exceeded'), _('Please Select Rooms According to Members Accomodation'))
             if roomcount:
                 raise except_orm(_('Warning'), _('You tried to confirm reservation with room those already reserved in this reservation period'))
             if len(reservation.reservation_line.reserve) == 0:
@@ -167,7 +173,8 @@ class hotel_reservation(models.Model):
     @api.multi
     def send_reservation_maill(self):
         '''
-        This function opens a window to compose an email, template message loaded by default
+        This function opens a window to compose an email, template message loaded by default.
+        @param self : object pointer
         '''
         assert len(self._ids) == 1, 'This option should only be used for a single id at a time.'
         ir_model_data = self.env['ir.model.data']
@@ -200,6 +207,27 @@ class hotel_reservation(models.Model):
             'context': ctx,
             'force_send' : True
         }
+
+    @api.model
+    def reservation_reminder_24hrs(self):
+        """
+        This method is for scheduler
+        every 1day scheduler will call this method to find all tomorrow's reservations.
+        --------------------------------------------------------------------------------------------
+        @param self: The object pointer
+        @return: send a mail
+        """
+        now_str = time.strftime('%Y-%m-%d %H:%M:%S')
+        now_date = datetime.datetime.strptime(now_str,'%Y-%m-%d %H:%M:%S')
+        ir_model_data = self.env['ir.model.data']
+        template_id = ir_model_data.get_object_reference('hotel_reservation', 'email_template_reservation_reminder_24hrs')[1]
+        template_rec = self.env['email.template'].browse(template_id)
+        for travel_rec in self.search([]):
+            checkin_date = datetime.datetime.strptime(travel_rec.checkin,'%Y-%m-%d %H:%M:%S')
+            difference = relativedelta(now_date, checkin_date)
+            if difference.days == -1 and travel_rec.partner_id.email and travel_rec.state == 'confirm':
+                template_rec.send_mail(travel_rec.id, force_send=True)
+        return True
 
     @api.multi
     def _create_folio(self):
