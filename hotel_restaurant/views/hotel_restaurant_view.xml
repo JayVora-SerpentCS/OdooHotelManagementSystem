@@ -114,7 +114,7 @@
             <field name="name">hotel_restaurant_reservation.tree</field>
             <field name="model">hotel.restaurant.reservation</field>
             <field name="arch" type="xml">
-                <tree string="Table Reservation" colors="blue:state == 'draft';red:state == 'cancel';grey:state == 'done';green:state == 'confirm'" toolbar="1">
+                <tree string="Table Reservation" colors="blue:state == 'draft';red:state == 'cancel';black:state == 'done';black:state == 'order';green:state == 'confirm'" toolbar="1">
                     <field name="reservation_id"/>
                     <field name="room_no"/>
                     <field name="start_date"/>
@@ -133,7 +133,7 @@
             <field name="model">hotel.restaurant.reservation</field>
             <field name="arch" type="xml">
                 <search string="Restaurant Reservation">
-                    <filter domain="[('state','=','confirm'),('start_date','&lt;=',datetime.datetime.now()),('end_date','&gt;',datetime.datetime.now())]" string="Current Booking"/><separator/>
+                    <filter domain="[('state','in',('confirm','done','order')),('start_date','&lt;=',datetime.datetime.now()),('end_date','&gt;',datetime.datetime.now())]" string="Current Booking"/><separator/>
                     <filter name="today" domain="[('start_date','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('end_date','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]" string="Today's Booking"/><separator/>
                     <group string="States">
 	                    <filter icon="terp-check" domain="[('state','=','draft')]" string="Draft"/>
@@ -144,7 +144,7 @@
                     <field name="room_no" select="1"/>
                     <field name="start_date"/>
                     <field name="end_date"/>
-                    <field name = "cname"/>
+                    <field name = "cname" select="1"/>
                     <newline/>
                     <group expand="0" string="Group By">
                         <filter name="room_no" string="Room Number" icon="terp-personal" domain="[]" context="{'group_by':'room_no'}"/>
@@ -180,7 +180,10 @@
             <field name="arch" type="xml">
                 <form string="Order" >
                     <header>
-                        <button string="Generate KOT" name="reservation_generate_kot" type="object" icon="gtk-go-forward"/>
+                        <button string="Generate KOT" name="reservation_generate_kot" type="object" states="draft" icon="gtk-go-forward"/>
+                        <button string="Generate KOT" name="reservation_update_kot" type="object" states="order" icon="gtk-go-forward"/>
+                        <button string="Done" name="done_kot" type="object" states="order" icon="gtk-apply"/>
+                        <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
                         <h1>
@@ -194,6 +197,8 @@
                             <group colspan="4" col="4" >
                                 <field name="date1" />
                                 <field name="waitername" />
+                                <field name="kitchen_id" invisible="1"/>
+                                <field name="rest_id" widget="many2many_tags" invisible="1"/>
                             </group>
                             <newline/>
                             <separator colspan='4' string='Table List' />
@@ -236,13 +241,14 @@
             <field name="name">hotel_reservation_order.tree</field>
             <field name="model">hotel.reservation.order</field>
             <field name="arch" type="xml">
-                <tree string="Order">
+                <tree string="Order" colors="blue:state == 'draft';green:state == 'order'" toolbar="1">
                     <field name="order_number"/>
                     <field name="reservationno"/>
                     <field name="date1"/>
                     <field name="waitername"/>
                     <field name="table_no"/>
-               		<field name="amount_total" sum = "Order Total" /> 
+                    <field name="state"/>
+               		<field name="amount_total" sum = "Order Total" />
                 </tree>
             </field>
         </record>
@@ -256,8 +262,8 @@
                         <filter name="today" domain="[('date1','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('date1','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]" string="Today's Orders"/>
                         <field name="reservationno"/>
                         <group expand="0" string="Group By">
-	                        <filter name="waitername" string="waiter name" icon="terp-personal" domain="[]" context="{'group_by':'waitername'}"/>
-	                        <filter name="date1" string="date"  domain="[]" context="{'group_by':'date1'}"/>
+	                        <filter name="waitername" string="Waiter Name" icon="terp-personal" domain="[]" context="{'group_by':'waitername'}"/>
+	                        <filter name="date1" string="Date"  domain="[]" context="{'group_by':'date1'}"/>
                         </group>
                 </search>
             </field>
@@ -314,7 +320,7 @@
                                     <field name="name"/> 
                                     <field name="item_qty"/>
                                     <field name="item_rate"/>
-                                    <field name="price_subtotal"/>
+                                    <field name="price_subtotal" invisible="1"/>
                                     </group>
                                 </form>
                                 <tree string="Order List">
@@ -456,6 +462,7 @@
             <field name="arch" type="xml">
                 <search string="Restaurant kitchen Order">
                     <filter name="today" domain="[('kot_date','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('kot_date','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]" string="Today's Orders"/>
+                    <field name="orderno" />
                     <group expand="0" string="Group By">
                         <filter name="w_name" string="Waiter Name" icon="terp-personal" domain="[]" context="{'group_by':'w_name'}"/>
                         <filter name="kot_date" string="Date"  domain="[]" context="{'group_by':'kot_date'}"/>
@@ -632,7 +639,7 @@
                     <field name="list_price"/>
                     <templates>
                         <t t-name="kanban-box">
-                            <div class="oe_kanban_vignette oe_semantic_html_override">
+                            <div class="oe_kanban_vignette oe_kanban_global_click oe_semantic_html_override">
                                 <a type="open">
                                     <img t-att-src="kanban_image('hotel.menucard', 'image', record.id.value)" class="oe_kanban_image"/>
                                 </a>

@@ -360,7 +360,7 @@
         </record>
 
 		<!-- Tree view of hotel room  -->
-		<record model="ir.ui.view" id="view_hotel_room_tree">
+		<record model="ir.ui.view" id="view_hotel_room_tree" >
 			<field name="name">hotel.room.tree</field>
 			<field name="model">hotel.room</field>
 			<field name="arch" type="xml">
@@ -386,7 +386,7 @@
                     <field name="lst_price"/>
                     <templates>
                          <t t-name="kanban-box">
-                             <div class="oe_kanban_vignette oe_semantic_html_override oe_kanban_card oe_kanban_project oe_kanban_global_click">
+                             <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_vignette oe_semantic_html_override oe_kanban_card oe_kanban_project oe_kanban_global_click">
                                 <div class="oe_dropdown_toggle oe_dropdown_kanban" groups="base.group_user">
                                 <span class="oe_e">í</span>
                                         <ul class="oe_dropdown_menu">
@@ -408,7 +408,8 @@
                                             <ul>
                                                 <li>Status: <field name="status"></field></li>
                                                 <li>Rate: <field name="lst_price"></field></li>
-                                            </ul>   
+                                                <li>Capacity: <field name="capacity"></field></li>
+                                            </ul>
                                    </div>
                                    <div class="oe_kanban_bottom_right">
                                          <a t-if="record.status.raw_value === 'available'" type="object" string="Available" name="set_room_status_occupied" class="oe_kanban_status oe_kanban_status_green "> </a>
@@ -491,7 +492,7 @@
                                 <field name="duration"/>
                             </group>
                             <separator string="Room Lines" colspan="4"/>
-                            <field name="room_lines"  colspan="4" string="Room Line"  nolabel="1" default_get="{'checkin_date': checkin_date,'checkout_date':checkout_date}">
+                            <field name="room_lines"  colspan="4" string="Room Line"  nolabel="1"  context="{'checkin':checkin_date,'checkout':checkout_date}">
                                 <form string="Room Line">
                                     <notebook>
                                         <page string="Folio Line">
@@ -543,7 +544,7 @@
                                 </tree>
                             </field>
                             <separator string="Service Lines" colspan="4"/>
-                            <field name="service_lines"  colspan="4" string = "Service Line" nolabel="1">
+                            <field name="service_lines"  colspan="4" string = "Service Line" nolabel="1" context="{'checkin':checkin_date,'checkout':checkout_date}">
                                 <form string="Service Line"  >
                                     <notebook>
                                         <page string="Service Line">

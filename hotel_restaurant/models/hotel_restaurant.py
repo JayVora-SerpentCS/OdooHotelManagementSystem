@@ -21,6 +21,7 @@
 ##############################################################################
 from openerp.exceptions import except_orm, ValidationError
 from openerp import models, fields, api, _, netsvc
+import time
 
 class product_category(models.Model):
 
@@ -125,6 +126,8 @@ class hotel_restaurant_reservation(models.Model):
                         , (reservation.start_date, reservation.end_date, reservation.id, reservation.id))
             res = self._cr.fetchone()
             roomcount = res and res[0] or 0.0
+            if len(reservation.tableno.ids) == 0:
+                raise except_orm(_('Warning'), _('Please Select Tables For Reservation'))
             if roomcount:
                 raise except_orm(_('Warning'), _('You tried to confirm reservation with table those already reserved in this reservation period'))
             else:
@@ -158,7 +161,7 @@ class hotel_restaurant_reservation(models.Model):
 
     reservation_id = fields.Char('Reservation No', size=64, required=True, default=lambda obj: obj.env['ir.sequence'].get('hotel.restaurant.reservation'))
     room_no = fields.Many2one('hotel.room', string='Room No', size=64)
-    start_date = fields.Datetime('Start Time', required=True)
+    start_date = fields.Datetime('Start Time', required=True,default=lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'))
     end_date = fields.Datetime('End Time', required=True)
     cname = fields.Many2one('res.partner', string='Customer Name', size=64, required=True)
     partner_address_id = fields.Many2one('res.partner', string='Address')
@@ -223,6 +226,8 @@ class hotel_restaurant_order(models.Model):
         order_tickets_obj = self.env['hotel.restaurant.kitchen.order.tickets']
         restaurant_order_list_obj = self.env['hotel.restaurant.order.list']
         for order in self:
+            if len(order.order_list.ids) == 0:
+                raise except_orm(_('No Order Given'), _('Please Give an Order'))
             table_ids = [x.id for x in order.table_no]
             kot_data = order_tickets_obj.create({
                 'orderno':order.order_no,
@@ -247,7 +252,7 @@ class hotel_restaurant_order(models.Model):
     _rec_name = "order_no"
 
     order_no = fields.Char('Order Number', size=64, required=True, default=lambda obj: obj.env['ir.sequence'].get('hotel.restaurant.order'))
-    o_date = fields.Datetime('Date', required=True)
+    o_date = fields.Datetime('Start Datetime', required=True,default=lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'))
     room_no = fields.Many2one('hotel.room', 'Room No')
     waiter_name = fields.Many2one('res.partner', 'Waiter Name')
     table_no = fields.Many2many('hotel.restaurant.tables', 'temp_table2', 'table_no', 'name', 'Table Number')
@@ -288,17 +293,22 @@ class hotel_reservation_order(models.Model):
         @param self: The object pointer
         @return: new record set for hotel restaurant order list.
         """
+        res = []
         order_tickets_obj = self.env['hotel.restaurant.kitchen.order.tickets']
         rest_order_list_obj = self.env['hotel.restaurant.order.list']
         for order in self:
+            if len(order.order_list) == 0:
+                raise except_orm(_('No Order Given'), _('Please Give an Order'))
             table_ids = [x.id for x in order.table_no]
-            kot_data = order_tickets_obj.create({
+            line_data = {
                 'orderno':order.order_number,
                 'resno':order.reservationno,
                 'kot_date':order.date1,
                 'w_name':order.waitername.name,
                 'tableno':[(6, 0, table_ids)],
-            })
+                }
+            kot_data = order_tickets_obj.create(line_data)
+            self.kitchen_id = kot_data.id
             for order_line in order.order_list:
                 o_line = {
                     'kot_order_list':kot_data.id,
@@ -306,8 +316,55 @@ class hotel_reservation_order(models.Model):
                     'item_qty':order_line.item_qty,
                     'item_rate':order_line.item_rate
                 }
-                rest_order_list_obj.create(o_line)
-            return True
+                rest_data = rest_order_list_obj.create(o_line)
+                res.append(order_line.id)
+            self.rest_id = [(6, 0, res)]
+            self.write({'state':'order'})
+        return res
+
+    @api.multi
+    def reservation_update_kot(self):
+        """
+        This method update record for hotel restaurant order list.
+        --------------------------------------------------------------
+        @param self: The object pointer
+        @return: update record set for hotel restaurant order list.
+        """
+        order_tickets_obj = self.env['hotel.restaurant.kitchen.order.tickets']
+        rest_order_list_obj = self.env['hotel.restaurant.order.list']
+        for order in self:
+            table_ids = [x.id for x in order.table_no]
+            line_data = {
+                'orderno':order.order_number,
+                'resno':order.reservationno,
+                'kot_date': time.strftime('%Y-%m-%d %H:%M:%S'),
+                'w_name':order.waitername.name,
+                'tableno':[(6, 0, table_ids)],
+                }
+            kot_data = order_tickets_obj.create(line_data)
+            self.kitchen_id = kot_data.id
+            for order_line in order.order_list:
+                o_line = {
+                    'kot_order_list':kot_data.id,
+                    'name':order_line.name.id,
+                    'item_qty':order_line.item_qty,
+                    'item_rate':order_line.item_rate
+                }
+                if order_line.id not in order.rest_id.ids:
+                    self.rest_id = [(4,order_line.id)]
+                    rest_order_list_obj.create(o_line)
+        return True
+
+    @api.multi
+    def done_kot(self):
+        """
+        This method is used to change the state 
+        to done of the hotel reservation order
+        ----------------------------------------
+        @param self : object pointer
+        """
+        self.write({'state':'done'})
+        return True
 
     _name = "hotel.reservation.order"
     _description = "Reservation Order"
@@ -316,13 +373,16 @@ class hotel_reservation_order(models.Model):
 
     order_number = fields.Char('Order No', size=64, default=lambda obj: obj.env['ir.sequence'].get('hotel.reservation.order'))
     reservationno = fields.Char('Reservation No', size=64)
-    date1 = fields.Datetime('Date', required=True)
+    date1 = fields.Datetime('Date', required=True,default=lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'))
     waitername = fields.Many2one('res.partner', 'Waiter Name')
     table_no = fields.Many2many('hotel.restaurant.tables', 'temp_table4', 'table_no', 'name', 'Table Number')
     order_list = fields.One2many('hotel.restaurant.order.list', 'o_l', 'Order List')
     tax = fields.Float('Tax (%) ', size=64)
     amount_subtotal = fields.Float(compute='_sub_total', method=True, string='Subtotal')
     amount_total = fields.Float(compute='_total', method=True, string='Total')
+    kitchen_id = fields.Integer('Kitchen id')
+    rest_id = fields.Many2many('hotel.restaurant.order.list','reserv_id','kitchen_id','res_kit_ids',"Rest")
+    state = fields.Selection([('draft', 'Draft'),('order', 'Order Created'),('done', 'Done')], 'State', select=True, required=True, readonly=True, default=lambda * a: 'draft')
 
 class hotel_restaurant_order_list(models.Model):
 

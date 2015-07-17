@@ -102,6 +102,7 @@
                     <newline/>
                     <group expand="0" string="Group By">
                         <filter name="partner_id" string="Guest Name" icon="terp-personal" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="Order By Month" domain="[]" context="{'group_by':'date_order'}"/>
                     </group>
                 </search>
             </field>
@@ -172,6 +173,7 @@
                                     <field name="state"/>
                                     <field name="check_out"/>
                                     <field name="reservation_id" />
+                                    <field name="status"/>
                                 </group>
                             </form>
                             <tree>
@@ -180,6 +182,7 @@
                                 <field name="check_out"/>
                                 <field name="state"/>
                                 <field name="reservation_id" />
+                                <field name="status"/>
                             </tree>
                         </field>
                     </page>
@@ -236,8 +239,8 @@
                      </sheet>
                  </form>
              </field>
-         </record>
 
+         </record>
 
          <!-- Form view of quick room reservation-->
          <record model="ir.ui.view" id="quick_room_reservation_form_view">

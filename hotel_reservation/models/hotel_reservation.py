@@ -20,7 +20,7 @@
 #
 ##############################################################################
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from openerp.exceptions import except_orm
+from openerp.exceptions import except_orm,ValidationError
 from dateutil.relativedelta import relativedelta
 from openerp import models, fields, api, _
 import datetime
@@ -57,6 +57,26 @@ class hotel_reservation(models.Model):
     state = fields.Selection([('draft', 'Draft'), ('confirm', 'Confirm'), ('cancel', 'Cancel'), ('done', 'Done')], 'State', readonly=True, default=lambda *a: 'draft')
     folio_id = fields.Many2many('hotel.folio', 'hotel_folio_reservation_rel', 'order_id', 'invoice_id', string='Folio')
     dummy = fields.Datetime('Dummy')
+
+    @api.constrains('reservation_line','adults','children')
+    def check_reservation_rooms(self):
+        '''
+        This method is used to validate the reservation_line.
+        -----------------------------------------------------
+        @param self : object pointer
+        @return : raise a warning depending on the validation
+        '''
+        for reservation in self:
+            if len(reservation.reservation_line) == 0:
+                raise ValidationError(_('Please Select Rooms For Reservation.'))
+            for rec in reservation.reservation_line:
+                if len(rec.reserve) == 0:
+                    raise ValidationError(_('Please Select Rooms For Reservation.'))
+                cap = 0
+                for room in rec.reserve:
+                    cap += room.capacity
+                if (self.adults + self.children) > cap :
+                        raise ValidationError(_('Room Capacity Exceeded \n Please Select Rooms According to Members Accomodation.'))
 
     @api.model
     def _needaction_count(self, domain=None):
@@ -145,16 +165,8 @@ class hotel_reservation(models.Model):
                         , (reservation.checkin, reservation.checkout, str(reservation.id), str(reservation.id)))
             res = self._cr.fetchone()
             roomcount = res and res[0] or 0.0
-            if reservation.adults or reservation.children:
-                cap = 0
-                for rec in reservation.reservation_line.reserve:
-                    cap += rec.capacity
-                if (reservation.adults + reservation.children) > cap :
-                    raise except_orm(_('Room Capacity Exceeded'), _('Please Select Rooms According to Members Accomodation'))
             if roomcount:
                 raise except_orm(_('Warning'), _('You tried to confirm reservation with room those already reserved in this reservation period'))
-            if len(reservation.reservation_line.reserve) == 0:
-                raise except_orm(_('Warning'), _('Please Select Room To Confirm Reservation'))
             else:
                 self.write({'state':'confirm'})
                 for line_id in reservation.reservation_line:
@@ -353,6 +365,9 @@ class hotel_room_reservation_line(models.Model):
     check_out = fields.Datetime('Check Out Date', required=True)
     state = fields.Selection([('assigned', 'Assigned'), ('unassigned', 'Unassigned')], 'Room Status')
     reservation_id = fields.Many2one('hotel.reservation', string='Reservation')
+    status  = fields.Selection(string='state',related='reservation_id.state')
+
+
 
 hotel_room_reservation_line()
 
@@ -379,9 +394,9 @@ class hotel_room(models.Model):
             reservation_line_ids = [reservation_line.ids for reservation_line in room.room_reservation_line_ids]
             reservation_line_ids = reservation_line_obj.search([('id', 'in', reservation_line_ids), ('check_in', '<=', curr_date), ('check_out', '>=', curr_date)])
             if reservation_line_ids.ids:
-                status = {'status': 'occupied'}
+                status = {'status': 'occupied','color':2}
             else:
-                status = {'status': 'available'}
+                status = {'status': 'available','color':5}
             room.write(status)
         return True
 

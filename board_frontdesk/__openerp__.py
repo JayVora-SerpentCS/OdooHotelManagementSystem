@@ -24,8 +24,8 @@
     "author":"['Serpent Consulting Services Pvt. Ltd.', 'OpenERP SA']",
     "category":"Board/Hotel FrontDesk",
     "depends":[
-        "board",
-        "report_hotel_restaurant"
+        "report_hotel_restaurant",
+        "board"
         ],
     "data":[
         "views/board_frontdesk_view.xml"

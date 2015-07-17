@@ -89,11 +89,23 @@ class hotel_room(models.Model):
 
     @api.multi
     def set_room_status_occupied(self):
-        return self.write({'status': 'occupied'})
+        """
+        This method is used to change the state 
+        to occupied of the hotel room.
+        ---------------------------------------
+        @param self : object pointer
+        """
+        return self.write({'status': 'occupied','color':2})
 
     @api.multi
     def set_room_status_available(self):
-        return self.write({'status': 'available'})
+        """
+        This method is used to change the state 
+        to available of the hotel room.
+        ---------------------------------------
+        @param self : object pointer
+        """
+        return self.write({'status': 'available','color':5})
 
 class hotel_folio(models.Model):
 
@@ -101,7 +113,8 @@ class hotel_folio(models.Model):
     def _needaction_count(self, domain=None):
         """
          Show a count of draft state folio on the menu badge.
-         """
+         @param self : object pointer
+        """
         return self.search_count([('state', '=', 'draft')])
 
     @api.multi
@@ -449,14 +462,14 @@ class hotel_folio_line(models.Model):
 
     @api.model
     def _get_checkin_date(self):
-        if 'checkin_date' in self._context:
-            return self._context['checkin_date']
+        if 'checkin' in self._context:
+            return self._context['checkin']
         return time.strftime('%Y-%m-%d %H:%M:%S')
 
     @api.model
     def _get_checkout_date(self):
-        if 'checkin_date' in self._context:
-            return self._context['checkout_date']
+        if 'checkout' in self._context:
+            return self._context['checkout']
         return time.strftime('%Y-%m-%d %H:%M:%S')
 
     _name = 'hotel.folio.line'
@@ -621,14 +634,14 @@ class hotel_service_line(models.Model):
 
     @api.model
     def _service_checkin_date(self):
-        if 'checkin_date' in self._context:
-            return self._context['checkout_date']
+        if 'checkin' in self._context:
+            return self._context['checkin']
         return time.strftime('%Y-%m-%d %H:%M:%S')
 
     @api.model
     def _service_checkout_date(self):
-        if 'checkin_date' in self._context:
-            return self._context['checkout_date']
+        if 'checkout' in self._context:
+            return self._context['checkout']
         return time.strftime('%Y-%m-%d %H:%M:%S')
 
     _name = 'hotel.service.line'
