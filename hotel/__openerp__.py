@@ -23,7 +23,7 @@
 {
     "name" : "Hotel Management",
     "version" : "0.10",
-    "author": ["Serpent Consulting Services Pvt. Ltd.", "OpenERP SA" ],
+    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA" ,
     "category" : "Generic Modules/Hotel Management",
     "description": """
     Module for Hotel/Resort/Property management. You can manage:

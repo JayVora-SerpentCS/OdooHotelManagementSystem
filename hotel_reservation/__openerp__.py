@@ -23,7 +23,7 @@
 {
     "name" : "Hotel Reservation Management",
     "version" : "0.07",
-    "author": ["Serpent Consulting Services Pvt. Ltd.", "OpenERP SA" ],
+    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
     "category" : "Generic Modules/Hotel Reservation",
     "description": """
     Module for Hotel/Resort/Property management. You can manage:

@@ -23,7 +23,7 @@
 {
     "name" : "Restaurant Management - Reporting",
     "version" : "0.03",
-    "author": ["Serpent Consulting Services Pvt. Ltd.", "OpenERP SA" ],
+    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
     "website": ["http://www.serpentcs.com", "http://www.openerp.com"],
     "depends" : ["hotel_restaurant", "report_hotel_reservation"],
     "category" : "Generic Modules/Hotel Restaurant",
