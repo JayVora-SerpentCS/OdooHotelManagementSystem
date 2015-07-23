@@ -22,6 +22,7 @@
     "name":"Board for Hotel FrontDesk",
     "version":"1.0",
     "author":"Serpent Consulting Services Pvt Ltd",
+    "website": "http://www.serpentcs.com",
     "category":"Board/Hotel FrontDesk",
     "depends":[
         "board",

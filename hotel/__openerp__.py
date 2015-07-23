@@ -35,7 +35,7 @@
 
     Different reports are also provided, mainly for hotel statistics.
     """,
-    "website": ["http://www.serpentcs.com", "http://www.openerp.com"],
+    "website": "http://www.serpentcs.com",
     "depends" : ["sale_stock", "report_extended"],
     "data": [
         "security/hotel_security.xml",

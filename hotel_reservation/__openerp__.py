@@ -31,7 +31,7 @@
     * Group Reservartion
       Different reports are also provided, mainly for hotel statistics.
     """,
-    "website": ["http://www.serpentcs.com", "http://www.openerp.com"],
+    "website": "http://www.serpentcs.com",
     "depends" : ["hotel", "stock", "report_extended",'mail','email_template',],
     "demo" : [
         "views/hotel_reservation_data.xml",
