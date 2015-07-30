@@ -22,7 +22,7 @@
                                 <span t-esc="formatLang(data['form']['date_end'],date=True)"/>
                             </div>
                         </div>
-                    <table class="table table-condensed">
+                    <table class="table table-condensed container">
                         <thead>
                             <tr>
                                 <th><strong>Reservation No</strong></th>

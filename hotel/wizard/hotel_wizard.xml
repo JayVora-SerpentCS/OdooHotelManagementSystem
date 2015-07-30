@@ -33,5 +33,42 @@
 		<menuitem name="Hotel Folio Report" action="hotel_folio_wizard"
 			id="wizard_hotel_menu" parent="hotel_report_menu" sequence="31" />
 
+
+
+        <!--Form view for folio report wizard -->
+        <record model="ir.ui.view" id="view_hotel_order_wizard">
+            <field name="name">order.report.wizard</field>
+            <field name="model">order.report.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Order Report" >
+                    <group col="4">
+                        <field name="date_start" required="1" />
+                        <field name="date_end" required="1" />
+                    <group col="4">
+                        <field name="check"/>
+                    </group>
+                    </group>
+                    <footer>
+                        <button name="print_pos_report" string="Print Pos Order" type="object"
+                            class="oe_highlight" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!--Action for folio report wizard -->
+        <record model="ir.actions.act_window" id="hotel_order_wizard">
+            <field name="name">Hotel Folio Order Wizard</field>
+            <field name="res_model">order.report.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Pos Order Report" action="hotel_order_wizard"
+            id="wizard_order_menu" parent="hotel_report_menu" sequence="32" />
+
 	</data>
 </openerp>

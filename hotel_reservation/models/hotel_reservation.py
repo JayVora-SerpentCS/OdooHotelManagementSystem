@@ -367,9 +367,8 @@ class hotel_room_reservation_line(models.Model):
     reservation_id = fields.Many2one('hotel.reservation', string='Reservation')
     status  = fields.Selection(string='state',related='reservation_id.state')
 
-
-
 hotel_room_reservation_line()
+
 
 class hotel_room(models.Model):
 

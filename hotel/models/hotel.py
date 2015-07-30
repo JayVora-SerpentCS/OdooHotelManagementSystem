@@ -74,6 +74,7 @@ class hotel_room_amenities(models.Model):
     room_categ_id = fields.Many2one('product.product', 'Product Category' , required=True, delegate=True, ondelete='cascade')
     rcateg_id = fields.Many2one('hotel.room.amenities.type', 'Amenity Catagory')
 
+
 class hotel_room(models.Model):
 
     _name = 'hotel.room'
@@ -86,6 +87,16 @@ class hotel_room(models.Model):
     room_amenities = fields.Many2many('hotel.room.amenities', 'temp_tab', 'room_amenities', 'rcateg_id', string='Room Amenities', help='List of room amenities. ')
     status = fields.Selection([('available', 'Available'), ('occupied', 'Occupied')], 'Status', default='available')
     capacity = fields.Integer('Capacity')
+
+
+    @api.multi
+    def write(self,vals):
+        if vals.has_key('status') and vals['status'] == 'occupied':
+            vals.update({'color':2})
+        if vals.has_key('status') and vals['status'] == 'available':
+            vals.update({'color':5})
+        ret_val = super(hotel_room, self).write(vals)
+        return ret_val
 
     @api.multi
     def set_room_status_occupied(self):
@@ -108,6 +119,22 @@ class hotel_room(models.Model):
         return self.write({'status': 'available','color':5})
 
 class hotel_folio(models.Model):
+
+    @api.multi
+    def name_get(self):
+        res =[]
+        disp=''
+        for rec in self:
+            if rec.order_id:
+                disp = str(rec.name)
+                res.append((rec.id,disp))
+        return res
+
+    @api.model
+    def name_search(self, name = '', args=[], operator='ilike', limit=100):
+           args += ([('name',operator,name)])
+           mids = self.search(args,limit=100)
+           return mids.name_get()
 
     @api.model
     def _needaction_count(self, domain=None):
@@ -157,7 +184,9 @@ class hotel_folio(models.Model):
     service_lines = fields.One2many('hotel.service.line', 'folio_id', readonly=True, states={'draft': [('readonly', False)], 'sent': [('readonly', False)]}, help="Hotel services detail provide to customer and it will include in main Invoice.")
     hotel_policy = fields.Selection([('prepaid', 'On Booking'), ('manual', 'On Check In'), ('picking', 'On Checkout')], 'Hotel Policy', default='manual', help="Hotel policy for payment that either the guest has to payment at booking time or check-in check-out time.")
     duration = fields.Float('Duration in Days', help="Number of days which will automatically count from the check-in and check-out date. ")
-    currrency_ids = fields.One2many('currency.exchange', 'so_number', readonly=True)
+    currrency_ids = fields.One2many('currency.exchange', 'folio_no', readonly=True)
+    hotel_invoice_id = fields.Many2one('account.invoice','Invoice')
+    folio_pos_order = fields.Many2many('pos.order','hotel_pos_rel','hotel_folio_id','pos_id','Orders',readonly=True)
 
     @api.multi
     def go_to_currency_exchange(self):
@@ -181,7 +210,7 @@ class hotel_folio(models.Model):
             'view_id': False,
             'view_mode': 'form,tree',
             'view_type': 'form',
-            'context':{'default_so_number':context.get('folioid'), 'default_hotel_id':context.get('hotel'), 'default_guest_name':context.get('guest'), 'default_room_number':context.get('room_no')},
+            'context':{'default_folio_no':context.get('folioid'), 'default_hotel_id':context.get('hotel'), 'default_guest_name':context.get('guest'), 'default_room_number':context.get('room_no')},
         }
 
     @api.constrains('room_lines')
@@ -212,7 +241,7 @@ class hotel_folio(models.Model):
     @api.onchange('checkout_date', 'checkin_date')
     def onchange_dates(self):
         '''
-        This mathod gives the duration between check in checkout if customer will leave only for some
+        This mathod gives the duration between checkin and checkout if customer will leave only for some
         hour it would be considers as a whole day. If customer will checkin checkout for more or equal
         hours , which configured in company as additional hours than it would be consider as full days
         ---------------------------------------------------------------------------------------------
@@ -220,6 +249,7 @@ class hotel_folio(models.Model):
         @return : Duration and checkout_date
         '''
         company_obj = self.env['res.company']
+        reservation_line_obj = self.env['hotel.room.reservation.line']
         configured_addition_hours = 0
         company_ids = company_obj.search([])
         if company_ids.ids:
@@ -235,6 +265,21 @@ class hotel_folio(models.Model):
                 if additional_hours >= configured_addition_hours:
                     myduration += 1
         self.duration = myduration
+        if self.reservation_id:
+            for reservation in self.reservation_id:
+                reservation_myobj  = reservation_line_obj.search([('reservation_id','=',reservation.id)])
+                if len(reservation_myobj) == 1:
+                    for line_id in reservation.reservation_line:
+                        line_id = line_id.reserve
+                        for room_id in line_id:
+                            vals = {
+                                'room_id': room_id.id,
+                                'check_in': chkin_dt,
+                                'check_out': chkout_dt,
+                                'state': 'assigned',
+                                'reservation_id': reservation.id,
+                            }
+                            reservation_myobj.write(vals)
 
     @api.model
     def create(self, vals, check=True):
@@ -244,15 +289,15 @@ class hotel_folio(models.Model):
         @param vals: dictionary of fields value.
         @return: new record set for hotel folio.
         """
-        tmp_room_lines = vals.get('room_lines', [])
-        vals['order_policy'] = vals.get('hotel_policy', 'manual')
         if not 'service_lines' and 'folio_id' in vals:
-                vals.update({'room_lines':[]})
-                folio_id = super(hotel_folio, self).create(vals)
-                for line in (tmp_room_lines):
-                    line[2].update({'folio_id':folio_id})
-                vals.update({'room_lines':tmp_room_lines})
-                folio_id.write(vals)
+            tmp_room_lines = vals.get('room_lines', [])
+            vals['order_policy'] = vals.get('hotel_policy', 'manual')
+            vals.update({'room_lines':[]})
+            folio_id = super(hotel_folio, self).create(vals)
+            for line in (tmp_room_lines):
+                line[2].update({'folio_id':folio_id})
+            vals.update({'room_lines':tmp_room_lines})
+            folio_id.write(vals)
         else:
             folio_id = super(hotel_folio, self).create(vals)
         return folio_id
@@ -306,6 +351,7 @@ class hotel_folio(models.Model):
         '''
         @param self : object pointer
         '''
+        pos_order_obj = self.env['pos.order']
         order_ids = [folio.order_id.id for folio in self]
         sale_obj = self.env['sale.order'].browse(order_ids)
         invoice_id = sale_obj.action_invoice_create(grouped=False, states=['confirmed', 'done'])
@@ -313,8 +359,15 @@ class hotel_folio(models.Model):
             values = {
                 'invoiced': True,
                 'state': 'progress' if grouped else 'progress',
+                'hotel_invoice_id':invoice_id
             }
             line.write(values)
+            for line2 in line.folio_pos_order:
+                vals = {
+                        'invoice_id':invoice_id,
+                        }
+                line2.write(vals)
+                line2.action_invoice_state()
         return invoice_id
 
     @api.multi
@@ -346,6 +399,8 @@ class hotel_folio(models.Model):
             for invoice in sale.invoice_ids:
                 wf_service.trg_validate(self._uid, 'account.invoice', invoice.id, 'invoice_cancel', self._cr)
                 sale.write({'state':'cancel'})
+            for rec in sale.folio_pos_order:
+                    rec.write({'state':'cancel'})
         return rv
 
     @api.multi
@@ -596,6 +651,7 @@ class hotel_folio_line(models.Model):
         sale_line_obj = self.env['sale.order.line'].browse(line_id)
         return sale_line_obj.copy_data(default=default)
 
+
 class hotel_service_line(models.Model):
 
     @api.one
@@ -786,8 +842,7 @@ class CurrencyExchangeRate(models.Model):
     in_amount = fields.Float('Amount Taken', size=64 , default=1.0)
     out_curr = fields.Many2one('res.currency', string='Output Currency', track_visibility='always')
     out_amount = fields.Float('Subtotal', size=64)
-    so_number = fields.Many2one('hotel.folio', 'Sale Order Number')
-    folio_no = fields.Char(string='Folio Number')
+    folio_no = fields.Many2one('hotel.folio', 'Folio Number')
     guest_name = fields.Many2one('res.partner', string='Guest Name')
     room_number = fields.Char(string='Room Number')
     state = fields.Selection([('draft', 'Draft'), ('done', 'Done'), ('cancel', 'Cancel')], 'State', default='draft')
@@ -797,24 +852,22 @@ class CurrencyExchangeRate(models.Model):
     tax = fields.Selection([('2', '2%'), ('5', '5%'), ('10', '10%')], 'Service Tax', default='2')
     total = fields.Float('Amount Given')
 
-    @api.onchange('so_number')
+    @api.onchange('folio_no')
     def get_folio_no(self):
         '''
-        When you change so_number, based on that it will update 
+        When you change folio_no, based on that it will update 
         the guest_name ,hotel_id and room_number as well
         ---------------------------------------------------------
         @param self : object pointer
         '''
         for rec in self:
-#            self.guest_name = False
+            self.guest_name = False
             self.hotel_id = False
             self.room_number = False
-            self.folio_no = False
-            if rec.so_number and len(rec.so_number.room_lines) != 0:
-                self.guest_name = rec.so_number.partner_id.id
-                self.hotel_id = rec.so_number.warehouse_id.id
-                self.room_number = rec.so_number.room_lines[0].product_id.name
-                self.folio_no = rec.so_number.name
+            if rec.folio_no and len(rec.folio_no.room_lines) != 0:
+                self.guest_name = rec.folio_no.partner_id.id
+                self.hotel_id = rec.folio_no.warehouse_id.id
+                self.room_number = rec.folio_no.room_lines[0].product_id.name
 
     @api.multi
     def act_cur_done(self):
@@ -861,7 +914,7 @@ class CurrencyExchangeRate(models.Model):
             rate = urllib2.urlopen(url).read().rstrip()
             return Decimal(rate)
         except:
-            return Decimal('-1.00')
+            raise except_orm(_('Warning'), _('Please Check Your Network Connectivity.'))
 
     @api.onchange('input_curr', 'out_curr', 'in_amount')
     def get_currency(self):
@@ -892,5 +945,23 @@ class CurrencyExchangeRate(models.Model):
                 ser_tax = ((self.out_amount) * (float(self.tax))) / 100 
                 self.total = self.out_amount - ser_tax
 
+class account_invoice(models.Model):
 
-# # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+    _inherit = 'account.invoice'
+
+    @api.multi
+    def confirm_paid(self):
+        '''
+        This method change pos orders states to done when folio invoice
+        is in done.
+        ----------------------------------------------------------
+        @param self : object pointer
+        '''
+        pos_order_obj = self.env['pos.order']
+        res = super(account_invoice, self).confirm_paid()
+        pos_ids = pos_order_obj.search([('invoice_id', '=', self._ids)])
+        for pos_id in pos_ids:
+            pos_id.write({'state': 'done'})
+        return res
+
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
