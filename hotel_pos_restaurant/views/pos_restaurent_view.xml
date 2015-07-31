@@ -1,5 +1,6 @@
 <openerp> 
     <data>
+       <!-- pos order view Inherited -->
        <record id ="hotel_folio_pos_inh" model="ir.ui.view">
             <field name="name">hotel.folio.pos.inh</field>
             <field name="model">pos.order</field>

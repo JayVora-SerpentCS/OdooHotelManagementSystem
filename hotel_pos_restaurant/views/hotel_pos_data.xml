@@ -21,7 +21,7 @@
 			<field name="image" type="base64" file="hotel_pos_restaurant/static/img/food-image.jpg"/>
 		</record>
 
-        <!-- Resource: product.product -->
+        <!-- Punjabi -->
         <record id="pun1" model="product.product">
           <field name="available_in_pos">True</field>
           <field name="list_price">110.00</field>
@@ -34,7 +34,6 @@
           <field name="image" type="base64" file="hotel_pos_restaurant/static/img/paneer_tikka.png"/>
         </record>
 
-        <!-- Resource: product.product -->
         <record id="pun2" model="product.product">
           <field name="available_in_pos">True</field>
           <field name="list_price">15.00</field>
@@ -47,7 +46,6 @@
           <field name="image" type="base64" file="hotel_pos_restaurant/static/img/tandoori-roti.jpg"/>
         </record>
 
-        <!-- Resource: product.product -->
         <record id="pun3" model="product.product">
           <field name="list_price">150.00</field>
           <field name="name">Paneer Butter Masala</field>

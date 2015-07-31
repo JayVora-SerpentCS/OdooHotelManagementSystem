@@ -21,19 +21,19 @@
 ##############################################################################
 
 {
-    "name" : "Hotel POS Restaurant Management",
-    "version" : "0.10",
-    "author" : ["Serpent Consulting Services Pvt. Ltd.", "OpenERP SA" ],
-    "category" : "Generic Modules/Hotel Restaurant Management",
-    "description" : """
+    "name": "Hotel POS Restaurant Management",
+    "version": "0.10",
+    "author": ["Serpent Consulting Services Pvt. Ltd.", "OpenERP SA" ],
+    "category": "Generic Modules/Hotel Restaurant Management",
+    "description": """
     Module for Hotel/Restaurant management. You can manage:
      """,
-    "website" : ["http://www.serpentcs.com", "http://www.openerp.com"],
-    "depends" : ["pos_restaurant"],
+    "website": ["http://www.serpentcs.com", "http://www.openerp.com"],
+    "depends": ["pos_restaurant"],
     "demo": ["views/hotel_pos_data.xml"],
-    "data" : ["views/pos_restaurent_view.xml"],
-    "auto_install" : False,
-    "installable" : True
+    "data": ["views/pos_restaurent_view.xml"],
+    "auto_install": False,
+    "installable": True
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
