@@ -19,8 +19,9 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 ##############################################################################
-from openerp.exceptions import ValidationError
+from openerp.tools import ustr, DEFAULT_SERVER_DATE_FORMAT
 from openerp import models, fields, api, _, netsvc
+from openerp.exceptions import ValidationError
 import time
 
 class product_category(models.Model):
@@ -48,7 +49,7 @@ class hotel_housekeeping(models.Model):
     _name = "hotel.housekeeping"
     _description = "Reservation"
 
-    current_date = fields.Date("Today's Date", required=True, default=lambda *a: time.strftime('%Y-%m-%d')) 
+    current_date = fields.Date("Today's Date", required=True, default=lambda *a: time.strftime(DEFAULT_SERVER_DATE_FORMAT)) 
     clean_type = fields.Selection([('daily', 'Daily'), ('checkin', 'Check-In'), ('checkout', 'Check-Out')], 'Clean Type', required=True)
     room_no = fields.Many2one('hotel.room', 'Room No', required=True)
     activity_lines = fields.One2many('hotel.housekeeping.activities', 'a_list', 'Activities', help='Details of housekeeping activities.')

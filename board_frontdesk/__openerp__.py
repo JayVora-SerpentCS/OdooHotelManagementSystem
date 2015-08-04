@@ -25,6 +25,7 @@
     "category":"Board/Hotel FrontDesk",
     "depends":[
         "report_hotel_restaurant",
+        "hotel_pos_restaurant",
         "board"
         ],
     "data":[

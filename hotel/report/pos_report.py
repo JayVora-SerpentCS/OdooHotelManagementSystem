@@ -42,7 +42,7 @@ class folio_report1(report_sxw.rml_parse):
         res = folio_obj.browse(self.cr, self.uid, tids)
         folio_ids = []
         for rec in res:
-            if rec.folio_pos_order:
+            if rec.folio_pos_order_ids:
                 folio_ids.append(rec)
         return folio_ids
 
@@ -52,10 +52,9 @@ class folio_report1(report_sxw.rml_parse):
         res = folio_obj.browse(self.cr, self.uid, tids)
         posorder_ids = []
         for rec in res:
-            if rec.folio_pos_order:
-                posorder_ids.append(rec.folio_pos_order)
+            if rec.folio_pos_order_ids:
+                posorder_ids.append(rec.folio_pos_order_ids)
         return posorder_ids
-
 
     def gettotal(self, pos_order):
         amount = 0.0

@@ -20,8 +20,10 @@
 #
 ##############################################################################
 from openerp.exceptions import except_orm, ValidationError
+from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from openerp import models, fields, api, _, netsvc
 import time
+
 
 class product_category(models.Model):
 
@@ -29,11 +31,13 @@ class product_category(models.Model):
 
     ismenutype = fields.Boolean('Is Menu Type')
 
+
 class product_product(models.Model):
 
     _inherit = "product.product"
  
     ismenucard = fields.Boolean('Is Menucard')
+
 
 class hotel_menucard_type(models.Model):
 
@@ -41,6 +45,7 @@ class hotel_menucard_type(models.Model):
     _description = 'Amenities Type'
 
     menu_id = fields.Many2one('product.category', 'Category', required=True, delegate=True, ondelete='cascade')
+
 
 class hotel_menucard(models.Model):
 
@@ -50,6 +55,7 @@ class hotel_menucard(models.Model):
     product_id = fields.Many2one('product.product', 'Product', required=True, delegate=True, ondelete='cascade')
     image = fields.Binary("Image", help="This field holds the image used as image for the product, limited to 1024x1024px.")
 
+
 class hotel_restaurant_tables(models.Model):
 
     _name = "hotel.restaurant.tables"
@@ -57,6 +63,7 @@ class hotel_restaurant_tables(models.Model):
 
     name = fields.Char('Table Number', size=64, required=True)
     capacity = fields.Integer('Capacity')
+
 
 class hotel_restaurant_reservation(models.Model):
 
@@ -159,14 +166,28 @@ class hotel_restaurant_reservation(models.Model):
     _name = "hotel.restaurant.reservation"
     _description = "Includes Hotel Restaurant Reservation"
 
-    reservation_id = fields.Char('Reservation No', size=64, required=True, default=lambda obj: obj.env['ir.sequence'].get('hotel.restaurant.reservation'))
+    reservation_id = fields.Char('Reservation No', size=64, readonly=True)
     room_no = fields.Many2one('hotel.room', string='Room No', size=64)
-    start_date = fields.Datetime('Start Time', required=True,default=lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'))
+    start_date = fields.Datetime('Start Time', required=True,default=lambda *a: time.strftime(DEFAULT_SERVER_DATETIME_FORMAT))
     end_date = fields.Datetime('End Time', required=True)
     cname = fields.Many2one('res.partner', string='Customer Name', size=64, required=True)
     partner_address_id = fields.Many2one('res.partner', string='Address')
     tableno = fields.Many2many('hotel.restaurant.tables', relation='reservation_table', column1='reservation_table_id', column2='name', string='Table Number', help="Table reservation detail. ")
     state = fields.Selection([('draft', 'Draft'), ('confirm', 'Confirmed'), ('done', 'Done'), ('cancel', 'Cancelled'),('order', 'Order Created')], 'state', select=True, required=True, readonly=True, default=lambda * a: 'draft')
+
+    @api.model
+    def create(self, vals):
+        """
+        Overrides orm create method.
+        @param self: The object pointer
+        @param vals: dictionary of fields value.
+        """
+        if not vals:
+            vals = {}
+        if self._context is None:
+            self._context = {}
+        vals['reservation_id'] = self.env['ir.sequence'].get('hotel.restaurant.reservation')
+        return super(hotel_restaurant_reservation, self).create(vals)
 
     @api.constrains('start_date', 'end_date')
     def check_start_dates(self):
@@ -178,6 +199,7 @@ class hotel_restaurant_reservation(models.Model):
         '''
         if self.start_date >= self.end_date:
             raise ValidationError(_('Start Date Should be less than the End Date!'))
+
 
 class hotel_restaurant_kitchen_order_tickets(models.Model):
 
@@ -191,6 +213,7 @@ class hotel_restaurant_kitchen_order_tickets(models.Model):
     w_name = fields.Char('Waiter Name', size=64, readonly=True)
     tableno = fields.Many2many('hotel.restaurant.tables', 'temp_table3', 'table_no', 'name', 'Table Number' , size=64, help="Table reservation detail.")
     kot_list = fields.One2many('hotel.restaurant.order.list', 'kot_order_list', 'Order List' , help="Kitchen order list")
+
 
 class hotel_restaurant_order(models.Model):
 
@@ -251,8 +274,8 @@ class hotel_restaurant_order(models.Model):
 
     _rec_name = "order_no"
 
-    order_no = fields.Char('Order Number', size=64, required=True, default=lambda obj: obj.env['ir.sequence'].get('hotel.restaurant.order'))
-    o_date = fields.Datetime('Start Datetime', required=True,default=lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'))
+    order_no = fields.Char('Order Number', size=64, readonly=True)
+    o_date = fields.Datetime('Start Datetime', required=True,default=lambda *a: time.strftime(DEFAULT_SERVER_DATETIME_FORMAT))
     room_no = fields.Many2one('hotel.room', 'Room No')
     waiter_name = fields.Many2one('res.partner', 'Waiter Name')
     table_no = fields.Many2many('hotel.restaurant.tables', 'temp_table2', 'table_no', 'name', 'Table Number')
@@ -260,6 +283,21 @@ class hotel_restaurant_order(models.Model):
     tax = fields.Float('Tax (%) ')
     amount_subtotal = fields.Float(compute='_sub_total', method=True, string='Subtotal')
     amount_total = fields.Float(compute='_total', method=True, string='Total1')
+
+    @api.model
+    def create(self, vals):
+        """
+        Overrides orm create method.
+        @param self: The object pointer
+        @param vals: dictionary of fields value.
+        """
+        if not vals:
+            vals = {}
+        if self._context is None:
+            self._context = {}
+        vals['order_no'] = self.env['ir.sequence'].get('hotel.restaurant.order')
+        return super(hotel_restaurant_order, self).create(vals)
+
 
 class hotel_reservation_order(models.Model):
 
@@ -337,7 +375,7 @@ class hotel_reservation_order(models.Model):
             line_data = {
                 'orderno':order.order_number,
                 'resno':order.reservationno,
-                'kot_date': time.strftime('%Y-%m-%d %H:%M:%S'),
+                'kot_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                 'w_name':order.waitername.name,
                 'tableno':[(6, 0, table_ids)],
                 }
@@ -371,9 +409,9 @@ class hotel_reservation_order(models.Model):
 
     _rec_name = "order_number"
 
-    order_number = fields.Char('Order No', size=64, default=lambda obj: obj.env['ir.sequence'].get('hotel.reservation.order'))
+    order_number = fields.Char('Order No', size=64, readonly=True)
     reservationno = fields.Char('Reservation No', size=64)
-    date1 = fields.Datetime('Date', required=True,default=lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'))
+    date1 = fields.Datetime('Date', required=True,default=lambda *a: time.strftime(DEFAULT_SERVER_DATETIME_FORMAT))
     waitername = fields.Many2one('res.partner', 'Waiter Name')
     table_no = fields.Many2many('hotel.restaurant.tables', 'temp_table4', 'table_no', 'name', 'Table Number')
     order_list = fields.One2many('hotel.restaurant.order.list', 'o_l', 'Order List')
@@ -383,6 +421,21 @@ class hotel_reservation_order(models.Model):
     kitchen_id = fields.Integer('Kitchen id')
     rest_id = fields.Many2many('hotel.restaurant.order.list','reserv_id','kitchen_id','res_kit_ids',"Rest")
     state = fields.Selection([('draft', 'Draft'),('order', 'Order Created'),('done', 'Done')], 'State', select=True, required=True, readonly=True, default=lambda * a: 'draft')
+
+    @api.model
+    def create(self, vals):
+        """
+        Overrides orm create method.
+        @param self: The object pointer
+        @param vals: dictionary of fields value.
+        """
+        if not vals:
+            vals = {}
+        if self._context is None:
+            self._context = {}
+        vals['order_number'] = self.env['ir.sequence'].get('hotel.reservation.order')
+        return super(hotel_reservation_order, self).create(vals)
+
 
 class hotel_restaurant_order_list(models.Model):
 
@@ -418,4 +471,4 @@ class hotel_restaurant_order_list(models.Model):
     item_rate = fields.Float('Rate', size=64)
     price_subtotal = fields.Float(compute='_sub_total', method=True, string='Subtotal')
 
-# # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -65,7 +65,7 @@
         </record>
         <record id="hotel_room_type_3" model="hotel.room.type">
              <field name="parent_id" search="[('isroomtype','=',True), ('name', '=', 'All Rooms')]"/>
-             <field name="name">No Room</field>
+             <field name="name">Triple</field>
              <field name="isroomtype">1</field>
         </record>
 
@@ -88,14 +88,6 @@
 
     <!-- hotel_room -->
 
-        <record id="hotel_room_6" model="hotel.room">
-            <field name="name">No Room Available</field>
-            <field name="isroom">1</field>
-            <field name="available_in_pos">0</field>
-            <field name="categ_id" search="[('isroomtype','=',True), ('name', '=', 'No Room')]"/>
-            <field name="list_price">0.00</field>
-            <field name="capacity">0</field>
-        </record>
         <record id="hotel_room_0" model="hotel.room">
             <field name="name">Single-101</field>
             <field name="isroom">1</field>
@@ -144,13 +136,21 @@
             <field name="capacity">5</field>
             <field name="available_in_pos">0</field>
         </record>
-        <record id="hotel_room_61" model="hotel.room">
-            <field name="name">No Room Record</field>
+        <record id="hotel_room_6" model="hotel.room">
+            <field name="name">Triple-101</field>
             <field name="isroom">1</field>
-            <field name="categ_id" search="[('isroomtype','=',True), ('name', '=', 'No Room')]"/> 
-            <field name="list_price">0.00</field>
-            <field name="capacity">0</field>
             <field name="available_in_pos">0</field>
+            <field name="categ_id" search="[('isroomtype','=',True), ('name', '=', 'Triple')]"/>
+            <field name="list_price">300.00</field>
+            <field name="capacity">6</field>
+        </record>
+        <record id="hotel_room_61" model="hotel.room">
+            <field name="name">Triple-102</field>
+            <field name="isroom">1</field>
+            <field name="categ_id" search="[('isroomtype','=',True), ('name', '=', 'Triple')]"/> 
+            <field name="list_price">300.00</field>
+            <field name="capacity">6</field>
+            <field name="available_in_pos">6</field>
         </record>
 
             <!-- hotel_services --> 

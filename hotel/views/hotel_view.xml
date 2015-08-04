@@ -6,6 +6,21 @@
     <menuitem id="hotel_configuration_menu" name="Configuration" sequence="20" parent ="hotel_management_menu"/>
     <menuitem id="hotel_report_menu" name="Reports" sequence="6" parent="hotel_management_menu"/>
 
+
+        <record id="view_product_product_form_inherited" model="ir.ui.view">
+            <field name="name">view.product.product.form.inherited</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='active']" position="after">
+                    <field name="isroom"/>
+                </xpath>
+            </field>
+        </record>
+
+
+
+
 	<!-- ###############################################
 		 #############Company Configuration#############
    	     ###############################################
@@ -294,6 +309,9 @@
 			        <h2>
 			            <field name="status" />
 			        </h2>
+                    <h2>
+                        <field name="isroom" />
+                    </h2>
 				</div>
 				<notebook>
 						<page string="Information">
@@ -336,6 +354,27 @@
                             <separator string="Description" />
                             <field name="description" colspan="4" nolabel="1" />
                         </page>
+	                    <page string = "Folio Room Reservations">
+	                        <separator colspan='4' string="Folio Room Reservation Line" />
+	                        <field name="room_line_ids" colspan="4" nolabel='1' >
+	                            <form string=" Room line" >
+	                                <group colspan='4' col='4'>
+	                                    <field name="room_id"/>
+	                                    <field name="check_in"/>
+	                                    <field name="check_out"/>
+	                                    <field name="folio_id" />
+	                                    <field name="status"/>
+	                                </group>
+	                            </form>
+	                            <tree>
+	                                <field name="room_id"/>
+	                                <field name="check_in"/>
+	                                <field name="check_out"/>
+	                                <field name="folio_id" />
+	                                <field name="status"/>
+	                            </tree>
+	                        </field>
+	                    </page>
                 </notebook>
                 </sheet>
                 </form>
@@ -370,6 +409,7 @@
 					<field name="list_price" string="Room rate"/>
 					<field name="status"/>
 					<field name="capacity"/>
+					<field name="isroom" />
 				</tree>
 			</field>
 		</record>
@@ -635,11 +675,10 @@
                         </page>
                         <page string="Hotel Restaurant">
                             <separator string="Restaurant Orders Details" colspan="4"/>
-                            <field name="folio_pos_order" colspan="4" nolabel="1"> 
+                            <field name="folio_pos_order_ids" colspan="4" nolabel="1"> 
                                 <tree colors="blue:state == 'draft';gray:state in ('done','cancel');black:state not in('done','cancel')">
                                     <field name="date_order"/>
                                     <field name="name"/>
-                                    <field name="pos_reference"/>
                                     <field name="session_id"/>
                                     <field name="invoice_id"/>
                                     <field name="user_id"/>
