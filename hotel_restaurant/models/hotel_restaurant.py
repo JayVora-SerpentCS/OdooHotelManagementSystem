@@ -168,12 +168,12 @@ class hotel_restaurant_reservation(models.Model):
 
     reservation_id = fields.Char('Reservation No', size=64, readonly=True)
     room_no = fields.Many2one('hotel.room', string='Room No', size=64)
-    start_date = fields.Datetime('Start Time', required=True,default=lambda *a: time.strftime(DEFAULT_SERVER_DATETIME_FORMAT))
+    start_date = fields.Datetime('Start Time', required=True, default=lambda *a: time.strftime(DEFAULT_SERVER_DATETIME_FORMAT))
     end_date = fields.Datetime('End Time', required=True)
     cname = fields.Many2one('res.partner', string='Customer Name', size=64, required=True)
     partner_address_id = fields.Many2one('res.partner', string='Address')
     tableno = fields.Many2many('hotel.restaurant.tables', relation='reservation_table', column1='reservation_table_id', column2='name', string='Table Number', help="Table reservation detail. ")
-    state = fields.Selection([('draft', 'Draft'), ('confirm', 'Confirmed'), ('done', 'Done'), ('cancel', 'Cancelled'),('order', 'Order Created')], 'state', select=True, required=True, readonly=True, default=lambda * a: 'draft')
+    state = fields.Selection([('draft', 'Draft'), ('confirm', 'Confirmed'), ('done', 'Done'), ('cancel', 'Cancelled'), ('order', 'Order Created')], 'state', select=True, required=True, readonly=True, default=lambda * a: 'draft')
 
     @api.model
     def create(self, vals):
@@ -275,7 +275,7 @@ class hotel_restaurant_order(models.Model):
     _rec_name = "order_no"
 
     order_no = fields.Char('Order Number', size=64, readonly=True)
-    o_date = fields.Datetime('Start Datetime', required=True,default=lambda *a: time.strftime(DEFAULT_SERVER_DATETIME_FORMAT))
+    o_date = fields.Datetime('Start Datetime', required=True, default=lambda *a: time.strftime(DEFAULT_SERVER_DATETIME_FORMAT))
     room_no = fields.Many2one('hotel.room', 'Room No')
     waiter_name = fields.Many2one('res.partner', 'Waiter Name')
     table_no = fields.Many2many('hotel.restaurant.tables', 'temp_table2', 'table_no', 'name', 'Table Number')
@@ -389,7 +389,7 @@ class hotel_reservation_order(models.Model):
                     'item_rate':order_line.item_rate
                 }
                 if order_line.id not in order.rest_id.ids:
-                    self.rest_id = [(4,order_line.id)]
+                    self.rest_id = [(4, order_line.id)]
                     rest_order_list_obj.create(o_line)
         return True
 
@@ -411,7 +411,7 @@ class hotel_reservation_order(models.Model):
 
     order_number = fields.Char('Order No', size=64, readonly=True)
     reservationno = fields.Char('Reservation No', size=64)
-    date1 = fields.Datetime('Date', required=True,default=lambda *a: time.strftime(DEFAULT_SERVER_DATETIME_FORMAT))
+    date1 = fields.Datetime('Date', required=True, default=lambda *a: time.strftime(DEFAULT_SERVER_DATETIME_FORMAT))
     waitername = fields.Many2one('res.partner', 'Waiter Name')
     table_no = fields.Many2many('hotel.restaurant.tables', 'temp_table4', 'table_no', 'name', 'Table Number')
     order_list = fields.One2many('hotel.restaurant.order.list', 'o_l', 'Order List')
@@ -419,8 +419,8 @@ class hotel_reservation_order(models.Model):
     amount_subtotal = fields.Float(compute='_sub_total', method=True, string='Subtotal')
     amount_total = fields.Float(compute='_total', method=True, string='Total')
     kitchen_id = fields.Integer('Kitchen id')
-    rest_id = fields.Many2many('hotel.restaurant.order.list','reserv_id','kitchen_id','res_kit_ids',"Rest")
-    state = fields.Selection([('draft', 'Draft'),('order', 'Order Created'),('done', 'Done')], 'State', select=True, required=True, readonly=True, default=lambda * a: 'draft')
+    rest_id = fields.Many2many('hotel.restaurant.order.list', 'reserv_id', 'kitchen_id', 'res_kit_ids', "Rest")
+    state = fields.Selection([('draft', 'Draft'), ('order', 'Order Created'), ('done', 'Done')], 'State', select=True, required=True, readonly=True, default=lambda * a: 'draft')
 
     @api.model
     def create(self, vals):

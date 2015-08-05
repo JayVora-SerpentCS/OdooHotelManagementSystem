@@ -20,7 +20,7 @@
 #
 ################################################################################
 
-from openerp import models,fields,api
+from openerp import models, fields, api
 
 class folio_report_wizard(models.TransientModel):
     _name = 'folio.report.wizard'
@@ -34,7 +34,7 @@ class folio_report_wizard(models.TransientModel):
         data = {
             'ids': self.ids,
             'model': 'hotel.folio',
-            'form': self.read(['date_start','date_end'])[0]
+            'form': self.read(['date_start', 'date_end'])[0]
         }
         return self.env['report'].get_action(self, 'hotel.report_hotel_folio', data=data)
 
@@ -45,14 +45,14 @@ class order_report_wizard(models.TransientModel):
     
     date_start = fields.Datetime('Start Date')
     date_end = fields.Datetime('End Date')
-    check =  fields.Boolean('With Details')
+    check = fields.Boolean('With Details')
 
     @api.multi 
     def print_pos_report(self):
         data = {
             'ids': self.ids,
             'model': 'hotel.folio',
-            'form': self.read(['date_start','date_end','check'])[0]
+            'form': self.read(['date_start', 'date_end', 'check'])[0]
         }
         return self.env['report'].get_action(self, 'hotel.report_hotel_folio_pos', data=data)
 

@@ -20,7 +20,7 @@
 #
 ##############################################################################
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from openerp.exceptions import except_orm,ValidationError
+from openerp.exceptions import except_orm, ValidationError
 from dateutil.relativedelta import relativedelta
 from openerp import models, fields, api, _
 import datetime
@@ -39,7 +39,7 @@ class hotel_reservation(models.Model):
     _rec_name = "reservation_no"
     _description = "Reservation"
     _order = 'reservation_no desc'
-    _inherit = ['mail.thread','ir.needaction_mixin']
+    _inherit = ['mail.thread', 'ir.needaction_mixin']
 
     reservation_no = fields.Char('Reservation No', size=64, readonly=True)
     date_order = fields.Datetime('Date Ordered', required=True, readonly=True, states={'draft':[('readonly', False)]}, default=lambda *a: time.strftime(DEFAULT_SERVER_DATETIME_FORMAT))
@@ -53,12 +53,12 @@ class hotel_reservation(models.Model):
     checkout = fields.Datetime('Expected-Date-Departure', required=True, readonly=True, states={'draft':[('readonly', False)]})
     adults = fields.Integer('Adults', size=64, readonly=True, states={'draft':[('readonly', False)]}, help='List of adults there in guest list. ')
     children = fields.Integer('Children', size=64, readonly=True, states={'draft':[('readonly', False)]}, help='Number of children there in guest list. ')
-    reservation_line = fields.One2many('hotel_reservation.line', 'line_id', 'Reservation Line', help='Hotel room reservation details. ')
+    reservation_line = fields.One2many('hotel_reservation.line', 'line_id', 'Reservation Line', help='Hotel room reservation details.')
     state = fields.Selection([('draft', 'Draft'), ('confirm', 'Confirm'), ('cancel', 'Cancel'), ('done', 'Done')], 'State', readonly=True, default=lambda *a: 'draft')
     folio_id = fields.Many2many('hotel.folio', 'hotel_folio_reservation_rel', 'order_id', 'invoice_id', string='Folio')
     dummy = fields.Datetime('Dummy')
 
-    @api.constrains('reservation_line','adults','children')
+    @api.constrains('reservation_line', 'adults', 'children')
     def check_reservation_rooms(self):
         '''
         This method is used to validate the reservation_line.
@@ -175,11 +175,11 @@ class hotel_reservation(models.Model):
                         vals = {
                             'room_id': room_id.id,
                             'check_in': reservation.checkin,
-                            'check_out': reservation.checkout,  
+                            'check_out': reservation.checkout,
                             'state': 'assigned',
                             'reservation_id': reservation.id,
                             }
-                        room_id.write({'isroom':False,'status':'occupied'})
+                        room_id.write({'isroom':False, 'status':'occupied'})
                         reservation_line_obj.create(vals)
         return True
 
@@ -231,12 +231,12 @@ class hotel_reservation(models.Model):
         @return: send a mail
         """
         now_str = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-        now_date = datetime.datetime.strptime(now_str,DEFAULT_SERVER_DATETIME_FORMAT)
+        now_date = datetime.datetime.strptime(now_str, DEFAULT_SERVER_DATETIME_FORMAT)
         ir_model_data = self.env['ir.model.data']
         template_id = ir_model_data.get_object_reference('hotel_reservation', 'email_template_reservation_reminder_24hrs')[1]
         template_rec = self.env['email.template'].browse(template_id)
         for travel_rec in self.search([]):
-            checkin_date = datetime.datetime.strptime(travel_rec.checkin,DEFAULT_SERVER_DATETIME_FORMAT)
+            checkin_date = datetime.datetime.strptime(travel_rec.checkin, DEFAULT_SERVER_DATETIME_FORMAT)
             difference = relativedelta(now_date, checkin_date)
             if difference.days == -1 and travel_rec.partner_id.email and travel_rec.state == 'confirm':
                 template_rec.send_mail(travel_rec.id, force_send=True)
@@ -285,7 +285,7 @@ class hotel_reservation(models.Model):
                         'product_uom_qty': ((datetime.datetime(*time.strptime(reservation['checkout'], DEFAULT_SERVER_DATETIME_FORMAT)[:5]) - datetime.datetime(*time.strptime(reservation['checkin'], DEFAULT_SERVER_DATETIME_FORMAT)[:5])).days) + 1 
                     }))
                     res_obj = room_obj.browse([r.id]) 
-                    res_obj.write({'status': 'occupied','isroom':False})
+                    res_obj.write({'status': 'occupied', 'isroom':False})
             folio_vals.update({'room_lines': folio_lines})
             folio = hotel_folio_obj.create(folio_vals)
             self._cr.execute('insert into hotel_folio_reservation_rel (order_id, invoice_id) values (%s,%s)', (reservation.id, folio.id))
@@ -355,7 +355,7 @@ class hotel_reservation_line(models.Model):
         @param self : object pointer
         '''
         hotel_room_obj = self.env['hotel.room']
-        hotel_room_ids = hotel_room_obj.search([('categ_id', '=', self.categ_id.id),('isroom','=',True)])
+        hotel_room_ids = hotel_room_obj.search([('categ_id', '=', self.categ_id.id), ('isroom', '=', True)])
         assigned = False
         room_ids = []
         if not self.line_id.checkin:
@@ -380,7 +380,7 @@ class hotel_reservation_line(models.Model):
         hotel_room_reservation_line_obj = self.env['hotel.room.reservation.line']
         for reserv_rec in self:
             for rec in reserv_rec.reserve:
-                myobj = hotel_room_reservation_line_obj.search([('room_id','=',rec.id),('reservation_id','=',reserv_rec.line_id.id)])
+                myobj = hotel_room_reservation_line_obj.search([('room_id', '=', rec.id), ('reservation_id', '=', reserv_rec.line_id.id)])
                 if myobj.ids:
                     rec.write({'isroom':True, 'status':'available'})
                     myobj.unlink()
@@ -397,7 +397,7 @@ class hotel_room_reservation_line(models.Model):
     check_out = fields.Datetime('Check Out Date', required=True)
     state = fields.Selection([('assigned', 'Assigned'), ('unassigned', 'Unassigned')], 'Room Status')
     reservation_id = fields.Many2one('hotel.reservation', string='Reservation')
-    status = fields.Selection(string='state',related='reservation_id.state')
+    status = fields.Selection(string='state', related='reservation_id.state')
 
 hotel_room_reservation_line()
 
@@ -427,12 +427,12 @@ class hotel_room(models.Model):
             reservation_line_ids = reservation_line_obj.search([('id', 'in', reserv_line_ids), ('check_in', '<=', curr_date), ('check_out', '>=', curr_date)])
             rooms_ids = [room_line.ids for room_line in room.room_line_ids]
             room_line_ids = folio_room_line_obj.search([('id', 'in', rooms_ids), ('check_in', '<=', curr_date), ('check_out', '>=', curr_date)])
-            status = {'isroom':True,'color':5}
+            status = {'isroom':True, 'color':5}
             if reservation_line_ids.ids:
-                status = {'isroom':False,'color':2}
+                status = {'isroom':False, 'color':2}
             room.write(status)
             if room_line_ids.ids:
-                status = {'isroom':False,'color':2}
+                status = {'isroom':False, 'color':2}
             room.write(status)
             if reservation_line_ids.ids and room_line_ids.ids:
                 raise except_orm(_('Wrong Entry'), _('Please Check Rooms Status for %s.' % (room.name)))

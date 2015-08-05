@@ -40,7 +40,7 @@ class activity_report(report_sxw.rml_parse):
         activity_detail = []
         house_keep_act_obj = self.pool.get('hotel.housekeeping.activities')
         if room_data:
-            activiti_line_ids = house_keep_act_obj.search(self.cr, self.uid, [('clean_start_time', '>=', date_start), ('clean_end_time', '<=', date_end)]) #('room_id', '=', room_data[0]), 
+            activiti_line_ids = house_keep_act_obj.search(self.cr, self.uid, [('clean_start_time', '>=', date_start), ('clean_end_time', '<=', date_end)])  # ('room_id', '=', room_data[0]), 
             
             for activity in house_keep_act_obj.browse(self.cr, self.uid, activiti_line_ids):
                 act_val = {}
@@ -63,6 +63,6 @@ class report_lunchorder(models.AbstractModel):
     _template = 'hotel_housekeeping.report_housekeeping'
     _wrapped_report_class = activity_report
     
-#report_sxw.report_sxw('report.activity.detail', 'hotel.housekeeping', 'addons/hotel_housekeeping/report/activity_detail.rml', parser=activity_report)
+# report_sxw.report_sxw('report.activity.detail', 'hotel.housekeeping', 'addons/hotel_housekeeping/report/activity_detail.rml', parser=activity_report)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:    

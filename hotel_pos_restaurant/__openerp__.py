@@ -31,7 +31,8 @@
     "website": ["http://www.serpentcs.com", "http://www.openerp.com"],
     "depends": ["pos_restaurant"],
     "demo": ["views/hotel_pos_data.xml"],
-    "data": ["views/pos_restaurent_view.xml"],
+    "data": ["security/ir.model.access.csv",
+             "views/pos_restaurent_view.xml"],
     "auto_install": False,
     "installable": True
 }

@@ -29,7 +29,7 @@ class pos_order(models.Model):
 
     _inherit = "pos.order"
 
-    folio_id = fields.Many2one('hotel.folio','Folio Number')
+    folio_id = fields.Many2one('hotel.folio', 'Folio Number')
     room_no = fields.Char('Room Number')
 
 
@@ -72,8 +72,8 @@ class pos_order(models.Model):
                                   'price_subtotal':order1.price_subtotal,
                                   }
                         sale_order_line_rec = sale_order_line_obj.create(values)
-                        hotel_service_line_obj.create({'folio_id':order_obj.folio_id.id,'service_line_id':sale_order_line_rec.id})
+                        hotel_service_line_obj.create({'folio_id':order_obj.folio_id.id, 'service_line_id':sale_order_line_rec.id})
                         hotel_folio_rec = hotel_folio_obj.browse(order_obj.folio_id.id)
-                        hotel_folio_rec.write({'folio_pos_order_ids': [(4,order_obj.id)]})
+                        hotel_folio_rec.write({'folio_pos_order_ids': [(4, order_obj.id)]})
         return super(pos_order, self).action_paid()
 

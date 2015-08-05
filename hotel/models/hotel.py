@@ -159,7 +159,6 @@ class hotel_folio(models.Model):
 
     @api.multi
     def name_get(self):
-        """Overrides orm name_get method"""
         res = []
         disp = ''
         for rec in self:
@@ -170,7 +169,6 @@ class hotel_folio(models.Model):
 
     @api.model
     def name_search(self, name='', args=[], operator='ilike', limit=100):
-           """Overrides orm name_search method"""
            args += ([('name', operator, name)])
            mids = self.search(args, limit=100)
            return mids.name_get()
@@ -215,7 +213,7 @@ class hotel_folio(models.Model):
     _order = 'id'
     _inherit = ['ir.needaction_mixin']
 
-    name = fields.Char('Folio Number',readonly=True)
+    name = fields.Char('Folio Number', readonly=True)
     order_id = fields.Many2one('sale.order', 'Order', delegate=True, required=True, ondelete='cascade')
     checkin_date = fields.Datetime('Check In', required=True, readonly=True, states={'draft':[('readonly', False)]})
     checkout_date = fields.Datetime('Check Out', required=True, readonly=True, states={'draft':[('readonly', False)]})
@@ -283,8 +281,8 @@ class hotel_folio(models.Model):
     @api.onchange('checkout_date', 'checkin_date')
     def onchange_dates(self):
         '''
-        This mathod gives the duration between checkin and checkout if customer will leave only for some
-        hour it would be considers as a whole day. If customer will checkin checkout for more or equal
+        This mathod gives the duration between check in and checkout if customer will leave only for some
+        hour it would be considers as a whole day. If customer will check in checkout for more or equal
         hours , which configured in company as additional hours than it would be consider as full days
         ---------------------------------------------------------------------------------------------
         @param self : object pointer
