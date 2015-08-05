@@ -409,7 +409,6 @@
 					<field name="list_price" string="Room rate"/>
 					<field name="status"/>
 					<field name="capacity"/>
-					<field name="isroom" />
 				</tree>
 			</field>
 		</record>

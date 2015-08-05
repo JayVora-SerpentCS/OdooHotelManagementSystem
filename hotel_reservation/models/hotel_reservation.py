@@ -397,7 +397,7 @@ class hotel_room_reservation_line(models.Model):
     check_out = fields.Datetime('Check Out Date', required=True)
     state = fields.Selection([('assigned', 'Assigned'), ('unassigned', 'Unassigned')], 'Room Status')
     reservation_id = fields.Many2one('hotel.reservation', string='Reservation')
-    status  = fields.Selection(string='state',related='reservation_id.state')
+    status = fields.Selection(string='state',related='reservation_id.state')
 
 hotel_room_reservation_line()
 
