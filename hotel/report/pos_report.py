@@ -1,8 +1,9 @@
-# -*- coding: utf-8 -*-
-##############################################################################
+# -*- encoding: utf-8 -*-
+#############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd. (<http://www.serpentcs.com>)
+#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
+#    (<http://www.serpentcs.com>)
 #    Copyright (C) 2004 OpenERP SA (<http://www.openerp.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -18,7 +19,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
-##############################################################################
+#############################################################################
 
 import time
 from openerp import models
@@ -33,12 +34,14 @@ class folio_report1(report_sxw.rml_parse):
             'gettotal': self.gettotal,
             'getTotal':self.getTotal,
             'get_pos': self.get_pos,
-        })
+                        })
         self.temp = 0.0
 
     def get_data(self, date_start, date_end):
         folio_obj = self.pool.get('hotel.folio')
-        tids = folio_obj.search(self.cr, self.uid, [('checkin_date', '>=', date_start), ('checkout_date', '<=', date_end)])
+        tids = folio_obj.search(self.cr, self.uid,
+                                [('checkin_date', '>=', date_start),
+                                 ('checkout_date', '<=', date_end)])
         res = folio_obj.browse(self.cr, self.uid, tids)
         folio_ids = []
         for rec in res:
@@ -48,7 +51,9 @@ class folio_report1(report_sxw.rml_parse):
 
     def get_pos(self, date_start, date_end):
         folio_obj = self.pool.get('hotel.folio')
-        tids = folio_obj.search(self.cr, self.uid, [('checkin_date', '>=', date_start), ('checkout_date', '<=', date_end)])
+        tids = folio_obj.search(self.cr, self.uid,
+                                [('checkin_date', '>=', date_start),
+                                 ('checkout_date', '<=', date_end)])
         res = folio_obj.browse(self.cr, self.uid, tids)
         posorder_ids = []
         for rec in res:
@@ -71,6 +76,5 @@ class report_lunchorder1(models.AbstractModel):
     _inherit = 'report.abstract_report'
     _template = 'hotel.report_hotel_folio_pos'
     _wrapped_report_class = folio_report1
-
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:                 

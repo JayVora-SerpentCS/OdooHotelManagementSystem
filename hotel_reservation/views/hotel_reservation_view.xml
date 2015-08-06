@@ -165,7 +165,7 @@
                 <xpath expr="//page[@string='Information']" position="after">
                     <page string = "Room Reservation">
                         <separator colspan='4' string="Room Reservation Line" />
-                        <field name="room_reservation_line_ids" colspan="4" nolabel='1' >
+                        <field name="room_reservation_line_ids" colspan="4" nolabel='1' string="Room Reservation Line">
                             <form string=" Room line" >
                                 <group colspan='4' col='4'>
                                     <field name="room_id"/>

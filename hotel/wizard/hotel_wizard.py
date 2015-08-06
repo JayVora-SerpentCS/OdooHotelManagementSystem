@@ -1,8 +1,9 @@
 # -*- encoding: utf-8 -*-
-##############################################################################
+#############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd. (<http://www.serpentcs.com>)
+#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
+#    (<http://www.serpentcs.com>)
 #    Copyright (C) 2004 OpenERP SA (<http://www.openerp.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -18,14 +19,14 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
-################################################################################
+#############################################################################
 
 from openerp import models, fields, api
 
 class folio_report_wizard(models.TransientModel):
     _name = 'folio.report.wizard'
     _rec_name = 'date_start'
-    
+
     date_start = fields.Datetime('Start Date')
     date_end = fields.Datetime('End Date')
 
@@ -36,7 +37,8 @@ class folio_report_wizard(models.TransientModel):
             'model': 'hotel.folio',
             'form': self.read(['date_start', 'date_end'])[0]
         }
-        return self.env['report'].get_action(self, 'hotel.report_hotel_folio', data=data)
+        return self.env['report'].get_action(self, 'hotel.report_hotel_folio',
+                                             data=data)
 
 
 class order_report_wizard(models.TransientModel):
@@ -54,9 +56,8 @@ class order_report_wizard(models.TransientModel):
             'model': 'hotel.folio',
             'form': self.read(['date_start', 'date_end', 'check'])[0]
         }
-        return self.env['report'].get_action(self, 'hotel.report_hotel_folio_pos', data=data)
-
+        return self.env['report'].get_action(self,
+                                             'hotel.report_hotel_folio_pos',
+                                             data=data)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
-
-
