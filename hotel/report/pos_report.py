@@ -30,7 +30,7 @@ class folio_report1(report_sxw.rml_parse):
         super(folio_report1, self).__init__(cr, uid, name, context)
         self.localcontext.update({
             'time': time,
-            'get_data' : self.get_data,
+            'get_data': self.get_data,
             'gettotal': self.gettotal,
             'getTotal':self.getTotal,
             'get_pos': self.get_pos,

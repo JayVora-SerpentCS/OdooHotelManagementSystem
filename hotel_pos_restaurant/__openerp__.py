@@ -24,7 +24,7 @@
 {
     "name": "Hotel POS Restaurant Management",
     "version": "0.10",
-    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA" ,
+    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
     "category": "Generic Modules/Hotel Restaurant Management",
     "description": """
     Module for Hotel/Restaurant management. You can manage:

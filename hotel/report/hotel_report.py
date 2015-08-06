@@ -31,7 +31,7 @@ class folio_report(report_sxw.rml_parse):
         self.localcontext.update({
             'time': time,
             'get_data': self.get_data,
-            'get_Total' : self.getTotal,
+            'get_Total': self.getTotal,
             'get_total': self.gettotal,
                                 })
         self.temp = 0.0

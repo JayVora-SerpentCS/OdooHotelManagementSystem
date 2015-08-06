@@ -22,10 +22,10 @@
 #############################################################################
 
 {
-    "name" : "Hotel Reservation Management",
-    "version" : "0.07",
+    "name": "Hotel Reservation Management",
+    "version": "0.07",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
-    "category" : "Generic Modules/Hotel Reservation",
+    "category": "Generic Modules/Hotel Reservation",
     "description": """
     Module for Hotel/Resort/Property management. You can manage:
     * Guest Reservation
@@ -33,11 +33,11 @@
       Different reports are also provided, mainly for hotel statistics.
     """,
     "website": "http://www.serpentcs.com",
-    "depends" : ["hotel", "stock", "hotel_report_layout",'mail','email_template',],
-    "demo" : [
+    "depends": ["hotel", "stock", "hotel_report_layout",'mail','email_template',],
+    "demo": [
         "views/hotel_reservation_data.xml",
     ],
-    "data" : [
+    "data": [
         "security/ir.model.access.csv",
         "wizard/hotel_reservation_wizard.xml",
         "report/hotel_reservation_report.xml",

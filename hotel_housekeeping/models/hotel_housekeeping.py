@@ -89,7 +89,7 @@ as Bad, Good or Ok. ")
         This method is used to change the state 
         to dirty of the hotel housekeeping
         ---------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         """
         self.write({'state': 'dirty'})
         wf_service = netsvc.LocalService('workflow')
@@ -103,7 +103,7 @@ as Bad, Good or Ok. ")
         This method is used to change the state 
         to cancel of the hotel housekeeping
         ---------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         """
         self.write({'state':'cancel'})
         return True
@@ -114,7 +114,7 @@ as Bad, Good or Ok. ")
         This method is used to change the state 
         to done of the hotel housekeeping
         ---------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         """
         self.write({'state':'done'})
         return True
@@ -125,7 +125,7 @@ as Bad, Good or Ok. ")
         This method is used to change the state 
         to inspect of the hotel housekeeping
         ---------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         """
         self.write({'state':'inspect'})
         return True
@@ -136,7 +136,7 @@ as Bad, Good or Ok. ")
         This method is used to change the state 
         to clean of the hotel housekeeping
         ---------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         """
         self.write({'state':'clean'})
         return True
@@ -168,8 +168,8 @@ activity results as Clean.')
         This method is used to validate the clean_start_time and
         clean_end_time.
         ---------------------------------------------------------
-        @param self : object pointer
-        @return : raise warning depending on the validation
+        @param self: object pointer
+        @return: raise warning depending on the validation
         '''
         if self.clean_start_time >= self.clean_end_time:
             raise ValidationError(_('Start Date Should be \

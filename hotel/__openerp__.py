@@ -22,10 +22,10 @@
 #############################################################################
 
 {
-    "name" : "Hotel Management",
-    "version" : "0.10",
+    "name": "Hotel Management",
+    "version": "0.10",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA" ,
-    "category" : "Generic Modules/Hotel Management",
+    "category": "Generic Modules/Hotel Management",
     "description": """
     Module for Hotel/Resort/Property management. You can manage:
     * Configure Property
@@ -37,7 +37,7 @@
     Different reports are also provided, mainly for hotel statistics.
     """,
     "website": "http://www.serpentcs.com",
-    "depends" : ["sale_stock", "hotel_report_layout"],
+    "depends": ["sale_stock", "hotel_report_layout"],
     "data": [
         "security/hotel_security.xml",
         "security/ir.model.access.csv",

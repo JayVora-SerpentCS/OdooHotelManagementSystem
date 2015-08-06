@@ -127,7 +127,7 @@ class hotel_room(models.Model):
         '''
         Based on isroom, status will be updated.
         ----------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         '''
         if self.isroom == False:
             self.status = 'occupied'
@@ -154,7 +154,7 @@ class hotel_room(models.Model):
         This method is used to change the state 
         to occupied of the hotel room.
         ---------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         """
         return self.write({'isroom': False, 'color':2})
 
@@ -164,7 +164,7 @@ class hotel_room(models.Model):
         This method is used to change the state 
         to available of the hotel room.
         ---------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         """
         return self.write({'isroom': True, 'color':5})
 
@@ -191,22 +191,22 @@ class hotel_folio(models.Model):
     def _needaction_count(self, domain=None):
         """
          Show a count of draft state folio on the menu badge.
-         @param self : object pointer
+         @param self: object pointer
         """
         return self.search_count([('state', '=', 'draft')])
 
     @api.multi
     def copy(self, default=None):
         '''
-        @param self : object pointer
-        @param default : dict of default values to be set
+        @param self: object pointer
+        @param default: dict of default values to be set
         '''
         return self.env['sale.order'].copy(default=default)
 
     @api.multi 
     def _invoiced(self, name, arg):
         '''
-        @param self : object pointer
+        @param self: object pointer
         @param name: Names of fields.
         @param arg: User defined arguments
         '''
@@ -215,7 +215,7 @@ class hotel_folio(models.Model):
     @api.multi
     def _invoiced_search(self, obj, name, args):
         '''
-        @param self : object pointer
+        @param self: object pointer
         @param name: Names of fields.
         @param arg: User defined arguments
         '''
@@ -267,7 +267,7 @@ count from the check-in and check-out date. ")
         '''
          when Money Exchange button is clicked then this method is called.
         -------------------------------------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         '''
         cr, uid, context = self.env.args
         context = dict(context)
@@ -298,8 +298,8 @@ count from the check-in and check-out date. ")
         '''
         This method is used to validate the room_lines.
         ------------------------------------------------
-        @param self : object pointer
-        @return : raise warning depending on the validation
+        @param self: object pointer
+        @return: raise warning depending on the validation
         '''
         folio_rooms = []
         for room in self[0].room_lines:
@@ -312,8 +312,8 @@ count from the check-in and check-out date. ")
         '''
         This method is used to validate the checkin_date and checkout_date.
         -------------------------------------------------------------------
-        @param self : object pointer
-        @return : raise warning depending on the validation
+        @param self: object pointer
+        @return: raise warning depending on the validation
         '''
         if self.checkin_date >= self.checkout_date:
                 raise ValidationError(_('Check in Date Should be \
@@ -332,8 +332,8 @@ count from the check-in and check-out date. ")
         hours, which configured in company as additional hours than it would
         be consider as full days
         --------------------------------------------------------------------
-        @param self : object pointer
-        @return : Duration and checkout_date
+        @param self: object pointer
+        @return: Duration and checkout_date
         '''
         company_obj = self.env['res.company']
         reservation_line_obj = self.env['hotel.room.reservation.line']
@@ -467,7 +467,7 @@ count from the check-in and check-out date. ")
         When you change warehouse it will update the warehouse of
         the hotel folio as well
         ----------------------------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         '''
         for folio in self:
             order = folio.order_id
@@ -480,7 +480,7 @@ count from the check-in and check-out date. ")
         When you change partner_id it will update the partner_invoice_id,
         partner_shipping_id and pricelist_id of the hotel folio as well
         ---------------------------------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         '''
         if self.partner_id:
             partner_rec = self.env['res.partner'].browse(self.partner_id.id)
@@ -498,7 +498,7 @@ count from the check-in and check-out date. ")
     @api.multi
     def button_dummy(self):
         '''
-        @param self : object pointer
+        @param self: object pointer
         '''
         for folio in self:
             order = folio.order_id
@@ -509,7 +509,7 @@ count from the check-in and check-out date. ")
     def action_invoice_create(self, grouped=False,
                               states=['confirmed', 'done']):
         '''
-        @param self : object pointer
+        @param self: object pointer
         '''
         pos_order_obj = self.env['pos.order']
         order_ids = [folio.order_id.id for folio in self]
@@ -541,7 +541,7 @@ count from the check-in and check-out date. ")
     @api.multi
     def action_invoice_cancel(self):
         '''
-        @param self : object pointer
+        @param self: object pointer
         '''
         order_ids = [folio.order_id.id for folio in self]
         sale_obj = self.env['sale.order'].browse(order_ids)
@@ -555,7 +555,7 @@ count from the check-in and check-out date. ")
     @api.multi
     def action_cancel(self):
         '''
-        @param self : object pointer
+        @param self: object pointer
         '''
         order_ids = [folio.order_id.id for folio in self]
         sale_obj = self.env['sale.order'].browse(order_ids)
@@ -577,7 +577,7 @@ count from the check-in and check-out date. ")
     @api.multi
     def action_wait(self):
         '''
-        @param self : object pointer
+        @param self: object pointer
         '''
         sale_order_obj = self.env['sale.order']
         res = False
@@ -593,8 +593,8 @@ count from the check-in and check-out date. ")
     @api.multi
     def test_state(self, mode):
         '''
-        @param self : object pointer
-        @param mode : state of workflow
+        @param self: object pointer
+        @param mode: state of workflow
         '''
         write_done_ids = []
         write_cancel_ids = []
@@ -608,7 +608,7 @@ count from the check-in and check-out date. ")
     @api.multi
     def action_ship_create(self):
         '''
-        @param self : object pointer
+        @param self: object pointer
         '''
         for folio in self:
             order = folio.order_id
@@ -618,7 +618,7 @@ count from the check-in and check-out date. ")
     @api.multi
     def action_ship_end(self):
         '''
-        @param self : object pointer
+        @param self: object pointer
         '''
         order_ids = [folio.order_id.id for folio in self]
         for order in self:
@@ -627,7 +627,7 @@ count from the check-in and check-out date. ")
     @api.multi
     def has_stockable_products(self):
         '''
-        @param self : object pointer
+        @param self: object pointer
         '''
         for folio in self:
             order = folio.order_id
@@ -637,7 +637,7 @@ count from the check-in and check-out date. ")
     @api.multi
     def action_cancel_draft(self):
         '''
-        @param self : object pointer
+        @param self: object pointer
         '''
         if not len(self._ids):
             return False
@@ -667,15 +667,15 @@ class hotel_folio_line(models.Model):
     @api.one
     def copy(self, default=None):
         '''
-        @param self : object pointer
-        @param default : dict of default values to be set
+        @param self: object pointer
+        @param default: dict of default values to be set
         '''
         return self.env['sale.order.line'].copy(default=default)
 
     @api.multi
     def _amount_line(self, field_name, arg):
         '''
-        @param self : object pointer
+        @param self: object pointer
         @param field_name: Names of fields.
         @param arg: User defined arguments
         '''
@@ -684,7 +684,7 @@ class hotel_folio_line(models.Model):
     @api.multi
     def _number_packages(self, field_name, arg):
         '''
-        @param self : object pointer
+        @param self: object pointer
         @param field_name: Names of fields.
         @param arg: User defined arguments
         '''
@@ -759,7 +759,7 @@ class hotel_folio_line(models.Model):
     @api.multi
     def uos_change(self, product_uos, product_uos_qty=0, product_id=None):
         '''
-        @param self : object pointer
+        @param self: object pointer
         '''
         for folio in self:
             line = folio.order_line_id
@@ -772,7 +772,7 @@ class hotel_folio_line(models.Model):
             uom=False, qty_uos=0, uos=False, name='', partner_id=False,
             lang=False, update_tax=True, date_order=False):
         '''
-        @param self : object pointer
+        @param self: object pointer
         '''
         line_ids = [folio.order_line_id.id for folio in self]
         if product:
@@ -787,7 +787,7 @@ class hotel_folio_line(models.Model):
             uom=False, qty_uos=0, uos=False, name='', partner_id=False,
             lang=False, update_tax=True, date_order=False):
         '''
-        @param self : object pointer
+        @param self: object pointer
         '''
         if product:
             return self.product_id_change(pricelist, product, qty=0,
@@ -802,7 +802,7 @@ class hotel_folio_line(models.Model):
         When you change checkin_date or checkout_date it will checked it
         and update the qty of hotel folio line
         -----------------------------------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         '''
         if not self.checkin_date:
             self.checkin_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
@@ -823,7 +823,7 @@ class hotel_folio_line(models.Model):
     @api.multi
     def button_confirm(self):
         '''
-        @param self : object pointer
+        @param self: object pointer
         '''
         for folio in self:
             line = folio.order_line_id
@@ -833,7 +833,7 @@ class hotel_folio_line(models.Model):
     @api.multi
     def button_done(self):
         '''
-        @param self : object pointer
+        @param self: object pointer
         '''
         line_ids = [folio.order_line_id.id for folio in self]
         sale_line_obj = self.env['sale.order.line'].browse(line_ids)
@@ -848,8 +848,8 @@ class hotel_folio_line(models.Model):
     @api.one
     def copy_data(self, default=None):
         '''
-        @param self : object pointer
-        @param default : dict of default values to be set
+        @param self: object pointer
+        @param default: dict of default values to be set
         '''
         line_id = self.order_line_id.id 
         sale_line_obj = self.env['sale.order.line'].browse(line_id)
@@ -861,8 +861,8 @@ class hotel_service_line(models.Model):
     @api.one
     def copy(self, default=None):
         '''
-        @param self : object pointer
-        @param default : dict of default values to be set
+        @param self: object pointer
+        @param default: dict of default values to be set
         '''
         line_id = self.service_line_id.id
         sale_line_obj = self.env['sale.order.line'].browse(line_id)
@@ -871,7 +871,7 @@ class hotel_service_line(models.Model):
     @api.multi
     def _amount_line(self, field_name, arg):
         '''
-        @param self : object pointer
+        @param self: object pointer
         @param field_name: Names of fields.
         @param arg: User defined arguments
         '''
@@ -883,7 +883,7 @@ class hotel_service_line(models.Model):
     @api.multi
     def _number_packages(self, field_name, arg):
         '''
-        @param self : object pointer
+        @param self: object pointer
         @param field_name: Names of fields.
         @param arg: User defined arguments
         '''
@@ -948,7 +948,7 @@ class hotel_service_line(models.Model):
             uom=False, qty_uos=0, uos=False, name='', partner_id=False,
             lang=False, update_tax=True, date_order=False):
         '''
-        @param self : object pointer
+        @param self: object pointer
         '''
         line_ids = [folio.service_line_id.id for folio in self]
         if product:
@@ -963,7 +963,7 @@ class hotel_service_line(models.Model):
             uom=False, qty_uos=0, uos=False, name='', partner_id=False,
             lang=False, update_tax=True, date_order=False):
         '''
-        @param self : object pointer
+        @param self: object pointer
         '''
         if product:
             return self.product_id_change(pricelist, product, qty=0,
@@ -977,7 +977,7 @@ class hotel_service_line(models.Model):
         When you change checkin_date or checkout_date it will checked it
         and update the qty of hotel service line
         -----------------------------------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         '''
         if not self.ser_checkin_date:
             time_a = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
@@ -998,7 +998,7 @@ class hotel_service_line(models.Model):
     @api.multi 
     def button_confirm(self):
         '''
-        @param self : object pointer
+        @param self: object pointer
         '''
         for folio in self:
             line = folio.service_line_id
@@ -1008,7 +1008,7 @@ class hotel_service_line(models.Model):
     @api.multi
     def button_done(self):
         '''
-        @param self : object pointer
+        @param self: object pointer
         '''
         for folio in self:
             line = folio.service_line_id
@@ -1018,8 +1018,8 @@ class hotel_service_line(models.Model):
     @api.one
     def copy_data(self, default=None):
         '''
-        @param self : object pointer
-        @param default : dict of default values to be set
+        @param self: object pointer
+        @param default: dict of default values to be set
         '''
         sale_line_obj = self.env['sale.order.line'
                                  ].browse(self.service_line_id.id)
@@ -1104,7 +1104,7 @@ class CurrencyExchangeRate(models.Model):
         When you change folio_no, based on that it will update 
         the guest_name,hotel_id and room_number as well
         ---------------------------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         '''
         for rec in self:
             self.guest_name = False
@@ -1121,9 +1121,9 @@ class CurrencyExchangeRate(models.Model):
         This method is used to change the state 
         to done of the currency exchange
         ---------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         """
-        self.write({'state' : 'done'})
+        self.write({'state': 'done'})
         return True
 
     @api.multi
@@ -1132,9 +1132,9 @@ class CurrencyExchangeRate(models.Model):
         This method is used to change the state 
         to cancel of the currency exchange
         ---------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         """
-        self.write({'state' : 'cancel'})
+        self.write({'state': 'cancel'})
         return True
 
     @api.multi
@@ -1143,9 +1143,9 @@ class CurrencyExchangeRate(models.Model):
         This method is used to change the state 
         to draft of the currency exchange
         ---------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         """
-        self.write({'state' : 'draft'})
+        self.write({'state': 'draft'})
         return True
 
     @api.model
@@ -1153,7 +1153,7 @@ class CurrencyExchangeRate(models.Model):
         '''
         Calculate rate between two currency
         ----------------------------------- 
-        @param self : object pointer
+        @param self: object pointer
         '''
         try:
             url = 'http://finance.yahoo.com/d/quotes.csv?s=%s%s=X&f=l1' % (a,
@@ -1169,7 +1169,7 @@ class CurrencyExchangeRate(models.Model):
         When you change input_curr, out_curr or in_amount 
         it will update the out_amount of the currency exchange
         ------------------------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         '''
         self.out_amount = 0.0
         if self.input_curr:
@@ -1190,7 +1190,7 @@ class CurrencyExchangeRate(models.Model):
         When you change out_amount or tax 
         it will update the total of the currency exchange
         ----------------------------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         '''
         if self.out_amount:
             for rec in self:
@@ -1208,7 +1208,7 @@ class account_invoice(models.Model):
         This method change pos orders states to done when folio invoice
         is in done.
         ----------------------------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         '''
         pos_order_obj = self.env['pos.order']
         res = super(account_invoice, self).confirm_paid()

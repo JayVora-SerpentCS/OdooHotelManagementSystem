@@ -101,7 +101,7 @@ class hotel_restaurant_reservation(models.Model):
         '''
         When Customer name is changed respective adress will display
         in Adress field
-        @param self : object pointer
+        @param self: object pointer
         '''
         if not self.cname:
             self.partner_address_id = False
@@ -115,7 +115,7 @@ class hotel_restaurant_reservation(models.Model):
         This method is used to change the state 
         to draft of the hotel restaurant reservation
         --------------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         """
         self.write({'state': 'draft'})
         wf_service = netsvc.LocalService('workflow')
@@ -165,7 +165,7 @@ class hotel_restaurant_reservation(models.Model):
         This method is used to change the state 
         to cancel of the hotel restaurant reservation
         --------------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         """
         self.write({'state':'cancel'})
         return True
@@ -176,7 +176,7 @@ class hotel_restaurant_reservation(models.Model):
         This method is used to change the state 
         to done of the hotel restaurant reservation
         --------------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         """
         self.write({'state':'done'})
         return True
@@ -225,8 +225,8 @@ class hotel_restaurant_reservation(models.Model):
         '''
         This method is used to validate the start_date and end_date.
         -------------------------------------------------------------
-        @param self : object pointer
-        @return : raise a warning depending on the validation
+        @param self: object pointer
+        @return: raise a warning depending on the validation
         '''
         if self.start_date >= self.end_date:
             raise ValidationError(_('Start Date Should be less \
@@ -259,7 +259,7 @@ class hotel_restaurant_order(models.Model):
         '''
         amount_subtotal will display on change of order_list
         ---------------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         '''
         for sale in self:
             sale.amount_subtotal = sum(line.price_subtotal for line
@@ -271,7 +271,7 @@ class hotel_restaurant_order(models.Model):
         '''
         amount_total will display on change of amount_subtotal
         ---------------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         '''
         for line in self:
             line.amount_total = line.amount_subtotal + (line.
@@ -355,7 +355,7 @@ class hotel_reservation_order(models.Model):
        '''
        amount_subtotal will display on change of order_list
        ---------------------------------------------
-       @param self : object pointer
+       @param self: object pointer
        '''
        for sale in self:
             sale.amount_subtotal = sum(line.price_subtotal for line
@@ -367,7 +367,7 @@ class hotel_reservation_order(models.Model):
         '''
         amount_total will display on change of amount_subtotal
         ---------------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         '''
         for line in self:
             line.amount_total = line.amount_subtotal + (line.amount_subtotal *
@@ -450,7 +450,7 @@ class hotel_reservation_order(models.Model):
         This method is used to change the state 
         to done of the hotel reservation order
         ----------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         """
         self.write({'state':'done'})
         return True
@@ -507,7 +507,7 @@ class hotel_restaurant_order_list(models.Model):
         '''
         price_subtotal will display on change of item_rate
         ---------------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         '''
         for line in self:
             line.price_subtotal = line.item_rate * int(line.item_qty)
@@ -517,7 +517,7 @@ class hotel_restaurant_order_list(models.Model):
         '''
         item rate will display on change of item name
         ---------------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         '''
         if self.name:
             self.item_rate = self.name.list_price

@@ -39,7 +39,7 @@ class pos_order(models.Model):
         When you change folio_id, based on that it will update 
         the guest_name and room_no as well
         ---------------------------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         '''
         for rec in self:
             self.partner_id = False
@@ -54,7 +54,7 @@ class pos_order(models.Model):
         When pos order created this method called,and sale order line
         created for current folio
         --------------------------------------------------------------
-        @param self : object pointer
+        @param self: object pointer
         '''
         hotel_folio_obj = self.env['hotel.folio']
         hsl_obj = self.env['hotel.service.line']
