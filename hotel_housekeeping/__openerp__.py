@@ -22,10 +22,10 @@
 #############################################################################
 
 {
-    "name": "Hotel Housekeeping Management",
-    "version": "0.05",
-    "author": ["Serpent Consulting Services Pvt. Ltd.", "OpenERP SA" ],
-    "category": "Generic Modules/Hotel Housekeeping",
+    "name" : "Hotel Housekeeping Management",
+    "version" : "0.05",
+    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA" ,
+    "category" : "Generic Modules/Hotel Housekeeping",
     "description": """
     Module for Hotel/Hotel Housekeeping. You can manage:
     * Housekeeping process
@@ -33,10 +33,12 @@
 
       Different reports are also provided, mainly for hotel statistics.
     """,
-    "website": ["http://www.serpentcs.com", "http://www.openerp.com"],
-    "depends": ["hotel"],
-    "demo": ["views/hotel_housekeeping_data.xml"],
-    "data": [
+    "website": "http://www.serpentcs.com",
+    "depends" : ["hotel"],
+    "demo" : [
+        "views/hotel_housekeeping_data.xml",
+    ],
+    "data" : [
         "security/ir.model.access.csv",
         "report/hotel_housekeeping_report.xml",
         "views/activity_detail.xml",

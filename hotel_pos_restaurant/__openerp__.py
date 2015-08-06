@@ -24,12 +24,12 @@
 {
     "name": "Hotel POS Restaurant Management",
     "version": "0.10",
-    "author": ["Serpent Consulting Services Pvt. Ltd.", "OpenERP SA" ],
+    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA" ,
     "category": "Generic Modules/Hotel Restaurant Management",
     "description": """
     Module for Hotel/Restaurant management. You can manage:
      """,
-    "website": ["http://www.serpentcs.com", "http://www.openerp.com"],
+    "website": "http://www.serpentcs.com",
     "depends": ["pos_restaurant"],
     "demo": ["views/hotel_pos_data.xml"],
     "data": ["security/ir.model.access.csv",

@@ -22,10 +22,10 @@
 #############################################################################
 
 {
-    "name": "Hotel Restaurant Management",
-    "version": "0.05",
-    "author": ["Serpent Consulting Services Pvt. Ltd.", "OpenERP SA" ],
-    "category": "Generic Modules/Hotel Restaurant",
+    "name" : "Hotel Restaurant Management",
+    "version" : "0.05",
+    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
+    "category" : "Generic Modules/Hotel Restaurant",
     "description": """
     Module for Hotel/Resort/Restaurant management. You can manage:
     * Configure Property
@@ -37,9 +37,11 @@
     Different reports are also provided, mainly for Restaurant.
     """,
     "website": "http://www.serpentcs.com",
-    "depends": ["hotel", "report_extended"],
-    "demo": ["views/hotel_restaurant_data.xml"],
-    "data": [
+    "depends" : ["hotel", "hotel_report_layout"],
+    "demo" : [
+        "views/hotel_restaurant_data.xml",
+    ],
+    "data" : [
         "security/ir.model.access.csv",
         "report/hotel_restaurant_report.xml",
         "wizard/hotel_restaurant_wizard.xml",

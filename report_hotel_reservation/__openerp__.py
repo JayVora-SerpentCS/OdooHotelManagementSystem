@@ -22,13 +22,13 @@
 #############################################################################
 
 {
-    "name": "Hotel Reservation Management - Reporting",
-    "version": "0.03",
-    "author": ["Serpent Consulting Services Pvt. Ltd.", "OpenERP SA" ],
-    "website": ["http://www.serpentcs.com", "http://www.openerp.com"],
-    "depends": ["hotel_reservation"],
-    "category": "Generic Modules/Hotel Reservation",
-    "description": """
+    "name" : "Hotel Reservation Management - Reporting",
+    "version" : "0.03",
+    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
+    "website": "http://www.serpentcs.com",
+    "depends" : ["hotel_reservation"],
+    "category" : "Generic Modules/Hotel Reservation",
+     "description": """
     Module shows the status of room reservation
      * Current status of reserved room
      * List status of room as draft or done state

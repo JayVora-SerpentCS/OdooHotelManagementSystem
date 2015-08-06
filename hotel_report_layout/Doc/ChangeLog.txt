@@ -1,5 +1,5 @@
 ============================================================================================================================
- Version Change Log (report_extended)
+ Version Change Log (hotel_report_layout)
 ============================================================================================================================
 0.01 on 2014-09-07 by Naitik Maheta
-    * Report_Extended Module For Qweb Report For Add Company's Full Address In Header.
+    * Added hotel_report_layout Module For Qweb Report For Add Company's Full Address In Header.

@@ -33,9 +33,13 @@ class hotel_folio(models.Model):
     _inherit = 'hotel.folio'
     _order = 'reservation_id desc'
 
+<<<<<<< HEAD
     reservation_id = fields.Many2one(comodel_name='hotel.reservation',
                                      string='Reservation Id')
 
+=======
+    reservation_id = fields.Many2one(comodel_name='hotel.reservation', string='Reservation Id')
+>>>>>>> upstream/8.0
 
 class hotel_reservation(models.Model):
 
@@ -43,6 +47,7 @@ class hotel_reservation(models.Model):
     _rec_name = "reservation_no"
     _description = "Reservation"
     _order = 'reservation_no desc'
+<<<<<<< HEAD
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
     reservation_no = fields.Char('Reservation No', size=64, readonly=True)
@@ -134,6 +139,27 @@ class hotel_reservation(models.Model):
          """
         return self.search_count([('state', '=', 'draft')])
 
+=======
+    _inherit = ['mail.thread']
+
+    reservation_no = fields.Char('Reservation No', size=64, readonly=True, default=lambda obj: obj.env['ir.sequence'].get('hotel.reservation'))
+    date_order = fields.Datetime('Date Ordered', required=True, readonly=True, states={'draft':[('readonly', False)]}, default=lambda *a: time.strftime('%Y-%m-%d %H:%M:%S'))
+    warehouse_id = fields.Many2one('stock.warehouse', 'Hotel', readonly=True, required=True, default=1, states={'draft':[('readonly', False)]})
+    partner_id = fields.Many2one('res.partner', 'Guest Name' , readonly=True, required=True, states={'draft':[('readonly', False)]})
+    pricelist_id = fields.Many2one('product.pricelist', 'Scheme' , required=True, readonly=True, states={'draft':[('readonly', False)]}, help="Pricelist for current reservation. ")
+    partner_invoice_id = fields.Many2one('res.partner', 'Invoice Address' , readonly=True, states={'draft':[('readonly', False)]}, help="Invoice address for current reservation. ")
+    partner_order_id = fields.Many2one('res.partner', 'Ordering Contact', readonly=True, states={'draft':[('readonly', False)]}, help="The name and address of the contact that requested the order or quotation.")
+    partner_shipping_id = fields.Many2one('res.partner', 'Delivery Address' , readonly=True, states={'draft':[('readonly', False)]}, help="Delivery address for current reservation. ")
+    checkin = fields.Datetime('Expected-Date-Arrival', required=True, readonly=True, states={'draft':[('readonly', False)]})
+    checkout = fields.Datetime('Expected-Date-Departure', required=True, readonly=True, states={'draft':[('readonly', False)]})
+    adults = fields.Integer('Adults', size=64, readonly=True, states={'draft':[('readonly', False)]}, help='List of adults there in guest list. ')
+    children = fields.Integer('Children', size=64, readonly=True, states={'draft':[('readonly', False)]}, help='Number of children there in guest list. ')
+    reservation_line = fields.One2many('hotel_reservation.line', 'line_id', 'Reservation Line', help='Hotel room reservation details. ')
+    state = fields.Selection([('draft', 'Draft'), ('confirm', 'Confirm'), ('cancel', 'Cancel'), ('done', 'Done')], 'State', readonly=True, default=lambda *a: 'draft')
+    folio_id = fields.Many2many('hotel.folio', 'hotel_folio_reservation_rel', 'order_id', 'invoice_id', string='Folio')
+    dummy = fields.Datetime('Dummy')
+
+>>>>>>> upstream/8.0
     @api.onchange('date_order', 'checkin')
     def on_change_checkin(self):
         '''
@@ -143,11 +169,19 @@ class hotel_reservation(models.Model):
         @param self : object pointer
         @return : raise warning depending on the validation
         '''
+<<<<<<< HEAD
         checkin_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         if self.date_order and self.checkin:  
             if self.checkin < self.date_order:
                 raise except_orm(_('Warning'), _('Checkin date should be \
                 greater than the current date.'))
+=======
+        checkin_date = time.strftime('%Y-%m-%d %H:%M:%S')
+        if self.date_order and self.checkin:  
+            if self.checkin < self.date_order:
+                raise except_orm(_('Warning'), _('Checkin date should be greater than the current date.'))
+
+>>>>>>> upstream/8.0
 
     @api.onchange('checkout', 'checkin')
     def on_change_checkout(self):
@@ -159,15 +193,24 @@ class hotel_reservation(models.Model):
       @param self : object pointer
       @return : raise warning depending on the validation
       '''
+<<<<<<< HEAD
       checkout_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
       checkin_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+=======
+      checkout_date = time.strftime('%Y-%m-%d %H:%M:%S')
+      checkin_date = time.strftime('%Y-%m-%d %H:%M:%S')
+>>>>>>> upstream/8.0
       res = {}
       if not (checkout_date and checkin_date):
             return {'value':{}}
       if self.checkout and self.checkin:
           if self.checkout < self.checkin:
+<<<<<<< HEAD
                     raise except_orm(_('Warning'), _('Checkout date \
                     should be greater than Checkin date.'))
+=======
+                    raise except_orm(_('Warning'), _('Checkout date should be greater than Checkin date.'))
+>>>>>>> upstream/8.0
       delta = datetime.timedelta(days=1)
       dat_a = time.strptime(checkout_date, DEFAULT_SERVER_DATETIME_FORMAT)[:5]
       addDays = datetime.datetime(*dat_a) + delta
@@ -246,7 +289,25 @@ class hotel_reservation(models.Model):
         return True
 
     @api.multi
+<<<<<<< HEAD
     def send_reservation_maill(self):
+=======
+    def send_my_maill(self):
+        """Generates a new mail message for the Reservation template and schedules it,
+           for delivery through the ``mail`` module's scheduler.
+           @param self: The object pointer
+        """
+        template_id = self.env['email.template'].search([('name', '=', 'Reservation-Send by Email')])
+        for user in self:
+            if not user.partner_id.email:
+                raise except_orm(("Cannot send email: user has no email address."), user.partner_id.name)
+            myobj = self.env['email.template'].browse(template_id.id)
+            myobj.send_mail(user.id, force_send=True, raise_exception=True)
+        return True 
+
+    @api.multi
+    def action_for_hotel(self):
+>>>>>>> upstream/8.0
         '''
         This function opens a window to compose an email,
         template message loaded by default.
@@ -380,8 +441,12 @@ class hotel_reservation(models.Model):
         return True
 
     @api.multi
+<<<<<<< HEAD
     def onchange_check_dates(self, checkin_date=False, checkout_date=False,
                              duration=False):
+=======
+    def onchange_check_dates(self, checkin_date=False, checkout_date=False, duration=False):
+>>>>>>> upstream/8.0
         '''
         This mathod gives the duration between check in checkout if 
         customer will leave only for some hour it would be considers
@@ -436,6 +501,7 @@ class hotel_reservation_line(models.Model):
 
     name = fields.Char('Name', size=64)
     line_id = fields.Many2one('hotel.reservation')
+<<<<<<< HEAD
     reserve = fields.Many2many('hotel.room',
                                'hotel_reservation_line_room_rel',
                                'room_id', 'hotel_reservation_line_id',
@@ -444,6 +510,10 @@ class hotel_reservation_line(models.Model):
     categ_id = fields.Many2one('product.category', 'Room Type',
                                domain="[('isroomtype','=',True)]",
                                change_default=True)
+=======
+    reserve = fields.Many2many('hotel.room', 'hotel_reservation_line_room_rel', 'room_id', 'hotel_reservation_line_id', domain="[('isroom','=',True),('categ_id','=',categ_id)]")
+    categ_id = fields.Many2one('product.category', 'Room Type' , domain="[('isroomtype','=',True)]", change_default=True)
+>>>>>>> upstream/8.0
 
     @api.onchange('categ_id')
     def on_change_categ(self):
@@ -454,6 +524,7 @@ class hotel_reservation_line(models.Model):
         @param self : object pointer
         '''
         hotel_room_obj = self.env['hotel.room']
+<<<<<<< HEAD
         hotel_room_ids = hotel_room_obj.search([('categ_id', '=',
                                                  self.categ_id.id),
                                                 ('isroom', '=', True)])
@@ -471,6 +542,17 @@ class hotel_reservation_line(models.Model):
                    line.check_in <= self.line_id.checkout or
                    line.check_out <= self.line_id.checkout and
                    line.check_out >= self.line_id.checkin):
+=======
+        hotel_room_ids = hotel_room_obj.search([('categ_id', '=', self.categ_id.id)])
+        assigned = False
+        room_ids = []
+        if not self.line_id.checkin:
+            raise except_orm(_('Warning'), _('Before choosing a room,\n You have to select a Check in date or a Check out date in the reservation form.'))
+        for room in hotel_room_ids:
+            assigned = False
+            for line in room.room_reservation_line_ids:
+                if line.check_in >= self.line_id.checkin and line.check_in <= self.line_id.checkout or line.check_out <= self.line_id.checkout and line.check_out >= self.line_id.checkin:
+>>>>>>> upstream/8.0
                     assigned = True
             if not assigned:
                 room_ids.append(room.id)
@@ -504,12 +586,18 @@ class hotel_room_reservation_line(models.Model):
     room_id = fields.Many2one(comodel_name='hotel.room', string='Room id')
     check_in = fields.Datetime('Check In Date', required=True)
     check_out = fields.Datetime('Check Out Date', required=True)
+<<<<<<< HEAD
     state = fields.Selection([('assigned', 'Assigned'),
                               ('unassigned', 'Unassigned')], 'Room Status')
     reservation_id = fields.Many2one('hotel.reservation',
                                      string='Reservation')
     status = fields.Selection(string='state', related='reservation_id.state')
 
+=======
+    state = fields.Selection([('assigned', 'Assigned'), ('unassigned', 'Unassigned')], 'Room Status')
+    reservation_id = fields.Many2one('hotel.reservation', string='Reservation')
+     
+>>>>>>> upstream/8.0
 hotel_room_reservation_line()
 
 
@@ -518,9 +606,13 @@ class hotel_room(models.Model):
     _inherit = 'hotel.room'
     _description = 'Hotel Room'
 
+<<<<<<< HEAD
     room_reservation_line_ids = fields.One2many('hotel.room.reservation.line',
                                                 'room_id',
                                                 string='Room Reserv Line')
+=======
+    room_reservation_line_ids = fields.One2many('hotel.room.reservation.line', 'room_id', string='Room Reservation Line')
+>>>>>>> upstream/8.0
 
     @api.model
     def cron_room_line(self):
@@ -537,6 +629,7 @@ class hotel_room(models.Model):
         now = datetime.datetime.now()
         curr_date = now.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         for room in self.search([]):
+<<<<<<< HEAD
             reserv_line_ids = [reservation_line.ids for
                                reservation_line in
                                room.room_reservation_line_ids]
@@ -552,6 +645,13 @@ class hotel_room(models.Model):
             status = {'isroom':True, 'color':5}
             if reservation_line_ids.ids:
                 status = {'isroom':False, 'color':2}
+=======
+            reservation_line_ids = [reservation_line.ids for reservation_line in room.room_reservation_line_ids]
+            reservation_line_ids = reservation_line_obj.search([('id', 'in', reservation_line_ids), ('check_in', '<=', curr_date), ('check_out', '>=', curr_date)])
+            status = {'status': 'available'}
+            if reservation_line_ids.ids:
+                status.update({'status': 'occupied'})
+>>>>>>> upstream/8.0
             room.write(status)
             if room_line_ids.ids:
                 status = {'isroom':False, 'color':2}
@@ -585,8 +685,12 @@ class room_reservation_summary(models.Model):
         res = super(room_reservation_summary, self).default_get(fields)
         if self.date_from == False and self.date_to == False:
             date_today = datetime.datetime.today()
+<<<<<<< HEAD
             first_day = datetime.datetime(date_today.year,
                                           date_today.month, 1, 0, 0, 0)
+=======
+            first_day = datetime.datetime(date_today.year, date_today.month, 1, 0, 0, 0)
+>>>>>>> upstream/8.0
             first_temp_day = first_day + relativedelta(months=1)
             last_temp_day = first_temp_day - relativedelta(days=1)
             last_day = datetime.datetime(last_temp_day.year,
@@ -699,6 +803,7 @@ class quick_room_reservation(models.TransientModel):
      check_out = fields.Datetime('Check Out', required=True)
      room_id = fields.Many2one('hotel.room', 'Room', required=True)
      warehouse_id = fields.Many2one('stock.warehouse', 'Hotel', required=True)
+<<<<<<< HEAD
      pricelist_id = fields.Many2one('product.pricelist', 'pricelist',
                                     required=True)
      partner_invoice_id = fields.Many2one('res.partner', 'Invoice Address',
@@ -707,6 +812,12 @@ class quick_room_reservation(models.TransientModel):
                                         required=True)
      partner_shipping_id = fields.Many2one('res.partner', 'Delivery Address',
                                            required=True)
+=======
+     pricelist_id = fields.Many2one('product.pricelist', 'pricelist', required=True)
+     partner_invoice_id = fields.Many2one('res.partner', 'Invoice Address' , required=True)
+     partner_order_id = fields.Many2one('res.partner', 'Ordering Contact', required=True)
+     partner_shipping_id = fields.Many2one('res.partner', 'Delivery Address' , required=True)
+>>>>>>> upstream/8.0
 
      @api.onchange('check_out', 'check_in')
      def on_change_check_out(self):
@@ -720,9 +831,14 @@ class quick_room_reservation(models.TransientModel):
           '''
           if self.check_out and self.check_in:
               if self.check_out < self.check_in:
+<<<<<<< HEAD
                   raise except_orm(_('Warning'),
                                    _('Checkout date should be greater \
                                    than Checkin date.'))
+=======
+                  raise except_orm(_('Warning'), _('Checkout date should be greater than Checkin date.'))
+
+>>>>>>> upstream/8.0
 
      @api.onchange('partner_id')
      def onchange_partner_id_res(self):
