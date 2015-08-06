@@ -23,6 +23,7 @@
 
 from openerp import models, fields, api
 
+
 class hotel_reservation_wizard(models.TransientModel):
 
     _name = 'hotel.reservation.wizard'
@@ -77,6 +78,7 @@ class hotel_reservation_wizard(models.TransientModel):
                         ].get_action(self,
                                      'hotel_reservation.report_maxroom_qweb',
                                      data=data)
+
 
 class make_folio_wizard(models.TransientModel):
 

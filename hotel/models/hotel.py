@@ -142,9 +142,9 @@ class hotel_room(models.Model):
         @param vals: dictionary of fields value.
         """
         if vals.has_key('isroom') and vals['isroom'] == False:
-            vals.update({'color':2, 'status':'occupied'})
+            vals.update({'color': 2, 'status': 'occupied'})
         if vals.has_key('isroom') and vals['isroom'] == True:
-            vals.update({'color':5, 'status':'available'})
+            vals.update({'color': 5, 'status': 'available'})
         ret_val = super(hotel_room, self).write(vals)
         return ret_val
 
@@ -156,7 +156,7 @@ class hotel_room(models.Model):
         ---------------------------------------
         @param self: object pointer
         """
-        return self.write({'isroom': False, 'color':2})
+        return self.write({'isroom': False, 'color': 2})
 
     @api.multi
     def set_room_status_available(self):
@@ -166,7 +166,7 @@ class hotel_room(models.Model):
         ---------------------------------------
         @param self: object pointer
         """
-        return self.write({'isroom': True, 'color':5})
+        return self.write({'isroom': True, 'color': 5})
 
 
 class hotel_folio(models.Model):
@@ -231,9 +231,9 @@ class hotel_folio(models.Model):
     order_id = fields.Many2one('sale.order', 'Order', delegate=True,
                                required=True, ondelete='cascade')
     checkin_date = fields.Datetime('Check In', required=True, readonly=True,
-                                   states={'draft':[('readonly', False)]})
+                                   states={'draft': [('readonly', False)]})
     checkout_date = fields.Datetime('Check Out', required=True, readonly=True,
-                                    states={'draft':[('readonly', False)]})
+                                    states={'draft': [('readonly', False)]})
     room_lines = fields.One2many('hotel.folio.line', 'folio_id',
                                  readonly=True,
                                  states={'draft': [('readonly', False)],
@@ -243,18 +243,20 @@ class hotel_folio(models.Model):
                                     readonly=True,
                                     states={'draft': [('readonly', False)],
                                             'sent': [('readonly', False)]},
-                                    help="Hotel services detail provide to \
-customer and it will include in main Invoice.")
-
+                                    help="Hotel services detail provide to" \
+                                    "customer and it will include in "\
+                                    "main Invoice.")
     hotel_policy = fields.Selection([('prepaid', 'On Booking'),
                                      ('manual', 'On Check In'),
                                      ('picking', 'On Checkout')],
                                     'Hotel Policy', default='manual',
-                                    help="Hotel policy for payment that either \
-the guest has to payment at booking time or check-in check-out time.")
+                                    help="Hotel policy for payment that "\
+                                    "either the guest has to payment at "\
+                                    "booking time or check-in "\
+                                    "check-out time.")
     duration = fields.Float('Duration in Days',
-                            help="Number of days which will automatically \
-count from the check-in and check-out date. ")
+                            help="Number of days which will automatically "\
+                            "count from the check-in and check-out date. ")
     currrency_ids = fields.One2many('currency.exchange', 'folio_no',
                                     readonly=True)
     hotel_invoice_id = fields.Many2one('account.invoice', 'Invoice')
@@ -273,9 +275,9 @@ count from the check-in and check-out date. ")
         context = dict(context)
         for rec in self:
             if rec.partner_id.id and len(rec.room_lines) != 0:
-                context.update({'folioid':rec.id, 'guest':rec.partner_id.id,
-                                'room_no':rec.room_lines[0].product_id.name,
-                                'hotel':rec.warehouse_id.id})
+                context.update({'folioid': rec.id, 'guest': rec.partner_id.id,
+                                'room_no': rec.room_lines[0].product_id.name,
+                                'hotel': rec.warehouse_id.id})
                 self.env.args = cr, uid, misc.frozendict(context)
             else:
                 raise except_orm(_('Warning'), _('Please Reserve Any Room.'))
@@ -286,11 +288,11 @@ count from the check-in and check-out date. ")
             'view_id': False,
             'view_mode': 'form,tree',
             'view_type': 'form',
-            'context':{'default_folio_no':context.get('folioid'),
-                       'default_hotel_id':context.get('hotel'),
-                       'default_guest_name':context.get('guest'),
-                       'default_room_number':context.get('room_no')
-                       },
+            'context': {'default_folio_no': context.get('folioid'),
+                        'default_hotel_id': context.get('hotel'),
+                        'default_guest_name': context.get('guest'),
+                        'default_room_number': context.get('room_no')
+                        },
                 }
 
     @api.constrains('room_lines')
@@ -383,11 +385,11 @@ count from the check-in and check-out date. ")
         if not 'service_lines' and 'folio_id' in vals:
             tmp_room_lines = vals.get('room_lines', [])
             vals['order_policy'] = vals.get('hotel_policy', 'manual')
-            vals.update({'room_lines':[]})
+            vals.update({'room_lines': []})
             folio_id = super(hotel_folio, self).create(vals)
             for line in (tmp_room_lines):
-                line[2].update({'folio_id':folio_id})
-            vals.update({'room_lines':tmp_room_lines})
+                line[2].update({'folio_id': folio_id})
+            vals.update({'room_lines': tmp_room_lines})
             folio_id.write(vals)
         else:
             if not vals:
@@ -403,7 +405,7 @@ count from the check-in and check-out date. ")
                         room_lst.append(room_rec.product_id)
                     for rm in room_lst:
                         room_obj = h_room_obj.search([('name', '=', rm.name)])
-                        room_obj.write({'isroom':False})
+                        room_obj.write({'isroom': False})
                         vals = {
                             'room_id': room_obj.id,
                             'check_in': rec.checkin_date,
@@ -437,7 +439,7 @@ count from the check-in and check-out date. ")
                 room_list = product_obj.browse(list(new_rooms))
                 for rm in room_list:
                     room_obj = h_room_obj.search([('name', '=', rm.name)])
-                    room_obj.write({'isroom':False})
+                    room_obj.write({'isroom': False})
                     vals = {
                         'room_id': room_obj.id,
                         'check_in': folio_obj.checkin_date,
@@ -449,7 +451,7 @@ count from the check-in and check-out date. ")
                 room_list_obj = product_obj.browse(room_lst1)
                 for rom in room_list_obj:
                     room_obj = h_room_obj.search([('name', '=', rom.name)])
-                    room_obj.write({'isroom':False})
+                    room_obj.write({'isroom': False})
                     room_vals = {
                         'room_id': room_obj.id,
                         'check_in': folio_obj.checkin_date,
@@ -521,12 +523,12 @@ count from the check-in and check-out date. ")
             values = {
                 'invoiced': True,
                 'state': 'progress' if grouped else 'progress',
-                'hotel_invoice_id':invoice_id
+                'hotel_invoice_id': invoice_id
             }
             line.write(values)
             for line2 in line.folio_pos_order_ids:
                 vals = {
-                        'invoice_id':invoice_id,
+                        'invoice_id': invoice_id,
                         }
                 line2.write(vals)
                 line2.action_invoice_state()
@@ -535,7 +537,7 @@ count from the check-in and check-out date. ")
             for room in room_lst:
                 room_obj = self.env['hotel.room'
                                     ].search([('name', '=', room.name)])
-                room_obj.write({'isroom':True})
+                room_obj.write({'isroom': True})
         return invoice_id
 
     @api.multi
@@ -549,7 +551,7 @@ count from the check-in and check-out date. ")
         for sale in self:
             for line in sale.order_line:
                 line.write({'invoiced': 'invoiced'})
-        sale.write({'state':'invoice_except'})
+        sale.write({'state': 'invoice_except'})
         return res
 
     @api.multi
@@ -569,9 +571,9 @@ count from the check-in and check-out date. ")
                 wf_service.trg_validate(self._uid, 'account.invoice',
                                         invoice.id, 'invoice_cancel',
                                         self._cr)
-                sale.write({'state':'cancel'})
+                sale.write({'state': 'cancel'})
             for rec in sale.folio_pos_order_ids:
-                    rec.write({'state':'cancel'})
+                    rec.write({'state': 'cancel'})
         return rv
 
     @api.multi
@@ -622,7 +624,7 @@ count from the check-in and check-out date. ")
         '''
         order_ids = [folio.order_id.id for folio in self]
         for order in self:
-            order.write ({'shipped':True})
+            order.write ({'shipped': True})
 
     @api.multi
     def has_stockable_products(self):
@@ -725,7 +727,7 @@ class hotel_folio_line(models.Model):
         """
         if 'folio_id' in vals:
             folio = self.env["hotel.folio"].browse(vals['folio_id'])
-            vals.update({'order_id':folio.order_id.id})
+            vals.update({'order_id': folio.order_id.id})
         return super(hotel_folio_line, self).create(vals)
 
     @api.multi
@@ -751,8 +753,8 @@ class hotel_folio_line(models.Model):
                             folio_room_line_myobj = fr_obj.search(folio_arg)
                             if folio_room_line_myobj.id:
                                 folio_room_line_myobj.unlink()
-                                room_obj.write({'isroom':True,
-                                                'status':'available'})
+                                room_obj.write({'isroom': True,
+                                                'status': 'available'})
                 sale_unlink_obj.unlink()
         return super(hotel_folio_line, self).unlink()
 
@@ -839,7 +841,7 @@ class hotel_folio_line(models.Model):
         sale_line_obj = self.env['sale.order.line'].browse(line_ids)
         res = sale_line_obj.button_done()
         wf_service = netsvc.LocalService("workflow")
-        res = self.write({'state':'done'})
+        res = self.write({'state': 'done'})
         for line in self:
             wf_service.trg_write(self._uid, 'sale.order',
                                  line.order_line_id.order_id.id, self._cr)
@@ -926,7 +928,7 @@ class hotel_service_line(models.Model):
         """
         if 'folio_id' in vals:
             folio = self.env['hotel.folio'].browse(vals['folio_id'])
-            vals.update({'order_id':folio.order_id.id})
+            vals.update({'order_id': folio.order_id.id})
         return super(models.Model, self).create(vals)
 
     @api.multi
@@ -995,7 +997,7 @@ class hotel_service_line(models.Model):
             qty = diffDate.days + 1
             self.product_uom_qty = qty
 
-    @api.multi 
+    @api.multi
     def button_confirm(self):
         '''
         @param self: object pointer

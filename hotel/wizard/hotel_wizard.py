@@ -23,6 +23,7 @@
 
 from openerp import models, fields, api
 
+
 class folio_report_wizard(models.TransientModel):
     _name = 'folio.report.wizard'
     _rec_name = 'date_start'

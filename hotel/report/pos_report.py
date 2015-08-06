@@ -25,6 +25,7 @@ import time
 from openerp import models
 from openerp.report import report_sxw
 
+
 class folio_report1(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
         super(folio_report1, self).__init__(cr, uid, name, context)
@@ -32,7 +33,7 @@ class folio_report1(report_sxw.rml_parse):
             'time': time,
             'get_data': self.get_data,
             'gettotal': self.gettotal,
-            'getTotal':self.getTotal,
+            'getTotal': self.getTotal,
             'get_pos': self.get_pos,
                         })
         self.temp = 0.0
@@ -70,6 +71,7 @@ class folio_report1(report_sxw.rml_parse):
 
     def getTotal(self):
         return self.temp
+
 
 class report_lunchorder1(models.AbstractModel):
     _name = 'report.hotel.report_hotel_folio_pos'

@@ -23,6 +23,7 @@
 
 from openerp import models, fields, api
 
+
 class wizard_hotel_restaurant(models.TransientModel):
 
     _name = 'wizard.hotel.restaurant'

@@ -33,7 +33,8 @@
       Different reports are also provided, mainly for hotel statistics.
     """,
     "website": "http://www.serpentcs.com",
-    "depends": ["hotel", "stock", "hotel_report_layout",'mail','email_template',],
+    "depends": ["hotel", "stock", "hotel_report_layout", 'mail',
+                'email_template',],
     "demo": [
         "views/hotel_reservation_data.xml",
     ],
@@ -42,9 +43,9 @@
         "wizard/hotel_reservation_wizard.xml",
         "report/hotel_reservation_report.xml",
         "views/hotel_reservation_sequence.xml",
-         "views/hotel_reservation_workflow.xml",
-         "views/hotel_reservation_view.xml",
-         "views/hotel_scheduler.xml",
+        "views/hotel_reservation_workflow.xml",
+        "views/hotel_reservation_view.xml",
+        "views/hotel_scheduler.xml",
         "views/report_checkin.xml",
         "views/report_checkout.xml",
         "views/max_room.xml",

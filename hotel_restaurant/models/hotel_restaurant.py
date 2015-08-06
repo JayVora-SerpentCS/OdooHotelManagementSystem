@@ -88,12 +88,12 @@ class hotel_restaurant_reservation(models.Model):
         for record in self:
             table_ids = [tableno.id for tableno in record.tableno]
             values = {
-                'reservationno':record.reservation_id,
-                'date1':record.start_date,
-                'table_no':[(6, 0, table_ids)],
+                'reservationno': record.reservation_id,
+                'date1': record.start_date,
+                'table_no': [(6, 0, table_ids)],
             }
             proxy.create(values)
-        self.write({'state':'order'})
+        self.write({'state': 'order'})
         return True
 
     @api.onchange('cname')
@@ -156,7 +156,7 @@ class hotel_restaurant_reservation(models.Model):
                 reservation with table those already reserved in this \
                 reservation period'))
             else:
-                self.write({'state':'confirm'})
+                self.write({'state': 'confirm'})
             return True
 
     @api.multi
@@ -167,7 +167,7 @@ class hotel_restaurant_reservation(models.Model):
         --------------------------------------------
         @param self: object pointer
         """
-        self.write({'state':'cancel'})
+        self.write({'state': 'cancel'})
         return True
 
     @api.multi
@@ -178,7 +178,7 @@ class hotel_restaurant_reservation(models.Model):
         --------------------------------------------
         @param self: object pointer
         """
-        self.write({'state':'done'})
+        self.write({'state': 'done'})
         return True
 
     _name = "hotel.restaurant.reservation"
@@ -293,18 +293,18 @@ class hotel_restaurant_order(models.Model):
                                  _('Please Give an Order'))
             table_ids = [x.id for x in order.table_no]
             kot_data = order_tickets_obj.create({
-                'orderno':order.order_no,
-                'kot_date':order.o_date,
-                'room_no':order.room_no.name,
-                'w_name':order.waiter_name.name,
-                'tableno':[(6, 0, table_ids)],
+                'orderno': order.order_no,
+                'kot_date': order.o_date,
+                'room_no': order.room_no.name,
+                'w_name': order.waiter_name.name,
+                'tableno': [(6, 0, table_ids)],
             })
             for order_line in order.order_list:
                 o_line = {
-                         'kot_order_list':kot_data.id,
-                         'name':order_line.name.id,
-                         'item_qty':order_line.item_qty,
-                         'item_rate':order_line.item_rate
+                         'kot_order_list': kot_data.id,
+                         'name': order_line.name.id,
+                         'item_qty': order_line.item_qty,
+                         'item_rate': order_line.item_rate
                 }
                 restaurant_order_list_obj.create(o_line)
         return True
@@ -390,25 +390,25 @@ class hotel_reservation_order(models.Model):
                                  _('Please Give an Order'))
             table_ids = [x.id for x in order.table_no]
             line_data = {
-                'orderno':order.order_number,
-                'resno':order.reservationno,
-                'kot_date':order.date1,
-                'w_name':order.waitername.name,
-                'tableno':[(6, 0, table_ids)],
+                'orderno': order.order_number,
+                'resno': order.reservationno,
+                'kot_date': order.date1,
+                'w_name': order.waitername.name,
+                'tableno': [(6, 0, table_ids)],
                 }
             kot_data = order_tickets_obj.create(line_data)
             self.kitchen_id = kot_data.id
             for order_line in order.order_list:
                 o_line = {
-                    'kot_order_list':kot_data.id,
-                    'name':order_line.name.id,
-                    'item_qty':order_line.item_qty,
-                    'item_rate':order_line.item_rate
+                    'kot_order_list': kot_data.id,
+                    'name': order_line.name.id,
+                    'item_qty': order_line.item_qty,
+                    'item_rate': order_line.item_rate
                 }
                 rest_data = rest_order_list_obj.create(o_line)
                 res.append(order_line.id)
             self.rest_id = [(6, 0, res)]
-            self.write({'state':'order'})
+            self.write({'state': 'order'})
         return res
 
     @api.multi
@@ -424,20 +424,20 @@ class hotel_reservation_order(models.Model):
         for order in self:
             table_ids = [x.id for x in order.table_no]
             line_data = {
-                'orderno':order.order_number,
-                'resno':order.reservationno,
+                'orderno': order.order_number,
+                'resno': order.reservationno,
                 'kot_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
-                'w_name':order.waitername.name,
-                'tableno':[(6, 0, table_ids)],
+                'w_name': order.waitername.name,
+                'tableno': [(6, 0, table_ids)],
                 }
             kot_data = order_tickets_obj.create(line_data)
             self.kitchen_id = kot_data.id
             for order_line in order.order_list:
                 o_line = {
-                    'kot_order_list':kot_data.id,
-                    'name':order_line.name.id,
-                    'item_qty':order_line.item_qty,
-                    'item_rate':order_line.item_rate
+                    'kot_order_list': kot_data.id,
+                    'name': order_line.name.id,
+                    'item_qty': order_line.item_qty,
+                    'item_rate': order_line.item_rate
                 }
                 if order_line.id not in order.rest_id.ids:
                     self.rest_id = [(4, order_line.id)]
@@ -452,7 +452,7 @@ class hotel_reservation_order(models.Model):
         ----------------------------------------
         @param self: object pointer
         """
-        self.write({'state':'done'})
+        self.write({'state': 'done'})
         return True
 
     _name = "hotel.reservation.order"

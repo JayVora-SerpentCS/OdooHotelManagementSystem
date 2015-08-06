@@ -27,6 +27,7 @@ AVAILABLE_STATES = [
     ('confirm', 'Confirm'),
     ('done', 'Done')]
 
+
 class report_hotel_reservation_status(models.Model):
 
     _name = "report.hotel.reservation.status"

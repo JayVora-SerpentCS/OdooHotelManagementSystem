@@ -24,6 +24,7 @@ from openerp import models
 import time
 from openerp.report import report_sxw
 
+
 class reservation_detail_report(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
         super(reservation_detail_report, self).__init__(cr, uid, name,
@@ -33,9 +34,9 @@ class reservation_detail_report(report_sxw.rml_parse):
             'get_data': self.get_data,
             'get_checkin': self.get_checkin,
             'get_checkout': self.get_checkout,
-            'get_room_type':self._get_room_type,
-            'get_room_nos':self._get_room_nos,
-            'get_room_used_detail':self._get_room_used_detail,
+            'get_room_type': self._get_room_type,
+            'get_room_nos': self._get_room_nos,
+            'get_room_used_detail': self._get_room_used_detail,
         })
         self.context = context
 
@@ -99,11 +100,13 @@ class reservation_detail_report(report_sxw.rml_parse):
                     room_used_details.append(details)
         return room_used_details
 
+
 class report_test_checkin(models.AbstractModel):
     _name = "report.hotel_reservation.report_checkin_qweb"
     _inherit = "report.abstract_report"
     _template = "hotel_reservation.report_checkin_qweb"
     _wrapped_report_class = reservation_detail_report
+
 
 class report_test_checkout(models.AbstractModel):
     _name = "report.hotel_reservation.report_checkout_qweb"
@@ -111,11 +114,13 @@ class report_test_checkout(models.AbstractModel):
     _template = "hotel_reservation.report_checkout_qweb"
     _wrapped_report_class = reservation_detail_report
 
+
 class report_test_maxroom(models.AbstractModel):
     _name = "report.hotel_reservation.report_maxroom_qweb"
     _inherit = "report.abstract_report"
     _template = "hotel_reservation.report_maxroom_qweb"
     _wrapped_report_class = reservation_detail_report
+
 
 class report_test_roomres(models.AbstractModel):
     _name = "report.hotel_reservation.report_roomres_qweb"

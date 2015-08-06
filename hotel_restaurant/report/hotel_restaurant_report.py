@@ -25,12 +25,13 @@ import time
 from openerp import models
 from openerp.report import report_sxw
 
+
 class hotel_restaurant_report(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
         super(hotel_restaurant_report, self).__init__(cr, uid, name, context)
         self.localcontext.update({
             'time': time,
-            'get_res_data':self.get_res_data,
+            'get_res_data': self.get_res_data,
         })
         self.context = context
 
@@ -42,17 +43,20 @@ class hotel_restaurant_report(report_sxw.rml_parse):
         res = rest_reservation_obj.browse(self.cr, self.uid, tids)
         return res
 
+
 class report_lunchorder(models.AbstractModel):
     _name = 'report.hotel_restaurant.report_res_table'
     _inherit = 'report.abstract_report'
     _template = 'hotel_restaurant.report_res_table'
     _wrapped_report_class = hotel_restaurant_report
 
+
 class report_kot(models.AbstractModel):
     _name = 'report.hotel_restaurant.report_hotel_order_kot'
     _inherit = 'report.abstract_report'
     _template = 'hotel_restaurant.report_hotel_order_kot'
     _wrapped_report_class = hotel_restaurant_report
+
 
 class report_bill(models.AbstractModel):
     _name = 'report.hotel_restaurant.report_hotel_order_kot'

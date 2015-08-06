@@ -105,7 +105,7 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state':'cancel'})
+        self.write({'state': 'cancel'})
         return True
 
     @api.multi
@@ -116,7 +116,7 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state':'done'})
+        self.write({'state': 'done'})
         return True
 
     @api.multi
@@ -127,7 +127,7 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state':'inspect'})
+        self.write({'state': 'inspect'})
         return True
 
     @api.multi
@@ -138,8 +138,9 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state':'clean'})
+        self.write({'state': 'clean'})
         return True
+
 
 class hotel_housekeeping_activities(models.Model):
 
@@ -187,9 +188,9 @@ activity results as Clean.')
             self._context = {}
         res = super(hotel_housekeeping_activities, self).default_get(fields)
         if self._context.get('room_id', False):
-            res.update({'room_id':self._context['room_id']})
+            res.update({'room_id': self._context['room_id']})
         if self._context.get('today_date', False):
-            res.update({'today_date':self._context['today_date']})
+            res.update({'today_date': self._context['today_date']})
         return res
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -28,6 +28,7 @@ from openerp import models, fields, api, _
 import datetime
 import time
 
+
 class hotel_folio(models.Model):
 
     _inherit = 'hotel.folio'
@@ -47,19 +48,19 @@ class hotel_reservation(models.Model):
 
     reservation_no = fields.Char('Reservation No', size=64, readonly=True)
     date_order = fields.Datetime('Date Ordered', required=True, readonly=True,
-                                 states={'draft':[('readonly', False)]},
+                                 states={'draft': [('readonly', False)]},
                                  default=(lambda *a:
                                           time.strftime
                                           (DEFAULT_SERVER_DATETIME_FORMAT)))
     warehouse_id = fields.Many2one('stock.warehouse', 'Hotel', readonly=True,
                                    required=True, default=1,
-                                   states={'draft':[('readonly', False)]})
+                                   states={'draft': [('readonly', False)]})
     partner_id = fields.Many2one('res.partner', 'Guest Name', readonly=True,
                                  required=True,
-                                 states={'draft':[('readonly', False)]})
+                                 states={'draft': [('readonly', False)]})
     pricelist_id = fields.Many2one('product.pricelist', 'Scheme',
                                    required=True, readonly=True,
-                                   states={'draft':[('readonly', False)]},
+                                   states={'draft': [('readonly', False)]},
                                    help="Pricelist for current reservation.")
     partner_invoice_id = fields.Many2one('res.partner', 'Invoice Address',
                                          readonly=True,
@@ -82,15 +83,15 @@ class hotel_reservation(models.Model):
                                           "for current reservation. ")
     checkin = fields.Datetime('Expected-Date-Arrival', required=True,
                               readonly=True,
-                              states={'draft':[('readonly', False)]})
+                              states={'draft': [('readonly', False)]})
     checkout = fields.Datetime('Expected-Date-Departure', required=True,
                                readonly=True,
-                               states={'draft':[('readonly', False)]})
+                               states={'draft': [('readonly', False)]})
     adults = fields.Integer('Adults', size=64, readonly=True,
-                            states={'draft':[('readonly', False)]},
+                            states={'draft': [('readonly', False)]},
                             help='List of adults there in guest list. ')
     children = fields.Integer('Children', size=64, readonly=True,
-                              states={'draft':[('readonly', False)]},
+                              states={'draft': [('readonly', False)]},
                               help='Number of children there in guest list.')
     reservation_line = fields.One2many('hotel_reservation.line', 'line_id',
                                        'Reservation Line',
@@ -144,7 +145,7 @@ class hotel_reservation(models.Model):
         @return: raise warning depending on the validation
         '''
         checkin_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-        if self.date_order and self.checkin:  
+        if self.date_order and self.checkin:
             if self.checkin < self.date_order:
                 raise except_orm(_('Warning'), _('Checkin date should be \
                 greater than the current date.'))
@@ -230,7 +231,7 @@ class hotel_reservation(models.Model):
                 reservation with room those already reserved in this \
                 reservation period'))
             else:
-                self.write({'state':'confirm'})
+                self.write({'state': 'confirm'})
                 for line_id in reservation.reservation_line:
                     line_id = line_id.reserve
                     for room_id in line_id:
@@ -241,7 +242,7 @@ class hotel_reservation(models.Model):
                             'state': 'assigned',
                             'reservation_id': reservation.id,
                             }
-                        room_id.write({'isroom':False, 'status':'occupied'})
+                        room_id.write({'isroom': False, 'status': 'occupied'})
                         reservation_line_obj.create(vals)
         return True
 
@@ -340,17 +341,17 @@ class hotel_reservation(models.Model):
                               checkout_date=checkout_date, duration=False))
             duration = duration_vals.get('duration') or 0.0
             folio_vals = {
-                'date_order':reservation.date_order,
-                'warehouse_id':reservation.warehouse_id.id,
-                'partner_id':reservation.partner_id.id,
-                'pricelist_id':reservation.pricelist_id.id,
-                'partner_invoice_id':reservation.partner_invoice_id.id,
-                'partner_shipping_id':reservation.partner_shipping_id.id,
+                'date_order': reservation.date_order,
+                'warehouse_id': reservation.warehouse_id.id,
+                'partner_id': reservation.partner_id.id,
+                'pricelist_id': reservation.pricelist_id.id,
+                'partner_invoice_id': reservation.partner_invoice_id.id,
+                'partner_shipping_id': reservation.partner_shipping_id.id,
                 'checkin_date': reservation.checkin,
                 'checkout_date': reservation.checkout,
                 'duration': duration,
                 'reservation_id': reservation.id,
-                'service_lines':reservation['folio_id']
+                'service_lines': reservation['folio_id']
             }
             date_a = (datetime.datetime
                       (*time.strptime(reservation['checkout'],
@@ -370,7 +371,7 @@ class hotel_reservation(models.Model):
                         'product_uom_qty': ((date_a - date_b).days) + 1
                     }))
                     res_obj = room_obj.browse([r.id]) 
-                    res_obj.write({'status': 'occupied', 'isroom':False})
+                    res_obj.write({'status': 'occupied', 'isroom': False})
             folio_vals.update({'room_lines': folio_lines})
             folio = hotel_folio_obj.create(folio_vals)
             self._cr.execute('insert into hotel_folio_reservation_rel \
@@ -410,7 +411,7 @@ class hotel_reservation(models.Model):
                 additional_hours = abs((dur.seconds / 60) / 60)
                 if additional_hours >= configured_addition_hours:
                     duration += 1
-        value.update({'duration':duration})
+        value.update({'duration': duration})
         return value
 
     @api.model
@@ -491,9 +492,10 @@ class hotel_reservation_line(models.Model):
                             ('reservation_id', '=', reserv_rec.line_id.id)]
                 myobj = hotel_room_reserv_line_obj.search(hres_arg)
                 if myobj.ids:
-                    rec.write({'isroom':True, 'status':'available'})
+                    rec.write({'isroom': True, 'status': 'available'})
                     myobj.unlink()
         return super(hotel_reservation_line, self).unlink()
+
 
 class hotel_room_reservation_line(models.Model):
 
@@ -549,18 +551,19 @@ class hotel_room(models.Model):
                         ('check_in', '<=', curr_date),
                         ('check_out', '>=', curr_date)]
             room_line_ids = folio_room_line_obj.search(rom_args)
-            status = {'isroom':True, 'color':5}
+            status = {'isroom': True, 'color': 5}
             if reservation_line_ids.ids:
-                status = {'isroom':False, 'color':2}
+                status = {'isroom': False, 'color': 2}
             room.write(status)
             if room_line_ids.ids:
-                status = {'isroom':False, 'color':2}
+                status = {'isroom': False, 'color': 2}
             room.write(status)
             if reservation_line_ids.ids and room_line_ids.ids:
                 raise except_orm(_('Wrong Entry'),
                                  _('Please Check Rooms Status \
                                  for %s.' % (room.name)))
         return True
+
 
 class room_reservation_summary(models.Model):
 
@@ -594,7 +597,7 @@ class room_reservation_summary(models.Model):
                                          last_temp_day.day, 23, 59, 59)
             date_froms = first_day.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
             date_ends = last_day.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-            res.update({'date_from': date_froms, 'date_to':date_ends})
+            res.update({'date_from': date_froms, 'date_to': date_ends})
         return res
 
      @api.multi
@@ -657,11 +660,11 @@ class room_reservation_summary(models.Model):
              for room in room_ids:
                  room_detail = {}
                  room_list_stats = []
-                 room_detail.update({'name':room.name or ''})
+                 room_detail.update({'name': room.name or ''})
                  if not room.room_reservation_line_ids:
                      for chk_date in date_range_list:
-                         room_list_stats.append({'state':'Free',
-                                                 'date':chk_date})
+                         room_list_stats.append({'state': 'Free',
+                                                 'date': chk_date})
                  else:
                      for chk_date in date_range_list:
                          for room_res_line in room.room_reservation_line_ids:
@@ -673,22 +676,23 @@ class room_reservation_summary(models.Model):
                                                  ('check_out', '>=', chk_date)
                                                  ]))
                              if reservline_ids:
-                                 room_list_stats.append({'state':'Reserved',
-                                                         'date':chk_date,
-                                                         'room_id':room.id})
+                                 room_list_stats.append({'state': 'Reserved',
+                                                         'date': chk_date,
+                                                         'room_id': room.id})
                                  break
                              else:
-                                 room_list_stats.append({'state':'Free',
-                                                         'date':chk_date,
-                                                         'room_id':room.id})
+                                 room_list_stats.append({'state': 'Free',
+                                                         'date': chk_date,
+                                                         'room_id': room.id})
                                  break
-                 room_detail.update({'value':room_list_stats})
+                 room_detail.update({'value': room_list_stats})
                  all_room_detail.append(room_detail)
-             main_header.append({'header':summary_header_list})
+             main_header.append({'header': summary_header_list})
              self.summary_header = str(main_header)
              self.room_summary = str(all_room_detail)
          return res
- 
+
+
 class quick_room_reservation(models.TransientModel):
      _name = 'quick.room.reservation'
      _description = 'Quick Room Reservation'
@@ -775,17 +779,17 @@ class quick_room_reservation(models.TransientModel):
          hotel_res_obj = self.env['hotel.reservation']
          for res in self:
              hotel_res_obj.create({
-                          'partner_id':res.partner_id.id,
-                          'partner_invoice_id':res.partner_invoice_id.id,
-                          'partner_order_id':res.partner_order_id.id,
-                          'partner_shipping_id':res.partner_shipping_id.id,
-                          'checkin':res.check_in,
-                          'checkout':res.check_out,
-                          'warehouse_id':res.warehouse_id.id,
-                          'pricelist_id':res.pricelist_id.id,
-                          'reservation_line':[(0, 0, {
+                          'partner_id': res.partner_id.id,
+                          'partner_invoice_id': res.partner_invoice_id.id,
+                          'partner_order_id': res.partner_order_id.id,
+                          'partner_shipping_id': res.partner_shipping_id.id,
+                          'checkin': res.check_in,
+                          'checkout': res.check_out,
+                          'warehouse_id': res.warehouse_id.id,
+                          'pricelist_id': res.pricelist_id.id,
+                          'reservation_line': [(0, 0, {
                           'reserve': [(6, 0, [res.room_id.id])],
-                          'name':res.room_id and res.room_id.name or ''})]
+                          'name': res.room_id and res.room_id.name or ''})]
                          })
          return True
 

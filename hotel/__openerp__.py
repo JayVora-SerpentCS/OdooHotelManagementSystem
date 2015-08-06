@@ -24,7 +24,7 @@
 {
     "name": "Hotel Management",
     "version": "0.10",
-    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA" ,
+    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
     "category": "Generic Modules/Hotel Management",
     "description": """
     Module for Hotel/Resort/Property management. You can manage:
@@ -37,7 +37,8 @@
     Different reports are also provided, mainly for hotel statistics.
     """,
     "website": "http://www.serpentcs.com",
-    "depends": ["sale_stock", "hotel_report_layout"],
+    "depends": ["sale_stock", "hotel_report_layout",'point_of_sale'],
+    "demo" : ["views/hotel_data.xml"],
     "data": [
         "security/hotel_security.xml",
         "security/ir.model.access.csv",

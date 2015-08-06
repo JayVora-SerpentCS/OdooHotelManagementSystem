@@ -22,12 +22,13 @@
 #############################################################################
 
 from openerp import models, fields
- 
+
 AVAILABLE_STATES = [
     ('draft', 'Draft'),
     ('confirm', 'Confirm'),
     ('done', 'Done')
 ]
+
 
 class report_hotel_restaurant_status(models.Model):
     _name = "report.hotel.restaurant.status"

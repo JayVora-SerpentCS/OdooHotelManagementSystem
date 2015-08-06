@@ -35,7 +35,7 @@ class activity_report(report_sxw.rml_parse):
         self.localcontext.update({
             'time': time,
             'get_room_no': self.get_room_no,
-            'get_room_activity_detail':self._get_room_activity_detail,
+            'get_room_activity_detail': self._get_room_activity_detail,
         })
 
     def _get_room_activity_detail(self, date_start, date_end, room_data):
@@ -54,15 +54,15 @@ class activity_report(report_sxw.rml_parse):
                 ee_date = datetime.strptime(activity.clean_end_time,
                                             DEFAULT_SERVER_DATETIME_FORMAT)
                 diff = ee_date - ss_date
-                act_val.update({'current_date':activity.today_date,
-                                'activity':(activity.activity_name and
-                                            activity.activity_name.name
-                                            or ''),
-                                'login':(activity.housekeeper and
-                                         activity.housekeeper.name or ''),
-                                'clean_start_time':activity.clean_start_time,
-                                'clean_end_time':activity.clean_end_time,
-                                'duration':diff})
+                act_val.update({'current_date': activity.today_date,
+                                'activity': (activity.activity_name and
+                                             activity.activity_name.name
+                                             or ''),
+                                'login': (activity.housekeeper and
+                                          activity.housekeeper.name or ''),
+                                'clean_start_time': activity.clean_start_time,
+                                'clean_end_time': activity.clean_end_time,
+                                'duration': diff})
                 activity_detail.append(act_val)
         return activity_detail
 
