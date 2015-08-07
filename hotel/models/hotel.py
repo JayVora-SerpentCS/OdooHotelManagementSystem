@@ -182,7 +182,9 @@ class hotel_folio(models.Model):
         return res
 
     @api.model
-    def name_search(self, name='', args=[], operator='ilike', limit=100):
+    def name_search(self, name='', args=None, operator='ilike', limit=100):
+        if args is None:
+            args = []
         args += ([('name', operator, name)])
         mids = self.search(args, limit=100)
         return mids.name_get()
@@ -504,11 +506,12 @@ class hotel_folio(models.Model):
         return x
 
     @api.multi
-    def action_invoice_create(self, grouped=False,
-                              states=['confirmed', 'done']):
+    def action_invoice_create(self, grouped=False, states=None):
         '''
         @param self: object pointer
         '''
+        if states is None:
+            states = ['confirmed', 'done']
         order_ids = [folio.order_id.id for folio in self]
         room_lst = []
         sale_obj = self.env['sale.order'].browse(order_ids)
