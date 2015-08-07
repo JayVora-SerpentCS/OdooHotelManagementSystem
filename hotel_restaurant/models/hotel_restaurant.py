@@ -135,17 +135,17 @@ class hotel_restaurant_reservation(models.Model):
             self._cr.execute("select count(*) from "
                              "hotel_restaurant_reservation as hrr "
                              "inner join reservation_table as rt on \
-                            rt.reservation_table_id = hrr.id "
-                            "where (start_date,end_date)overlaps\
-                            ( timestamp %s , timestamp %s ) "
-                            "and hrr.id<> %s "
-                            "and rt.name in (select rt.name from \
-                            hotel_restaurant_reservation as hrr "
-                            "inner join reservation_table as rt on \
-                            rt.reservation_table_id = hrr.id "
-                            "where hrr.id= %s) ",
-                            (reservation.start_date, reservation.end_date,
-                             reservation.id, reservation.id))
+                             rt.reservation_table_id = hrr.id "
+                             "where (start_date,end_date)overlaps\
+                             ( timestamp %s , timestamp %s ) "
+                             "and hrr.id<> %s "
+                             "and rt.name in (select rt.name from \
+                             hotel_restaurant_reservation as hrr "
+                             "inner join reservation_table as rt on \
+                             rt.reservation_table_id = hrr.id "
+                             "where hrr.id= %s) ",
+                             (reservation.start_date, reservation.end_date,
+                              reservation.id, reservation.id))
             res = self._cr.fetchone()
             roomcount = res and res[0] or 0.0
             if len(reservation.tableno.ids) == 0:
