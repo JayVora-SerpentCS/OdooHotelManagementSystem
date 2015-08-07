@@ -29,8 +29,7 @@ from openerp.report import report_sxw
 class folio_report(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
         super(folio_report, self).__init__(cr, uid, name, context)
-        self.localcontext.update({
-                                  'time': time,
+        self.localcontext.update({'time': time,
                                   'get_data': self.get_data,
                                   'get_Total': self.getTotal,
                                   'get_total': self.gettotal,

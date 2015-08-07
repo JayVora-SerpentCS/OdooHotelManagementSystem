@@ -281,8 +281,7 @@ class hotel_folio(models.Model):
                 self.env.args = cr, uid, misc.frozendict(context)
             else:
                 raise except_orm(_('Warning'), _('Please Reserve Any Room.'))
-        return {
-                'name': _('Currency Exchange'),
+        return {'name': _('Currency Exchange'),
                 'res_model': 'currency.exchange',
                 'type': 'ir.actions.act_window',
                 'view_id': False,
@@ -788,9 +787,10 @@ class hotel_folio_line(models.Model):
         '''
         if product:
             return self.product_id_change(pricelist, product, qty=0,
-                uom=False, qty_uos=0, uos=False, name='',
-                partner_id=partner_id,lang=False,
-                update_tax=True, date_order=False)
+                                          uom=False, qty_uos=0, uos=False,
+                                          name='', partner_id=partner_id,
+                                          lang=False, update_tax=True,
+                                          date_order=False)
 
     @api.onchange('checkin_date', 'checkout_date')
     def on_change_checkout(self):
