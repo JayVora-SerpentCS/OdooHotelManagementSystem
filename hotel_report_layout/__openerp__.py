@@ -22,7 +22,7 @@
 #############################################################################
 
 {
-    'name': 'Report Extended',
+    'name': 'Hotel Report Layout',
     'category': 'Base',
     'summary': 'Report',
     'version': '0.01',
