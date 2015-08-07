@@ -1,8 +1,9 @@
 # -*- encoding: utf-8 -*-
-##############################################################################
+#############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd. (<http://www.serpentcs.com>)
+#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
+#    (<http://www.serpentcs.com>)
 #    Copyright (C) 2004 OpenERP SA (<http://www.openerp.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -18,13 +19,14 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
-##############################################################################
-from openerp import models,fields
+#############################################################################
+from openerp import models, fields
 
 AVAILABLE_STATES = [
     ('draft', 'Draft'),
     ('confirm', 'Confirm'),
     ('done', 'Done')]
+
 
 class report_hotel_reservation_status(models.Model):
 
@@ -34,11 +36,13 @@ class report_hotel_reservation_status(models.Model):
 
     reservation_no = fields.Char('Reservation No', size=64, readonly=True)
     nbr = fields.Integer('Reservation', readonly=True)
-    state = fields.Selection(AVAILABLE_STATES, 'State', size=16, readonly=True)
+    state = fields.Selection(AVAILABLE_STATES, 'State', size=16,
+                             readonly=True)
 
-    def init(self,cr):
+    def init(self, cr):
         """
-        This method is for initialization for report hotel reservation status Module.
+        This method is for initialization for report hotel reservation
+        status Module.
         @param self: The object pointer
         @param cr: database cursor
         """
@@ -53,6 +57,5 @@ class report_hotel_reservation_status(models.Model):
                     hotel_reservation c
                 group by c.state,c.reservation_no
             )""")
-
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

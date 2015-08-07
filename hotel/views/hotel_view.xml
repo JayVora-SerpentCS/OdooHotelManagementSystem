@@ -1001,6 +1001,7 @@
                        <field name="folio_no" required="1"/>
                        <field name="guest_name" required="1"/>
                        <field name="room_number" required="1"/>
+                       <field name="hotel_id"/>
                        <field name="type"/>
                     </group>
                     <separator string="Currency Exchange"/><newline/>
