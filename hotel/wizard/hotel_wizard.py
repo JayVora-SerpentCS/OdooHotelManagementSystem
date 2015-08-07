@@ -31,7 +31,7 @@ class folio_report_wizard(models.TransientModel):
     date_start = fields.Datetime('Start Date')
     date_end = fields.Datetime('End Date')
 
-    @api.multi 
+    @api.multi
     def print_report(self):
         data = {
             'ids': self.ids,
@@ -45,12 +45,12 @@ class folio_report_wizard(models.TransientModel):
 class order_report_wizard(models.TransientModel):
     _name = 'order.report.wizard'
     _rec_name = 'date_start'
-    
+
     date_start = fields.Datetime('Start Date')
     date_end = fields.Datetime('End Date')
     check = fields.Boolean('With Details')
 
-    @api.multi 
+    @api.multi
     def print_pos_report(self):
         data = {
             'ids': self.ids,

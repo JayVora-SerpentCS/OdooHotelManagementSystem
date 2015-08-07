@@ -300,8 +300,7 @@ class hotel_restaurant_order(models.Model):
                 'tableno': [(6, 0, table_ids)],
             })
             for order_line in order.order_list:
-                o_line = {
-                          'kot_order_list': kot_data.id,
+                o_line = {'kot_order_list': kot_data.id,
                           'name': order_line.name.id,
                           'item_qty': order_line.item_qty,
                           'item_rate': order_line.item_rate

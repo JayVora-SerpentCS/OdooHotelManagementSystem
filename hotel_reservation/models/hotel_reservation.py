@@ -152,7 +152,7 @@ class hotel_reservation(models.Model):
     @api.onchange('checkout', 'checkin')
     def on_change_checkout(self):
         '''
-        When you change checkout or checkin it will check whether 
+        When you change checkout or checkin it will check whether
         Checkout date should be greater than Checkin date
         and update dummy field
         -----------------------------------------------------------
@@ -162,13 +162,14 @@ class hotel_reservation(models.Model):
         checkout_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         checkin_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         if not (checkout_date and checkin_date):
-            return {'value':{}}
+            return {'value': {}}
         if self.checkout and self.checkin:
             if self.checkout < self.checkin:
                 raise except_orm(_('Warning'), _('Checkout date \
                 should be greater than Checkin date.'))
         delta = datetime.timedelta(days=1)
-        dat_a = time.strptime(checkout_date, DEFAULT_SERVER_DATETIME_FORMAT)[:5]
+        dat_a = time.strptime(checkout_date,
+                              DEFAULT_SERVER_DATETIME_FORMAT)[:5]
         addDays = datetime.datetime(*dat_a) + delta
         self.dummy = addDays.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
@@ -203,24 +204,24 @@ class hotel_reservation(models.Model):
         reservation_line_obj = self.env['hotel.room.reservation.line']
         for reservation in self:
             self._cr.execute("select count(*) from hotel_reservation as hr "
-                        "inner join hotel_reservation_line as hrl on \
-                        hrl.line_id = hr.id "
-                        "inner join hotel_reservation_line_room_rel as \
-                        hrlrr on hrlrr.room_id = hrl.id "
-                        "where (checkin,checkout) overlaps \
-                        ( timestamp %s, timestamp %s ) "
-                        "and hr.id <> cast(%s as integer) "
-                        "and hr.state = 'confirm' "
-                        "and hrlrr.hotel_reservation_line_id in ("
-                        "select hrlrr.hotel_reservation_line_id \
-                        from hotel_reservation as hr "
-                        "inner join hotel_reservation_line as \
-                        hrl on hrl.line_id = hr.id "
-                        "inner join hotel_reservation_line_room_rel \
-                        as hrlrr on hrlrr.room_id = hrl.id "
-                        "where hr.id = cast(%s as integer) )"
-                        ,(reservation.checkin, reservation.checkout,
-                          str(reservation.id), str(reservation.id)))
+                             "inner join hotel_reservation_line as hrl on \
+                             hrl.line_id = hr.id "
+                             "inner join hotel_reservation_line_room_rel as \
+                             hrlrr on hrlrr.room_id = hrl.id "
+                             "where (checkin,checkout) overlaps \
+                             ( timestamp %s, timestamp %s ) "
+                             "and hr.id <> cast(%s as integer) "
+                             "and hr.state = 'confirm' "
+                             "and hrlrr.hotel_reservation_line_id in ("
+                             "select hrlrr.hotel_reservation_line_id \
+                             from hotel_reservation as hr "
+                             "inner join hotel_reservation_line as \
+                             hrl on hrl.line_id = hr.id "
+                             "inner join hotel_reservation_line_room_rel \
+                             as hrlrr on hrlrr.room_id = hrl.id "
+                             "where hr.id = cast(%s as integer) )",
+                             (reservation.checkin, reservation.checkout,
+                              str(reservation.id), str(reservation.id)))
             res = self._cr.fetchone()
             roomcount = res and res[0] or 0.0
             if roomcount:
@@ -609,8 +610,7 @@ class room_reservation_summary(models.Model):
                                          ('name', '=',
                                           'view_hotel_reservation_form')])
         resource_id = model_data_ids.read(fields=['res_id'])[0]['res_id']
-        return {
-                'name': _('Reconcile Write-Off'),
+        return {'name': _('Reconcile Write-Off'),
                 'context': self._context,
                 'view_type': 'form',
                 'view_mode': 'form',
@@ -776,8 +776,7 @@ class quick_room_reservation(models.TransientModel):
         hotel_res_obj = self.env['hotel.reservation']
         for res in self:
             (hotel_res_obj.create
-             ({
-               'partner_id': res.partner_id.id,
+             ({'partner_id': res.partner_id.id,
                'partner_invoice_id': res.partner_invoice_id.id,
                'partner_order_id': res.partner_order_id.id,
                'partner_shipping_id': res.partner_shipping_id.id,

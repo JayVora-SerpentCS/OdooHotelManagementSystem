@@ -282,17 +282,17 @@ class hotel_folio(models.Model):
             else:
                 raise except_orm(_('Warning'), _('Please Reserve Any Room.'))
         return {
-            'name': _('Currency Exchange'),
-            'res_model': 'currency.exchange',
-            'type': 'ir.actions.act_window',
-            'view_id': False,
-            'view_mode': 'form,tree',
-            'view_type': 'form',
-            'context': {'default_folio_no': context.get('folioid'),
-                        'default_hotel_id': context.get('hotel'),
-                        'default_guest_name': context.get('guest'),
-                        'default_room_number': context.get('room_no')
-                        },
+                'name': _('Currency Exchange'),
+                'res_model': 'currency.exchange',
+                'type': 'ir.actions.act_window',
+                'view_id': False,
+                'view_mode': 'form,tree',
+                'view_type': 'form',
+                'context': {'default_folio_no': context.get('folioid'),
+                            'default_hotel_id': context.get('hotel'),
+                            'default_guest_name': context.get('guest'),
+                            'default_room_number': context.get('room_no')
+                            },
                 }
 
     @api.constrains('room_lines')
@@ -406,8 +406,7 @@ class hotel_folio(models.Model):
                     for rm in room_lst:
                         room_obj = h_room_obj.search([('name', '=', rm.name)])
                         room_obj.write({'isroom': False})
-                        vals = {
-                                'room_id': room_obj.id,
+                        vals = {'room_id': room_obj.id,
                                 'check_in': rec.checkin_date,
                                 'check_out': rec.checkout_date,
                                 'folio_id': rec.id,
@@ -440,8 +439,7 @@ class hotel_folio(models.Model):
                 for rm in room_list:
                     room_obj = h_room_obj.search([('name', '=', rm.name)])
                     room_obj.write({'isroom': False})
-                    vals = {
-                            'room_id': room_obj.id,
+                    vals = {'room_id': room_obj.id,
                             'check_in': folio_obj.checkin_date,
                             'check_out': folio_obj.checkout_date,
                             'folio_id': folio_obj.id,
@@ -452,8 +450,7 @@ class hotel_folio(models.Model):
                 for rom in room_list_obj:
                     room_obj = h_room_obj.search([('name', '=', rom.name)])
                     room_obj.write({'isroom': False})
-                    room_vals = {
-                                 'room_id': room_obj.id,
+                    room_vals = {'room_id': room_obj.id,
                                  'check_in': folio_obj.checkin_date,
                                  'check_out': folio_obj.checkout_date,
                                  'folio_id': folio_obj.id,
@@ -519,17 +516,13 @@ class hotel_folio(models.Model):
         invoice_id = (sale_obj.action_invoice_create
                       (grouped=False, states=['confirmed', 'done']))
         for line in self:
-            values = {
-                      'invoiced': True,
+            values = {'invoiced': True,
                       'state': 'progress' if grouped else 'progress',
                       'hotel_invoice_id': invoice_id
                       }
             line.write(values)
             for line2 in line.folio_pos_order_ids:
-                vals = {
-                        'invoice_id': invoice_id,
-                        }
-                line2.write(vals)
+                line2.write({'invoice_id': invoice_id})
                 line2.action_invoice_state()
             for rec in line.room_lines:
                 room_lst.append(rec.product_id)
@@ -621,7 +614,7 @@ class hotel_folio(models.Model):
         '''
         @param self: object pointer
         '''
-        for order in order_ids:
+        for order in self:
             order.write({'shipped': True})
 
     @api.multi
@@ -812,8 +805,8 @@ class hotel_folio_line(models.Model):
         if not self.checkout_date:
             self.checkout_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         if self.checkout_date < self.checkin_date:
-            raise except_orm(_('Warning'), _('Checkout must be greater or \
-            equal to checkin date'))
+            raise except_orm(_('Warning'), _('Checkout must be greater or'
+                                             'equal to checkin date'))
         if self.checkin_date and self.checkout_date:
             date_a = time.strptime(self.checkout_date,
                                    DEFAULT_SERVER_DATETIME_FORMAT)[:5]
