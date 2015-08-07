@@ -33,7 +33,7 @@
       Different reports are also provided, mainly for hotel statistics.
     """,
     "website": "http://www.serpentcs.com",
-    "depends": ["hotel", "stock", "hotel_report_layout", 'mail',
+    "depends": ["hotel", "stock", 'mail',
                 'email_template'],
     "demo": [
         "views/hotel_reservation_data.xml",
