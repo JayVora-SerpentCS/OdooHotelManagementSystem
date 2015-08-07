@@ -37,7 +37,7 @@ class product_category(models.Model):
 class product_product(models.Model):
 
     _inherit = "product.product"
- 
+
     ismenucard = fields.Boolean('Is Menucard')
 
 
@@ -58,7 +58,7 @@ class hotel_menucard(models.Model):
     product_id = fields.Many2one('product.product', 'Product', required=True,
                                  delegate=True, ondelete='cascade')
     image = fields.Binary("Image",
-                          help="This field holds the image used as image" \
+                          help="This field holds the image used as image "
                           "for the product, limited to 1024x1024px.")
 
 
@@ -112,7 +112,7 @@ class hotel_restaurant_reservation(models.Model):
     @api.multi
     def action_set_to_draft(self):
         """
-        This method is used to change the state 
+        This method is used to change the state
         to draft of the hotel restaurant reservation
         --------------------------------------------
         @param self: object pointer
@@ -133,18 +133,18 @@ class hotel_restaurant_reservation(models.Model):
         """
         for reservation in self:
             self._cr.execute("select count(*) from \
-                        hotel_restaurant_reservation as hrr " \
-                       "inner join reservation_table as rt on \
-                       rt.reservation_table_id = hrr.id " \
-                       "where (start_date,end_date)overlaps\
-                       ( timestamp %s , timestamp %s ) " \
-                       "and hrr.id<> %s " \
-                       "and rt.name in (select rt.name from \
-                       hotel_restaurant_reservation as hrr " \
-                       "inner join reservation_table as rt on \
-                       rt.reservation_table_id = hrr.id " \
-                       "where hrr.id= %s) " \
-                        , (reservation.start_date, reservation.end_date,
+                        hotel_restaurant_reservation as hrr "
+                        "inner join reservation_table as rt on \
+                        rt.reservation_table_id = hrr.id "
+                        "where (start_date,end_date)overlaps\
+                        ( timestamp %s , timestamp %s ) "
+                        "and hrr.id<> %s "
+                        "and rt.name in (select rt.name from \
+                        hotel_restaurant_reservation as hrr "
+                        "inner join reservation_table as rt on \
+                        rt.reservation_table_id = hrr.id "
+                        "where hrr.id= %s) "
+                        ,(reservation.start_date, reservation.end_date,
                            reservation.id, reservation.id))
             res = self._cr.fetchone()
             roomcount = res and res[0] or 0.0
@@ -162,7 +162,7 @@ class hotel_restaurant_reservation(models.Model):
     @api.multi
     def table_cancel(self):
         """
-        This method is used to change the state 
+        This method is used to change the state
         to cancel of the hotel restaurant reservation
         --------------------------------------------
         @param self: object pointer
@@ -173,7 +173,7 @@ class hotel_restaurant_reservation(models.Model):
     @api.multi
     def table_done(self):
         """
-        This method is used to change the state 
+        This method is used to change the state
         to done of the hotel restaurant reservation
         --------------------------------------------
         @param self: object pointer
@@ -265,8 +265,8 @@ class hotel_restaurant_order(models.Model):
             sale.amount_subtotal = sum(line.price_subtotal for line
                                        in sale.order_list)
 
-    @api.multi 
-    @api.depends('amount_subtotal') 
+    @api.multi
+    @api.depends('amount_subtotal')
     def _total(self):
         '''
         amount_total will display on change of amount_subtotal
@@ -301,11 +301,11 @@ class hotel_restaurant_order(models.Model):
             })
             for order_line in order.order_list:
                 o_line = {
-                         'kot_order_list': kot_data.id,
-                         'name': order_line.name.id,
-                         'item_qty': order_line.item_qty,
-                         'item_rate': order_line.item_rate
-                }
+                          'kot_order_list': kot_data.id,
+                          'name': order_line.name.id,
+                          'item_qty': order_line.item_qty,
+                          'item_rate': order_line.item_rate
+                          }
                 restaurant_order_list_obj.create(o_line)
         return True
 
@@ -352,12 +352,12 @@ class hotel_reservation_order(models.Model):
     @api.multi
     @api.depends('order_list')
     def _sub_total(self):
-       '''
-       amount_subtotal will display on change of order_list
-       ---------------------------------------------
-       @param self: object pointer
-       '''
-       for sale in self:
+        '''
+        amount_subtotal will display on change of order_list
+        ---------------------------------------------
+        @param self: object pointer
+        '''
+        for sale in self:
             sale.amount_subtotal = sum(line.price_subtotal for line
                                        in sale.order_list)
 
@@ -405,7 +405,7 @@ class hotel_reservation_order(models.Model):
                     'item_qty': order_line.item_qty,
                     'item_rate': order_line.item_rate
                 }
-                rest_data = rest_order_list_obj.create(o_line)
+                rest_order_list_obj.create(o_line)
                 res.append(order_line.id)
             self.rest_id = [(6, 0, res)]
             self.write({'state': 'order'})
@@ -447,7 +447,7 @@ class hotel_reservation_order(models.Model):
     @api.multi
     def done_kot(self):
         """
-        This method is used to change the state 
+        This method is used to change the state
         to done of the hotel reservation order
         ----------------------------------------
         @param self: object pointer

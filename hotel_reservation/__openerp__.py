@@ -34,7 +34,7 @@
     """,
     "website": "http://www.serpentcs.com",
     "depends": ["hotel", "stock", "hotel_report_layout", 'mail',
-                'email_template',],
+                'email_template'],
     "demo": [
         "views/hotel_reservation_data.xml",
     ],

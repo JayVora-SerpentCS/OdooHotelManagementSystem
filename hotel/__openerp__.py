@@ -37,8 +37,8 @@
     Different reports are also provided, mainly for hotel statistics.
     """,
     "website": "http://www.serpentcs.com",
-    "depends": ["sale_stock", "hotel_report_layout",'point_of_sale'],
-    "demo" : ["views/hotel_data.xml"],
+    "depends": ["sale_stock", "hotel_report_layout", 'point_of_sale'],
+    "demo": ["views/hotel_data.xml"],
     "data": [
         "security/hotel_security.xml",
         "security/ir.model.access.csv",

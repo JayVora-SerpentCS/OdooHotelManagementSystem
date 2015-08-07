@@ -29,7 +29,7 @@ from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 
 class activity_report(report_sxw.rml_parse):
-    
+
     def __init__(self, cr, uid, name, context):
         super(activity_report, self).__init__(cr, uid, name, context)
         self.localcontext.update({
@@ -78,6 +78,4 @@ class report_lunchorder(models.AbstractModel):
     _template = 'hotel_housekeeping.report_housekeeping'
     _wrapped_report_class = activity_report
 
-# report_sxw.report_sxw('report.activity.detail', 'hotel.housekeeping', 'addons/hotel_housekeeping/report/activity_detail.rml', parser=activity_report)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:    
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

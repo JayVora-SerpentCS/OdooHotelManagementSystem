@@ -21,7 +21,7 @@
 #
 ############################################################################
 
-from openerp.tools import ustr, DEFAULT_SERVER_DATE_FORMAT
+from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 from openerp import models, fields, api, _, netsvc
 from openerp.exceptions import ValidationError
 import time
@@ -86,7 +86,7 @@ as Bad, Good or Ok. ")
     @api.multi
     def action_set_to_dirty(self):
         """
-        This method is used to change the state 
+        This method is used to change the state
         to dirty of the hotel housekeeping
         ---------------------------------------
         @param self: object pointer
@@ -100,7 +100,7 @@ as Bad, Good or Ok. ")
     @api.multi
     def room_cancel(self):
         """
-        This method is used to change the state 
+        This method is used to change the state
         to cancel of the hotel housekeeping
         ---------------------------------------
         @param self: object pointer
@@ -111,7 +111,7 @@ as Bad, Good or Ok. ")
     @api.multi
     def room_done(self):
         """
-        This method is used to change the state 
+        This method is used to change the state
         to done of the hotel housekeeping
         ---------------------------------------
         @param self: object pointer
@@ -122,7 +122,7 @@ as Bad, Good or Ok. ")
     @api.multi
     def room_inspect(self):
         """
-        This method is used to change the state 
+        This method is used to change the state
         to inspect of the hotel housekeeping
         ---------------------------------------
         @param self: object pointer
@@ -133,7 +133,7 @@ as Bad, Good or Ok. ")
     @api.multi
     def room_clean(self):
         """
-        This method is used to change the state 
+        This method is used to change the state
         to clean of the hotel housekeeping
         ---------------------------------------
         @param self: object pointer
@@ -178,12 +178,12 @@ activity results as Clean.')
 
     @api.model
     def default_get(self, fields):
-        """ 
+        """
         To get default values for the object.
         @param self: The object pointer.
         @param fields: List of fields for which we want default values
         @return: A dictionary which of fields with values.
-        """ 
+        """
         if self._context is None:
             self._context = {}
         res = super(hotel_housekeeping_activities, self).default_get(fields)

@@ -30,12 +30,12 @@ class folio_report1(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
         super(folio_report1, self).__init__(cr, uid, name, context)
         self.localcontext.update({
-            'time': time,
-            'get_data': self.get_data,
-            'gettotal': self.gettotal,
-            'getTotal': self.getTotal,
-            'get_pos': self.get_pos,
-                        })
+                                  'time': time,
+                                  'get_data': self.get_data,
+                                  'gettotal': self.gettotal,
+                                  'getTotal': self.getTotal,
+                                  'get_pos': self.get_pos,
+                                  })
         self.temp = 0.0
 
     def get_data(self, date_start, date_end):
@@ -79,4 +79,4 @@ class report_lunchorder1(models.AbstractModel):
     _template = 'hotel.report_hotel_folio_pos'
     _wrapped_report_class = folio_report1
 
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:                 
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
