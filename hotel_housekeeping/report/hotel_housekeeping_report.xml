@@ -12,5 +12,6 @@
             name="hotel_housekeeping.report_housekeeping"
             menu="False"
         />
+
 	</data>
 </openerp>

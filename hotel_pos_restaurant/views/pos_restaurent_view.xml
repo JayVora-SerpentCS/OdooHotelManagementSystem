@@ -1,0 +1,16 @@
+<openerp> 
+    <data>
+       <!-- pos order view Inherited -->
+       <record id ="hotel_folio_pos_inh" model="ir.ui.view">
+            <field name="name">hotel.folio.pos.inh</field>
+            <field name="model">pos.order</field>
+            <field name ="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+            <field name="arch" type ="xml">
+                <xpath expr ="//form/sheet/group/field[@name='partner_id']"  position ="after">
+                    <field name ="folio_id" />
+                    <field name="room_no"/>
+                </xpath>
+            </field>
+       </record>
+</data>
+</openerp>

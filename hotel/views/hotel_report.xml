@@ -4,7 +4,7 @@
 
 		<!--Report for hotel folio -->
 
-	    <report 
+        <report 
             id="report_hotel_management"
             string="Hotel Folio"
             model="hotel.folio" 
@@ -13,5 +13,30 @@
             name="hotel.report_hotel_folio" 
             menu="False"
         />
+
+        <!--Report for hotel folio pos order-->
+
+        <report 
+            id="report_hotel_pos_order"
+            string="Hotel Folio Pos Order"
+            model="hotel.folio" 
+            report_type="qweb-pdf"
+            file="hotel.report_hotel_folio_pos" 
+            name="hotel.report_hotel_folio_pos" 
+            menu="False"
+        />
+
+
+        <!--Report for currency exchange -->
+        <report 
+            id="report_hotel_currency"
+            string="Encashment Certificate"
+            model="currency.exchange" 
+            report_type="qweb-pdf"
+            file="hotel.report_currency_exchange" 
+            name="hotel.report_currency_exchange"
+            menu="False" 
+        />
+
 	</data>
 </openerp>

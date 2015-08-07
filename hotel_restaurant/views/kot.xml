@@ -9,6 +9,21 @@
         <t t-foreach="docs" t-as="o">
             <t t-call="report.external_layout">
                 <div class="page">
+                    <t t-name="report.external_layout_header">
+                        <div class="header">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 75px;max-width: 75px;"/>
+                                </div>
+                                <div class="col-xs-9 text-right" style="margin-top:20px;" t-field="company.name"/>
+                            </div>
+                            <div class="row zero_min_height">
+                                <div class="col-xs-12">
+                                    <div style="border-bottom: 1px solid black;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
                         <div class="row">
                             <h2>
                                 <span><strong><center>Kitchen Order Ticket</center></strong></span>
@@ -38,7 +53,6 @@
                                 </td>
                         </tbody>
                     </table>
-
                     <table class="table table-condensed">
                         <thead>
                             <tr>

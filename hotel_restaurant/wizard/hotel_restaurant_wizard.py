@@ -1,8 +1,9 @@
 # -*- encoding: utf-8 -*-
-##############################################################################
+#############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd. (<http://www.serpentcs.com>)
+#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
+#    (<http://www.serpentcs.com>)
 #    Copyright (C) 2004 OpenERP SA (<http://www.openerp.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -18,9 +19,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
-##############################################################################
+#############################################################################
 
-from openerp import models,fields,api
+from openerp import models, fields, api
+
 
 class wizard_hotel_restaurant(models.TransientModel):
 
@@ -36,7 +38,10 @@ class wizard_hotel_restaurant(models.TransientModel):
             'model': 'hotel.restaurant.reservation',
             'form': self.read(['date_start', 'date_end'])[0]
         }
-        return self.env['report'].get_action(self, 'hotel_restaurant.report_res_table',data=data)
+        return self.env['report'
+                        ].get_action(self,
+                                     'hotel_restaurant.report_res_table',
+                                     data=data)
 
 wizard_hotel_restaurant()
 

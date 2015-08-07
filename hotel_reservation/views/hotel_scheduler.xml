@@ -13,5 +13,17 @@
             <field name="function" eval="'cron_room_line'"/>
             <field name="args" eval="'()'" />
         </record>
+
+        <!-- inform Guest About reservation before 24 hours -->
+        <record model="ir.cron" id="Guest_reservation_reminder_24hrs">
+            <field name="name">Inform Guest About Reservation Before 24hours</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="model" eval="'hotel.reservation'"/>
+            <field name="function" eval="'reservation_reminder_24hrs'"/>
+            <field name="args" eval="'()'"/> 
+        </record>
     </data>
 </openerp>

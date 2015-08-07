@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <openerp>
 	<data>
+        <menuitem id="menu_hotel_reporting" name="Hotel Management System" parent="base.menu_reporting" />
 
         <!-- Action of hotel reservation -->
 		<record model="ir.actions.act_window" id="action_view_frontdesk_cal">
@@ -11,78 +12,106 @@
 			<field name="view_id" ref="hotel_reservation.hotel_calendar_view" />
 		</record>
 
-        <!-- Form view of board -->	
-		<record model="ir.ui.view" id="board_frontdesk_form">
-			<field name="name">board.frontdesk.form</field>
-			<field name="model">board.board</field>
-			<field name="type">form</field>
-			<field name="arch" type="xml">
-				<form string="FrontDesk board">
-					<hpaned>
-						<child1>
-							<action
-								string="Reservation"
-								name="%(action_view_frontdesk_cal)d"
-								/>
-						</child1>
-					</hpaned>
-				</form>
-			</field>
-		</record>
-
-        <!-- Action of board -->
-		<record model="ir.actions.act_window" id="open_board_frontdesk">
-			<field name="name">FrontDesk Dashboard</field>
-			<field name="res_model">board.board</field>
-			<field name="view_type">form</field>
-			<field name="view_mode">form</field>
-			<field name="usage">menu</field>
-			<field name="view_id" ref="board_frontdesk_form"/>
-		</record>
-
-		<menuitem id="menu_hotel_reporting" name="Hotel Management System" parent="base.menu_reporting" />
-
-		<menuitem
-			name="Hotel FrontDesk Board"
-			action="open_board_frontdesk"
-			sequence="1"
-			id="menu_board_frontdesk" icon="terp-graph"
-			parent="menu_hotel_reporting"/>
-
-
-        <!-- Action of hotel room -->
-        <record id="action_hotel_room_board" model="ir.actions.act_window">
-            <field name="name">Hotel Rooms Details</field>
-            <field name="res_model">hotel.room</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree</field>
-            <field name="context">{'search_view_ref':'hotel.view_hotel_room_search','tree_view_ref':'hotel.view_hotel_room_tree'}</field>
-        </record>
-
-        <menuitem
-            name="Hotel Rooms Details"
-            action="action_hotel_room_board"
-            sequence="2"
-            id="menu_action_hotel_room_board" icon="terp-graph"
-            parent="menu_hotel_reporting"/>
-
-
         <!-- Action of hotel restaurant kitchen order tickets -->
         <record id="action_hotel_restaurant_order_board" model="ir.actions.act_window">
             <field name="name">Current Orders Details</field>
             <field name="res_model">hotel.restaurant.kitchen.order.tickets</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree</field>
-            <field name="context">{'tree_view_ref':'hotel_restaurant.view_hotel_restaurant_kitchen_order_tickets_tree'}</field>
-            <field name="domain">[('kot_date','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('kot_date','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]</field>
+            <field name="context">{'tree_view_ref':'hotel_restaurant.view_hotel_restaurant_kitchen_order_tickets_tree','search_default_today':1}</field>
         </record>
 
-        <menuitem
-            name="Current Orders Details"
-            action="action_hotel_restaurant_order_board"
-            sequence="3"
-            id="menu_action_restaurant_order_board" icon="terp-graph"
-            parent="menu_hotel_reporting"/>
+         <!-- Action for room reservation summary-->
+         <record model="ir.actions.act_window" id="action_desk_hotel_reservation_summary">
+             <field name="name">action.desk.hotel.reservation.summary</field>
+             <field name="type">ir.actions.act_window</field>
+             <field name="res_model">room.reservation.summary</field>
+             <field name="view_type">form</field>
+             <field name="view_mode">form</field>
+         </record>
+
+        <!-- Tree view of Current Table Reservation -->
+        <record model="ir.ui.view" id="view_board_hotel_restaurant_reservation_tree">
+            <field name="name">view.board.hotel.restaurant.reservation.tree</field>
+            <field name="model">hotel.restaurant.reservation</field>
+            <field name="arch" type="xml">
+                <tree string="Table Reservation">
+                    <field name="tableno"/>
+                    <field name="cname"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Action of Current Table Reservation -->
+        <record id="action_table_order_board" model="ir.actions.act_window">
+            <field name="name">Current Table Reservation Details</field>
+            <field name="res_model">hotel.restaurant.reservation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_board_hotel_restaurant_reservation_tree"/>
+            <field name="domain">[('state','in',('order','done')),('start_date','&lt;=',datetime.datetime.now()),('end_date','&gt;',datetime.datetime.now())]</field>
+        </record>
+
+        <!-- Action of hotel room -->
+        <record id="action_hotel_room_board" model="ir.actions.act_window">
+            <field name="name">Hotel Rooms Details</field>
+            <field name="res_model">hotel.room</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban</field>
+            <field name="context">{'kanban_view_ref':'hotel.view_hotel_room_kanban'}</field>
+        </record>
+
+        <!-- Form view of board --> 
+        <record model="ir.ui.view" id="board_frontdesk_form">
+            <field name="name">board.frontdesk.form</field>
+            <field name="model">board.board</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="FrontDesk board">
+                    <hpaned>
+                        <child1>
+                            <action
+                                string="Reservation"
+                                name="%(action_view_frontdesk_cal)d"
+                                />
+                            <action
+                                string="Reservation Summary"
+                                name="%(action_desk_hotel_reservation_summary)d"
+                                />
+                            <action
+                                string="Rooms Details"
+                                name="%(action_hotel_room_board)d"
+                                />
+                            <action
+                                string="Today's Restaurant Orders"  
+                                name="%(action_hotel_restaurant_order_board)d"
+                                />
+                            <action
+                                string="Currently Reserved Tables Details"  
+                                name="%(action_table_order_board)d"
+                                />
+                        </child1>
+                    </hpaned>
+                </form>
+            </field>
+        </record>
+
+        <!-- Action of board -->
+        <record model="ir.actions.act_window" id="open_board_frontdesk">
+            <field name="name">FrontDesk Dashboard</field>
+            <field name="res_model">board.board</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="usage">menu</field>
+            <field name="view_id" ref="board_frontdesk_form"/>
+        </record>
+
+        <menuitem name="Hotel FrontDesk Board" 
+                  action="open_board_frontdesk" sequence="1" 
+                  id="menu_board_frontdesk" icon="terp-graph" 
+                  parent="menu_hotel_reporting"/>
 
         <!-- Action for report hotel reservation status-->
         <record model="ir.actions.act_window"
@@ -98,7 +127,6 @@
             action="action_report_hotel_reservation_status_tree_graph_bar12" id="menu_hotel_reservation_status_tree_graph_bar11"
             sequence="34" parent="menu_hotel_reporting"/>
 
-
         <!-- Action for report hotel restaurant status-->
         <record model="ir.actions.act_window"
             id="action_report_hotel_restaurant_board">
@@ -113,20 +141,17 @@
             action="action_report_hotel_restaurant_board" id="menu_action_report_hotel_restaurant_board"
             sequence="35"  parent="menu_hotel_reporting" />
 
-         <!-- Action for room reservation summary-->
-         <record model="ir.actions.act_window" id="action_desk_hotel_reservation_summary">
-             <field name="name">action.desk.hotel.reservation.summary</field>
+         <!-- Action for currency exchange-->
+         <record model="ir.actions.act_window" id="action_desk_currency_exchange">
+             <field name="name">action.desk.currency.exchange</field>
              <field name="type">ir.actions.act_window</field>
-             <field name="res_model">room.reservation.summary</field>
+             <field name="res_model">currency.exchange</field>
              <field name="view_type">form</field>
-             <field name="view_mode">form</field>
+             <field name="view_mode">tree,form</field>
          </record>
 
-         <menuitem name="Rooms Reservations Summary"
-         id="menu_action_desk_hotel_reservation_summary"
-         action="action_desk_hotel_reservation_summary"
-         parent="menu_hotel_reporting" 
-          />
+         <menuitem name="Currency Exchange" id="menu_action_desk_currency_exchange" action="action_desk_currency_exchange"
+          parent="menu_hotel_reporting" />
 
 	</data>
 </openerp>

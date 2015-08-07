@@ -12,7 +12,7 @@
             <field name="arch" type="xml">
                 <form string="Reservation" >
                     <header>
-                        <button name="action_for_hotel" type="object" string="send" states="draft" class="oe_highlight"/>
+                        <button name="send_reservation_maill" type="object" string="Send Reservation Email" states="confirm" class="oe_highlight"/>
                         <button name="confirm" string="Confirm" states="draft" class="oe_highlight"/>
                         <button name="done" string="Create Folio" states="confirm" class="oe_highlight"/> 
                         <field name="state" widget="statusbar"/>
@@ -89,20 +89,20 @@
             <field name="model">hotel.reservation</field>
             <field name="arch" type="xml">
                 <search string="Reservation">
-                    <group string='Filters'>
-                        <filter icon="terp-document-new" domain="[('state','=','draft')]" string="Draft"/>
-                        <filter icon="terp-camera_test" domain="[('state','=','confirm')]" string="Confirm"/>
-                        <filter icon="terp-dialog-close" domain="[('state','=','cancel')]" string="Cancel"/>
-                        <filter icon="terp-check" domain="[('state','=','done')]" string="Done"/>
-                    </group>
-                    <field name="reservation_no"/>
+                    <filter string="Current Reservations" domain="[('checkout','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('checkin','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]" help="Current Reservations" />
+                    <filter domain="[('state','=','draft')]" string="Draft"/>
+                    <filter domain="[('state','=','confirm')]" string="Confirm"/>
+                    <filter domain="[('state','=','cancel')]" string="Cancel"/>
+                    <filter domain="[('state','=','done')]" string="Done"/>
                     <field name="partner_id" select="1"/>
+                    <field name="reservation_no"/>
                     <field name="checkin"/>
                     <field name="checkout"/>
                     <field name="state"/>
                     <newline/>
-                    <group expand="0" string="Group By...">
+                    <group expand="0" string="Group By">
                         <filter name="partner_id" string="Guest Name" icon="terp-personal" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="Order By Month" domain="[]" context="{'group_by':'date_order'}"/>
                     </group>
                 </search>
             </field>
@@ -165,7 +165,7 @@
                 <xpath expr="//page[@string='Information']" position="after">
                     <page string = "Room Reservation">
                         <separator colspan='4' string="Room Reservation Line" />
-                        <field name="room_reservation_line_ids" colspan="4" nolabel='1' >
+                        <field name="room_reservation_line_ids" colspan="4" nolabel='1' string="Room Reservation Line">
                             <form string=" Room line" >
                                 <group colspan='4' col='4'>
                                     <field name="room_id"/>
@@ -173,6 +173,7 @@
                                     <field name="state"/>
                                     <field name="check_out"/>
                                     <field name="reservation_id" />
+                                    <field name="status"/>
                                 </group>
                             </form>
                             <tree>
@@ -181,6 +182,7 @@
                                 <field name="check_out"/>
                                 <field name="state"/>
                                 <field name="reservation_id" />
+                                <field name="status"/>
                             </tree>
                         </field>
                     </page>
@@ -237,8 +239,8 @@
                      </sheet>
                  </form>
              </field>
-         </record>
 
+         </record>
 
          <!-- Form view of quick room reservation-->
          <record model="ir.ui.view" id="quick_room_reservation_form_view">

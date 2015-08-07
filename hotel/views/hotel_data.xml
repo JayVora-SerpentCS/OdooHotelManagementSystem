@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-    <data noupdate="0">
-    
+    <data noupdate="1">
+
     <!-- Floor  -->
-    
+
         <record id="hotel_floor_ground0" model="hotel.floor">
             <field eval="&quot;Ground&quot;" name="name"/>
         </record>
@@ -19,14 +19,13 @@
             <field eval="&quot;Third&quot;" name="name"/>
             <field eval="3" name="sequence"/>
         </record>
-        
+
     <!-- hotel_room_amenities_type  -->
-        
+
         <record id="hotel_room_amenities_type_0" model="hotel.room.amenities.type">
             <field name="name">All Aminities</field>
             <field name="isamenitytype">1</field>
         </record>
-        
         <record id="hotel_room_amenities_type_1" model="hotel.room.amenities.type">
             <field name="parent_id" search="[('isamenitytype','=',True), ('name', '=', 'All Aminities')]"/>
             <field name="name">Beds</field>
@@ -47,20 +46,18 @@
             <field name="name">Double Bed</field>
             <field name="isamenitytype">1</field>
         </record>
-        
+
     <!-- hotel_room_type    -->
-         
+
         <record id="rooms" model="hotel.room.type">
             <field name="name">All Rooms</field>
             <field name="isroomtype">1</field>
         </record>
-        
         <record id="hotel_room_type_1" model="hotel.room.type">
             <field name="parent_id" search="[('isroomtype','=',True), ('name', '=', 'All Rooms')]"/>
             <field name="name">Single</field>
             <field name="isroomtype">1</field>
         </record>
-        
         <record id="hotel_room_type_2" model="hotel.room.type">
             <field name="parent_id" search="[('isroomtype','=',True), ('name', '=', 'All Rooms')]"/>
             <field name="name">Double</field>
@@ -68,13 +65,12 @@
         </record>
         <record id="hotel_room_type_3" model="hotel.room.type">
              <field name="parent_id" search="[('isroomtype','=',True), ('name', '=', 'All Rooms')]"/>
-             <field name="name">No Room</field>
+             <field name="name">Triple</field>
              <field name="isroomtype">1</field>
         </record>
-        
 
         <!-- hotel_service_type -->
-        
+
         <record id="hotel_service_type_0" model="hotel.service.type">
             <field name="name">All Services</field>
             <field name="isservicetype">1</field>
@@ -89,118 +85,114 @@
             <field name="isservicetype">1</field>
             <field name="name">Variable</field>
         </record>
-            
+
     <!-- hotel_room -->
-    
-        <record id="hotel_room_6" model="hotel.room">
-            <field name="name">No Room Available</field>
-            <field name="isroom">1</field>
-            <field name="categ_id" search="[('isroomtype','=',True), ('name', '=', 'No Room')]"/>
-            <field name="list_price">0.00</field>
-            <field name="capacity">0</field>
-        </record>
-  
+
         <record id="hotel_room_0" model="hotel.room">
             <field name="name">Single-101</field>
             <field name="isroom">1</field>
             <field name="categ_id" search="[('isroomtype','=',True), ('name', '=', 'Single')]"/> 
             <field name="list_price">100.00</field>
             <field name="capacity">2</field>
+            <field name="available_in_pos">0</field>
         </record>
-        
         <record id="hotel_room_1" model="hotel.room">
             <field name="name">Single-102</field>
             <field name="isroom">1</field>
             <field name="categ_id" search="[('isroomtype','=',True), ('name', '=', 'Single')]"/>
             <field name="list_price">100.00</field>
             <field name="capacity">2</field>
+            <field name="available_in_pos">0</field>
         </record>
-        
         <record id="hotel_room_2" model="hotel.room">
             <field name="name">Single-103</field>
             <field name="isroom">1</field>
             <field name="categ_id" search="[('isroomtype','=',True), ('name', '=', 'Single')]"/>
             <field name="list_price">100.00</field>
             <field name="capacity">2</field>
+            <field name="available_in_pos">0</field>
         </record>
-  
         <record id="hotel_room_3" model="hotel.room">
             <field name="name">Double-201</field>
             <field name="isroom">1</field>
             <field name="categ_id" search="[('isroomtype','=',True), ('name', '=', 'Double')]"/> 
             <field name="list_price">200.00</field>
             <field name="capacity">5</field>
+            <field name="available_in_pos">0</field>
         </record>
-        
         <record id="hotel_room_4" model="hotel.room">
             <field name="name">Double-202</field>
             <field name="isroom">1</field>
             <field name="categ_id" search="[('isroomtype','=',True), ('name', '=', 'Double')]"/>
             <field name="list_price">200.00</field>
             <field name="capacity">5</field>
+            <field name="available_in_pos">0</field>
         </record>
-        
         <record id="hotel_room_5" model="hotel.room">
             <field name="name">Double-203</field>
             <field name="isroom">1</field>
             <field name="categ_id" search="[('isroomtype','=',True), ('name', '=', 'Double')]"/>
             <field name="list_price">200.00</field>
             <field name="capacity">5</field>
+            <field name="available_in_pos">0</field>
         </record>
-        
-        <record id="hotel_room_61" model="hotel.room">
-            <field name="name">No Room Record</field>
+        <record id="hotel_room_6" model="hotel.room">
+            <field name="name">Triple-101</field>
             <field name="isroom">1</field>
-            <field name="categ_id" search="[('isroomtype','=',True), ('name', '=', 'No Room')]"/> 
-            <field name="list_price">0.00</field>
-            <field name="capacity">0</field>
+            <field name="available_in_pos">0</field>
+            <field name="categ_id" search="[('isroomtype','=',True), ('name', '=', 'Triple')]"/>
+            <field name="list_price">300.00</field>
+            <field name="capacity">6</field>
+        </record>
+        <record id="hotel_room_61" model="hotel.room">
+            <field name="name">Triple-102</field>
+            <field name="isroom">1</field>
+            <field name="categ_id" search="[('isroomtype','=',True), ('name', '=', 'Triple')]"/> 
+            <field name="list_price">300.00</field>
+            <field name="capacity">6</field>
+            <field name="available_in_pos">6</field>
         </record>
 
             <!-- hotel_services --> 
 
-    
         <record id="hotel_service_6" model="hotel.services">
             <field name="name">Internet</field>
             <field name="isservice">1</field>
             <field name="categ_id" search="[('isservicetype','=',True), ('name', '=', 'Fixed')]"/> 
             <field name="list_price">200.00</field>
+            <field name="available_in_pos">0</field>
         </record>
-        
         <record id="hotel_service_0" model="hotel.services">
             <field name="name">Taxi</field>
             <field name="isservice">1</field>
             <field name="categ_id" search="[('isservicetype','=',True), ('name', '=', 'Variable')]"/>
             <field name="list_price">500.00</field>
+            <field name="available_in_pos">0</field>
         </record>
-        
         <record id="hotel_service_1" model="hotel.services">
             <field name="name">Laundry</field>
             <field name="isservice">1</field>
             <field name="categ_id" search="[('isservicetype','=',True), ('name', '=', 'Fixed')]"/> 
             <field name="list_price">150.00</field>
+            <field name="available_in_pos">0</field>
         </record>
-        
+
         <!--Amenities-->
 
         <record id="hotel_room_amenities_1" model="hotel.room.amenities">
             <field name="name">Toiletries</field>
             <field name="iscategid">1</field>
             <field name="categ_id" search="[('isamenitytype','=',True), ('name', '=', 'All Aminities')]"/>
-            <field name="isamenitytype">1</field> 
         </record>
-
         <record id="hotel_room_amenities_2" model="hotel.room.amenities">
             <field name="name">Iron</field>
             <field name="iscategid">1</field>
             <field name="categ_id" search="[('isamenitytype','=',True), ('name', '=', 'All Aminities')]"/>
-            <field name="isamenitytype">1</field> 
         </record>
-
         <record id="hotel_room_amenities_3" model="hotel.room.amenities">
             <field name="name">Irons Boards</field>
             <field name="iscategid">1</field>
             <field name="categ_id" search="[('isamenitytype','=',True), ('name', '=', 'All Aminities')]"/>
-            <field name="isamenitytype">1</field> 
         </record>
 
     </data>

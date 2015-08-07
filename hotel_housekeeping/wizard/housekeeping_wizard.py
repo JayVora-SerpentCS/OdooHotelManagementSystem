@@ -1,8 +1,9 @@
-# -*- coding: utf-8 -*-
-##############################################################################
+# -*- encoding: utf-8 -*-
+#############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd. (<http://www.serpentcs.com>)
+#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
+#    (<http://www.serpentcs.com>)
 #    Copyright (C) 2004 OpenERP SA (<http://www.openerp.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -18,9 +19,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
-##############################################################################
+#############################################################################
 
-from openerp import models,fields,api,_
+from openerp import models, fields, api
+
 
 class hotel_housekeeping_wizard(models.TransientModel):
     _name = 'hotel.housekeeping.wizard'
@@ -36,6 +38,9 @@ class hotel_housekeeping_wizard(models.TransientModel):
             'model': 'hotel.housekeeping',
             'form': self.read(['date_start', 'date_end', 'room_no'])[0]
         }
-        return self.env['report'].get_action(self,'hotel_housekeeping.report_housekeeping', data=data)
+        return self.env['report'
+                        ].get_action(self,
+                                     'hotel_housekeeping.report_housekeeping',
+                                     data=data)
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

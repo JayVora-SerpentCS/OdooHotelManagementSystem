@@ -14,5 +14,17 @@
             <field name="padding">5</field>
         </record>
 
+        <!-- Sequences for curency exchange -->
+        <record model="ir.sequence.type" id="seq_type_currency_exchange">
+            <field name="name">Currency Exchange</field>
+            <field name="code">currency.exchange</field>
+        </record>
+        <record model="ir.sequence" id="seq_currency_exchange">
+            <field name="name">Currency Exchange</field>
+            <field name="code">currency.exchange</field>
+            <field name="prefix">ECR/</field>
+            <field name="padding">5</field>
+        </record>
+
     </data>
 </openerp>

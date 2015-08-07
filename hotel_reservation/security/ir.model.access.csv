@@ -5,3 +5,5 @@ access_hotel_room_reservation_line_user,hotel_room_reservation.line.user,model_h
 access_hotel_reservation_manager,hotel_reservation.manager,model_hotel_reservation,hotel.group_hotel_manager,1,1,1,1
 access_hotel_reservation_line_manager,hotel_reservation.line.manager,model_hotel_reservation_line,hotel.group_hotel_manager,1,1,1,1
 access_hotel_room_reservation_line_manager,hotel_room_reservation.line.manager,model_hotel_room_reservation_line,hotel.group_hotel_manager,1,1,1,1
+access_room_reservation_summary_manager,hotel_room_reservation_summary.manager,model_room_reservation_summary,hotel.group_hotel_manager,1,1,1,1
+

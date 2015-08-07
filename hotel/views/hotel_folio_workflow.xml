@@ -2,9 +2,9 @@
 <openerp>
 	<data>
 		<record model="workflow" id="wkf_hotel">
-		<field name="name">hotel.folio.basic</field>
-		<field name="osv">hotel.folio</field>
-		<field name="on_create">True</field>
+			<field name="name">hotel.folio.basic</field>
+			<field name="osv">hotel.folio</field>
+			<field name="on_create">True</field>
 		</record>
 
 	#----------------------------------------------
@@ -16,7 +16,6 @@
 			<field name="flow_start">True</field>
 			<field name="name">draft</field>
 		</record>
-
 		<record model="workflow.activity" id="act_router">
 			<field name="wkf_id" ref="wkf_hotel"/>
 			<field name="name">router</field>
@@ -32,7 +31,6 @@
 			<field name="wkf_id" ref="wkf_hotel"/>
 			<field name="name">wait_ship</field>
 		</record>
-
 		<record model="workflow.activity" id="act_done">
 			<field name="wkf_id" ref="wkf_hotel"/>
 			<field name="name">done</field>
@@ -62,7 +60,6 @@
 			<field name="kind">stopall</field>
 			<field name="action">action_cancel()</field>
 		</record>
-
 		<record model="workflow.activity" id="act_invoice">
 			<field name="wkf_id" ref="wkf_hotel"/>
 			<field name="name">invoice</field>
@@ -88,7 +85,6 @@
 			<field name="kind">stopall</field>
 			<field name="action">action_cancel()</field>
 		</record>
-
 		<record model="workflow.activity" id="act_ship">
 			<field name="wkf_id" ref="wkf_hotel"/>
 			<field name="name">ship</field>
@@ -138,47 +134,39 @@
 			<field name="act_to" ref="act_invoice_end"/>
 			<field name="condition">(order_policy=='picking')</field>
 		</record>
-
 		<record model="workflow.transition" id="trans_router_wait_invoice">
 			<field name="act_from" ref="act_router"/>
 			<field name="act_to" ref="act_wait_invoice"/>
 		</record>
-
 		<record model="workflow.transition" id="trans_router_wait_ship">
 			<field name="act_from" ref="act_router"/>
 			<field name="act_to" ref="act_wait_ship"/>
 		</record>
-
 		<record model="workflow.transition" id="trans_wait_invoice_cancel2">
 			<field name="act_from" ref="act_wait_invoice"/>
 			<field name="act_to" ref="act_cancel2"/>
 			<field name="signal">cancel</field>
 		</record>
-
 		<record model="workflow.transition" id="trans_wait_ship_cancel3">
 			<field name="act_from" ref="act_wait_ship"/>
 			<field name="act_to" ref="act_cancel3"/>
 			<field name="signal">cancel</field>
 		</record>
-
 		<record model="workflow.transition" id="trans_wait_ship_ship">
 			<field name="act_from" ref="act_wait_ship"/>
 			<field name="act_to" ref="act_ship"/>
 			<field name="condition">(order_policy!='prepaid') or invoiced</field>
 		</record>
-
 		<record model="workflow.transition" id="trans_wait_invoice_invoice">
 			<field name="act_from" ref="act_wait_invoice"/>
 			<field name="act_to" ref="act_invoice"/>
 			<field name="condition">(order_policy=='prepaid') or ((order_policy=='postpaid') and shipped)</field>
 		</record>
-
 		<record model="workflow.transition" id="trans_wait_invoice_invoice_manual">
 			<field name="act_from" ref="act_wait_invoice"/>
 			<field name="act_to" ref="act_invoice"/>
 			<field name="signal">manual_invoice</field>
 		</record>
-
 		<record model="workflow.transition" id="trans_invoice_invoice_end">
 			<field name="act_from" ref="act_invoice"/>
 			<field name="act_to" ref="act_invoice_end"/>
@@ -203,7 +191,6 @@
 			<field name="act_from" ref="act_ship_end"/>
 			<field name="act_to" ref="act_done"/>
 		</record>
-
 		<record model="workflow.transition" id="trans_ship_ship_except">
 			<field name="act_from" ref="act_ship"/>
 			<field name="act_to" ref="act_ship_except"/>
@@ -224,6 +211,61 @@
 			<field name="act_to" ref="act_ship_cancel"/>
 			<field name="signal">ship_cancel</field>
 		</record>
+
+#--------------------------------------------
+		Currency Exchange
+#--------------------------------------------
+		
+        <record id="wkf_currency" model="workflow">
+            <field name="name">currency.exchange.basic</field>
+            <field name="osv">currency.exchange</field>
+            <field name="on_create">True</field>
+        </record>
+
+        <!-- Activity -->
+
+		<record id="act_cur_draft" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_currency"/>
+            <field name="flow_start">True</field>
+            <field name="name">draft</field>
+        </record>
+        <record id="act_cur_done" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_currency"/>
+            <field name="name">done</field>
+            <field name="kind">function</field>
+            <field name="action">act_cur_done()</field>
+            <field name="flow_stop">true</field>
+        </record>
+        <record id="act_cur_cancel" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_currency"/>
+            <field name="name">cancel</field>
+            <field name="kind">function</field>
+            <field name="action">act_cur_cancel()</field>
+        </record>
+        <record id="act_cur_cancel_draft" model="workflow.activity">
+            <field name="wkf_id" ref="wkf_currency"/>
+            <field name="name">do_draft</field>
+            <field name="kind">function</field>
+            <field name="action">act_cur_cancel_draft()</field>
+        </record>
+
+        <!--  Transitions  -->
+
+        <record id="trans_cur_draft" model="workflow.transition">
+            <field name="act_from" ref="act_cur_draft"/>
+            <field name="act_to" ref="act_cur_done"/>
+            <field name="signal">cur_confirm</field>
+        </record>
+        <record id="trans_cur_cancel" model="workflow.transition">
+            <field name="act_from" ref="act_cur_draft"/>
+            <field name="act_to" ref="act_cur_cancel"/>
+            <field name="signal">cur_cancel</field>
+        </record>
+        <record id="trans_cancel_draft" model="workflow.transition">
+            <field name="act_from" ref="act_cur_cancel"/>
+            <field name="act_to" ref="act_cur_cancel_draft"/>
+            <field name="signal">cur_cancel_draft</field>
+        </record>
 
 	</data>
 </openerp>

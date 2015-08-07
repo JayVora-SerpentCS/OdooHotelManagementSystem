@@ -1,8 +1,9 @@
 # -*- encoding: utf-8 -*-
-##############################################################################
+#############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd. (<http://www.serpentcs.com>)
+#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
+#    (<http://www.serpentcs.com>)
 #    Copyright (C) 2004 OpenERP SA (<http://www.openerp.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -18,43 +19,49 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
-##############################################################################
+#############################################################################
 
 import time
 from openerp import models
 from openerp.report import report_sxw
 
+
 class hotel_restaurant_report(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
         super(hotel_restaurant_report, self).__init__(cr, uid, name, context)
-        self.localcontext.update( {
+        self.localcontext.update({
             'time': time,
-            'get_res_data':self.get_res_data,
+            'get_res_data': self.get_res_data,
         })
-        self.context=context
+        self.context = context
 
-    def get_res_data(self,date_start,date_end):
+    def get_res_data(self, date_start, date_end):
         rest_reservation_obj = self.pool.get('hotel.restaurant.reservation')
-        tids = rest_reservation_obj.search(self.cr, self.uid, [('start_date', '>=', date_start),('end_date', '<=', date_end)])
+        tids = rest_reservation_obj.search(self.cr, self.uid,
+                                           [('start_date', '>=', date_start),
+                                            ('end_date', '<=', date_end)])
         res = rest_reservation_obj.browse(self.cr, self.uid, tids)
         return res
+
 
 class report_lunchorder(models.AbstractModel):
     _name = 'report.hotel_restaurant.report_res_table'
     _inherit = 'report.abstract_report'
     _template = 'hotel_restaurant.report_res_table'
     _wrapped_report_class = hotel_restaurant_report
-    
+
+
 class report_kot(models.AbstractModel):
     _name = 'report.hotel_restaurant.report_hotel_order_kot'
     _inherit = 'report.abstract_report'
     _template = 'hotel_restaurant.report_hotel_order_kot'
     _wrapped_report_class = hotel_restaurant_report
-    
+
+
 class report_bill(models.AbstractModel):
     _name = 'report.hotel_restaurant.report_hotel_order_kot'
     _inherit = 'report.abstract_report'
     _template = 'hotel_restaurant.report_hotel_order_kot'
     _wrapped_report_class = hotel_restaurant_report
-    
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

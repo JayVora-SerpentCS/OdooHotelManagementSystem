@@ -29,3 +29,7 @@ access_hotel_services_manager,hotel.sevices.manager,model_hotel_services,hotel.g
 access_hotel_order_manager_manager,hotel.order.manager,sale.model_sale_order,hotel.group_hotel_manager,1,1,1,1
 access_hotel_order_line_manager,hotel.order.line.manager,sale.model_sale_order_line,hotel.group_hotel_manager,1,1,1,0
 access_hotel_invoice_manager,account.invoice.manager,account.model_account_invoice,hotel.group_hotel_manager,1,1,1,1
+access_currency_exchange_manager,hotel.currency_exchange.manager,model_currency_exchange,hotel.group_hotel_manager,1,1,1,1
+access_currency_exchange_user,hotel.currency_exchange.user,model_currency_exchange,hotel.group_hotel_user,1,1,1,1
+access_folio_room_line_manager,hotel.folio_room_line.manager,model_folio_room_line,hotel.group_hotel_manager,1,1,1,1
+access_folio_room_line_user,hotel.folio_room_line.user,model_folio_room_line,hotel.group_hotel_user,1,1,1,1

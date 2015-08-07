@@ -39,7 +39,6 @@
             </field>
         </record>
 
-
         <!-- Graph view of report hotel restaurant status-->
 		<record model="ir.ui.view" id="view_hotel_restaurant_status_graph">
 			<field name="name">report.hotel.restaurant.status.graph</field>

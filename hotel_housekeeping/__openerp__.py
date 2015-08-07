@@ -1,8 +1,9 @@
-# -*- coding: utf-8 -*-
-##############################################################################
+# -*- encoding: utf-8 -*-
+#############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd. (<http://www.serpentcs.com>)
+#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
+#    (<http://www.serpentcs.com>)
 #    Copyright (C) 2004 OpenERP SA (<http://www.openerp.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -18,13 +19,13 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
-##############################################################################
+#############################################################################
 
 {
-    "name" : "Hotel Housekeeping Management",
-    "version" : "0.05",
-    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA" ,
-    "category" : "Generic Modules/Hotel Housekeeping",
+    "name": "Hotel Housekeeping Management",
+    "version": "0.05",
+    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
+    "category": "Generic Modules/Hotel Housekeeping",
     "description": """
     Module for Hotel/Hotel Housekeeping. You can manage:
     * Housekeeping process
@@ -33,11 +34,11 @@
       Different reports are also provided, mainly for hotel statistics.
     """,
     "website": "http://www.serpentcs.com",
-    "depends" : ["hotel"],
-    "demo" : [
+    "depends": ["hotel"],
+    "demo": [
         "views/hotel_housekeeping_data.xml",
     ],
-    "data" : [
+    "data": [
         "security/ir.model.access.csv",
         "report/hotel_housekeeping_report.xml",
         "views/activity_detail.xml",
@@ -45,6 +46,7 @@
         "views/hotel_housekeeping_workflow.xml",
         "views/hotel_housekeeping_view.xml",
     ],
+
     'installable': True,
     'auto_install': False,
 }
