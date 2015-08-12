@@ -32,9 +32,10 @@ class hotel_folio(models.Model):
     _inherit = 'hotel.folio'
     _order = 'reservation_id desc'
 
-    rest_order_ids = fields.Many2many('hotel.reservation.order', 'hotel_res_rel',
-                                           'hotel_folio_id', 'rest_id',
-                                           'Orders', readonly=True)
+    rest_order_ids = fields.Many2many('hotel.reservation.order',
+                                      'hotel_res_rel', 'hotel_folio_id',
+                                      'rest_id', 'Orders', readonly=True)
+
 
 class product_category(models.Model):
 
@@ -232,7 +233,6 @@ class hotel_restaurant_reservation(models.Model):
                              select=True, required=True, readonly=True,
                              default=lambda * a: 'draft')
     is_folio = fields.Boolean('Is a Hotel Guest??')
-
 
     @api.model
     def create(self, vals):
@@ -459,7 +459,7 @@ class hotel_reservation_order(models.Model):
                 'tableno': [(6, 0, table_ids)],
                 }
             kot_obj = order_tickets_obj.browse(self.kitchen_id)
-            kot_data = kot_obj.write(line_data)
+            kot_obj.write(line_data)
             for order_line in order.order_list:
                 if order_line.id not in order.rest_id.ids:
                     kot_data1 = order_tickets_obj.create(line_data)
@@ -533,7 +533,8 @@ class hotel_reservation_order(models.Model):
                              required=True, readonly=True,
                              default=lambda * a: 'draft')
     folio_id = fields.Many2one('hotel.folio', string='Folio No')
-    is_folio = fields.Boolean('Is a Hotel Guest??',help='is customer reside in hotel or not')
+    is_folio = fields.Boolean('Is a Hotel Guest??', help='is customer reside'
+                              'in hotel or not')
 
     @api.model
     def create(self, vals):
