@@ -2,6 +2,21 @@
 <openerp>
     <data>
         <menuitem  id="hotel_restaurant_menu" name="Restaurant" parent="hotel.hotel_management_menu" sequence="3"/>
+
+        <record model="ir.ui.view" id="view_hotelfolio1_form1_inherited">
+            <field name="name">hotel.folio1.form1.inherited</field>
+            <field name="model">hotel.folio</field>
+            <field name="inherit_id" ref="hotel.view_hotel_folio1_form"/>
+            <field name="arch" type="xml">
+                <field name="folio_pos_order_ids" position='after'>
+                    <separator string="Restaurant Orders Details" colspan="4"/>
+                    <field name="rest_order_ids" colspan="4" nolabel="1"/>
+                </field>
+            </field>
+        </record>
+
+
+
     	<!-- ==============================
         Table Master
         ============================== -->
@@ -89,15 +104,17 @@
                             <field name="reservation_id" colspan="4" select="1" />
                         </h1>
                         <group>
-                            <group colspan="2" >
-                                <field name="room_no" />
+                            <group colspan="2" col="4">
+                                <field name="is_folio"/><newline/>
+                                <field name="folio_id" attrs="{'invisible':[('is_folio','=',False)], 'required':[('is_folio','=',True)]}"/>
+                                <field name="room_no" attrs="{'invisible':[('is_folio','=',False)] ,'required':[('is_folio','=',True)]}"/>
                             </group>
                             <newline/>
                             <group colspan="4" col="4">
-                                <field name="start_date"/>
-                                <field name="end_date"/>
                                 <field name="cname"/>
                                 <field name="partner_address_id"/>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
                             </group>
                             <group colspan="4">
                                 <separator colspan='4' string="Table List"/>
@@ -116,6 +133,7 @@
             <field name="arch" type="xml">
                 <tree string="Table Reservation" colors="blue:state == 'draft';red:state == 'cancel';black:state == 'done';black:state == 'order';green:state == 'confirm'" toolbar="1">
                     <field name="reservation_id"/>
+                    <field name="folio_id"/>
                     <field name="room_no"/>
                     <field name="start_date"/>
                     <field name="end_date"/>
@@ -183,16 +201,19 @@
                         <button string="Generate KOT" name="reservation_generate_kot" type="object" states="draft" icon="gtk-go-forward"/>
                         <button string="Generate KOT" name="reservation_update_kot" type="object" states="order" icon="gtk-go-forward"/>
                         <button string="Done" name="done_kot" type="object" states="order" icon="gtk-apply"/>
+                        <button name="%(report_hotel_reservation_order_bill)d" attrs="{'invisible' : ['|', ('folio_id','!=',False), ('state','in',('draft','order'))]}" type="action" string="generate Bill" class = "oe_highlight"/>
                         <field name="state" widget="statusbar"/>
-                    </header>
+                    </header >
                     <sheet>
                         <h1>
-                            <label string="Order" colspan="4" />
-                            <field name="order_number" colspan="4"/>
+                            <label string="Order" colspan="4"/>
+                            <field name="order_number" colspan="4" />
                         </h1>
                         <group>
-                            <group colspan="2">
+                            <group colspan="4" col="4">
+                                <field name="is_folio" invisible="1"/><newline/>
                                 <field name="reservationno"/>
+                                <field name="folio_id" attrs="{'invisible': [('is_folio','=',False)]}"/>
                             </group>
                             <group colspan="4" col="4" >
                                 <field name="date1" />
@@ -390,6 +411,7 @@
         action="open_view_hotel_restaurant_order_form_tree"
         sequence="11"
         parent="hotel_restaurant_menu"/>
+
 
         <!-- ==============================
         Kitchen Order List

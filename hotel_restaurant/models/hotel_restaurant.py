@@ -27,6 +27,15 @@ from openerp import models, fields, api, _, netsvc
 import time
 
 
+class hotel_folio(models.Model):
+
+    _inherit = 'hotel.folio'
+    _order = 'reservation_id desc'
+
+    rest_order_ids = fields.Many2many('hotel.reservation.order', 'hotel_res_rel',
+                                           'hotel_folio_id', 'rest_id',
+                                           'Orders', readonly=True)
+
 class product_category(models.Model):
 
     _inherit = "product.category"
@@ -90,7 +99,9 @@ class hotel_restaurant_reservation(models.Model):
             values = {
                 'reservationno': record.reservation_id,
                 'date1': record.start_date,
+                'folio_id': record.folio_id.id,
                 'table_no': [(6, 0, table_ids)],
+                'is_folio': record.is_folio,
             }
             proxy.create(values)
         self.write({'state': 'order'})
@@ -108,6 +119,21 @@ class hotel_restaurant_reservation(models.Model):
         else:
             addr = self.cname.address_get(['default'])
             self.partner_address_id = addr['default']
+
+    @api.onchange('folio_id')
+    def get_folio_id(self):
+        '''
+        When you change folio_no, based on that it will update
+        the guest_name,hotel_id and room_number as well
+        ---------------------------------------------------------
+        @param self: object pointer
+        '''
+        for rec in self:
+            self.cname = False
+            self.room_no = False
+            if rec.folio_id:
+                self.cname = rec.folio_id.partner_id.id
+                self.room_no = rec.folio_id.room_lines[0].product_id.id
 
     @api.multi
     def action_set_to_draft(self):
@@ -185,7 +211,8 @@ class hotel_restaurant_reservation(models.Model):
     _description = "Includes Hotel Restaurant Reservation"
 
     reservation_id = fields.Char('Reservation No', size=64, readonly=True)
-    room_no = fields.Many2one('hotel.room', string='Room No', size=64)
+    room_no = fields.Many2one('product.product', string='Room No', size=64)
+    folio_id = fields.Many2one('hotel.folio', string='Folio No')
     start_date = fields.Datetime('Start Time', required=True,
                                  default=(lambda *a:
                                           time.strftime
@@ -204,6 +231,8 @@ class hotel_restaurant_reservation(models.Model):
                               ('order', 'Order Created')], 'state',
                              select=True, required=True, readonly=True,
                              default=lambda * a: 'draft')
+    is_folio = fields.Boolean('Is a Hotel Guest??')
+
 
     @api.model
     def create(self, vals):
@@ -429,16 +458,18 @@ class hotel_reservation_order(models.Model):
                 'w_name': order.waitername.name,
                 'tableno': [(6, 0, table_ids)],
                 }
-            kot_data = order_tickets_obj.create(line_data)
-            self.kitchen_id = kot_data.id
+            kot_obj = order_tickets_obj.browse(self.kitchen_id)
+            kot_data = kot_obj.write(line_data)
             for order_line in order.order_list:
-                o_line = {
-                    'kot_order_list': kot_data.id,
-                    'name': order_line.name.id,
-                    'item_qty': order_line.item_qty,
-                    'item_rate': order_line.item_rate
-                }
                 if order_line.id not in order.rest_id.ids:
+                    kot_data1 = order_tickets_obj.create(line_data)
+                    self.kitchen_id = kot_data1.id
+                    o_line = {
+                        'kot_order_list': kot_data1.id,
+                        'name': order_line.name.id,
+                        'item_qty': order_line.item_qty,
+                        'item_rate': order_line.item_rate
+                    }
                     self.rest_id = [(4, order_line.id)]
                     rest_order_list_obj.create(o_line)
         return True
@@ -451,6 +482,26 @@ class hotel_reservation_order(models.Model):
         ----------------------------------------
         @param self: object pointer
         """
+        hotel_folio_obj = self.env['hotel.folio']
+        hsl_obj = self.env['hotel.service.line']
+        so_line_obj = self.env['sale.order.line']
+        for order_obj in self:
+                hotelfolio = order_obj.folio_id.order_id.id
+                if order_obj.folio_id:
+                    for order1 in order_obj.order_list:
+                        values = {'order_id': hotelfolio,
+                                  'name': order1.name.name,
+                                  'product_id': order1.name.product_id.id,
+                                  'product_uom_qty': order1.item_qty,
+                                  'price_unit': order1.item_rate,
+                                  'price_subtotal': order1.price_subtotal,
+                                  }
+                        sol_rec = so_line_obj.create(values)
+                        hsl_obj.create({'folio_id': order_obj.folio_id.id,
+                                        'service_line_id': sol_rec.id})
+                        hf_rec = hotel_folio_obj.browse(order_obj.folio_id.id)
+                        hf_rec.write({'rest_order_ids':
+                                      [(4, order_obj.id)]})
         self.write({'state': 'done'})
         return True
 
@@ -481,6 +532,8 @@ class hotel_reservation_order(models.Model):
                               ('done', 'Done')], 'State', select=True,
                              required=True, readonly=True,
                              default=lambda * a: 'draft')
+    folio_id = fields.Many2one('hotel.folio', string='Folio No')
+    is_folio = fields.Boolean('Is a Hotel Guest??',help='is customer reside in hotel or not')
 
     @api.model
     def create(self, vals):

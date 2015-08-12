@@ -22,6 +22,17 @@
 			menu="True" 
 		/>
 			
+        <report
+            id="report_hotel_reservation_order_bill"
+            string="Customer Bill"
+            model="hotel.reservation.order" 
+            report_type="qweb-pdf"
+            file="hotel_restaurant.report_res_order_bill"
+            name="hotel_restaurant.report_res_order_bill"
+            menu="True"
+            multi="True"
+        />
+    
 		<report 
 			id="report_hotel_table_res"
 			string="Table Reservation List"
