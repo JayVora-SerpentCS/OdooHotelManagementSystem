@@ -215,7 +215,7 @@ class hotel_restaurant_reservation(models.Model):
 
     _name = "hotel.restaurant.reservation"
     _description = "Includes Hotel Restaurant Reservation"
-    _rec_name="reservation_id"
+    _rec_name = "reservation_id"
 
     reservation_id = fields.Char('Reservation No', size=64, readonly=True)
     room_no = fields.Many2one('product.product', string='Room No', size=64)
