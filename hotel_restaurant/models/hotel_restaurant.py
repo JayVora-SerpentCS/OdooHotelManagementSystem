@@ -129,8 +129,8 @@ class hotel_restaurant_reservation(models.Model):
     @api.onchange('folio_id')
     def get_folio_id(self):
         '''
-        When you change folio_no, based on that it will update
-        the guest_name,hotel_id and room_number as well
+        When you change folio_id, based on that it will update
+        the cname and room_number as well
         ---------------------------------------------------------
         @param self: object pointer
         '''
@@ -293,7 +293,7 @@ class hotel_restaurant_order(models.Model):
     def _sub_total(self):
         '''
         amount_subtotal will display on change of order_list
-        ---------------------------------------------
+        ----------------------------------------------------
         @param self: object pointer
         '''
         for sale in self:
@@ -305,7 +305,7 @@ class hotel_restaurant_order(models.Model):
     def _total(self):
         '''
         amount_total will display on change of amount_subtotal
-        ---------------------------------------------
+        -------------------------------------------------------
         @param self: object pointer
         '''
         for line in self:
@@ -316,7 +316,7 @@ class hotel_restaurant_order(models.Model):
     @api.onchange('folio_id')
     def get_folio_id(self):
         '''
-        When you change folio_no, based on that it will update
+        When you change folio_id, based on that it will update
         the cname and room_number as well
         ---------------------------------------------------------
         @param self: object pointer
@@ -477,7 +477,7 @@ class hotel_restaurant_order(models.Model):
     def done_order_kot(self):
         """
         This method is used to change the state
-        to done of the hotel reservation order
+        to done of the hotel restaurant order
         ----------------------------------------
         @param self: object pointer
         """
@@ -512,7 +512,7 @@ class hotel_reservation_order(models.Model):
     def _sub_total(self):
         '''
         amount_subtotal will display on change of order_list
-        ---------------------------------------------
+        ----------------------------------------------------
         @param self: object pointer
         '''
         for sale in self:
@@ -524,7 +524,7 @@ class hotel_reservation_order(models.Model):
     def _total(self):
         '''
         amount_total will display on change of amount_subtotal
-        ---------------------------------------------
+        -------------------------------------------------------
         @param self: object pointer
         '''
         for line in self:
@@ -692,7 +692,7 @@ class hotel_restaurant_order_list(models.Model):
     def _sub_total(self):
         '''
         price_subtotal will display on change of item_rate
-        ---------------------------------------------
+        --------------------------------------------------
         @param self: object pointer
         '''
         for line in self:
