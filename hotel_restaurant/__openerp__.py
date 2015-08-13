@@ -42,6 +42,7 @@
         "views/hotel_restaurant_data.xml",
     ],
     "data": [
+        "views/hotel_restaurant_data.xml",
         "security/ir.model.access.csv",
         "report/hotel_restaurant_report.xml",
         "wizard/hotel_restaurant_wizard.xml",

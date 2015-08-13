@@ -215,7 +215,7 @@
 			<field eval="[(6,0,[ref('hotel_restaurant.hotel_restaurant_tables_table1'),ref('hotel_restaurant.hotel_restaurant_tables_table0')])]" name="table_no"/>
 			<field eval="&quot;2013-04-25 01:09:00&quot;" name="date1"/>
 			<field eval="&quot;ORR/00001&quot;" name="order_number"/>
-			<field eval="&quot;R0/00001&quot;" name="reservationno"/>
+			<field ref="hotel_restaurant_reservation_0" name="reservationno"/>
 		</record>
 		<record id="hotel_reservation_order_line_0" model="hotel.restaurant.order.list">
 			<field name="o_l" ref="hotel_reservation_order_0"/>
@@ -228,7 +228,7 @@
 			<field eval="[(6,0,[ref('hotel_restaurant.hotel_restaurant_tables_table2'),ref('hotel_restaurant.hotel_restaurant_tables_table3')])]" name="table_no"/>
 			<field eval="&quot;04/23/2013 16:39:00&quot;" name="date1"/>
 			<field eval="&quot;ORR/00002&quot;" name="order_number"/>
-			<field eval="&quot;R0/00002&quot;" name="reservationno"/>
+			<field ref="hotel_restaurant_reservation_1" name="reservationno"/>
 		</record>
 		<record id="hotel_reservation_order_line_1" model="hotel.restaurant.order.list">
 			<field name="o_l" ref="hotel_reservation_order_1"/>
