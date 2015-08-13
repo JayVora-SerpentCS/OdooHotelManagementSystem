@@ -13,26 +13,37 @@
                                 <span><strong><center>Customer Order Bill</center></strong></span>
                             </h2>
                         </div>
+                        <br/>
+                    <table width="100%" class="table table-condensed">
+                           <tr>
+                                <td width="50%" style="text-align:left;">
+                                <strong>Customer Name : </strong><span t-field="o.cname"/></td>
+                                <td width="50%" style="text-align:right;">
+                                <strong>Date : </strong><span t-field="o.o_date"/></td>
+                           </tr>
+                    </table>
+                    <br/>
                     <table class="table table-condensed">
                         <thead>
                             <tr>
-                                <th><strong>Date</strong></th>
                                 <th><strong>Order Number</strong></th>
                                 <th><strong>Waiter Name</strong></th>
+                                <th t-if="o.folio_id.id">
+                                <strong>Folio Number</strong></th>
                                 <th><strong>Room Number</strong></th>
                             </tr>
                         </thead>
                         <tbody>
                                 <td style="white-space: nowrap;">
-                                    <span t-esc="o.o_date"/>
-                                </td>
-                                <td style="white-space: nowrap;">
-                                    <span t-att-style="style" t-esc="o.order_no"/>
+                                    <span t-esc="o.order_no"/>
                                 </td>
                                 <td style="white-space: nowrap;">
                                     <span t-att-style="style" t-esc="o.waiter_name.name"/>
                                 </td>
-                                <td style="white-space: nowrap;">
+                                <td t-if="o.folio_id.id" style="white-space: nowrap;">
+                                    <span t-att-style="style" t-esc="o.folio_id.name"/>
+                                </td>
+                                <td t-if="o.room_no.id" style="white-space: nowrap;">
                                     <span t-att-style="style" t-esc="o.room_no.name"/>
                                 </td>
                         </tbody>

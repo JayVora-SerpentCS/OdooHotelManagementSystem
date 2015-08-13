@@ -19,7 +19,8 @@
 			report_type="qweb-pdf"
 			file="hotel_restaurant.report_order_bill"
 			name="hotel_restaurant.report_order_bill"
-			menu="True" 
+			menu="True"
+		    multi="True"
 		/>
 			
         <report
