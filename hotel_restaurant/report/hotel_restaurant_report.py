@@ -68,8 +68,7 @@ class report_bill(models.AbstractModel):
 class folio_rest_report(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
         super(folio_rest_report, self).__init__(cr, uid, name, context)
-        self.localcontext.update({
-                                  'get_data': self.get_data,
+        self.localcontext.update({'get_data': self.get_data,
                                   'gettotal': self.gettotal,
                                   'getTotal': self.getTotal,
                                   'get_rest': self.get_rest,
@@ -121,8 +120,7 @@ class report_rest_order(models.AbstractModel):
 class folio_reserv_report(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
         super(folio_reserv_report, self).__init__(cr, uid, name, context)
-        self.localcontext.update({
-                                  'get_data': self.get_data,
+        self.localcontext.update({'get_data': self.get_data,
                                   'gettotal': self.gettotal,
                                   'getTotal': self.getTotal,
                                   'get_reserv': self.get_reserv,
@@ -162,6 +160,7 @@ class folio_reserv_report(report_sxw.rml_parse):
 
     def getTotal(self):
         return self.temp
+
 
 class report_reserv_order(models.AbstractModel):
     _name = 'report.hotel_restaurant.report_reserv_order'

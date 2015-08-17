@@ -161,7 +161,7 @@ class hotel_housekeeping_activities(models.Model):
                            help='Checked if the housekeeping activity'
                            'results as Dirty.')
     clean = fields.Boolean('Clean', help='Checked if the housekeeping'
-                                    'activity results as Clean.')
+                           'activity results as Clean.')
 
     @api.constrains('clean_start_time', 'clean_end_time')
     def check_clean_start_time(self):

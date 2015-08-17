@@ -3,7 +3,7 @@
 <data>
 
 <!--Template for hotel folio pos order -->
-<template id="report_hotel_folio_pos">
+<template id="report_folio_pos">
     <t t-call="report.html_container">
         <t t-foreach="docs" t-as="o">
             <t t-call="report.external_layout">

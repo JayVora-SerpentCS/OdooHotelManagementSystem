@@ -7,10 +7,10 @@
         <report 
             id="report_hotel_pos_order"
             string="Hotel Folio Pos Order"
-            model="hotel.folio" 
+            model="hotel.folio"
             report_type="qweb-pdf"
-            file="hotel_pos_restaurant.report_hotel_folio_pos"
-            name="hotel_pos_restaurant.report_hotel_folio_pos"
+            file="hotel_pos_restaurant.report_folio_pos"
+            name="hotel_pos_restaurant.report_folio_pos"
             menu="False"
         />
 
