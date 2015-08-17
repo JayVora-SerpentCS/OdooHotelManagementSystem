@@ -26,12 +26,6 @@
     "version": "0.07",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
     "category": "Generic Modules/Hotel Reservation",
-    "description": """
-    Module for Hotel/Resort/Property management. You can manage:
-    * Guest Reservation
-    * Group Reservartion
-      Different reports are also provided, mainly for hotel statistics.
-    """,
     "website": "http://www.serpentcs.com",
     "depends": ["hotel", "stock", 'mail', "hotel_report_layout",
                 'email_template'],
@@ -53,7 +47,12 @@
         "views/room_summ_view.xml",
         "views/email_temp_view.xml",
     ],
-
+    "description": """
+    Module for Hotel/Resort/Property management. You can manage:
+    * Guest Reservation
+    * Group Reservartion
+      Different reports are also provided, mainly for hotel statistics.
+    """,
     'js': ["static/src/js/hotel_room_summary.js", ],
     'qweb': ['static/src/xml/hotel_room_summary.xml'],
     'css': ["static/src/css/room_summary.css"],

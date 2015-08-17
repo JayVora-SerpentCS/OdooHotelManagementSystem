@@ -37,5 +37,46 @@
             id="wizard_list_menu"
             sequence="30"/>
 
+
+        <!--Form view for folio report wizard -->
+        <record model="ir.ui.view" id="view_folio_rest_reservation">
+            <field name="name">view.folio.rest.reservation</field>
+            <field name="model">folio.rest.reservation</field>
+            <field name="arch" type="xml">
+                <form string="Order Report" >
+                    <group col="4">
+                        <field name="date_start" required="1" />
+                        <field name="date_end" required="1" />
+                    <group col="4">
+                        <field name="check"/>
+                    </group>
+                    </group>
+                    <footer>
+                        <button name="print_rest_report" string="Restaurant Reserved Order" type="object"
+                            class="oe_highlight" />
+                        
+                        <button name="print_reserv_report" string="Restaurant Orders" type="object"
+                            class="oe_highlight" />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!--Action for folio report wizard -->
+        <record model="ir.actions.act_window" id="action_folio_rest_reservation">
+            <field name="name">Hotel Folio Order Wizard</field>
+            <field name="res_model">folio.rest.reservation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Restaurant Reports" action="action_folio_rest_reservation"
+            id="folio_rest_reservation_menu" parent="hotel.hotel_report_menu" sequence="32"/>
+
+
+
     </data>
 </openerp>

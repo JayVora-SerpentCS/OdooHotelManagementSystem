@@ -8,30 +8,32 @@
             <field name="model">hotel.folio</field>
             <field name="inherit_id" ref="hotel.view_hotel_folio1_form"/>
             <field name="arch" type="xml">
-                <field name="folio_pos_order_ids" position='after'>
-                    <separator string="Restaurant Order Reservation Details" colspan="4"/>
-                    <field name="hotel_reservation_order_ids" colspan="4" nolabel="1" readonly="1">
-		                <tree string="Order" colors="blue:state == 'draft';green:state == 'order'" toolbar="1">
-		                    <field name="order_number"/>
-		                    <field name="date1"/>
-		                    <field name="waitername"/>
-		                    <field name="table_no"/>
-		                    <field name="state"/>
-		                    <field name="amount_total" sum = "Order Total" />
-		                </tree>
-		            </field>
-                    <separator string="Restaurant Orders Details" colspan="4"/>
-                    <field name="hotel_restaurant_order_ids" colspan="4" nolabel="1" readonly="1">
-		                <tree string="Order" colors="blue:state == 'draft';green:state == 'order';black:state == 'done';" toolbar="1">
-		                    <field name="order_no"/>
-		                    <field name="o_date"/>
-		                    <field name="waiter_name"/>
-		                    <field name="table_no"/>
-		                    <field name="state"/>
-		                    <field name="amount_total" sum = "Table Order Total"/> 
-		                </tree>
-                    </field>
-                </field>
+                <xpath expr ="//form/sheet/notebook/page[@string='Foreign Exchange']"  position ="after">
+                    <page string="Hotel Restaurant">
+	                    <separator string="Restaurant Order Reservation Details" colspan="4"/>
+	                    <field name="hotel_reservation_order_ids" colspan="4" nolabel="1" readonly="1">
+			                <tree string="Order" colors="blue:state == 'draft';green:state == 'order'" toolbar="1">
+			                    <field name="order_number"/>
+			                    <field name="date1"/>
+			                    <field name="waitername"/>
+			                    <field name="table_no"/>
+			                    <field name="state"/>
+			                    <field name="amount_total" sum = "Order Total" />
+			                </tree>
+			            </field>
+	                    <separator string="Restaurant Orders Details" colspan="4"/>
+	                    <field name="hotel_restaurant_order_ids" colspan="4" nolabel="1" readonly="1">
+			                <tree string="Order" colors="blue:state == 'draft';green:state == 'order';black:state == 'done';" toolbar="1">
+			                    <field name="order_no"/>
+			                    <field name="o_date"/>
+			                    <field name="waiter_name"/>
+			                    <field name="table_no"/>
+			                    <field name="state"/>
+			                    <field name="amount_total" sum = "Table Order Total"/> 
+			                </tree>
+	                    </field>
+	                </page>
+                </xpath>
             </field>
         </record>
 

@@ -26,6 +26,23 @@
     "version": "0.05",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
     "category": "Generic Modules/Hotel Restaurant",
+    "website": "http://www.serpentcs.com",
+    "depends": ["hotel", "hotel_report_layout"],
+    "demo": [
+        "views/hotel_restaurant_data.xml",
+    ],
+    "data": [
+        "security/ir.model.access.csv",
+        "report/hotel_restaurant_report.xml",
+        "wizard/hotel_restaurant_wizard.xml",
+        "views/res_table.xml",
+        "views/kot.xml",
+        "views/bill.xml",
+        "views/folio_order_report.xml",
+        "views/hotel_restaurant_workflow.xml",
+        "views/hotel_restaurant_sequence.xml",
+        "views/hotel_restaurant_view.xml",
+    ],
     "description": """
     Module for Hotel/Resort/Restaurant management. You can manage:
     * Configure Property
@@ -36,25 +53,6 @@
 
     Different reports are also provided, mainly for Restaurant.
     """,
-    "website": "http://www.serpentcs.com",
-    "depends": ["hotel", "hotel_report_layout"],
-    "demo": [
-        "views/hotel_restaurant_data.xml",
-    ],
-    "data": [
-        "views/hotel_restaurant_data.xml",
-        "security/ir.model.access.csv",
-        "report/hotel_restaurant_report.xml",
-        "wizard/hotel_restaurant_wizard.xml",
-        "views/res_table.xml",
-        "views/kot.xml",
-        "views/bill.xml",
-        "views/hotel_restaurant_workflow.xml",
-        "views/hotel_restaurant_sequence.xml",
-        "views/hotel_restaurant_view.xml",
-    ],
-
-
     "active": False,
     "installable": True
 }

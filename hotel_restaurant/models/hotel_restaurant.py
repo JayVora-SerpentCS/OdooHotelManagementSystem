@@ -30,7 +30,6 @@ import time
 class hotel_folio(models.Model):
 
     _inherit = 'hotel.folio'
-    _order = 'reservation_id desc'
 
     hotel_reservation_order_ids = fields.Many2many('hotel.reservation.order',
                                                    'hotel_res_rel',
