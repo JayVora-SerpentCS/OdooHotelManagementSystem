@@ -262,9 +262,6 @@ class hotel_folio(models.Model):
     currrency_ids = fields.One2many('currency.exchange', 'folio_no',
                                     readonly=True)
     hotel_invoice_id = fields.Many2one('account.invoice', 'Invoice')
-    folio_pos_order_ids = fields.Many2many('pos.order', 'hotel_pos_rel',
-                                           'hotel_folio_id', 'pos_id',
-                                           'Orders', readonly=True)
 
     @api.multi
     def go_to_currency_exchange(self):

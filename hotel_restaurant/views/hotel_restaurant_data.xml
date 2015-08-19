@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <openerp>
-	<data noupdate="1">
+	<data noupdate="0">
 
 	 <!-- Table Data --> 
 		<record id="hotel_restaurant_tables_table0" model="hotel.restaurant.tables">
@@ -191,22 +191,22 @@
 
 		<record id="hotel_restaurant_reservation_0" model="hotel.restaurant.reservation">
 			<field eval="[(6,0,[ref('hotel_restaurant.hotel_restaurant_tables_table1'),ref('hotel_restaurant.hotel_restaurant_tables_table0')])]" name="tableno"/>
-			<field name="room_no" ref="hotel.hotel_room_3"/>
+			<field name="room_no" eval="188"/>
 			<field eval="&quot;2013-04-25 03:09:00&quot;" name="end_date"/>
-			<field name="partner_address_id" ref="base.res_partner_address_9"/>
+			<field name="partner_address_id" ref="base.res_partner_4"/>
 			<field eval="&quot;draft&quot;" name="state"/>
-			<field name="cname" ref="base.res_partner_2"/>
+			<field name="cname" ref="base.res_partner_4"/>
 			<field eval="&quot;R0/00001&quot;" name="reservation_id"/>
 			<field eval="&quot;2013-04-25 01:09:00&quot;" name="start_date"/>
 		</record>
 
 		<record id="hotel_restaurant_reservation_1" model="hotel.restaurant.reservation">
 			<field eval="[(6,0,[ref('hotel_restaurant.hotel_restaurant_tables_table2'),ref('hotel_restaurant.hotel_restaurant_tables_table3')])]" name="tableno"/>
-			<field name="room_no" ref="hotel.hotel_room_0"/>
+			<field name="room_no" eval="187"/>
 			<field eval="&quot;2013-04-23 15:09:00&quot;" name="end_date"/>
-			<field name="partner_address_id" ref="base.res_partner_address_13"/>
+			<field name="partner_address_id" ref="base.res_partner_3"/>
 			<field eval="&quot;draft&quot;" name="state"/>
-			<field name="cname" ref="base.res_partner_14"/>
+			<field name="cname" ref="base.res_partner_3"/>
 			<field eval="&quot;R0/00002&quot;" name="reservation_id"/>
 			<field eval="&quot;2013-04-23 11:09:00&quot;" name="start_date"/>
 		</record>
@@ -215,7 +215,7 @@
 			<field eval="[(6,0,[ref('hotel_restaurant.hotel_restaurant_tables_table1'),ref('hotel_restaurant.hotel_restaurant_tables_table0')])]" name="table_no"/>
 			<field eval="&quot;2013-04-25 01:09:00&quot;" name="date1"/>
 			<field eval="&quot;ORR/00001&quot;" name="order_number"/>
-			<field eval="&quot;R0/00001&quot;" name="reservationno"/>
+			<field ref="hotel_restaurant_reservation_0" name="reservationno"/>
 		</record>
 		<record id="hotel_reservation_order_line_0" model="hotel.restaurant.order.list">
 			<field name="o_l" ref="hotel_reservation_order_0"/>
@@ -228,7 +228,7 @@
 			<field eval="[(6,0,[ref('hotel_restaurant.hotel_restaurant_tables_table2'),ref('hotel_restaurant.hotel_restaurant_tables_table3')])]" name="table_no"/>
 			<field eval="&quot;04/23/2013 16:39:00&quot;" name="date1"/>
 			<field eval="&quot;ORR/00002&quot;" name="order_number"/>
-			<field eval="&quot;R0/00002&quot;" name="reservationno"/>
+			<field ref="hotel_restaurant_reservation_1" name="reservationno"/>
 		</record>
 		<record id="hotel_reservation_order_line_1" model="hotel.restaurant.order.list">
 			<field name="o_l" ref="hotel_reservation_order_1"/>
@@ -242,8 +242,9 @@
 		<record id="hotel_restaurant_order_0" model="hotel.restaurant.order">
 			<field eval="[(6,0,[ref('hotel_restaurant.hotel_restaurant_tables_table1'),ref('hotel_restaurant.hotel_restaurant_tables_table0')])]" name="table_no"/>
 			<field eval="&quot;2013-04-25 15:09:00&quot;" name="o_date"/>
+			<field name="cname" ref="base.res_partner_3"/>
 			<field eval="&quot;OR/00001&quot;" name="order_no"/>
-			<field name="room_no" ref="hotel.hotel_room_2"/>
+			<field name="room_no" eval="188"/>
 		</record>
 		<record id="hotel_restaurant_order_list_0" model="hotel.restaurant.order.list">
 			<field name="o_list" ref="hotel_restaurant_order_0"/>
@@ -255,8 +256,9 @@
 		<record id="hotel_restaurant_order_1" model="hotel.restaurant.order">
 			<field eval="[(6,0,[ref('hotel_restaurant.hotel_restaurant_tables_table2')])]" name="table_no"/>
 			<field eval="&quot;2013-04-22 12:09:00&quot;" name="o_date"/>
+			<field name="cname" ref="base.res_partner_4"/>
 			<field eval="&quot;OR/00002&quot;" name="order_no"/>
-			<field name="room_no" ref="hotel.hotel_room_1"/>
+			<field name="room_no" eval="187"/>
 		</record>
 
         <record id="hotel_restaurant_order_list_1" model="hotel.restaurant.order.list">

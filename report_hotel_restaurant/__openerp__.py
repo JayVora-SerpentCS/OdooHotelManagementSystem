@@ -28,15 +28,15 @@
     "website": "http://www.serpentcs.com, http://www.openerp.com",
     "depends": ["hotel_restaurant", "report_hotel_reservation"],
     "category": "Generic Modules/Hotel Restaurant",
+    "data": [
+        "security/ir.model.access.csv",
+        "views/report_hotel_restaurant_view.xml",
+    ],
     "description": """
     Module shows the status of restaurant reservation
      * Current status of reserved tables
      * List status of tables as draft or done state
     """,
-    "data": [
-        "security/ir.model.access.csv",
-        "views/report_hotel_restaurant_view.xml",
-    ],
     'installable': True,
     'auto_install': False,
 }

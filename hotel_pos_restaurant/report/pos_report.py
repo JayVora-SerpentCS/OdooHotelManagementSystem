@@ -73,9 +73,9 @@ class folio_report1(report_sxw.rml_parse):
 
 
 class report_lunchorder1(models.AbstractModel):
-    _name = 'report.hotel.report_hotel_folio_pos'
+    _name = 'report.hotel_pos_restaurant.report_folio_pos'
     _inherit = 'report.abstract_report'
-    _template = 'hotel.report_hotel_folio_pos'
+    _template = 'hotel_pos_restaurant.report_folio_pos'
     _wrapped_report_class = folio_report1
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

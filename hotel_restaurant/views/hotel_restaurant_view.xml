@@ -2,6 +2,42 @@
 <openerp>
     <data>
         <menuitem  id="hotel_restaurant_menu" name="Restaurant" parent="hotel.hotel_management_menu" sequence="3"/>
+
+        <record model="ir.ui.view" id="view_hotelfolio1_form1_inherited">
+            <field name="name">hotel.folio1.form1.inherited</field>
+            <field name="model">hotel.folio</field>
+            <field name="inherit_id" ref="hotel.view_hotel_folio1_form"/>
+            <field name="arch" type="xml">
+                <xpath expr ="//form/sheet/notebook/page[@string='Foreign Exchange']"  position ="after">
+                    <page string="Hotel Restaurant">
+	                    <separator string="Restaurant Order Reservation Details" colspan="4"/>
+	                    <field name="hotel_reservation_order_ids" colspan="4" nolabel="1" readonly="1">
+			                <tree string="Order" colors="blue:state == 'draft';green:state == 'order'" toolbar="1">
+			                    <field name="order_number"/>
+			                    <field name="date1"/>
+			                    <field name="waitername"/>
+			                    <field name="table_no"/>
+			                    <field name="state"/>
+			                    <field name="amount_total" sum = "Order Total" />
+			                </tree>
+			            </field>
+	                    <separator string="Restaurant Orders Details" colspan="4"/>
+	                    <field name="hotel_restaurant_order_ids" colspan="4" nolabel="1" readonly="1">
+			                <tree string="Order" colors="blue:state == 'draft';green:state == 'order';black:state == 'done';" toolbar="1">
+			                    <field name="order_no"/>
+			                    <field name="o_date"/>
+			                    <field name="waiter_name"/>
+			                    <field name="table_no"/>
+			                    <field name="state"/>
+			                    <field name="amount_total" sum = "Table Order Total"/> 
+			                </tree>
+	                    </field>
+	                </page>
+                </xpath>
+            </field>
+        </record>
+
+
     	<!-- ==============================
         Table Master
         ============================== -->
@@ -89,15 +125,17 @@
                             <field name="reservation_id" colspan="4" select="1" />
                         </h1>
                         <group>
-                            <group colspan="2" >
-                                <field name="room_no" />
+                            <group colspan="2" col="4">
+                                <field name="is_folio"/><newline/>
+                                <field name="folio_id" attrs="{'invisible':[('is_folio','=',False)], 'required':[('is_folio','=',True)]}"/>
+                                <field name="room_no" attrs="{'invisible':[('is_folio','=',False)] ,'required':[('is_folio','=',True)]}"/>
                             </group>
                             <newline/>
                             <group colspan="4" col="4">
-                                <field name="start_date"/>
-                                <field name="end_date"/>
                                 <field name="cname"/>
                                 <field name="partner_address_id"/>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
                             </group>
                             <group colspan="4">
                                 <separator colspan='4' string="Table List"/>
@@ -114,8 +152,9 @@
             <field name="name">hotel_restaurant_reservation.tree</field>
             <field name="model">hotel.restaurant.reservation</field>
             <field name="arch" type="xml">
-                <tree string="Table Reservation" colors="blue:state == 'draft';red:state == 'cancel';black:state == 'done';black:state == 'order';green:state == 'confirm'" toolbar="1">
+                <tree string="Table Reservation" colors="blue:state == 'draft';red:state == 'cancel';grey:state == 'done';black:state == 'order';green:state == 'confirm'" toolbar="1">
                     <field name="reservation_id"/>
+                    <field name="folio_id"/>
                     <field name="room_no"/>
                     <field name="start_date"/>
                     <field name="end_date"/>
@@ -183,16 +222,19 @@
                         <button string="Generate KOT" name="reservation_generate_kot" type="object" states="draft" icon="gtk-go-forward"/>
                         <button string="Generate KOT" name="reservation_update_kot" type="object" states="order" icon="gtk-go-forward"/>
                         <button string="Done" name="done_kot" type="object" states="order" icon="gtk-apply"/>
+                        <button name="%(report_hotel_reservation_order_bill)d" attrs="{'invisible' : ['|', ('folio_id','!=',False), ('state','in',('draft','order'))]}" type="action" string="generate Bill" class = "oe_highlight"/>
                         <field name="state" widget="statusbar"/>
-                    </header>
+                    </header >
                     <sheet>
                         <h1>
-                            <label string="Order" colspan="4" />
-                            <field name="order_number" colspan="4"/>
+                            <label string="Order" colspan="4"/>
+                            <field name="order_number" colspan="4" />
                         </h1>
                         <group>
-                            <group colspan="2">
+                            <group colspan="4" col="4">
+                                <field name="is_folio" invisible="1"/><newline/>
                                 <field name="reservationno"/>
+                                <field name="folio_id" attrs="{'invisible': [('is_folio','=',False)]}"/>
                             </group>
                             <group colspan="4" col="4" >
                                 <field name="date1" />
@@ -241,7 +283,7 @@
             <field name="name">hotel_reservation_order.tree</field>
             <field name="model">hotel.reservation.order</field>
             <field name="arch" type="xml">
-                <tree string="Order" colors="blue:state == 'draft';green:state == 'order'" toolbar="1">
+                <tree string="Order" colors="blue:state == 'draft';green:state == 'order';grey:state == 'done';" toolbar="1">
                     <field name="order_number"/>
                     <field name="reservationno"/>
                     <field name="date1"/>
@@ -294,7 +336,13 @@
             <field name="arch" type="xml">
                 <form string="Order" >
                     <header>
-                        <button string="Generate KOT" name="generate_kot" type="object" icon="gtk-go-forward"/>
+                        <button string="Generate KOT" name="generate_kot" type="object" states="draft" icon="gtk-go-forward"/>
+                        <button string="Generate KOT" name="generate_kot_update" type="object" states="order" icon="gtk-go-forward"/>
+                        <button string="Done" name="done_order_kot" type="object" states="order" icon="gtk-apply"/>
+                        <button string="Cancel" name="done_cancel" states="draft,order" type="object" icon="gtk-cancel"/>
+                        <button string="Set to Draft" name="set_to_draft" states="cancel" type="object" icon="gtk-file"/>
+                        <button name="%(report_hotel_res_order_bill)d" attrs="{'invisible' : ['|', ('folio_id','!=',False), ('state','in',('draft','order','cancel'))]}" type="action" string="generate Bill" class = "oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done,cancel"/>
                     </header>
                     <sheet>
                         <h1>
@@ -302,12 +350,19 @@
                             <field name="order_no" colspan="4"/>
                         </h1>
                         <group>
-                            <group>
-                                <field name="o_date" />
+                            <group colspan="2" col="2">
+                                <field name="o_date"/>
+                                <field name="is_folio"/>
                             </group>
                             <group colspan="2" col="4">
-                                <field name="room_no"/>
+                                <field name="folio_id" attrs="{'invisible':[('is_folio','=',False)], 'required':[('is_folio','=',True)]}"/>
+                                <field name="room_no" attrs="{'invisible':[('is_folio','=',False)], 'required':[('is_folio','=',True)]}"/>
+                            </group>
+                            <group colspan="2" col="4">
+                                <field name="cname"/>
                                 <field name="waiter_name"/>
+                                <field name="kitchen_id" invisible="1"/>
+                                <field name="rest_item_id" widget="many2many_tags" invisible="1"/>
                             </group>
                             <newline/>
                             <separator colspan='4' string='Table List'/>
@@ -351,12 +406,13 @@
             <field name="name">hotel_restaurant_order.tree</field>
             <field name="model">hotel.restaurant.order</field>
             <field name="arch" type="xml">
-                <tree string="Order">
+                <tree string="Order" colors="blue:state == 'draft';green:state == 'order';grey:state == 'done';" toolbar="1">
                     <field name="order_no"/>
                     <field name="o_date"/>
                     <field name="table_no"/>
                     <field name="room_no"/>
                     <field name="waiter_name"/>
+                    <field name="state"/>
                     <field name="amount_total" sum = "Table Order Total"/> 
                 </tree>
             </field>
@@ -390,6 +446,7 @@
         action="open_view_hotel_restaurant_order_form_tree"
         sequence="11"
         parent="hotel_restaurant_menu"/>
+
 
         <!-- ==============================
         Kitchen Order List

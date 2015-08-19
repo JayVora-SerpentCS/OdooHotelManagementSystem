@@ -26,16 +26,6 @@
     "version": "0.05",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
     "category": "Generic Modules/Hotel Restaurant",
-    "description": """
-    Module for Hotel/Resort/Restaurant management. You can manage:
-    * Configure Property
-    * Restaurant Configuration
-    * table reservation
-    * Generate and process Kitchen Order ticket,
-    * Payment
-
-    Different reports are also provided, mainly for Restaurant.
-    """,
     "website": "http://www.serpentcs.com",
     "depends": ["hotel", "hotel_report_layout"],
     "demo": [
@@ -48,12 +38,21 @@
         "views/res_table.xml",
         "views/kot.xml",
         "views/bill.xml",
+        "views/folio_order_report.xml",
         "views/hotel_restaurant_workflow.xml",
         "views/hotel_restaurant_sequence.xml",
         "views/hotel_restaurant_view.xml",
     ],
+    "description": """
+    Module for Hotel/Resort/Restaurant management. You can manage:
+    * Configure Property
+    * Restaurant Configuration
+    * table reservation
+    * Generate and process Kitchen Order ticket,
+    * Payment
 
-
+    Different reports are also provided, mainly for Restaurant.
+    """,
     "active": False,
     "installable": True
 }

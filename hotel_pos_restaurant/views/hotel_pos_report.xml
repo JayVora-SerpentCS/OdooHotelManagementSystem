@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+        <!--Report for hotel folio pos order-->
+
+        <report 
+            id="report_hotel_pos_order"
+            string="Hotel Folio Pos Order"
+            model="hotel.folio"
+            report_type="qweb-pdf"
+            file="hotel_pos_restaurant.report_folio_pos"
+            name="hotel_pos_restaurant.report_folio_pos"
+            menu="False"
+        />
+
+	</data>
+</openerp>

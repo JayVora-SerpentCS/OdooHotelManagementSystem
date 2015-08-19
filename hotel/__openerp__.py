@@ -26,16 +26,6 @@
     "version": "0.10",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
     "category": "Generic Modules/Hotel Management",
-    "description": """
-    Module for Hotel/Resort/Property management. You can manage:
-    * Configure Property
-    * Hotel Configuration
-    * Check In, Check out
-    * Manage Folio
-    * Payment
-
-    Different reports are also provided, mainly for hotel statistics.
-    """,
     "website": "http://www.serpentcs.com",
     "depends": ["sale_stock", "point_of_sale", "hotel_report_layout"],
     "demo": ["views/hotel_data.xml"],
@@ -49,6 +39,16 @@
         "views/hotel_view.xml",
         "wizard/hotel_wizard.xml",
     ],
+    "description": """
+    Module for Hotel/Resort/Property management. You can manage:
+    * Configure Property
+    * Hotel Configuration
+    * Check In, Check out
+    * Manage Folio
+    * Payment
+
+    Different reports are also provided, mainly for hotel statistics.
+    """,
     'css': ["static/src/css/room_kanban.css"],
     "auto_install": False,
     "installable": True

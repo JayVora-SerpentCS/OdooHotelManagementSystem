@@ -24,6 +24,16 @@
 from openerp import models, fields, api
 
 
+class hotel_folio(models.Model):
+
+    _inherit = 'hotel.folio'
+    _order = 'folio_pos_order_ids desc'
+
+    folio_pos_order_ids = fields.Many2many('pos.order', 'hotel_pos_rel',
+                                           'hotel_folio_id', 'pos_id',
+                                           'Orders', readonly=True)
+
+
 class pos_order(models.Model):
 
     _inherit = "pos.order"

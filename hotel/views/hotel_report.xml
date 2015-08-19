@@ -14,19 +14,6 @@
             menu="False"
         />
 
-        <!--Report for hotel folio pos order-->
-
-        <report 
-            id="report_hotel_pos_order"
-            string="Hotel Folio Pos Order"
-            model="hotel.folio" 
-            report_type="qweb-pdf"
-            file="hotel.report_hotel_folio_pos" 
-            name="hotel.report_hotel_folio_pos" 
-            menu="False"
-        />
-
-
         <!--Report for currency exchange -->
         <report 
             id="report_hotel_currency"

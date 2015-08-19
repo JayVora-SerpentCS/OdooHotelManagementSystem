@@ -672,20 +672,6 @@
                                 </tree>
                              </field>
                         </page>
-                        <page string="Hotel Restaurant">
-                            <separator string="Restaurant Orders Details" colspan="4"/>
-                            <field name="folio_pos_order_ids" colspan="4" nolabel="1"> 
-                                <tree colors="blue:state == 'draft';gray:state in ('done','cancel');black:state not in('done','cancel')">
-                                    <field name="date_order"/>
-                                    <field name="name"/>
-                                    <field name="session_id"/>
-                                    <field name="invoice_id"/>
-                                    <field name="user_id"/>
-                                    <field name="state"/>
-                                    <field name="amount_total" sum="Amount total"/>
-                                </tree>
-                            </field>
-                        </page>
                     </notebook>
                  </sheet>
                 </form>

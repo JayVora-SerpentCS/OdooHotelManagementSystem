@@ -28,15 +28,15 @@
     "website": "http://www.serpentcs.com",
     "depends": ["hotel_reservation"],
     "category": "Generic Modules/Hotel Reservation",
+    "data": [
+        "security/ir.model.access.csv",
+        "views/report_hotel_reservation_view.xml",
+    ],
     "description": """
     Module shows the status of room reservation
      * Current status of reserved room
      * List status of room as draft or done state
     """,
-    "data": [
-        "security/ir.model.access.csv",
-        "views/report_hotel_reservation_view.xml",
-    ],
     'installable': True,
     'auto_install': False,
 }
