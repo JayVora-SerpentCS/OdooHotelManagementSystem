@@ -26,7 +26,7 @@
         <!--Action for hotel reservation wizard-->
         <record id="action_hotel_reservation_wizard"
             model="ir.actions.act_window">
-            <field name="name">Reservation List</field>
+            <field name="name">Hotel Reservation Report</field>
             <field name="res_model">hotel.reservation.wizard</field>
             <field name="view_type">form</field>
             <field name="view_mode">form</field>
