@@ -4,19 +4,24 @@
 
 
 		<!--  Food Item Category -->
+		
+		<record id="food" model="pos.category">
+			<field name="name">Food</field>
+			<field name="image" type="base64" file="hotel_pos_restaurant/static/img/food-image.jpg"/>
+		</record>
 
 		<record id="punjabi_1" model="pos.category">
-			<field name="parent_id" ref="point_of_sale.food"/>
+			<field name="parent_id" ref="food"/>
 			<field name="name">Punjabi</field>
 			<field name="image" type="base64" file="hotel_pos_restaurant/static/img/food-image.jpg"/>
 		</record>
 		<record id="south_indian_1" model="pos.category">
-			<field name="parent_id" ref="point_of_sale.food"/>
+			<field name="parent_id" ref="food"/>
 			<field name="name">South Indian</field>
 			<field name="image" type="base64" file="hotel_pos_restaurant/static/img/food-image.jpg"/>
 		</record>
 		<record id="gujarati_1" model="pos.category">
-			<field name="parent_id" ref="point_of_sale.food"/>
+			<field name="parent_id" ref="food"/>
 			<field name="name">Gujarati</field>
 			<field name="image" type="base64" file="hotel_pos_restaurant/static/img/food-image.jpg"/>
 		</record>
