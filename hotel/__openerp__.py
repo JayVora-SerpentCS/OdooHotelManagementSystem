@@ -23,7 +23,7 @@
 
 {
     "name": "Hotel Management",
-    "version": "0.10",
+    "version": "0.04",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
     "category": "Generic Modules/Hotel Management",
     "website": "http://www.serpentcs.com",
@@ -33,7 +33,7 @@
         "security/hotel_security.xml",
         "security/ir.model.access.csv",
         "views/hotel_sequence.xml",
-        "views/hotel_folio_workflow.xml",
+#        "views/hotel_folio_workflow.xml",
         "views/hotel_report.xml",
         "views/report_hotel_management.xml",
         "views/hotel_view.xml",

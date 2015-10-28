@@ -315,7 +315,7 @@
                     </h2>
 				</div>
 				<notebook>
-						<page string="Information">
+						<page name="information_hotel_room" string="Information">
                          <group colspan="4" col="4">
                             <field name="floor_id" string = "Floor" />
                             <field name="categ_id" select="1" domain="[('isroomtype','=',True)]"/>
@@ -490,18 +490,26 @@
             <field name="arch" type="xml">
                 <form string="Folio">
                  <header>
-                     <button name="order_confirm" string="Confirm Folio" states="draft" icon="gtk-apply" class="oe_highlight"/>
-                     <button name="invoice_recreate" string="Recreate Invoice" states="invoice_except" icon="gtk-redo" class="oe_highlight"/>
-                     <button name="invoice_corrected" string="Invoice Corrected" states="invoice_except" icon="gtk-paste-v" class="oe_highlight"/>
-                     <button name="ship_recreate" string="Recreate Procurement" states="shipping_except" icon="gtk-redo" class="oe_highlight"/>
-                     <button name="ship_corrected" string="Procurement Corrected" states="shipping_except" icon="gtk-paste-v" class="oe_highlight"/>
-                     <button name="manual_invoice" states="manual" string="Create Invoice" icon="gtk-new" class="oe_highlight"/>
-                     <button name="ship_cancel" string="Cancel Folio" states="shipping_except" icon="gtk-cancel" class="oe_highlight oe_highlight" />
+                     <button name="action_confirm" states="draft" string="Confirm Sale" class="btn-primary" type="object"/>
+<!--                      <button name="order_confirm" string="Confirm Folio" states="draft" icon="gtk-apply" class="oe_highlight"/> -->
+<!--                      <button name="invoice_recreate" string="Recreate Invoice" states="invoice_except" icon="gtk-redo" class="oe_highlight"/> -->
+<!--                      <button name="invoice_corrected" string="Invoice Corrected" states="invoice_except" icon="gtk-paste-v" class="oe_highlight"/> -->
+<!--                      <button name="ship_recreate" string="Recreate Procurement" states="shipping_except" icon="gtk-redo" class="oe_highlight"/> -->
+<!--                      <button name="ship_corrected" string="Procurement Corrected" states="shipping_except" icon="gtk-paste-v" class="oe_highlight"/> -->
+<!--                      <button name="manual_invoice" states="manual" string="Create Invoice" icon="gtk-new" class="oe_highlight"/> -->
+                     <button name="%(sale.action_view_sale_advance_payment_inv)d" string="Create Invoice"
+                        type="action" class="btn-primary" states="sale"
+                        attrs="{'invisible': [('invoice_status', '!=', 'to invoice')]}"/>
+<!--                      <button name="ship_cancel" string="Cancel Folio" states="shipping_except" icon="gtk-cancel" class="oe_highlight oe_highlight" /> -->
                      <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object" icon="gtk-file" class="oe_highlight"/>
-                     <button name="action_cancel" string="Cancel Folio" states="manual,progress" type="object" icon="gtk-cancel" class="oe_highlight"/>
-                     <button name="cancel" string="Cancel Folio" states="draft" icon="gtk-cancel" class="oe_highlight"/>
-                     <button name="invoice_cancel" string="Cancel Folio" states="invoice_except" icon="gtk-cancel" class="oe_highlight"/>
-                     <field name="state" select="2" widget="statusbar" statusbar_visible="draft,sent,invoiced,done"/>
+                     <button name="action_cancel" string="Cancel Folio" states="sale" type="object" icon="gtk-cancel" class="oe_highlight"/>
+                     <button name="action_cancel" string="Cancel Folio" states="draft" icon="gtk-cancel" type="object" class="oe_highlight"/>
+<!--                      <button name="action_cancel" string="Cancel Folio" states="manual,progress" type="object" icon="gtk-cancel" class="oe_highlight"/> -->
+<!--                      <button name="cancel" string="Cancel Folio" states="draft" icon="gtk-cancel" class="oe_highlight"/> -->
+<!--                      <button name="invoice_cancel" string="Cancel Folio" states="invoice_except" icon="gtk-cancel" class="oe_highlight"/> -->
+                     <button name="action_done" type="object" string="Set to Done" states="sale"
+                        help="If a Hotel Folio is done, you cannot modify it manually anymore. However, you will still be able to invoice or deliver. This is used to freeze the Hotel Folio."/>
+                     <field name="state" select="2" widget="statusbar" statusbar_visible="draft,sent,sale,done"/>
                  </header>
                   <sheet>
                     <div class="oe_right oe_button_box">
@@ -515,6 +523,7 @@
                         <field name="date_order"/>
                         <field name="warehouse_id" string="Branch"/>
 <!--                         <field name="invoiced"/> -->
+                        <field name="invoice_status"/>
                         <field name="hotel_invoice_id" states='progress,done,cancel' readonly="1"/>
                     </group>
                     <notebook colspan="4">
@@ -542,10 +551,10 @@
                                             <field name="checkout_date" />
                                             <separator string="Automatic Declaration" colspan="4"/>
                                             <field name="product_uom_qty" context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'uom':product_uom}"
-                                                invisible="1" on_change="product_id_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, False, parent.date_order)"/>
-                                            <field name="product_uom" string="Rent(UOM)" on_change="product_uom_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, False, parent.date_order)"/>
+                                                invisible="1"/>
                                             <field name="product_id" context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'uom':product_uom}"
-                                                colspan="4" select="1" domain="[('isroom','=',True)]" string="Room No" on_change="product_id_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, True, parent.date_order)"/>
+                                                colspan="4" select="1" domain="[('isroom','=',True)]" string="Room No"/>
+                                            <field name="product_uom" string="Rent(UOM)"/>
                                             </group>
                                             <separator string="Manual Description"
                                                 colspan="4" />
@@ -557,16 +566,17 @@
                                             <field name="tax_id" colspan="4" nolabel="1"/>
                                             <separator string="States" colspan="4"/>
                                             <field name="state" select="2"/>
+                                            <field name="invoice_status"/>
 <!--                                             <field name="invoiced" select="2"/> -->
                                             </group>
                                         </page>
-                                        <page string="Extra Info">
-                                            <group>
-                                            <field name="product_uos_qty"/>
-                                            <field name="product_uos"  />
+<!--                                         <page string="Extra Info"> -->
+<!--                                             <group> -->
+<!--                                             <field name="product_uos_qty"/> -->
+<!--                                             <field name="product_uos"  /> -->
 <!--                                             <field name="address_allotment_id" select="2"/> -->
-                                            </group>
-                                        </page>
+<!--                                             </group> -->
+<!--                                         </page> -->
                                         <page string="History">
                                             <separator string="Invoice Lines" colspan="4"/>
                                             <field name="invoice_lines" colspan="4" nolabel="1"/>
@@ -595,9 +605,9 @@
                                             </group>
                                             <separator string="Automatic Declaration" colspan="4"/>
                                             <group>
-                                            <field name="product_uom_qty" select="1" context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'hotel':parent.warehouse_id,'uom':product_uom}"  on_change="product_id_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, False, parent.date_order)"/>
-                                            <field name="product_uom" on_change="product_uom_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, False, parent.date_order)"/>
-                                            <field name="product_id" select="1" domain="[('isservice','=',True)]" context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'hotel':parent.warehouse_id,'uom':product_uom}" on_change="product_id_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, True, parent.date_order)"/>
+                                            <field name="product_uom_qty" select="1" context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'hotel':parent.warehouse_id,'uom':product_uom}"  />
+                                            <field name="product_uom" />
+                                            <field name="product_id" select="1" domain="[('isservice','=',True)]" context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'hotel':parent.warehouse_id,'uom':product_uom}" />
                                             </group>
                                             <separator string="Manual Description"
                                                 colspan="4"/>
@@ -611,6 +621,7 @@
                                             <group>
                                             <separator string="States" colspan="4"/>
                                             <field name="state" select="2"/>
+                                            <field name="invoice_status"/>
 <!--                                             <field name="invoiced" select="2"/> -->
                                             </group>
                                         </page>
