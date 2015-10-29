@@ -507,7 +507,7 @@
 <!--                      <button name="action_cancel" string="Cancel Folio" states="manual,progress" type="object" icon="gtk-cancel" class="oe_highlight"/> -->
 <!--                      <button name="cancel" string="Cancel Folio" states="draft" icon="gtk-cancel" class="oe_highlight"/> -->
 <!--                      <button name="invoice_cancel" string="Cancel Folio" states="invoice_except" icon="gtk-cancel" class="oe_highlight"/> -->
-                     <button name="action_done" type="object" string="Set to Done" states="sale"
+                     <button name="action_done" type="object" string="Set to Done" states="sale" attrs="{'invisible': [('invoice_status', '!=', 'invoiced')]}"
                         help="If a Hotel Folio is done, you cannot modify it manually anymore. However, you will still be able to invoice or deliver. This is used to freeze the Hotel Folio."/>
                      <field name="state" select="2" widget="statusbar" statusbar_visible="draft,sent,sale,done"/>
                  </header>
@@ -625,13 +625,13 @@
 <!--                                             <field name="invoiced" select="2"/> -->
                                             </group>
                                         </page>
-                                        <page string="Extra Info">
-                                            <group>
-                                            <field name="product_uos_qty"/>
-                                            <field name="product_uos"  />
+<!--                                         <page string="Extra Info"> -->
+<!--                                             <group> -->
+<!--                                             <field name="product_uos_qty"/> -->
+<!--                                             <field name="product_uos"  /> -->
 <!--                                             <field name="address_allotment_id" select="2"/> -->
-                                            </group>
-                                        </page>
+<!--                                             </group> -->
+<!--                                         </page> -->
                                         <page string="History">
                                             <separator string="Invoice Lines" colspan="4"/>
                                             <field name="invoice_lines" colspan="4" nolabel="1"/>

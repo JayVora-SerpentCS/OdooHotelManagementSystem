@@ -162,7 +162,7 @@
             <field name="model">hotel.room</field>
             <field name="inherit_id" ref="hotel.view_hotel_room_form" />
             <field name="arch" type="xml">
-                <xpath expr="//page[@string='Information']" position="after">
+                <xpath expr="//page[@name='information_hotel_room']" position="after">
                     <page string = "Room Reservation">
                         <separator colspan='4' string="Room Reservation Line" />
                         <field name="room_reservation_line_ids" colspan="4" nolabel='1' string="Room Reservation Line">
@@ -194,7 +194,7 @@
             <field name="model">hotel.folio</field>
             <field name="inherit_id" ref="hotel.view_hotel_folio1_form"/>
             <field name="arch" type="xml">
-                <field name="invoiced" position='after'>
+                <field name="invoice_status" position='after'>
                     <field name="reservation_id" readonly='1'/>
                 </field>
             </field>
@@ -209,7 +209,6 @@
                 </field>
             </field>
         </record>
-
 
          <!-- Form view of room reservation summary-->
          <record model="ir.ui.view" id="room_reservation_summary_form_view">
@@ -233,7 +232,7 @@
                              <page string="Room Summary">
                                  <field name="summary_header" colspan="4" invisible="1"/>
                                  <field name="room_summary" colspan="4" invisible="1"/>
-                                 <widget type="Room_Reservation"></widget>
+<!--                                  <widget type="Room_Reservation"></widget> -->
                              </page>
                          </notebook>
                      </sheet>
@@ -282,6 +281,7 @@
              <field name="view_type">form</field>
              <field name="view_mode">form</field>
          </record>
+         
          <menuitem name="Reservations Summary"
          id="menu_action_hotel_reservation_summary"
          action="action_hotel_reservation_summary"

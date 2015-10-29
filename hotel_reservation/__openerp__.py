@@ -23,12 +23,12 @@
 
 {
     "name": "Hotel Reservation Management",
-    "version": "0.07",
+    "version": "0.02",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
     "category": "Generic Modules/Hotel Reservation",
     "website": "http://www.serpentcs.com",
     "depends": ["hotel", "stock", 'mail', "hotel_report_layout",
-                'email_template'],
+                'mail'],
     "demo": [
         "views/hotel_reservation_data.xml",
     ],
@@ -44,7 +44,7 @@
         "views/report_checkout.xml",
         "views/max_room.xml",
         "views/room_res.xml",
-        "views/room_summ_view.xml",
+#        "views/room_summ_view.xml",
         "views/email_temp_view.xml",
     ],
     "description": """

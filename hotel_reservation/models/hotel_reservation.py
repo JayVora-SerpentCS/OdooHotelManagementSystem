@@ -36,6 +36,64 @@ class hotel_folio(models.Model):
 
     reservation_id = fields.Many2one(comodel_name='hotel.reservation',
                                      string='Reservation Id')
+    
+    @api.model
+    def create(self, vals, check=True):
+        """
+        Overrides orm create method.
+        @param self: The object pointer
+        @param vals: dictionary of fields value.
+        @return: new record set for hotel folio.
+        """
+        if 'service_lines' and not 'folio_id' in vals:
+            if not vals:
+                vals = {}
+            vals['name'] = self.env['ir.sequence'].get('hotel.folio')
+            folio_id = super(hotel_folio, self).create(vals)
+            room_lst = []
+            for rec in folio_id:
+                if not rec.reservation_id:
+                    room_lst = rec.room_lines.ids
+#                    for room_rec in rec.room_lines:
+#                        room_lst.append(room_rec.product_id)
+                    for rm in room_lst:
+                        room_obj = self.env['hotel.room'].search([('name', '=', rm.name)])
+                        room_obj.write({'isroom': False})
+                        vals = {'room_id': room_obj.id,
+                                'check_in': rec.checkin_date,
+                                'check_out': rec.checkout_date,
+                                'folio_id': rec.id,
+                                }
+                        self.env['folio.room.line'].create(vals)
+        return folio_id
+    
+    @api.multi
+    def write(self, vals):
+        """
+        Overrides orm write method.
+        @param self: The object pointer
+        @param vals: dictionary of fields value.
+        """
+        folio_write = super(hotel_folio, self).write(vals)
+        reservation_line_obj = self.env['hotel.room.reservation.line']
+        for folio_obj in self:
+            if folio_obj.reservation_id:
+                for reservation in folio_obj.reservation_id:
+                    reservation_obj = (reservation_line_obj.search
+                                       ([('reservation_id', '=',
+                                          reservation.id)]))
+                    if len(reservation_obj) == 1:
+                        for line_id in reservation.reservation_line:
+                            line_id = line_id.reserve
+                            for room_id in line_id:
+                                vals = {'room_id': room_id.id,
+                                        'check_in': folio_obj.checkin_date,
+                                        'check_out': folio_obj.checkout_date,
+                                        'state': 'assigned',
+                                        'reservation_id': reservation.id,
+                                        }
+                                reservation_obj.write(vals)
+        return folio_write
 
 
 class hotel_reservation(models.Model):
@@ -303,8 +361,8 @@ class hotel_reservation(models.Model):
         ir_model_data = self.env['ir.model.data']
         template_id = (ir_model_data.get_object_reference
                        ('hotel_reservation',
-                        'email_template_reservation_reminder_24hrs')[1])
-        template_rec = self.env['email.template'].browse(template_id)
+                        'mail_template_reservation_reminder_24hrs')[1])
+        template_rec = self.env['mail.template'].browse(template_id)
         for travel_rec in self.search([]):
             checkin_date = (datetime.datetime.strptime
                             (travel_rec.checkin,

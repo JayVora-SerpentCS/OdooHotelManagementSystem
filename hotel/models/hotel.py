@@ -28,6 +28,47 @@ import datetime
 import urllib2
 import time
 
+def _offset_format_timestamp1(src_tstamp_str, src_format, dst_format, ignore_unparsable_time=True, context=None):
+    """
+    Convert a source timestamp string into a destination timestamp string, attempting to apply the
+    correct offset if both the server and local timezone are recognized, or no
+    offset at all if they aren't or if tz_offset is false (i.e. assuming they are both in the same TZ).
+
+    @param src_tstamp_str: the str value containing the timestamp.
+    @param src_format: the format to use when parsing the local timestamp.
+    @param dst_format: the format to use when formatting the resulting timestamp.
+    @param server_to_client: specify timezone offset direction (server=src and client=dest if True, or client=src and server=dest if False)
+    @param ignore_unparsable_time: if True, return False if src_tstamp_str cannot be parsed
+                                   using src_format or formatted using dst_format.
+
+    @return: destination formatted timestamp, expressed in the destination timezone if possible
+            and if tz_offset is true, or src_tstamp_str if timezone offset could not be determined.
+    """
+    if not src_tstamp_str:
+        return False
+    res = src_tstamp_str
+    if src_format and dst_format:
+        try:
+            
+            # dt_value needs to be a datetime.datetime object (so no time.struct_time or mx.DateTime.DateTime here!)
+            dt_value = datetime.datetime.strptime(src_tstamp_str,src_format)
+            if context.get('tz',False):
+                try:
+                    import pytz
+                    src_tz = pytz.timezone(context['tz'])
+                    dst_tz = pytz.timezone('UTC')
+                    src_dt = src_tz.localize(dt_value, is_dst=True)
+                    dt_value = src_dt.astimezone(dst_tz)
+                except Exception:
+                    pass
+            res = dt_value.strftime(dst_format)
+        except Exception:
+            # Normal ways to end up here are if strptime or strftime failed
+            if not ignore_unparsable_time:
+                return False
+            pass
+    return res
+
 
 class hotel_floor(models.Model):
 
@@ -196,6 +237,25 @@ class hotel_folio(models.Model):
          @param self: object pointer
         """
         return self.search_count([('state', '=', 'draft')])
+    
+    @api.model
+    def _get_checkin_date(self):
+        if self._context.get('tz'):
+            to_zone = self._context.get('tz')
+        else:
+            to_zone = 'UTC'
+        return _offset_format_timestamp1(time.strftime("%Y-%m-%d 12:00:00"), '%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M:%S',\
+                                          ignore_unparsable_time=True, context={'tz':to_zone})
+    
+    @api.model
+    def _get_checkout_date(self):
+        if self._context.get('tz'):
+            to_zone = self._context.get('tz')
+        else:
+            to_zone = 'UTC'
+        return datetime.datetime.strptime(_offset_format_timestamp1(time.strftime("%Y-%m-%d 12:00:00"), '%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M:%S', \
+                                          ignore_unparsable_time=True, context={'tz':to_zone}),'%Y-%m-%d %H:%M:%S') + datetime.timedelta(days=1)
+    
 
     @api.multi
     def copy(self, default=None):
@@ -233,9 +293,9 @@ class hotel_folio(models.Model):
     order_id = fields.Many2one('sale.order', 'Order', delegate=True,
                                required=True, ondelete='cascade')
     checkin_date = fields.Datetime('Check In', required=True, readonly=True,
-                                   states={'draft': [('readonly', False)]})
+                                   states={'draft': [('readonly', False)]}, default=_get_checkin_date)
     checkout_date = fields.Datetime('Check Out', required=True, readonly=True,
-                                    states={'draft': [('readonly', False)]})
+                                    states={'draft': [('readonly', False)]},default=_get_checkout_date)
     room_lines = fields.One2many('hotel.folio.line', 'folio_id',
                                  readonly=True,
                                  states={'draft': [('readonly', False)],
@@ -342,12 +402,13 @@ class hotel_folio(models.Model):
             configured_addition_hours = company_ids[0].additional_hours
         myduration = 0
         if self.checkin_date and self.checkout_date:
-            chkin_dt = (datetime.datetime.strptime
-                        (self.checkin_date, DEFAULT_SERVER_DATETIME_FORMAT))
-            chkout_dt = (datetime.datetime.strptime
-                         (self.checkout_date, DEFAULT_SERVER_DATETIME_FORMAT))
+            chkin_dt = datetime.datetime.strptime(self.checkin_date, DEFAULT_SERVER_DATETIME_FORMAT)
+            chkout_dt = datetime.datetime.strptime(self.checkout_date, DEFAULT_SERVER_DATETIME_FORMAT)
             dur = chkout_dt - chkin_dt
-            myduration = dur.days + 1
+            if (dur.days == 0 and dur.seconds == 0) or (dur.days != 0 and dur.seconds == 0):
+                myduration = dur.days
+            else:
+                myduration = dur.days + 1
             if configured_addition_hours > 0:
                 additional_hours = abs((dur.seconds / 60) / 60)
                 if additional_hours >= configured_addition_hours:
@@ -633,10 +694,10 @@ class hotel_folio(models.Model):
             # Deleting the existing instance of workflow for SO
             wf_service.trg_delete(self._uid, 'sale.order', inv_id, self._cr)
             wf_service.trg_create(self._uid, 'sale.order', inv_id, self._cr)
-        for name in self.name_get():
-            message = _("The sales order '%s' has been set in \
-            draft state.") % (name[1],)
-            self.log(message)
+#        for name in self.name_get():
+#            message = _("The sales order '%s' has been set in \
+#            draft state.") % (name[1],)
+#            self.log(message)
         return True
 
 

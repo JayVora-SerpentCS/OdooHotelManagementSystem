@@ -1,25 +1,11 @@
 ============================================================================================================================
  Version Change Log (hotel_housekeeping)
 ============================================================================================================================
-0.06 on 2015-06-04 by Malay Khamar
-    * Standardized the code as per v8.
 
-0.05 on 2014-07-09 by Vacha Trivedi
-    * Add Qweb Report Of Housekeeping.
-    * Remove RML Report
-
-0.04 on 2014-01-11 by Krunal Soni
-    * Checked code quality and improved report format.
-
-0.03 on 2014-01-07 by Krunal Soni
-    * Added Accurate licensing terms and Copyright(C) on top inside license info in each py file.
+0.02 on 2014-01-07 by Ashish Thakkar
+    * Demo data for hotel housekeeping activities.
     
-0.02 on 2013-11-13 by Sudhir Arya
-    * Standardized the module as per v7 standards.
+0.01 on 2013-10-24 by Ashish Thakkar
+    * Standardized the module as per v9 standards.
 
-1.01 --> Oct 1,2013 : Anil Kesariya
-	* Added Access control for manager user Improved label name.
-	
-	
-	
 	

@@ -2,6 +2,10 @@
  Version Change Log (hotel)
 ============================================================================================================================
 
+0.05 on 2013-10-28 by Anu Patel
+    * Set the default value of check in date and check out date.
+    * Improved calculation of duration for hotel check in - checkout.
+    
 0.04 on 2013-10-28 by Anu Patel
     * Improved ir.sequence for hotel.folio.
     * Improved hotel folio line one2many field as faced problem because of product_uos field.
