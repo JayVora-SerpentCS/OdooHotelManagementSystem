@@ -670,7 +670,7 @@
                             <separator string="Related invoices" colspan="4"/>
                             <field name="invoice_ids" colspan="4" nolabel="1"/>
                         </page>
-                        <page string="Foreign Exchange">
+                        <page string="Foreign Exchange" name="foreign exchange">
                              <separator string="Foreign Exchange" colspan="4"/>
                              <field name="currrency_ids" colspan="4" nolabel="1"> 
                                 <tree>
@@ -923,6 +923,17 @@
                   action="action_hotel_services_form"
                   sequence="8"
                   parent="hotel.menu_hotel_service"/>
+                  
+       	<record id="product_category_tree_view" model="ir.ui.view">
+       		<field name="name">product.category.tree</field>
+       		<field name="model">product.category</field>
+       		<field name="field_parent">child_id</field>
+       		<field name="arch" type="xml">
+       			<tree toolbar="True" string="Product Categories">
+       				<field name="name"/>
+       			</tree>
+       		</field>
+       	</record>
 
 		<!-- Categories for Room, Amenities, Services -->
         <record model="ir.actions.act_window" id="hotel_room_category_action">
@@ -931,7 +942,7 @@
             <field name="res_model">product.category</field>
             <field name="domain">[('parent_id','=',False),('isroomtype','=',True)]</field>
             <field name="view_type">tree</field>
-            <field name="view_id" ref="product.product_category_list_view"/>
+            <field name="view_id" ref="product_category_tree_view"/>
         </record>
         <menuitem name="Room by Type" 
                   id="menu_hotel_room_category_action" 
@@ -945,7 +956,7 @@
             <field name="res_model">product.category</field>
             <field name="domain">[('parent_id','=',False),('isamenitytype','=',True)]</field>
             <field name="view_type">tree</field>
-            <field name="view_id" ref="product.product_category_list_view"/>
+            <field name="view_id" ref="product_category_tree_view"/>
         </record>
         <menuitem name="Amenities by Type" 
                   id="menu_hotel_ty_category_action" 
@@ -959,7 +970,7 @@
             <field name="res_model">product.category</field>
             <field name="domain">[('parent_id','=',False),('isservicetype','=',True)]</field>
             <field name="view_type">tree</field>
-            <field name="view_id" ref="product.product_category_list_view"/>
+            <field name="view_id" ref="product_category_tree_view"/>
         </record>
         <menuitem name="Services by Type" 
                   id="menu_hotel_service_category_action" 

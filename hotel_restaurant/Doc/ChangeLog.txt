@@ -1,17 +1,9 @@
 ============================================================================================================================
  Version Change Log (hotel_restaurant)
 ============================================================================================================================
-0.06 on 2015-06-05 by Malay Khamar
-    * Standardized the code as per v8.
 
-0.05 on 2014-07-09 by Vacha Trivedi
-    * Added qweb report for restaurant order,kitchen order ticket and customer bill. 
-    
-0.04 on 2014-01-11 by Krunal Soni
-    * Checked code quality and improved report format.
+0.02 on 2015-10-29 by Ashish Thakkar
+	* Solved the xpath error and improved code to get the hierarchy of food. 
 
-0.03 on 2014-01-07 by Krunal Soni
-    * Added Accurate licensing terms and Copyright(C) on top inside license info in each py file.
-    
-0.02 on 2013-11-13 by Sudhir Arya
-    * Standardized the module as per v7 standards.
+0.01 on 2015-10-26 by Ashish Thakkar
+    * Standardized the module as per v9 standards.

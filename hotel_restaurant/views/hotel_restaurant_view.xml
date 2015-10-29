@@ -8,7 +8,7 @@
             <field name="model">hotel.folio</field>
             <field name="inherit_id" ref="hotel.view_hotel_folio1_form"/>
             <field name="arch" type="xml">
-                <xpath expr ="//form/sheet/notebook/page[@string='Foreign Exchange']"  position ="after">
+                <xpath expr ="//form/sheet/notebook/page[@name='foreign exchange']"  position ="after">
                     <page string="Hotel Restaurant">
 	                    <separator string="Restaurant Order Reservation Details" colspan="4"/>
 	                    <field name="hotel_reservation_order_ids" colspan="4" nolabel="1" readonly="1">
@@ -750,7 +750,7 @@
             <field name="res_model">product.category</field>
             <field name="domain">[('parent_id','=',False),('ismenutype','=',True)]</field>
             <field name="view_type">tree</field>
-            <field name="view_id" ref="product.product_category_tree_view"/>
+            <field name="view_id" ref="hotel.product_category_tree_view"/>
         </record>
         <menuitem name="Foods Items by Type" 
                   id="menu_hotel_restaurent_food_category_action" 

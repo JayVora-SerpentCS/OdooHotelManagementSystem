@@ -138,7 +138,8 @@ class hotel_restaurant_reservation(models.Model):
             self.room_no = False
             if rec.folio_id:
                 self.cname = rec.folio_id.partner_id.id
-                self.room_no = rec.folio_id.room_lines[0].product_id.id
+                if rec.folio_id.room_lines:
+                    self.room_no = rec.folio_id.room_lines[0].product_id.id
 
     @api.multi
     def action_set_to_draft(self):
@@ -325,7 +326,8 @@ class hotel_restaurant_order(models.Model):
             self.room_no = False
             if rec.folio_id:
                 self.cname = rec.folio_id.partner_id.id
-                self.room_no = rec.folio_id.room_lines[0].product_id.id
+                if rec.folio_id.room_lines:
+                    self.room_no = rec.folio_id.room_lines[0].product_id.id
 
     @api.multi
     def done_cancel(self):
