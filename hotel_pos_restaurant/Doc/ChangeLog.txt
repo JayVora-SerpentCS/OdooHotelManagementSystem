@@ -1,0 +1,9 @@
+============================================================================================================================
+ Version Change Log (hotel_pos_restaurant)
+============================================================================================================================
+
+0.02 on 2015-10-30 by Ashish Thakkar
+	* Solved the xpath error and improved code. 
+
+0.01 on 2015-10-26 by Ashish Thakkar
+    * Standardized the module as per v9 standards.
