@@ -23,7 +23,7 @@
 
 {
     "name": "Hotel Reservation Management",
-    "version": "0.02",
+    "version": "0.03",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
     "category": "Generic Modules/Hotel Reservation",
     "website": "http://www.serpentcs.com",
@@ -44,7 +44,7 @@
         "views/report_checkout.xml",
         "views/max_room.xml",
         "views/room_res.xml",
-#        "views/room_summ_view.xml",
+        "views/room_summ_view.xml",
         "views/email_temp_view.xml",
     ],
     "description": """
@@ -53,7 +53,6 @@
     * Group Reservartion
       Different reports are also provided, mainly for hotel statistics.
     """,
-    'js': ["static/src/js/hotel_room_summary.js", ],
     'qweb': ['static/src/xml/hotel_room_summary.xml'],
     'css': ["static/src/css/room_summary.css"],
     'installable': True,

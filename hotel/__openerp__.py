@@ -23,7 +23,7 @@
 
 {
     "name": "Hotel Management",
-    "version": "0.06",
+    "version": "0.07",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
     "category": "Generic Modules/Hotel Management",
     "website": "http://www.serpentcs.com",

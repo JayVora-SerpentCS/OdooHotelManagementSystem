@@ -1,21 +1,23 @@
- openerp.hotel_reservation = function(openerp) {
-    var _t = openerp.web._t;
-    _lt = openerp.web._lt;
-    var QWeb = openerp.web.qweb;
+odoo.define('hotel_reservation.hotel_room_summary', function (require) {
+
+var core = require('web.core');
+var data = require('web.data');
+var ActionManager = require('web.ActionManager');
+var form_common = require('web.form_common');
+var time = require('web.time');
+var _t = core._t;
+var QWeb = core.qweb;
     
-    console.log("asdasdasdasdasdas");
-    openerp.hotel_reservation.RoomSummary = openerp.web.form.FormWidget.extend(openerp.web.form.ReinitializeWidgetMixin, {
-    	
-    	display_name: _lt('Form'),
+var RoomSummary = form_common.FormWidget.extend(form_common.ReinitializeWidgetMixin, {
+        display_name: _t('Form'),
         view_type: "form",
-        
         init: function() {
             this._super.apply(this, arguments);
-	    	if(this.field_manager.model == "room.reservation.summary")
-	    	{
-	    		$(".oe_view_manager_buttons").hide();
-	    		$(".oe_view_manager_header").hide();
-	   		}
+            if(this.field_manager.model == "room.reservation.summary")
+            {
+                $(".oe_view_manager_buttons").hide();
+                $(".oe_view_manager_header").hide();
+               }
             this.set({
                 date_to: false,
                 date_from: false,
@@ -25,10 +27,10 @@
             this.summary_header = [];
             this.room_summary = [];
             this.field_manager.on("field_changed:date_from", this, function() {
-                this.set({"date_from": openerp.web.str_to_datetime(this.field_manager.get_field_value("date_from"))});
+                this.set({"date_from": time.str_to_datetime(this.field_manager.get_field_value("date_from"))});
             });
             this.field_manager.on("field_changed:date_to", this, function() {
-                this.set({"date_to": openerp.web.str_to_datetime(this.field_manager.get_field_value("date_to"))});
+                this.set({"date_to": time.str_to_datetime(this.field_manager.get_field_value("date_to"))});
             });
             
             this.field_manager.on("field_changed:summary_header", this, function() {
@@ -37,25 +39,26 @@
             this.field_manager.on("field_changed:room_summary", this, function() {
                 this.set({"room_summary":this.field_manager.get_field_value("room_summary")});
             });
-            
+//            
         },
         
         initialize_field: function() {
-            openerp.web.form.ReinitializeWidgetMixin.initialize_field.call(this);
+            
+            form_common.ReinitializeWidgetMixin.initialize_field.call(this);
             var self = this;
             self.on("change:summary_header", self, self.initialize_content);
             self.on("change:room_summary", self, self.initialize_content);
         },
         
       initialize_content: function() {
-    	   var self = this;
+           var self = this;
            if (self.setting)
                return;
            
            if (!this.summary_header || !this.room_summary)
-              	return
+                  return
            // don't render anything until we have summary_header and room_summary
-              	
+                  
            this.destroy_content();
            
            if (this.get("summary_header")) {
@@ -64,7 +67,7 @@
            if (this.get("room_summary")) {
             this.room_summary = py.eval(this.get("room_summary"));
            }
-           	
+               
            this.renderElement();
            this.view_loading();
         },
@@ -74,7 +77,7 @@
         },
         
         load_form: function(data) {
-            self.action_manager = new openerp.web.ActionManager(self);
+            self.action_manager = new ActionManager(self);
             
             this.$el.find(".table_free").bind("click", function(event){
                 self.action_manager.do_action({
@@ -94,6 +97,5 @@
         }     
     });
 
-    openerp.web.form.custom_widgets.add('Room_Reservation', 'openerp.hotel_reservation.RoomSummary');
-};
-
+core.form_custom_registry.add('Room_Reservation', RoomSummary);
+});

@@ -209,7 +209,7 @@
                 </field>
             </field>
         </record>
-
+         
          <!-- Form view of room reservation summary-->
          <record model="ir.ui.view" id="room_reservation_summary_form_view">
              <field name="name">room.reservation.summary.form</field>
@@ -232,13 +232,12 @@
                              <page string="Room Summary">
                                  <field name="summary_header" colspan="4" invisible="1"/>
                                  <field name="room_summary" colspan="4" invisible="1"/>
-<!--                                  <widget type="Room_Reservation"></widget> -->
+                                 <widget type="Room_Reservation"></widget>
                              </page>
                          </notebook>
                      </sheet>
                  </form>
              </field>
-
          </record>
 
          <!-- Form view of quick room reservation-->
