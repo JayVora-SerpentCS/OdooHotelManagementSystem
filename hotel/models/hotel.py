@@ -57,7 +57,6 @@ def _offset_format_timestamp1(src_tstamp_str, src_format, dst_format,
     res = src_tstamp_str
     if src_format and dst_format:
         try:
-
             # dt_value needs to be a datetime.datetime object\
             # (so notime.struct_time or mx.DateTime.DateTime here!)
             dt_value = datetime.datetime.strptime(src_tstamp_str, src_format)
@@ -267,11 +266,12 @@ class hotel_folio(models.Model):
             to_zone = 'UTC'
         return datetime.datetime.strptime(_offset_format_timestamp1
                                           (time.strftime("%Y-%m-%d 12:00:00"),
-                                           '%Y-%m-%d %H:%M:%S','%Y-%m-%d %H:%M:%S',
+                                           '%Y-%m-%d %H:%M:%S',
+                                           '%Y-%m-%d %H:%M:%S',
                                            ignore_unparsable_time=True,
                                            context={'tz': to_zone}),
                                           '%Y-%m-%d %H:%M:%S')\
-                                          +datetime.timedelta(days=1)
+                                          + datetime.timedelta(days=1)
 
     @api.multi
     def copy(self, default=None):
@@ -421,13 +421,15 @@ class hotel_folio(models.Model):
             configured_addition_hours = company_ids[0].additional_hours
         myduration = 0
         if self.checkin_date and self.checkout_date:
-            chkin_dt = datetime.datetime.strptime
-            (self.checkin_date, DEFAULT_SERVER_DATETIME_FORMAT)
-            chkout_dt = datetime.datetime.strptime
-            (self.checkout_date, DEFAULT_SERVER_DATETIME_FORMAT)
+            chkin_dt = \
+            datetime.datetime.strptime(self.checkin_date,\
+                                        DEFAULT_SERVER_DATETIME_FORMAT)
+            chkout_dt = \
+            datetime.datetime.strptime(self.checkout_date,\
+                                        DEFAULT_SERVER_DATETIME_FORMAT)
             dur = chkout_dt - chkin_dt
-            if (dur.days == 0 and dur.seconds == 0)\
-             or (dur.days != 0 and dur.seconds == 0):
+            if (dur.days == 0 and dur.seconds == 0) or (dur.days != 0 and\
+                                                         dur.seconds == 0):
                 myduration = dur.days
             else:
                 myduration = dur.days + 1
@@ -446,8 +448,8 @@ class hotel_folio(models.Model):
         @return: new record set for hotel folio.
         """
         if vals.get('name', 'New') == 'New':
-            vals['name'] = self.env['ir.sequence']\
-            .next_by_code('hotel.folio') or 'New'
+            vals['name'] = self.env['ir.sequence'].next_by_code
+            ('hotel.folio') or 'New'
         folio_id = super(hotel_folio, self).create(vals)
         if not 'service_lines' and 'folio_id' in vals:
             tmp_room_lines = vals.get('room_lines', [])
@@ -820,8 +822,8 @@ class hotel_folio_line(models.Model):
         '''
         for folio in self:
             line = folio.order_line_id
-            line.uos_change(product_uos, product_uos_qty=0,
-                                product_id=None)
+            line.uos_change(product_uos, product_uos_qty=0, \
+                            product_id=None)
         return True
 
     @api.onchange('product_id')
@@ -830,8 +832,10 @@ class hotel_folio_line(models.Model):
             self.name = self.product_id.name
             self.price_unit = self.product_id.lst_price
             self.product_uom = self.product_id.uom_id
-            self.price_unit = self.env['account.tax']._fix_tax_included_price
-            (self.product_id.price,self.product_id.taxes_id,self.tax_id)
+            self.price_unit = \
+            self.env['account.tax']._fix_tax_included_price(self.product_id.price,\
+                                                             self.product_id.taxes_id,\
+                                                              self.tax_id)
 
     @api.onchange('product_uom')
     def product_uom_change(self):
@@ -848,9 +852,10 @@ class hotel_folio_line(models.Model):
                 pricelist=self.folio_id.pricelist_id.id,
                 uom=self.product_uom.id
             )
-            self.price_unit = self.env['account.tax']._fix_tax_included_price
-            (product.price,product.taxes_id,self.tax_id)
-
+            self.price_unit = \
+            self.env['account.tax']._fix_tax_included_price(product.price,
+                                                             product.taxes_id,
+                                                              self.tax_id)
 
     @api.onchange('checkin_date', 'checkout_date')
     def on_change_checkout(self):
