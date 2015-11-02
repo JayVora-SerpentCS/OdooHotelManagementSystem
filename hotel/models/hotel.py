@@ -270,8 +270,8 @@ class hotel_folio(models.Model):
                                            '%Y-%m-%d %H:%M:%S',
                                            ignore_unparsable_time=True,
                                            context={'tz': to_zone}),
-                                          '%Y-%m-%d %H:%M:%S')\
-                                          + datetime.timedelta(days=1)
+                                          '%Y-%m-%d %H:%M:%S') + 
+                                          datetime.timedelta(days=1)
 
     @api.multi
     def copy(self, default=None):
