@@ -420,13 +420,12 @@ class hotel_folio(models.Model):
             configured_addition_hours = company_ids[0].additional_hours
         myduration = 0
         if self.checkin_date and self.checkout_date:
-            chkin_dt = datetime.datetime.strptime(self.checkin_date, \
+            chkin_dt = datetime.datetime.strptime(self.checkin_date,
                                         DEFAULT_SERVER_DATETIME_FORMAT)
-            chkout_dt = datetime.datetime.strptime(self.checkout_date, \
+            chkout_dt = datetime.datetime.strptime(self.checkout_date,
                                         DEFAULT_SERVER_DATETIME_FORMAT)
             dur = chkout_dt - chkin_dt
-            if (dur.days == 0 and dur.seconds == 0) or (dur.days != 0 and \
-                                                         dur.seconds == 0):
+            if (not dur.days and not dur.seconds) or (dur.days and not dur.seconds):
                 myduration = dur.days
             else:
                 myduration = dur.days + 1
@@ -696,15 +695,6 @@ class hotel_folio(models.Model):
         sale_line_obj = self.env['sale.order.line'].browse(line_ids)
         sale_line_obj.write({'invoiced': False, 'state': 'draft',
                              'invoice_lines': [(6, 0, [])]})
-#        wf_service = netsvc.LocalService("workflow")
-#        for inv_id in self._ids:
-            # Deleting the existing instance of workflow for SO
-#            wf_service.trg_delete(self._uid, 'sale.order', inv_id, self._cr)
-#            wf_service.trg_create(self._uid, 'sale.order', inv_id, self._cr)
-#        for name in self.name_get():
-#            message = _("The sales order '%s' has been set in \
-#            draft state.") % (name[1],)
-#            self.log(message)
         return True
 
 
@@ -819,7 +809,7 @@ class hotel_folio_line(models.Model):
         '''
         for folio in self:
             line = folio.order_line_id
-            line.uos_change(product_uos, product_uos_qty=0, 
+            line.uos_change(product_uos, product_uos_qty=0,
                             product_id=None)
         return True
 
@@ -830,8 +820,9 @@ class hotel_folio_line(models.Model):
             self.price_unit = self.product_id.lst_price
             self.product_uom = self.product_id.uom_id
             self.price_unit = \
-            self.env['account.tax']._fix_tax_included_price(self.product_id.price, 
-                                            self.product_id.taxes_id, self.tax_id)
+            self.env['account.tax']._fix_tax_included_price(\
+                                    self.product_id.price,
+                                    self.product_id.taxes_id, self.tax_id)
 
     @api.onchange('product_uom')
     def product_uom_change(self):
@@ -849,8 +840,8 @@ class hotel_folio_line(models.Model):
                 uom=self.product_uom.id
             )
             self.price_unit = \
-            self.env['account.tax']._fix_tax_included_price(product.price, 
-                                            product.taxes_id, self.tax_id)
+            self.env['account.tax']._fix_tax_included_price(product.price,
+                                        product.taxes_id, self.tax_id)
 
     @api.onchange('checkin_date', 'checkout_date')
     def on_change_checkout(self):
