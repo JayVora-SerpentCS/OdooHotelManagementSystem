@@ -419,13 +419,15 @@ class hotel_folio(models.Model):
         if company_ids.ids:
             configured_addition_hours = company_ids[0].additional_hours
         myduration = 0
-        if self.checkin_date and self.checkout_date:
-            chkin_dt = datetime.datetime.strptime(self.checkin_date,
-                                        DEFAULT_SERVER_DATETIME_FORMAT)
-            chkout_dt = datetime.datetime.strptime(self.checkout_date,
-                                        DEFAULT_SERVER_DATETIME_FORMAT)
+        chckin = self.checkin_date
+        chckout = self.checkout_date
+        if chckin and chckout:
+            server_dt = DEFAULT_SERVER_DATETIME_FORMAT
+            chkin_dt = datetime.datetime.strptime(chckin, server_dt)
+            chkout_dt = datetime.datetime.strptime(chckout, server_dt)
             dur = chkout_dt - chkin_dt
-            if (not dur.days and not dur.seconds) or (dur.days and not dur.seconds):
+            sec_dur = dur.seconds
+            if (not dur.days and not sec_dur) or (dur.days and not sec_dur):
                 myduration = dur.days
             else:
                 myduration = dur.days + 1
@@ -819,10 +821,11 @@ class hotel_folio_line(models.Model):
             self.name = self.product_id.name
             self.price_unit = self.product_id.lst_price
             self.product_uom = self.product_id.uom_id
-            self.price_unit = \
-            self.env['account.tax']._fix_tax_included_price(\
-                                    self.product_id.price,
-                                    self.product_id.taxes_id, self.tax_id)
+            tax_obj = self.env['account.tax']
+            prod = self.product_id
+            self.price_unit = tax_obj._fix_tax_included_price(prod.price,
+                                                              prod.taxes_id,
+                                                              self.tax_id)
 
     @api.onchange('product_uom')
     def product_uom_change(self):
@@ -831,7 +834,7 @@ class hotel_folio_line(models.Model):
             return
         self.price_unit = self.product_id.lst_price
         if self.folio_id.partner_id:
-            product = self.product_id.with_context(
+            prod = self.product_id.with_context(
                 lang=self.folio_id.partner_id.lang,
                 partner=self.folio_id.partner_id.id,
                 quantity=1,
@@ -839,9 +842,10 @@ class hotel_folio_line(models.Model):
                 pricelist=self.folio_id.pricelist_id.id,
                 uom=self.product_uom.id
             )
-            self.price_unit = \
-            self.env['account.tax']._fix_tax_included_price(product.price,
-                                        product.taxes_id, self.tax_id)
+            tax_obj = self.env['account.tax']
+            self.price_unit = tax_obj._fix_tax_included_price(prod.price,
+                                                              prod.taxes_id,
+                                                              self.tax_id)
 
     @api.onchange('checkin_date', 'checkout_date')
     def on_change_checkout(self):
