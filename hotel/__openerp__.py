@@ -30,14 +30,14 @@
                 'hotel_report_layout'],
     'demo': ['views/hotel_data.xml'],
     'data': [
-             'security/hotel_security.xml',
-             'security/ir.model.access.csv',
-             'views/hotel_sequence.xml',
-             # 'views/hotel_folio_workflow.xml',
-             'views/hotel_report.xml',
-             'views/report_hotel_management.xml',
-             'views/hotel_view.xml',
-             'wizard/hotel_wizard.xml',
+            'security/hotel_security.xml',
+            'security/ir.model.access.csv',
+            'views/hotel_sequence.xml',
+            # 'views/hotel_folio_workflow.xml',
+            'views/hotel_report.xml',
+            'views/report_hotel_management.xml',
+            'views/hotel_view.xml',
+            'wizard/hotel_wizard.xml',
     ],
     'description': '''
     Module for Hotel/Resort/Property management. You can manage:

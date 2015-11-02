@@ -55,8 +55,8 @@ class hotel_folio(models.Model):
 #                    for room_rec in rec.room_lines:
 #                        room_lst.append(room_rec.product_id)
                     for rm in room_lst:
-                        room_obj = self.env['hotel.room'\
-                                    ].search([('name', '=', rm.name)])
+                        room_obj = self.env['hotel.room'].search\
+                                          ([('name', '=', rm.name)])
                         room_obj.write({'isroom': False})
                         vals = {'room_id': room_obj.id,
                                 'check_in': rec.checkin_date,

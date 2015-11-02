@@ -265,14 +265,11 @@ class hotel_folio(models.Model):
             to_zone = self._context.get('tz')
         else:
             to_zone = 'UTC'
-        return datetime.datetime.strptime(_offset_format_timestamp1
-                                          (time.strftime("%Y-%m-%d 12:00:00"),
-                                           '%Y-%m-%d %H:%M:%S', '%Y-%m-%d\
-                                               %H:%M:%S',
-                                           ignore_unparsable_time=True,
-                                           context={'tz': to_zone}),
-                                           '%Y-%m-%d %H:%M:%S')\
-                                          + datetime.timedelta(days=1)
+        return datetime.datetime.strptime(_offset_format_timestamp1\
+                (time.strftime("%Y-%m-%d 12:00:00"),'%Y-%m-%d %H:%M:%S',\
+                 '%Y-%m-%d %H:%M:%S', ignore_unparsable_time=True,\
+                context={'tz': to_zone}),'%Y-%m-%d %H:%M:%S')\
+                 + datetime.timedelta(days=1)
 
     @api.multi
     def copy(self, default=None):
@@ -422,13 +419,13 @@ class hotel_folio(models.Model):
             configured_addition_hours = company_ids[0].additional_hours
         myduration = 0
         if self.checkin_date and self.checkout_date:
-            chkin_dt = datetime.datetime.strptime(self.checkin_date,
+            chkin_dt = datetime.datetime.strptime(self.checkin_date,\
                                                 DEFAULT_SERVER_DATETIME_FORMAT)
-            chkout_dt = datetime.datetime.strptime(self.checkout_date,
+            chkout_dt = datetime.datetime.strptime(self.checkout_date,\
                                                 DEFAULT_SERVER_DATETIME_FORMAT)
             dur = chkout_dt - chkin_dt
-            if (dur.days == 0 and dur.seconds == 0) or\
-            (dur.days != 0 and dur.seconds == 0):
+            if (dur.days == 0 and dur.seconds == 0)\
+             or (dur.days != 0 and dur.seconds == 0):
                 myduration = dur.days
             else:
                 myduration = dur.days + 1
