@@ -1,10 +1,9 @@
-# -*- encoding: utf-8 -*-
-#############################################################################
+# -*- coding: UTF-8 -*-
+# --------------------------------------------------------------------------
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
+#    Copyright (C) 2012-Today Serpent Consulting Services PVT. LTD.
 #    (<http://www.serpentcs.com>)
-#    Copyright (C) 2004 OpenERP SA (<http://www.openerp.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,7 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
-#############################################################################
+# ---------------------------------------------------------------------------
 from openerp.exceptions import except_orm, Warning, ValidationError
 from openerp.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
 from openerp import models, fields, api, _, netsvc
@@ -28,31 +27,41 @@ import datetime
 import urllib2
 import time
 
-def _offset_format_timestamp1(src_tstamp_str, src_format, dst_format, ignore_unparsable_time=True, context=None):
+
+def _offset_format_timestamp1(src_tstamp_str, src_format, dst_format,
+                              ignore_unparsable_time=True, context=None):
     """
-    Convert a source timestamp string into a destination timestamp string, attempting to apply the
-    correct offset if both the server and local timezone are recognized, or no
-    offset at all if they aren't or if tz_offset is false (i.e. assuming they are both in the same TZ).
+    Convert a source timeStamp string into a destination timeStamp string,
+    attempting to apply the
+    correct offset if both the server and local timeZone are recognized,or no
+    offset at all if they aren't or if tz_offset is false (i.e. assuming they
+    are both in the same TZ).
 
-    @param src_tstamp_str: the str value containing the timestamp.
-    @param src_format: the format to use when parsing the local timestamp.
-    @param dst_format: the format to use when formatting the resulting timestamp.
-    @param server_to_client: specify timezone offset direction (server=src and client=dest if True, or client=src and server=dest if False)
-    @param ignore_unparsable_time: if True, return False if src_tstamp_str cannot be parsed
-                                   using src_format or formatted using dst_format.
+    @param src_tstamp_str: the STR value containing the timeStamp.
+    @param src_format: the format to use when parsing the local timeStamp.
+    @param dst_format: the format to use when formatting the resulting
+     timeStamp.
+    @param server_to_client: specify timeZone offset direction (server=src
+                             and client=dest if True, or client=src and
+                             server=dest if False)
+    @param ignore_unparsable_time: if True, return False if src_tstamp_str
+                                   cannot be parsed using src_format or
+                                   formatted using dst_format.
 
-    @return: destination formatted timestamp, expressed in the destination timezone if possible
-            and if tz_offset is true, or src_tstamp_str if timezone offset could not be determined.
+    @return: destination formatted timestamp, expressed in the destination
+             timezone if possible and if tz_offset is true, or src_tstamp_str
+             if timezone offset could not be determined.
     """
     if not src_tstamp_str:
         return False
     res = src_tstamp_str
     if src_format and dst_format:
         try:
-            
-            # dt_value needs to be a datetime.datetime object (so no time.struct_time or mx.DateTime.DateTime here!)
-            dt_value = datetime.datetime.strptime(src_tstamp_str,src_format)
-            if context.get('tz',False):
+
+            # dt_value needs to be a datetime.datetime object\
+            # (so notime.struct_time or mx.DateTime.DateTime here!)
+            dt_value = datetime.datetime.strptime(src_tstamp_str, src_format)
+            if context.get('tz', False):
                 try:
                     import pytz
                     src_tz = pytz.timezone(context['tz'])
@@ -237,25 +246,33 @@ class hotel_folio(models.Model):
          @param self: object pointer
         """
         return self.search_count([('state', '=', 'draft')])
-    
+
     @api.model
     def _get_checkin_date(self):
         if self._context.get('tz'):
             to_zone = self._context.get('tz')
         else:
             to_zone = 'UTC'
-        return _offset_format_timestamp1(time.strftime("%Y-%m-%d 12:00:00"), '%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M:%S',\
-                                          ignore_unparsable_time=True, context={'tz':to_zone})
-    
+        return _offset_format_timestamp1(time.strftime("%Y-%m-%d 12:00:00"),
+                                         '%Y-%m-%d %H:%M:%S', '%Y-%m-%d\
+                                             %H:%M:%S',
+                                         ignore_unparsable_time=True,
+                                         context={'tz': to_zone})
+
     @api.model
     def _get_checkout_date(self):
         if self._context.get('tz'):
             to_zone = self._context.get('tz')
         else:
             to_zone = 'UTC'
-        return datetime.datetime.strptime(_offset_format_timestamp1(time.strftime("%Y-%m-%d 12:00:00"), '%Y-%m-%d %H:%M:%S', '%Y-%m-%d %H:%M:%S', \
-                                          ignore_unparsable_time=True, context={'tz':to_zone}),'%Y-%m-%d %H:%M:%S') + datetime.timedelta(days=1)
-    
+        return datetime.datetime.strptime(_offset_format_timestamp1
+                                          (time.strftime("%Y-%m-%d 12:00:00"),
+                                           '%Y-%m-%d %H:%M:%S', '%Y-%m-%d\
+                                               %H:%M:%S',
+                                           ignore_unparsable_time=True,
+                                           context={'tz': to_zone}),
+                                           '%Y-%m-%d %H:%M:%S')\
+                                          + datetime.timedelta(days=1)
 
     @api.multi
     def copy(self, default=None):
@@ -289,13 +306,16 @@ class hotel_folio(models.Model):
     _order = 'id'
     _inherit = ['ir.needaction_mixin']
 
-    name = fields.Char('Folio Number', readonly=True, index=True, default='New')
+    name = fields.Char('Folio Number', readonly=True, index=True,
+                       default='New')
     order_id = fields.Many2one('sale.order', 'Order', delegate=True,
                                required=True, ondelete='cascade')
     checkin_date = fields.Datetime('Check In', required=True, readonly=True,
-                                   states={'draft': [('readonly', False)]}, default=_get_checkin_date)
+                                   states={'draft': [('readonly', False)]},
+                                   default=_get_checkin_date)
     checkout_date = fields.Datetime('Check Out', required=True, readonly=True,
-                                    states={'draft': [('readonly', False)]},default=_get_checkout_date)
+                                    states={'draft': [('readonly', False)]},
+                                    default=_get_checkout_date)
     room_lines = fields.One2many('hotel.folio.line', 'folio_id',
                                  readonly=True,
                                  states={'draft': [('readonly', False)],
@@ -402,10 +422,13 @@ class hotel_folio(models.Model):
             configured_addition_hours = company_ids[0].additional_hours
         myduration = 0
         if self.checkin_date and self.checkout_date:
-            chkin_dt = datetime.datetime.strptime(self.checkin_date, DEFAULT_SERVER_DATETIME_FORMAT)
-            chkout_dt = datetime.datetime.strptime(self.checkout_date, DEFAULT_SERVER_DATETIME_FORMAT)
+            chkin_dt = datetime.datetime.strptime(self.checkin_date,
+                                                DEFAULT_SERVER_DATETIME_FORMAT)
+            chkout_dt = datetime.datetime.strptime(self.checkout_date,
+                                                DEFAULT_SERVER_DATETIME_FORMAT)
             dur = chkout_dt - chkin_dt
-            if (dur.days == 0 and dur.seconds == 0) or (dur.days != 0 and dur.seconds == 0):
+            if (dur.days == 0 and dur.seconds == 0) or\
+            (dur.days != 0 and dur.seconds == 0):
                 myduration = dur.days
             else:
                 myduration = dur.days + 1
@@ -424,7 +447,8 @@ class hotel_folio(models.Model):
         @return: new record set for hotel folio.
         """
         if vals.get('name', 'New') == 'New':
-            vals['name'] = self.env['ir.sequence'].next_by_code('hotel.folio') or 'New'
+            vals['name'] = self.env['ir.sequence']\
+            .next_by_code('hotel.folio') or 'New'
         folio_id = super(hotel_folio, self).create(vals)
         if not 'service_lines' and 'folio_id' in vals:
             tmp_room_lines = vals.get('room_lines', [])
@@ -538,7 +562,7 @@ class hotel_folio(models.Model):
         for folio in self:
             folio.order_id.button_dummy()
         return True
-    
+
     @api.multi
     def action_done(self):
         self.write({'state': 'done'})
@@ -602,7 +626,7 @@ class hotel_folio(models.Model):
                                         self._cr)
                 sale.write({'state': 'cancel'})
         return rv
-    
+
     @api.multi
     def action_confirm(self):
         for order in self.order_id:
@@ -613,7 +637,8 @@ class hotel_folio(models.Model):
                     if line.product_id.invoice_policy == 'cost':
                         order._create_analytic_account()
                         break
-        if self.env['ir.values'].get_default('sale.config.settings', 'auto_done_setting'):
+        if self.env['ir.values'].get_default('sale.config.settings',
+                                             'auto_done_setting'):
             self.order_id.action_done()
 
 #    @api.multi
@@ -740,11 +765,12 @@ class hotel_folio_line(models.Model):
         if 'checkout' in self._context:
             return self._context['checkout']
         return time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-    
+
 #    def _get_uom_id(self):
 #        try:
 #            proxy = self.pool.get('ir.model.data')
-#            result = proxy.get_object_reference(self._cr, self._uid, 'product', 'product_uom_unit')
+#            result = proxy.get_object_reference(self._cr, self._uid,
+#              'product','product_uom_unit')
 #            return result[1]
 #        except Exception:
 #            return False
@@ -761,7 +787,7 @@ class hotel_folio_line(models.Model):
                                    default=_get_checkin_date)
     checkout_date = fields.Datetime('Check Out', required=True,
                                     default=_get_checkout_date)
-#    product_uom = fields.Many2one('product.uom', string='Unit of Measure', 
+#    product_uom = fields.Many2one('product.uom',string='Unit of Measure',
 #                                  required=True, default=_get_uom_id)
 
     @api.model
@@ -822,8 +848,11 @@ class hotel_folio_line(models.Model):
             self.price_unit = self.product_id.lst_price
             self.product_uom = self.product_id.uom_id
             if self.folio_id.partner_id:
-                self.price_unit = self.env['account.tax']._fix_tax_included_price(self.product_id.price, self.product_id.taxes_id, self.tax_id)
-                
+                self.price_unit = self.env['account.tax']\
+                ._fix_tax_included_price(self.product_id.price,
+                                         self.product_id.taxes_id,
+                                         self.tax_id)
+
     @api.onchange('product_uom')
     def product_uom_change(self):
         if not self.product_uom:
@@ -839,7 +868,10 @@ class hotel_folio_line(models.Model):
                 pricelist=self.folio_id.pricelist_id.id,
                 uom=self.product_uom.id
             )
-            self.price_unit = self.env['account.tax']._fix_tax_included_price(product.price, product.taxes_id, self.tax_id)
+            self.price_unit = self.env['account.tax'].\
+                                _fix_tax_included_price(product.price,
+                                                        product.taxes_id,
+                                                        self.tax_id)
 
 #    def product_id_change(self, pricelist, product, qty=0, uom=False,
 #                          qty_uos=0, uos=False, name='', partner_id=False,
@@ -919,7 +951,8 @@ class hotel_folio_line(models.Model):
         self.write({'state': 'done'})
         for folio_line in self:
             wf_service.trg_write(self._uid, 'sale.order',
-                                 folio_line.order_line_id.order_id.id, self._cr)
+                                 folio_line.order_line_id.order_id.id,
+                                 self._cr)
         return True
 
     @api.one

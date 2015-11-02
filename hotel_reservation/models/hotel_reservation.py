@@ -1,10 +1,9 @@
-# -*- encoding: utf-8 -*-
-#############################################################################
+# -*- coding: UTF-8 -*-
+# --------------------------------------------------------------------------
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
+#    Copyright (C) 2012-Today Serpent Consulting Services PVT. LTD.
 #    (<http://www.serpentcs.com>)
-#    Copyright (C) 2004 OpenERP SA (<http://www.openerp.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,8 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
-#############################################################################
-
+# ---------------------------------------------------------------------------
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from openerp.exceptions import except_orm, ValidationError
 from dateutil.relativedelta import relativedelta
@@ -36,7 +34,7 @@ class hotel_folio(models.Model):
 
     reservation_id = fields.Many2one(comodel_name='hotel.reservation',
                                      string='Reservation Id')
-    
+
     @api.model
     def create(self, vals, check=True):
         """
@@ -45,7 +43,7 @@ class hotel_folio(models.Model):
         @param vals: dictionary of fields value.
         @return: new record set for hotel folio.
         """
-        if 'service_lines' and not 'folio_id' in vals:
+        if 'service_lines' and 'folio_id' not in vals:
             if not vals:
                 vals = {}
             vals['name'] = self.env['ir.sequence'].get('hotel.folio')
@@ -57,7 +55,8 @@ class hotel_folio(models.Model):
 #                    for room_rec in rec.room_lines:
 #                        room_lst.append(room_rec.product_id)
                     for rm in room_lst:
-                        room_obj = self.env['hotel.room'].search([('name', '=', rm.name)])
+                        room_obj = self.env['hotel.room'\
+                                    ].search([('name', '=', rm.name)])
                         room_obj.write({'isroom': False})
                         vals = {'room_id': room_obj.id,
                                 'check_in': rec.checkin_date,
@@ -66,7 +65,7 @@ class hotel_folio(models.Model):
                                 }
                         self.env['folio.room.line'].create(vals)
         return folio_id
-    
+
     @api.multi
     def write(self, vals):
         """
