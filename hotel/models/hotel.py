@@ -265,11 +265,13 @@ class hotel_folio(models.Model):
             to_zone = self._context.get('tz')
         else:
             to_zone = 'UTC'
-        return datetime.datetime.strptime(_offset_format_timestamp1\
-                (time.strftime("%Y-%m-%d 12:00:00"),'%Y-%m-%d %H:%M:%S',\
-                 '%Y-%m-%d %H:%M:%S', ignore_unparsable_time=True,\
-                context={'tz': to_zone}),'%Y-%m-%d %H:%M:%S')\
-                 + datetime.timedelta(days=1)
+        return datetime.datetime.strptime(_offset_format_timestamp1
+                                          (time.strftime("%Y-%m-%d 12:00:00"),
+                                           '%Y-%m-%d %H:%M:%S','%Y-%m-%d %H:%M:%S',
+                                           ignore_unparsable_time=True,
+                                           context={'tz': to_zone}),
+                                          '%Y-%m-%d %H:%M:%S')\
+                                          +datetime.timedelta(days=1)
 
     @api.multi
     def copy(self, default=None):
@@ -419,10 +421,10 @@ class hotel_folio(models.Model):
             configured_addition_hours = company_ids[0].additional_hours
         myduration = 0
         if self.checkin_date and self.checkout_date:
-            chkin_dt = datetime.datetime.strptime(self.checkin_date,\
-                                                DEFAULT_SERVER_DATETIME_FORMAT)
-            chkout_dt = datetime.datetime.strptime(self.checkout_date,\
-                                                DEFAULT_SERVER_DATETIME_FORMAT)
+            chkin_dt = datetime.datetime.strptime
+            (self.checkin_date, DEFAULT_SERVER_DATETIME_FORMAT)
+            chkout_dt = datetime.datetime.strptime
+            (self.checkout_date, DEFAULT_SERVER_DATETIME_FORMAT)
             dur = chkout_dt - chkin_dt
             if (dur.days == 0 and dur.seconds == 0)\
              or (dur.days != 0 and dur.seconds == 0):
@@ -638,22 +640,6 @@ class hotel_folio(models.Model):
                                              'auto_done_setting'):
             self.order_id.action_done()
 
-#    @api.multi
-#    def action_wait(self):
-#        '''
-#        @param self: object pointer
-#        '''
-##        sale_order_obj = self.env['sale.order']
-#        res = False
-##        for o in self:
-##            sale_obj = sale_order_obj.browse([o.order_id.id])
-##            res = sale_obj.action_wait()
-##            if (o.order_policy == 'manual') and (not o.invoice_ids):
-##                o.write({'state': 'manual'})
-##            else:
-##                o.write({'state': 'progress'})
-#        return res
-
     @api.multi
     def test_state(self, mode):
         '''
@@ -840,15 +826,12 @@ class hotel_folio_line(models.Model):
 
     @api.onchange('product_id')
     def product_id_change(self):
-        if self.product_id:
+        if self.product_id and self.folio_id.partner_id:
             self.name = self.product_id.name
             self.price_unit = self.product_id.lst_price
             self.product_uom = self.product_id.uom_id
-            if self.folio_id.partner_id:
-                self.price_unit = self.env['account.tax']\
-                ._fix_tax_included_price(self.product_id.price,
-                                         self.product_id.taxes_id,
-                                         self.tax_id)
+            self.price_unit = self.env['account.tax']._fix_tax_included_price
+            (self.product_id.price,self.product_id.taxes_id,self.tax_id)
 
     @api.onchange('product_uom')
     def product_uom_change(self):
@@ -865,43 +848,9 @@ class hotel_folio_line(models.Model):
                 pricelist=self.folio_id.pricelist_id.id,
                 uom=self.product_uom.id
             )
-            self.price_unit = self.env['account.tax'].\
-                                _fix_tax_included_price(product.price,
-                                                        product.taxes_id,
-                                                        self.tax_id)
+            self.price_unit = self.env['account.tax']._fix_tax_included_price
+            (product.price,product.taxes_id,self.tax_id)
 
-#    def product_id_change(self, pricelist, product, qty=0, uom=False,
-#                          qty_uos=0, uos=False, name='', partner_id=False,
-#                          lang=False, update_tax=True, date_order=False):
-#        '''
-#        @param self: object pointer
-#        '''
-#        line_ids = [folio.order_line_id.id for folio in self]
-#        if product:
-#            sale_line_obj = self.env['sale.order.line'].browse(line_ids)
-#            return sale_line_obj.product_id_change()
-#            return sale_line_obj.product_id_change(pricelist, product, qty=0,
-#                                                   uom=False, qty_uos=0,
-#                                                   uos=False, name='',
-#                                                   partner_id=partner_id,
-#                                                   lang=False,
-#                                                   update_tax=True,
-#                                                   date_order=False)
-
-#    @api.multi
-#    def product_uom_change(self, pricelist, product, qty=0,
-#                           uom=False, qty_uos=0, uos=False, name='',
-#                           partner_id=False, lang=False, update_tax=True,
-#                           date_order=False):
-#        '''
-#        @param self: object pointer
-#        '''
-#        if product:
-#            return self.product_id_change(pricelist, product, qty=0,
-#                                          uom=False, qty_uos=0, uos=False,
-#                                          name='', partner_id=partner_id,
-#                                          lang=False, update_tax=True,
-#                                          date_order=False)
 
     @api.onchange('checkin_date', 'checkout_date')
     def on_change_checkout(self):
