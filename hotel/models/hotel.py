@@ -264,13 +264,14 @@ class hotel_folio(models.Model):
             to_zone = self._context.get('tz')
         else:
             to_zone = 'UTC'
+        tm_delta = datetime.timedelta(days=1)
         return datetime.datetime.strptime(_offset_format_timestamp1
                                           (time.strftime("%Y-%m-%d 12:00:00"),
                                            '%Y-%m-%d %H:%M:%S',
                                            '%Y-%m-%d %H:%M:%S',
                                            ignore_unparsable_time=True,
                                            context={'tz': to_zone}),
-                            '%Y-%m-%d %H:%M:%S') + datetime.timedelta(days=1)
+                                          '%Y-%m-%d %H:%M:%S') + tm_delta
 
     @api.multi
     def copy(self, default=None):
@@ -446,8 +447,8 @@ class hotel_folio(models.Model):
         @return: new record set for hotel folio.
         """
         if vals.get('name', 'New') == 'New':
-            vals['name'] = self.env['ir.sequence'].next_by_code
-            ('hotel.folio') or 'New'
+            seq_obj = self.env['ir.sequence']
+            vals['name'] = seq_obj.next_by_code('hotel.folio') or 'New'
         folio_id = super(hotel_folio, self).create(vals)
         if not 'service_lines' and 'folio_id' in vals:
             tmp_room_lines = vals.get('room_lines', [])
@@ -1244,9 +1245,8 @@ class CurrencyExchangeRate(models.Model):
         @param self: object pointer
         '''
         if self.out_amount:
-            for rec in self:
-                ser_tax = ((self.out_amount) * (float(self.tax))) / 100
-                self.total = self.out_amount - ser_tax
+            ser_tax = ((self.out_amount) * (float(self.tax))) / 100
+            self.total = self.out_amount - ser_tax
 
 
 class account_invoice(models.Model):
