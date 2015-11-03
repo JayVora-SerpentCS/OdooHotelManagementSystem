@@ -1,36 +1,15 @@
 ============================================================================================================================
  Version Change Log (hotel_reservation)
 ============================================================================================================================
-0.09 on 2015-06-11 by Malay Khamar
-    *Added room.reservation.summary model.
-    *Added quick.room.reservation TransientModel.
-    *Added view for both Models.
 
-0.08 on 2015-06-03 by Malay Khamar
-    * Standardized the code as per v8.
+0.03 on 2013-10-31 by Murtuza Saleh
+    * Improved hotel_room_summary.js file as per v9 standards.
 
-0.07 on 2014-07-09 by Kazim Mirza
-    * Add Qweb Report For Reservation
-        - CheckIn Report
-        - CheckOut Report
-        - Room Max Report
-        - Reservation Report 
-    * Remove RML Report
+0.02 on 2013-10-29 by Anu Patel
+    * Set the 'mail' module to replace 'email_template' dependency.
+    * Improved email templates for set mail.template instead of email.template.
+    * Improved demo data and view according v9 standard.
 
-0.06 on 2014-01-11 by Krunal Soni
-    * Checked code quality and improved report format.
+0.01 on 2013-10-13 by Ashish Thakkar
+    * Standardized the module as per v9 standards.
 
-0.05 on 2014-01-07 by Krunal Soni
-    * Added Accurate licensing terms and Copyright(C) on top inside license info in each py file.
-    
-0.04 on 2013-11-19 by Sudhir Arya
-    * Solved warnings and added scheduler to calculate room availability.
-
-0.03 on 2013-11-18 by Sudhir Arya
-    * Added access rights to some objects.
-
-0.02 on 2013-11-13 by Sudhir Arya
-    * Standardized the module as per v7 standards.
-
-1.01 on Oct 1,2013 : Anil Kesariya
-    * Added Access control for manager user Improved label name.

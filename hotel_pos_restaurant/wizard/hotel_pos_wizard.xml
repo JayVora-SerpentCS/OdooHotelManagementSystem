@@ -26,7 +26,7 @@
 
         <!--Action for folio report wizard -->
         <record model="ir.actions.act_window" id="hotel_order_wizard">
-            <field name="name">Hotel Folio Order Wizard</field>
+            <field name="name">Pos Order Report</field>
             <field name="res_model">order.report.wizard</field>
             <field name="view_type">form</field>
             <field name="view_mode">form</field>

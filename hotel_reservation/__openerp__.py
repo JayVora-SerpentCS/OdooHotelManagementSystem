@@ -1,10 +1,9 @@
-# -*- encoding: utf-8 -*-
-#############################################################################
+# -*- coding: UTF-8 -*-
+# --------------------------------------------------------------------------
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
+#    Copyright (C) 2012-Today Serpent Consulting Services PVT. LTD.
 #    (<http://www.serpentcs.com>)
-#    Copyright (C) 2004 OpenERP SA (<http://www.openerp.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,16 +18,16 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
-#############################################################################
+# ---------------------------------------------------------------------------
 
 {
     "name": "Hotel Reservation Management",
-    "version": "0.07",
+    "version": "0.03",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
     "category": "Generic Modules/Hotel Reservation",
     "website": "http://www.serpentcs.com",
     "depends": ["hotel", "stock", 'mail', "hotel_report_layout",
-                'email_template'],
+                'mail'],
     "demo": [
         "views/hotel_reservation_data.xml",
     ],
@@ -53,7 +52,6 @@
     * Group Reservartion
       Different reports are also provided, mainly for hotel statistics.
     """,
-    'js': ["static/src/js/hotel_room_summary.js", ],
     'qweb': ['static/src/xml/hotel_room_summary.xml'],
     'css': ["static/src/css/room_summary.css"],
     'installable': True,

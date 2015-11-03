@@ -1,10 +1,9 @@
-# -*- encoding: utf-8 -*-
-#############################################################################
+# -*- coding: UTF-8 -*-
+# --------------------------------------------------------------------------
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
+#    Copyright (C) 2012-Today Serpent Consulting Services PVT. LTD.
 #    (<http://www.serpentcs.com>)
-#    Copyright (C) 2004 OpenERP SA (<http://www.openerp.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,7 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
-#############################################################################
+# ---------------------------------------------------------------------------
 from openerp.exceptions import except_orm, Warning, ValidationError
 from openerp.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
 from openerp import models, fields, api, _, netsvc
@@ -27,6 +26,56 @@ from decimal import Decimal
 import datetime
 import urllib2
 import time
+
+
+def _offset_format_timestamp1(src_tstamp_str, src_format, dst_format,
+                              ignore_unparsable_time=True, context=None):
+    """
+    Convert a source timeStamp string into a destination timeStamp string,
+    attempting to apply the
+    correct offset if both the server and local timeZone are recognized,or no
+    offset at all if they aren't or if tz_offset is false (i.e. assuming they
+    are both in the same TZ).
+
+    @param src_tstamp_str: the STR value containing the timeStamp.
+    @param src_format: the format to use when parsing the local timeStamp.
+    @param dst_format: the format to use when formatting the resulting
+     timeStamp.
+    @param server_to_client: specify timeZone offset direction (server=src
+                             and client=dest if True, or client=src and
+                             server=dest if False)
+    @param ignore_unparsable_time: if True, return False if src_tstamp_str
+                                   cannot be parsed using src_format or
+                                   formatted using dst_format.
+
+    @return: destination formatted timestamp, expressed in the destination
+             timezone if possible and if tz_offset is true, or src_tstamp_str
+             if timezone offset could not be determined.
+    """
+    if not src_tstamp_str:
+        return False
+    res = src_tstamp_str
+    if src_format and dst_format:
+        try:
+            # dt_value needs to be a datetime.datetime object\
+            # (so notime.struct_time or mx.DateTime.DateTime here!)
+            dt_value = datetime.datetime.strptime(src_tstamp_str, src_format)
+            if context.get('tz', False):
+                try:
+                    import pytz
+                    src_tz = pytz.timezone(context['tz'])
+                    dst_tz = pytz.timezone('UTC')
+                    src_dt = src_tz.localize(dt_value, is_dst=True)
+                    dt_value = src_dt.astimezone(dst_tz)
+                except Exception:
+                    pass
+            res = dt_value.strftime(dst_format)
+        except Exception:
+            # Normal ways to end up here are if strptime or strftime failed
+            if not ignore_unparsable_time:
+                return False
+            pass
+    return res
 
 
 class hotel_floor(models.Model):
@@ -197,6 +246,33 @@ class hotel_folio(models.Model):
         """
         return self.search_count([('state', '=', 'draft')])
 
+    @api.model
+    def _get_checkin_date(self):
+        if self._context.get('tz'):
+            to_zone = self._context.get('tz')
+        else:
+            to_zone = 'UTC'
+        return _offset_format_timestamp1(time.strftime("%Y-%m-%d 12:00:00"),
+                                         '%Y-%m-%d %H:%M:%S', '%Y-%m-%d\
+                                             %H:%M:%S',
+                                         ignore_unparsable_time=True,
+                                         context={'tz': to_zone})
+
+    @api.model
+    def _get_checkout_date(self):
+        if self._context.get('tz'):
+            to_zone = self._context.get('tz')
+        else:
+            to_zone = 'UTC'
+        tm_delta = datetime.timedelta(days=1)
+        return datetime.datetime.strptime(_offset_format_timestamp1
+                                          (time.strftime("%Y-%m-%d 12:00:00"),
+                                           '%Y-%m-%d %H:%M:%S',
+                                           '%Y-%m-%d %H:%M:%S',
+                                           ignore_unparsable_time=True,
+                                           context={'tz': to_zone}),
+                                          '%Y-%m-%d %H:%M:%S') + tm_delta
+
     @api.multi
     def copy(self, default=None):
         '''
@@ -229,13 +305,16 @@ class hotel_folio(models.Model):
     _order = 'id'
     _inherit = ['ir.needaction_mixin']
 
-    name = fields.Char('Folio Number', readonly=True)
+    name = fields.Char('Folio Number', readonly=True, index=True,
+                       default='New')
     order_id = fields.Many2one('sale.order', 'Order', delegate=True,
                                required=True, ondelete='cascade')
     checkin_date = fields.Datetime('Check In', required=True, readonly=True,
-                                   states={'draft': [('readonly', False)]})
+                                   states={'draft': [('readonly', False)]},
+                                   default=_get_checkin_date)
     checkout_date = fields.Datetime('Check Out', required=True, readonly=True,
-                                    states={'draft': [('readonly', False)]})
+                                    states={'draft': [('readonly', False)]},
+                                    default=_get_checkout_date)
     room_lines = fields.One2many('hotel.folio.line', 'folio_id',
                                  readonly=True,
                                  states={'draft': [('readonly', False)],
@@ -341,13 +420,18 @@ class hotel_folio(models.Model):
         if company_ids.ids:
             configured_addition_hours = company_ids[0].additional_hours
         myduration = 0
-        if self.checkin_date and self.checkout_date:
-            chkin_dt = (datetime.datetime.strptime
-                        (self.checkin_date, DEFAULT_SERVER_DATETIME_FORMAT))
-            chkout_dt = (datetime.datetime.strptime
-                         (self.checkout_date, DEFAULT_SERVER_DATETIME_FORMAT))
+        chckin = self.checkin_date
+        chckout = self.checkout_date
+        if chckin and chckout:
+            server_dt = DEFAULT_SERVER_DATETIME_FORMAT
+            chkin_dt = datetime.datetime.strptime(chckin, server_dt)
+            chkout_dt = datetime.datetime.strptime(chckout, server_dt)
             dur = chkout_dt - chkin_dt
-            myduration = dur.days + 1
+            sec_dur = dur.seconds
+            if (not dur.days and not sec_dur) or (dur.days and not sec_dur):
+                myduration = dur.days
+            else:
+                myduration = dur.days + 1
             if configured_addition_hours > 0:
                 additional_hours = abs((dur.seconds / 60) / 60)
                 if additional_hours >= configured_addition_hours:
@@ -362,36 +446,18 @@ class hotel_folio(models.Model):
         @param vals: dictionary of fields value.
         @return: new record set for hotel folio.
         """
+        if vals.get('name', 'New') == 'New':
+            seq_obj = self.env['ir.sequence']
+            vals['name'] = seq_obj.next_by_code('hotel.folio') or 'New'
+        folio_id = super(hotel_folio, self).create(vals)
         if not 'service_lines' and 'folio_id' in vals:
             tmp_room_lines = vals.get('room_lines', [])
             vals['order_policy'] = vals.get('hotel_policy', 'manual')
             vals.update({'room_lines': []})
-            folio_id = super(hotel_folio, self).create(vals)
             for line in (tmp_room_lines):
                 line[2].update({'folio_id': folio_id})
             vals.update({'room_lines': tmp_room_lines})
             folio_id.write(vals)
-        else:
-            if not vals:
-                vals = {}
-            vals['name'] = self.env['ir.sequence'].get('hotel.folio')
-            folio_id = super(hotel_folio, self).create(vals)
-            folio_room_line_obj = self.env['folio.room.line']
-            h_room_obj = self.env['hotel.room']
-            room_lst = []
-            for rec in folio_id:
-                if not rec.reservation_id:
-                    for room_rec in rec.room_lines:
-                        room_lst.append(room_rec.product_id)
-                    for rm in room_lst:
-                        room_obj = h_room_obj.search([('name', '=', rm.name)])
-                        room_obj.write({'isroom': False})
-                        vals = {'room_id': room_obj.id,
-                                'check_in': rec.checkin_date,
-                                'check_out': rec.checkout_date,
-                                'folio_id': rec.id,
-                                }
-                        folio_room_line_obj.create(vals)
         return folio_id
 
     @api.multi
@@ -402,7 +468,7 @@ class hotel_folio(models.Model):
         @param vals: dictionary of fields value.
         """
         folio_room_line_obj = self.env['folio.room.line']
-        reservation_line_obj = self.env['hotel.room.reservation.line']
+#        reservation_line_obj = self.env['hotel.room.reservation.line']
         product_obj = self.env['product.product']
         h_room_obj = self.env['hotel.room']
         room_lst1 = []
@@ -439,22 +505,22 @@ class hotel_folio(models.Model):
                     folio_romline_rec = (folio_room_line_obj.search
                                          ([('folio_id', '=', folio_obj.id)]))
                     folio_romline_rec.write(room_vals)
-            if folio_obj.reservation_id:
-                for reservation in folio_obj.reservation_id:
-                    reservation_obj = (reservation_line_obj.search
-                                       ([('reservation_id', '=',
-                                          reservation.id)]))
-                    if len(reservation_obj) == 1:
-                        for line_id in reservation.reservation_line:
-                            line_id = line_id.reserve
-                            for room_id in line_id:
-                                vals = {'room_id': room_id.id,
-                                        'check_in': folio_obj.checkin_date,
-                                        'check_out': folio_obj.checkout_date,
-                                        'state': 'assigned',
-                                        'reservation_id': reservation.id,
-                                        }
-                                reservation_obj.write(vals)
+#            if folio_obj.reservation_id:
+#                for reservation in folio_obj.reservation_id:
+#                    reservation_obj = (reservation_line_obj.search
+#                                       ([('reservation_id', '=',
+#                                          reservation.id)]))
+#                    if len(reservation_obj) == 1:
+#                        for line_id in reservation.reservation_line:
+#                            line_id = line_id.reserve
+#                            for room_id in line_id:
+#                                vals = {'room_id': room_id.id,
+#                                        'check_in': folio_obj.checkin_date,
+#                                        'check_out': folio_obj.checkout_date,
+#                                        'state': 'assigned',
+#                                        'reservation_id': reservation.id,
+#                                        }
+#                                reservation_obj.write(vals)
         return folio_write
 
     @api.onchange('warehouse_id')
@@ -465,10 +531,7 @@ class hotel_folio(models.Model):
         ----------------------------------------------------------
         @param self: object pointer
         '''
-        for folio in self:
-            order = folio.order_id
-            x = order.onchange_warehouse_id(folio.warehouse_id.id)
-        return x
+        return self.order_id._onchange_warehouse_id()
 
     @api.onchange('partner_id')
     def onchange_partner_id(self):
@@ -497,9 +560,12 @@ class hotel_folio(models.Model):
         @param self: object pointer
         '''
         for folio in self:
-            order = folio.order_id
-            x = order.button_dummy()
-        return x
+            folio.order_id.button_dummy()
+        return True
+
+    @api.multi
+    def action_done(self):
+        self.write({'state': 'done'})
 
     @api.multi
     def action_invoice_create(self, grouped=False, states=None):
@@ -519,9 +585,6 @@ class hotel_folio(models.Model):
                       'hotel_invoice_id': invoice_id
                       }
             line.write(values)
-            for line2 in line.folio_pos_order_ids:
-                line2.write({'invoice_id': invoice_id})
-                line2.action_invoice_state()
             for rec in line.room_lines:
                 room_lst.append(rec.product_id)
             for room in room_lst:
@@ -562,25 +625,21 @@ class hotel_folio(models.Model):
                                         invoice.id, 'invoice_cancel',
                                         self._cr)
                 sale.write({'state': 'cancel'})
-            for rec in sale.folio_pos_order_ids:
-                    rec.write({'state': 'cancel'})
         return rv
 
     @api.multi
-    def action_wait(self):
-        '''
-        @param self: object pointer
-        '''
-        sale_order_obj = self.env['sale.order']
-        res = False
-        for o in self:
-            sale_obj = sale_order_obj.browse([o.order_id.id])
-            res = sale_obj.action_wait()
-            if (o.order_policy == 'manual') and (not o.invoice_ids):
-                o.write({'state': 'manual'})
-            else:
-                o.write({'state': 'progress'})
-        return res
+    def action_confirm(self):
+        for order in self.order_id:
+            order.state = 'sale'
+            order.order_line._action_procurement_create()
+            if not order.project_id:
+                for line in order.order_line:
+                    if line.product_id.invoice_policy == 'cost':
+                        order._create_analytic_account()
+                        break
+        if self.env['ir.values'].get_default('sale.config.settings',
+                                             'auto_done_setting'):
+            self.order_id.action_done()
 
     @api.multi
     def test_state(self, mode):
@@ -603,9 +662,8 @@ class hotel_folio(models.Model):
         @param self: object pointer
         '''
         for folio in self:
-            order = folio.order_id
-            x = order.action_ship_create()
-        return x
+            folio.order_id.action_ship_create()
+        return True
 
     @api.multi
     def action_ship_end(self):
@@ -621,9 +679,8 @@ class hotel_folio(models.Model):
         @param self: object pointer
         '''
         for folio in self:
-            order = folio.order_id
-            x = order.has_stockable_products()
-        return x
+            folio.order_id.has_stockable_products()
+        return True
 
     @api.multi
     def action_cancel_draft(self):
@@ -641,15 +698,6 @@ class hotel_folio(models.Model):
         sale_line_obj = self.env['sale.order.line'].browse(line_ids)
         sale_line_obj.write({'invoiced': False, 'state': 'draft',
                              'invoice_lines': [(6, 0, [])]})
-        wf_service = netsvc.LocalService("workflow")
-        for inv_id in self._ids:
-            # Deleting the existing instance of workflow for SO
-            wf_service.trg_delete(self._uid, 'sale.order', inv_id, self._cr)
-            wf_service.trg_create(self._uid, 'sale.order', inv_id, self._cr)
-        for (id, name) in self.name_get():
-            message = _("The sales order '%s' has been set in \
-            draft state.") % (name,)
-            self.log(message)
         return True
 
 
@@ -693,6 +741,15 @@ class hotel_folio_line(models.Model):
             return self._context['checkout']
         return time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
+#    def _get_uom_id(self):
+#        try:
+#            proxy = self.pool.get('ir.model.data')
+#            result = proxy.get_object_reference(self._cr, self._uid,
+#              'product','product_uom_unit')
+#            return result[1]
+#        except Exception:
+#            return False
+
     _name = 'hotel.folio.line'
     _description = 'hotel folio1 room line'
 
@@ -705,6 +762,8 @@ class hotel_folio_line(models.Model):
                                    default=_get_checkin_date)
     checkout_date = fields.Datetime('Check Out', required=True,
                                     default=_get_checkout_date)
+#    product_uom = fields.Many2one('product.uom',string='Unit of Measure',
+#                                  required=True, default=_get_uom_id)
 
     @api.model
     def create(self, vals, check=True):
@@ -738,12 +797,11 @@ class hotel_folio_line(models.Model):
                     if room_obj.id:
                         folio_arg = [('folio_id', '=', line.folio_id.id),
                                      ('room_id', '=', room_obj.id)]
-                        for room_line in room_obj.room_line_ids:
-                            folio_room_line_myobj = fr_obj.search(folio_arg)
-                            if folio_room_line_myobj.id:
-                                folio_room_line_myobj.unlink()
-                                room_obj.write({'isroom': True,
-                                                'status': 'available'})
+                        folio_room_line_myobj = fr_obj.search(folio_arg)
+                        if folio_room_line_myobj.id:
+                            folio_room_line_myobj.unlink()
+                            room_obj.write({'isroom': True,
+                                            'status': 'available'})
                 sale_unlink_obj.unlink()
         return super(hotel_folio_line, self).unlink()
 
@@ -754,42 +812,41 @@ class hotel_folio_line(models.Model):
         '''
         for folio in self:
             line = folio.order_line_id
-            x = line.uos_change(product_uos, product_uos_qty=0,
-                                product_id=None)
-        return x
+            line.uos_change(product_uos, product_uos_qty=0,
+                            product_id=None)
+        return True
 
-    @api.multi
-    def product_id_change(self, pricelist, product, qty=0, uom=False,
-                          qty_uos=0, uos=False, name='', partner_id=False,
-                          lang=False, update_tax=True, date_order=False):
-        '''
-        @param self: object pointer
-        '''
-        line_ids = [folio.order_line_id.id for folio in self]
-        if product:
-            sale_line_obj = self.env['sale.order.line'].browse(line_ids)
-            return sale_line_obj.product_id_change(pricelist, product, qty=0,
-                                                   uom=False, qty_uos=0,
-                                                   uos=False, name='',
-                                                   partner_id=partner_id,
-                                                   lang=False,
-                                                   update_tax=True,
-                                                   date_order=False)
+    @api.onchange('product_id')
+    def product_id_change(self):
+        if self.product_id and self.folio_id.partner_id:
+            self.name = self.product_id.name
+            self.price_unit = self.product_id.lst_price
+            self.product_uom = self.product_id.uom_id
+            tax_obj = self.env['account.tax']
+            prod = self.product_id
+            self.price_unit = tax_obj._fix_tax_included_price(prod.price,
+                                                              prod.taxes_id,
+                                                              self.tax_id)
 
-    @api.multi
-    def product_uom_change(self, pricelist, product, qty=0,
-                           uom=False, qty_uos=0, uos=False, name='',
-                           partner_id=False, lang=False, update_tax=True,
-                           date_order=False):
-        '''
-        @param self: object pointer
-        '''
-        if product:
-            return self.product_id_change(pricelist, product, qty=0,
-                                          uom=False, qty_uos=0, uos=False,
-                                          name='', partner_id=partner_id,
-                                          lang=False, update_tax=True,
-                                          date_order=False)
+    @api.onchange('product_uom')
+    def product_uom_change(self):
+        if not self.product_uom:
+            self.price_unit = 0.0
+            return
+        self.price_unit = self.product_id.lst_price
+        if self.folio_id.partner_id:
+            prod = self.product_id.with_context(
+                lang=self.folio_id.partner_id.lang,
+                partner=self.folio_id.partner_id.id,
+                quantity=1,
+                date_order=self.folio_id.checkin_date,
+                pricelist=self.folio_id.pricelist_id.id,
+                uom=self.product_uom.id
+            )
+            tax_obj = self.env['account.tax']
+            self.price_unit = tax_obj._fix_tax_included_price(prod.price,
+                                                              prod.taxes_id,
+                                                              self.tax_id)
 
     @api.onchange('checkin_date', 'checkout_date')
     def on_change_checkout(self):
@@ -822,23 +879,23 @@ class hotel_folio_line(models.Model):
         '''
         for folio in self:
             line = folio.order_line_id
-            x = line.button_confirm()
-        return x
+            line.button_confirm()
+        return True
 
     @api.multi
     def button_done(self):
         '''
         @param self: object pointer
         '''
-        line_ids = [folio.order_line_id.id for folio in self]
-        sale_line_obj = self.env['sale.order.line'].browse(line_ids)
-        res = sale_line_obj.button_done()
+        lines = [folio_line.order_line_id for folio_line in self]
+        lines.button_done()
         wf_service = netsvc.LocalService("workflow")
-        res = self.write({'state': 'done'})
-        for line in self:
+        self.write({'state': 'done'})
+        for folio_line in self:
             wf_service.trg_write(self._uid, 'sale.order',
-                                 line.order_line_id.order_id.id, self._cr)
-        return res
+                                 folio_line.order_line_id.order_id.id,
+                                 self._cr)
+        return True
 
     @api.one
     def copy_data(self, default=None):
@@ -949,13 +1006,7 @@ class hotel_service_line(models.Model):
         line_ids = [folio.service_line_id.id for folio in self]
         if product:
             sale_line_obj = self.env['sale.order.line'].browse(line_ids)
-            return sale_line_obj.product_id_change(pricelist, product, qty=0,
-                                                   uom=False, qty_uos=0,
-                                                   uos=False, name='',
-                                                   partner_id=partner_id,
-                                                   lang=False,
-                                                   update_tax=True,
-                                                   date_order=False)
+            return sale_line_obj.product_id_change()
 
     @api.multi
     def product_uom_change(self, pricelist, product, qty=0,
@@ -1194,9 +1245,8 @@ class CurrencyExchangeRate(models.Model):
         @param self: object pointer
         '''
         if self.out_amount:
-            for rec in self:
-                ser_tax = ((self.out_amount) * (float(self.tax))) / 100
-                self.total = self.out_amount - ser_tax
+            ser_tax = ((self.out_amount) * (float(self.tax))) / 100
+            self.total = self.out_amount - ser_tax
 
 
 class account_invoice(models.Model):

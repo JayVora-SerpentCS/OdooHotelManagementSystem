@@ -1,37 +1,28 @@
 ============================================================================================================================
  Version Change Log (hotel)
 ============================================================================================================================
-0.11 on 2015-06-04 by Malay Khamar
-    * Standardized the code as per v8
+0.07 on 2013-10-31 by Murtuza Saleh
+    *Improved hotel.room kanban view as per in v9.
 
-0.10 on 2015-03-03 by Dhwani Vora
-    * Corrected the Services type relation with product category to correct the demo data,
-    * Corrected the rooms and amenities and services data.
+0.06 on 2013-10-29 by Ashish Thakkar
+	*Set the product_category_tree_view in the hotel_view.xml file.
+	*Improved the code to get the hierarchy in rooms,amenities and services. 
 
-0.09 on 2015-03-03 by Dhwani Vora
-    * Corrected the amenity type relation with product category to correct the demo data.
-
-0.08 on 2015-03-02 by Dhwani Vora
-    * Corrected the room type relation with product category to correct the demo data.
-
-0.07 on 2014-07-09 by Naitik Maheta
-    * Add Qweb Report For Folio 
-    * Remove RML Report
-
-0.06 on 2014-01-11 by Krunal Soni
-    * Checked code quality and improved report format.
-
-0.05 on 2014-01-07 by Krunal Soni
-    * Added Accurate licensing terms and Copyright(C) on top inside license info in each py file.
-
-0.04 on 2013-11-19 by Sudhir Arya
-    * Fixed onchanage errors, bugs in generate folio and enhanced the code.
-
-0.03 on 2013-11-18 by Sudhir Arya
-    * Added access rights to some objects.
-
-0.02 on 2013-11-13 by Sudhir Arya
-    * Standardized the module as per v7 standards.
-
-1.01 --> Oct 1,2013 : Anil Kesariya
-	* Added Access control for manager user Improved labels and Fixed the error.
+0.05 on 2013-10-28 by Anu Patel
+    * Set the default value of check in date and check out date.
+    * Improved calculation of duration for hotel check in - checkout.
+    
+0.04 on 2013-10-28 by Anu Patel
+    * Improved ir.sequence for hotel.folio.
+    * Improved hotel folio line one2many field as faced problem because of product_uos field.
+    
+0.03 on 2013-10-25 by Anu Patel
+    * Improved on_change in hotel folio line where product_id onchange is not working.
+    * Removed on_chage from .xml file as there is no need to define there.
+    
+0.02 on 2013-10-26 by Anu Patel
+    * Improved the code for removed the workflow in hotel folio as workflow is no longer used in v9.
+    * Improved states used in hotel folio from sale order as per in v9.
+    
+0.01 on 2013-10-16 by Ashish Thakkar
+    * Made the module installable in v9.

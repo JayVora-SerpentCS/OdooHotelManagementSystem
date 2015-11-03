@@ -1,10 +1,9 @@
-# -*- encoding: utf-8 -*-
-#############################################################################
+# -*- coding: UTF-8 -*-
+# --------------------------------------------------------------------------
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
+#    Copyright (C) 2012-Today Serpent Consulting Services PVT. LTD.
 #    (<http://www.serpentcs.com>)
-#    Copyright (C) 2004 OpenERP SA (<http://www.openerp.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,7 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
-############################################################################
+# ---------------------------------------------------------------------------
 
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 from openerp import models, fields, api, _, netsvc
@@ -148,7 +147,7 @@ class hotel_housekeeping_activities(models.Model):
     _description = "Housekeeping Activities "
 
     a_list = fields.Many2one('hotel.housekeeping', string='Reservation')
-    room_id = fields.Many2one('hotel.room', string='Room No')
+#    room_id = fields.Many2one('hotel.room', string='Room No')
     today_date = fields.Date('Today Date')
     activity_name = fields.Many2one('hotel.activity',
                                     string='Housekeeping Activity')
@@ -192,5 +191,3 @@ class hotel_housekeeping_activities(models.Model):
         if self._context.get('today_date', False):
             res.update({'today_date': self._context['today_date']})
         return res
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

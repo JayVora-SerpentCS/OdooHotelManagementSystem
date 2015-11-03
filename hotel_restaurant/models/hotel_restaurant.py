@@ -1,10 +1,9 @@
-# -*- encoding: utf-8 -*-
-#############################################################################
+# -*- coding: UTF-8 -*-
+# --------------------------------------------------------------------------
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
+#    Copyright (C) 2012-Today Serpent Consulting Services PVT. LTD.
 #    (<http://www.serpentcs.com>)
-#    Copyright (C) 2004 OpenERP SA (<http://www.openerp.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -19,7 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
-#############################################################################
+# ---------------------------------------------------------------------------
 
 from openerp.exceptions import except_orm, ValidationError
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
@@ -138,7 +137,8 @@ class hotel_restaurant_reservation(models.Model):
             self.room_no = False
             if rec.folio_id:
                 self.cname = rec.folio_id.partner_id.id
-                self.room_no = rec.folio_id.room_lines[0].product_id.id
+                if rec.folio_id.room_lines:
+                    self.room_no = rec.folio_id.room_lines[0].product_id.id
 
     @api.multi
     def action_set_to_draft(self):
@@ -325,7 +325,8 @@ class hotel_restaurant_order(models.Model):
             self.room_no = False
             if rec.folio_id:
                 self.cname = rec.folio_id.partner_id.id
-                self.room_no = rec.folio_id.room_lines[0].product_id.id
+                if rec.folio_id.room_lines:
+                    self.room_no = rec.folio_id.room_lines[0].product_id.id
 
     @api.multi
     def done_cancel(self):
