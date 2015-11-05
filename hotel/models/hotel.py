@@ -1112,7 +1112,7 @@ class CurrencyExchangeRate(models.Model):
     _name = "currency.exchange"
     _description = "currency"
 
-    name = fields.Char('Reg Number', readonly=True)
+    name = fields.Char('Reg Number', readonly=True, default='New')
     today_date = fields.Datetime('Date Ordered',
                                  required=True,
                                  default=(lambda *a:
@@ -1147,7 +1147,8 @@ class CurrencyExchangeRate(models.Model):
             vals = {}
         if self._context is None:
             self._context = {}
-        vals['name'] = self.env['ir.sequence'].get('currency.exchange')
+        seq_obj = self.env['ir.sequence']
+        vals['name'] = seq_obj.next_by_code('currency.exchange') or 'New'
         return super(CurrencyExchangeRate, self).create(vals)
 
     @api.onchange('folio_no')
