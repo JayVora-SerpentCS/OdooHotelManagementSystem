@@ -26,8 +26,7 @@
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
     "category": "Generic Modules/Hotel Reservation",
     "website": "http://www.serpentcs.com",
-    "depends": ["hotel", "stock", 'mail', "hotel_report_layout",
-                'mail'],
+    "depends": ["hotel", "stock", 'mail'],
     "demo": [
         "views/hotel_reservation_data.xml",
     ],
