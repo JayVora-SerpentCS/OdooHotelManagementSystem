@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 # --------------------------------------------------------------------------
 #
 #    OpenERP, Open Source Management Solution
@@ -25,9 +25,9 @@ from openerp import models
 from openerp.report import report_sxw
 
 
-class hotel_restaurant_report(report_sxw.rml_parse):
+class HotelRestaurantReport(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
-        super(hotel_restaurant_report, self).__init__(cr, uid, name, context)
+        super(HotelRestaurantReport, self).__init__(cr, uid, name, context)
         self.localcontext.update({
             'time': time,
             'get_res_data': self.get_res_data,
@@ -43,30 +43,30 @@ class hotel_restaurant_report(report_sxw.rml_parse):
         return res
 
 
-class report_lunchorder(models.AbstractModel):
+class ReportLunchorder(models.AbstractModel):
     _name = 'report.hotel_restaurant.report_res_table'
     _inherit = 'report.abstract_report'
     _template = 'hotel_restaurant.report_res_table'
-    _wrapped_report_class = hotel_restaurant_report
+    _wrapped_report_class = HotelRestaurantReport
 
 
-class report_kot(models.AbstractModel):
+class ReportKot(models.AbstractModel):
     _name = 'report.hotel_restaurant.report_hotel_order_kot'
     _inherit = 'report.abstract_report'
     _template = 'hotel_restaurant.report_hotel_order_kot'
-    _wrapped_report_class = hotel_restaurant_report
+    _wrapped_report_class = HotelRestaurantReport
 
 
-class report_bill(models.AbstractModel):
+class Report_bill(models.AbstractModel):
     _name = 'report.hotel_restaurant.report_hotel_order_kot'
     _inherit = 'report.abstract_report'
     _template = 'hotel_restaurant.report_hotel_order_kot'
-    _wrapped_report_class = hotel_restaurant_report
+    _wrapped_report_class = HotelRestaurantReport
 
 
-class folio_rest_report(report_sxw.rml_parse):
+class FolioRestReport(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
-        super(folio_rest_report, self).__init__(cr, uid, name, context)
+        super(FolioRestReport, self).__init__(cr, uid, name, context)
         self.localcontext.update({'get_data': self.get_data,
                                   'gettotal': self.gettotal,
                                   'getTotal': self.getTotal,
@@ -109,16 +109,16 @@ class folio_rest_report(report_sxw.rml_parse):
         return self.temp
 
 
-class report_rest_order(models.AbstractModel):
+class ReportRestOrder(models.AbstractModel):
     _name = 'report.hotel_restaurant.report_rest_order'
     _inherit = 'report.abstract_report'
     _template = 'hotel_restaurant.report_rest_order'
-    _wrapped_report_class = folio_rest_report
+    _wrapped_report_class = FolioRestReport
 
 
-class folio_reserv_report(report_sxw.rml_parse):
+class FolioReservReport(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
-        super(folio_reserv_report, self).__init__(cr, uid, name, context)
+        super(FolioReservReport, self).__init__(cr, uid, name, context)
         self.localcontext.update({'get_data': self.get_data,
                                   'gettotal': self.gettotal,
                                   'getTotal': self.getTotal,
@@ -161,10 +161,8 @@ class folio_reserv_report(report_sxw.rml_parse):
         return self.temp
 
 
-class report_reserv_order(models.AbstractModel):
+class ReportReservOrder(models.AbstractModel):
     _name = 'report.hotel_restaurant.report_reserv_order'
     _inherit = 'report.abstract_report'
     _template = 'hotel_restaurant.report_reserv_order'
-    _wrapped_report_class = folio_reserv_report
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+    _wrapped_report_class = FolioReservReport

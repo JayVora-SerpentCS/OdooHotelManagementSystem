@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 # --------------------------------------------------------------------------
 #
 #    OpenERP, Open Source Management Solution
@@ -76,8 +76,3 @@ class folio_rest_reservation(models.TransientModel):
                         ].get_action(self,
                                      'hotel_restaurant.report_reserv_order',
                                      data=data)
-
-
-folio_rest_reservation()
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

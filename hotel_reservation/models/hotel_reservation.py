@@ -46,7 +46,8 @@ class hotel_folio(models.Model):
         if 'service_lines' and 'folio_id' not in vals:
             if not vals:
                 vals = {}
-            vals['name'] = self.env['ir.sequence'].get('hotel.folio')
+            seq_obj = self.env['ir.sequence']
+            vals['name'] = seq_obj.next_by_code('hotel.folio') or 'New'
             folio_id = super(hotel_folio, self).create(vals)
             room_lst = []
             for rec in folio_id:
@@ -314,7 +315,7 @@ class hotel_reservation(models.Model):
         try:
             template_id = (ir_model_data.get_object_reference
                            ('hotel_reservation',
-                            'email_template_hotel_reservation')[1])
+                            'mail_template_hotel_reservation')[1])
         except ValueError:
             template_id = False
         try:
@@ -481,8 +482,9 @@ class hotel_reservation(models.Model):
             vals = {}
         if self._context is None:
             self._context = {}
-        vals['reservation_no'] = self.env['ir.sequence'
-                                          ].get('hotel.reservation')
+        seq_obj = self.env['ir.sequence']
+        hotel_reserve = seq_obj.next_by_code('hotel.reservation') or 'New'
+        vals['reservation_no'] = hotel_reserve
         return super(hotel_reservation, self).create(vals)
 
 
