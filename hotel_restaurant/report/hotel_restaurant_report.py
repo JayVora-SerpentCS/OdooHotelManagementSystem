@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 # --------------------------------------------------------------------------
 #
 #    OpenERP, Open Source Management Solution
@@ -166,5 +166,3 @@ class report_reserv_order(models.AbstractModel):
     _inherit = 'report.abstract_report'
     _template = 'hotel_restaurant.report_reserv_order'
     _wrapped_report_class = folio_reserv_report
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
