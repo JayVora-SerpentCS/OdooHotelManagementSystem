@@ -251,8 +251,8 @@ class hotel_restaurant_reservation(models.Model):
         if self._context is None:
             self._context = {}
         seq_obj = self.env['ir.sequence']
-        vals['reservation_id'] = seq_obj\
-        .next_by_code('hotel.restaurant.reservation') or 'New'
+        resrve = seq_obj.next_by_code('hotel.restaurant.reservation') or 'New'
+        vals['reservation_id'] = resrve
         return super(hotel_restaurant_reservation, self).create(vals)
 
     @api.constrains('start_date', 'end_date')
@@ -436,7 +436,8 @@ class hotel_restaurant_order(models.Model):
         if self._context is None:
             self._context = {}
         seq_obj = self.env['ir.sequence']
-        vals['order_no'] = seq_obj.next_by_code('hotel.restaurant.order') or 'New'
+        rest_order = seq_obj.next_by_code('hotel.restaurant.order') or 'New'
+        vals['order_no'] = rest_order
         return super(hotel_restaurant_order, self).create(vals)
 
     @api.multi
@@ -682,8 +683,8 @@ class hotel_reservation_order(models.Model):
         if self._context is None:
             self._context = {}
         seq_obj = self.env['ir.sequence']
-        vals['order_number'] = seq_obj.next_by_code('hotel.reservation.order')\
-                                                                     or 'New'
+        res_oder = seq_obj.next_by_code('hotel.reservation.order') or 'New'
+        vals['order_number'] = res_oder
         return super(hotel_reservation_order, self).create(vals)
 
 

@@ -483,8 +483,8 @@ class hotel_reservation(models.Model):
         if self._context is None:
             self._context = {}
         seq_obj = self.env['ir.sequence']
-        vals['reservation_no'] = seq_obj.next_by_code('hotel.reservation')\
-                                                                   or 'New'
+        hotel_reserve = seq_obj.next_by_code('hotel.reservation') or 'New'
+        vals['reservation_no'] = hotel_reserve
         return super(hotel_reservation, self).create(vals)
 
 
