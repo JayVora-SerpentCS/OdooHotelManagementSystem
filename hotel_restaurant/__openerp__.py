@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 # --------------------------------------------------------------------------
 #
 #    OpenERP, Open Source Management Solution
@@ -23,10 +23,11 @@
 {
     "name": "Hotel Restaurant Management",
     "version": "0.02",
-    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
+    "author": "Serpent Consulting Services Pvt. Ltd.",
     "category": "Generic Modules/Hotel Restaurant",
     "website": "http://www.serpentcs.com",
     "depends": ["hotel"],
+    "license": "",
     "demo": [
         "views/hotel_restaurant_data.xml",
     ],
@@ -42,18 +43,16 @@
         "views/hotel_restaurant_sequence.xml",
         "views/hotel_restaurant_view.xml",
     ],
-    "description": """
-    Module for Hotel/Resort/Restaurant management. You can manage:
-    * Configure Property
-    * Restaurant Configuration
-    * table reservation
-    * Generate and process Kitchen Order ticket,
-    * Payment
-
-    Different reports are also provided, mainly for Restaurant.
-    """,
-    "active": False,
+#    "description": """
+#    Module for Hotel/Resort/Restaurant management. You can manage:
+#    * Configure Property
+#    * Restaurant Configuration
+#    * table reservation
+#    * Generate and process Kitchen Order ticket,
+#    * Payment
+#
+#    Different reports are also provided, mainly for Restaurant.
+#    """,
+#    "active": False,
     "installable": True
 }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

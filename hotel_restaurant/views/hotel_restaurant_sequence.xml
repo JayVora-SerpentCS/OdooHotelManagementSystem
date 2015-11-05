@@ -8,12 +8,6 @@
         <field name="name">Hotel Order</field>
         <field name="code">hotel.restaurant.order</field>
     </record> -->
-    <record model="ir.sequence" id="seq_hotel_rest_order">
-        <field name="name">Hotel Order</field>
-        <field name="code">hotel.restaurant.order</field>
-        <field name="prefix">0R/</field>
-        <field name="padding">5</field>
-    </record>
     
     <!--Sequences for hotel foodorder-->
     <record model="ir.sequence" id="seq_hotel_rest_order">
