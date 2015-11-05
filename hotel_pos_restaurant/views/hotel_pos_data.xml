@@ -44,7 +44,6 @@
           <field name="list_price">15.00</field>
           <field name="name">Tanduri Roti</field>
           <field name="to_weight">True</field>
-          <field name="barcode">2100002000003</field>
           <field name="pos_categ_id" ref="punjabi_1"/>
           <field name="uom_id" ref="product.product_uom_kgm" />
           <field name="uom_po_id" ref="product.product_uom_kgm" />
@@ -56,7 +55,6 @@
           <field name="name">Paneer Butter Masala</field>
           <field name="available_in_pos">True</field>
           <field name="to_weight">True</field>
-          <field name="barcode">2100002000003</field>
           <field name="pos_categ_id" ref="punjabi_1"/>
           <field name="uom_id" ref="product.product_uom_kgm" />
           <field name="uom_po_id" ref="product.product_uom_kgm" />
