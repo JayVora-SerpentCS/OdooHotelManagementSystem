@@ -723,4 +723,3 @@ class HotelRestaurantOrderList(models.Model):
     item_rate = fields.Float('Rate', size=64)
     price_subtotal = fields.Float(compute='_sub_total', method=True,
                                   string='Subtotal')
-
