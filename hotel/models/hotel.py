@@ -378,13 +378,24 @@ class hotel_folio(models.Model):
             folio_id = super(hotel_folio, self).create(vals)
             folio_room_line_obj = self.env['folio.room.line']
             h_room_obj = self.env['hotel.room']
-            room_lst = []
-            for rec in folio_id:
-                if not rec.reservation_id:
+            try:
+                for rec in folio_id:
+                    if not rec.reservation_id:
+                        for room_rec in rec.room_lines:
+                            prod = room_rec.product_id.name
+                            room_obj = h_room_obj.search([('name', '=', prod)])
+                            room_obj.write({'isroom': False})
+                            vals = {'room_id': room_obj.id,
+                                    'check_in': rec.checkin_date,
+                                    'check_out': rec.checkout_date,
+                                    'folio_id': rec.id,
+                                    }
+                            folio_room_line_obj.create(vals)
+            except:
+                for rec in folio_id:
                     for room_rec in rec.room_lines:
-                        room_lst.append(room_rec.product_id)
-                    for rm in room_lst:
-                        room_obj = h_room_obj.search([('name', '=', rm.name)])
+                        prod = room_rec.product_id.name
+                        room_obj = h_room_obj.search([('name', '=', prod)])
                         room_obj.write({'isroom': False})
                         vals = {'room_id': room_obj.id,
                                 'check_in': rec.checkin_date,
@@ -402,7 +413,7 @@ class hotel_folio(models.Model):
         @param vals: dictionary of fields value.
         """
         folio_room_line_obj = self.env['folio.room.line']
-        reservation_line_obj = self.env['hotel.room.reservation.line']
+#        reservation_line_obj = self.env['hotel.room.reservation.line']
         product_obj = self.env['product.product']
         h_room_obj = self.env['hotel.room']
         room_lst1 = []
@@ -439,22 +450,22 @@ class hotel_folio(models.Model):
                     folio_romline_rec = (folio_room_line_obj.search
                                          ([('folio_id', '=', folio_obj.id)]))
                     folio_romline_rec.write(room_vals)
-            if folio_obj.reservation_id:
-                for reservation in folio_obj.reservation_id:
-                    reservation_obj = (reservation_line_obj.search
-                                       ([('reservation_id', '=',
-                                          reservation.id)]))
-                    if len(reservation_obj) == 1:
-                        for line_id in reservation.reservation_line:
-                            line_id = line_id.reserve
-                            for room_id in line_id:
-                                vals = {'room_id': room_id.id,
-                                        'check_in': folio_obj.checkin_date,
-                                        'check_out': folio_obj.checkout_date,
-                                        'state': 'assigned',
-                                        'reservation_id': reservation.id,
-                                        }
-                                reservation_obj.write(vals)
+#            if folio_obj.reservation_id:
+#                for reservation in folio_obj.reservation_id:
+#                    reservation_obj = (reservation_line_obj.search
+#                                       ([('reservation_id', '=',
+#                                          reservation.id)]))
+#                    if len(reservation_obj) == 1:
+#                        for line_id in reservation.reservation_line:
+#                            line_id = line_id.reserve
+#                            for room_id in line_id:
+#                                vals = {'room_id': room_id.id,
+#                                        'check_in': folio_obj.checkin_date,
+#                                        'check_out': folio_obj.checkout_date,
+#                                        'state': 'assigned',
+#                                        'reservation_id': reservation.id,
+#                                        }
+#                                reservation_obj.write(vals)
         return folio_write
 
     @api.onchange('warehouse_id')
@@ -519,9 +530,9 @@ class hotel_folio(models.Model):
                       'hotel_invoice_id': invoice_id
                       }
             line.write(values)
-            for line2 in line.folio_pos_order_ids:
-                line2.write({'invoice_id': invoice_id})
-                line2.action_invoice_state()
+#            for line2 in line.folio_pos_order_ids:
+#                line2.write({'invoice_id': invoice_id})
+#                line2.action_invoice_state()
             for rec in line.room_lines:
                 room_lst.append(rec.product_id)
             for room in room_lst:
