@@ -1,30 +1,30 @@
 <?xml version="1.0" ?>
 <openerp>
-	<data noupdate="1">
+    <data noupdate="1">
 
 
-		<!--  Food Item Category -->
-		
-		<record id="food" model="pos.category">
-			<field name="name">Food</field>
-			<field name="image" type="base64" file="hotel_pos_restaurant/static/img/food-image.jpg"/>
-		</record>
+        <!--  Food Item Category -->
+        
+        <record id="food" model="pos.category">
+            <field name="name">Food</field>
+            <field name="image" type="base64" file="hotel_pos_restaurant/static/img/food-image.jpg"/>
+        </record>
 
-		<record id="punjabi_1" model="pos.category">
-			<field name="parent_id" ref="food"/>
-			<field name="name">Punjabi</field>
-			<field name="image" type="base64" file="hotel_pos_restaurant/static/img/food-image.jpg"/>
-		</record>
-		<record id="south_indian_1" model="pos.category">
-			<field name="parent_id" ref="food"/>
-			<field name="name">South Indian</field>
-			<field name="image" type="base64" file="hotel_pos_restaurant/static/img/food-image.jpg"/>
-		</record>
-		<record id="gujarati_1" model="pos.category">
-			<field name="parent_id" ref="food"/>
-			<field name="name">Gujarati</field>
-			<field name="image" type="base64" file="hotel_pos_restaurant/static/img/food-image.jpg"/>
-		</record>
+        <record id="punjabi_1" model="pos.category">
+            <field name="parent_id" ref="food"/>
+            <field name="name">Punjabi</field>
+            <field name="image" type="base64" file="hotel_pos_restaurant/static/img/food-image.jpg"/>
+        </record>
+        <record id="south_indian_1" model="pos.category">
+            <field name="parent_id" ref="food"/>
+            <field name="name">South Indian</field>
+            <field name="image" type="base64" file="hotel_pos_restaurant/static/img/food-image.jpg"/>
+        </record>
+        <record id="gujarati_1" model="pos.category">
+            <field name="parent_id" ref="food"/>
+            <field name="name">Gujarati</field>
+            <field name="image" type="base64" file="hotel_pos_restaurant/static/img/food-image.jpg"/>
+        </record>
 
         <!-- Punjabi -->
         <record id="pun1" model="product.product">
@@ -32,7 +32,6 @@
           <field name="list_price">110.00</field>
           <field name="name">Paneer Tikaa</field>
           <field name="to_weight">True</field>
-          <field name="barcode">2100002000003</field>
           <field name="pos_categ_id" ref="punjabi_1"/>
           <field name="uom_id" ref="product.product_uom_kgm" />
           <field name="uom_po_id" ref="product.product_uom_kgm" />
@@ -281,5 +280,5 @@
 <record id="hotel.hotel_room_amenities_3" model="hotel.room.amenities"> <field name="available_in_pos" eval="False"/> </record>
 
 
-	</data>
+    </data>
 </openerp>
