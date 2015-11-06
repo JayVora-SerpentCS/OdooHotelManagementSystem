@@ -253,8 +253,8 @@ class hotel_folio(models.Model):
         else:
             to_zone = 'UTC'
         return _offset_format_timestamp1(time.strftime("%Y-%m-%d 12:00:00"),
-                                         '%Y-%m-%d %H:%M:%S', '%Y-%m-%d\
-                                             %H:%M:%S',
+                                         '%Y-%m-%d %H:%M:%S', 
+                                         '%Y-%m-%d %H:%M:%S',
                                          ignore_unparsable_time=True,
                                          context={'tz': to_zone})
 
@@ -446,18 +446,47 @@ class hotel_folio(models.Model):
         @param vals: dictionary of fields value.
         @return: new record set for hotel folio.
         """
-        if vals.get('name', 'New') == 'New':
-            seq_obj = self.env['ir.sequence']
-            vals['name'] = seq_obj.next_by_code('hotel.folio') or 'New'
-        folio_id = super(hotel_folio, self).create(vals)
         if not 'service_lines' and 'folio_id' in vals:
             tmp_room_lines = vals.get('room_lines', [])
             vals['order_policy'] = vals.get('hotel_policy', 'manual')
             vals.update({'room_lines': []})
+            folio_id = super(hotel_folio, self).create(vals)
             for line in (tmp_room_lines):
                 line[2].update({'folio_id': folio_id})
             vals.update({'room_lines': tmp_room_lines})
             folio_id.write(vals)
+        else:
+            if not vals:
+                vals = {}
+            vals['name'] = self.env['ir.sequence'].get('hotel.folio')
+            folio_id = super(hotel_folio, self).create(vals)
+            folio_room_line_obj = self.env['folio.room.line']
+            h_room_obj = self.env['hotel.room']
+            try:
+                for rec in folio_id:
+                    if not rec.reservation_id:
+                        for room_rec in rec.room_lines:
+                            prod = room_rec.product_id.name
+                            room_obj = h_room_obj.search([('name', '=', prod)])
+                            room_obj.write({'isroom': False})
+                            vals = {'room_id': room_obj.id,
+                                    'check_in': rec.checkin_date,
+                                    'check_out': rec.checkout_date,
+                                    'folio_id': rec.id,
+                                    }
+                            folio_room_line_obj.create(vals)
+            except:
+                for rec in folio_id:
+                    for room_rec in rec.room_lines:
+                        prod = room_rec.product_id.name
+                        room_obj = h_room_obj.search([('name', '=', prod)])
+                        room_obj.write({'isroom': False})
+                        vals = {'room_id': room_obj.id,
+                                'check_in': rec.checkin_date,
+                                'check_out': rec.checkout_date,
+                                'folio_id': rec.id,
+                                }
+                        folio_room_line_obj.create(vals)
         return folio_id
 
     @api.multi
