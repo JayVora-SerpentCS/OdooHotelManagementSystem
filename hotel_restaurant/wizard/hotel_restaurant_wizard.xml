@@ -23,7 +23,7 @@
 
         <!--Action for wizard hotel restaurant -->
         <record id="action_wizard_hotel_restaurant" model="ir.actions.act_window">
-            <field name="name">Reservation List</field>
+            <field name="name">Table Reservation List</field>
             <field name="res_model">wizard.hotel.restaurant</field>
             <field name="view_type">form</field>
             <field name="view_mode">form</field>
@@ -66,7 +66,7 @@
 
         <!--Action for folio report wizard -->
         <record model="ir.actions.act_window" id="action_folio_rest_reservation">
-            <field name="name">Hotel Folio Order Wizard</field>
+            <field name="name">Restaurant Reports</field>
             <field name="res_model">folio.rest.reservation</field>
             <field name="view_type">form</field>
             <field name="view_mode">form</field>

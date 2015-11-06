@@ -33,6 +33,16 @@ class hotel_folio(models.Model):
                                            'hotel_folio_id', 'pos_id',
                                            'Orders', readonly=True)
 
+    @api.multi
+    def action_invoice_create(self, grouped=False, states=None):
+        invoice_id = super(hotel_folio, self).action_invoice_create(
+                                                grouped=False,
+                                                states=['confirmed', 'done'])
+        for line in self:
+            for pos_order in line.folio_pos_order_ids:
+                pos_order.write({'invoice_id': invoice_id})
+                pos_order.action_invoice_state()
+        return invoice_id
 
 class pos_order(models.Model):
 
