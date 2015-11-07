@@ -23,6 +23,7 @@
 
 from openerp import models, fields, api
 
+
 class hotel_folio(models.Model):
 
     _inherit = 'hotel.folio'
@@ -34,8 +35,8 @@ class hotel_folio(models.Model):
 
     @api.multi
     def action_invoice_create(self, grouped=False, states=None):
-        folio = super(hotel_folio, self)
         state = ['confirmed', 'done']
+        folio = super(hotel_folio, self)
         invoice_id = folio.action_invoice_create(grouped=False, states=state)
         for line in self:
             for pos_order in line.folio_pos_order_ids:
@@ -52,6 +53,7 @@ class hotel_folio(models.Model):
             for rec in folio.folio_pos_order_ids:
                 rec.write({'state': 'cancel'})
         return super(hotel_folio, self).action_cancel()
+
 
 class pos_order(models.Model):
 
