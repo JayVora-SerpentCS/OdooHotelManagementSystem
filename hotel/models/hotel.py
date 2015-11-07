@@ -253,7 +253,7 @@ class hotel_folio(models.Model):
         else:
             to_zone = 'UTC'
         return _offset_format_timestamp1(time.strftime("%Y-%m-%d 12:00:00"),
-                                         '%Y-%m-%d %H:%M:%S', 
+                                         '%Y-%m-%d %H:%M:%S',
                                          '%Y-%m-%d %H:%M:%S',
                                          ignore_unparsable_time=True,
                                          context={'tz': to_zone})
