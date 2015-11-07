@@ -31,7 +31,7 @@ class hotel_folio(models.Model):
     folio_pos_order_ids = fields.Many2many('pos.order', 'hotel_pos_rel',
                                            'hotel_folio_id', 'pos_id',
                                            'Orders', readonly=True)
-    
+
     @api.multi
     def action_invoice_create(self, grouped=False, states=None):
         folio = super(hotel_folio, self).action_invoice_create(grouped=False,
@@ -50,8 +50,7 @@ class hotel_folio(models.Model):
         for folio in self:
             for rec in folio.folio_pos_order_ids:
                 rec.write({'state': 'cancel'})
-        return super(hotel_folio, self).action_invoice_create(
-                                                grouped=False,
+        return super(hotel_folio, self).action_invoice_create(grouped=False,
                                                 states=['confirmed', 'done'])
 
 
