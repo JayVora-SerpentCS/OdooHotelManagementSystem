@@ -34,8 +34,9 @@ class hotel_folio(models.Model):
 
     @api.multi
     def action_invoice_create(self, grouped=False, states=None):
-        folio = super(hotel_folio, self).action_invoice_create(grouped=False,\
-                                                states=['confirmed', 'done'])
+        folio = super(hotel_folio, self)
+        state = ['confirmed', 'done']
+        folio = folio.action_invoice_create(grouped=False, states=state)
         for line in self:
             for pos_order in line.folio_pos_order_ids:
                 pos_order.write({'invoice_id': folio})
@@ -50,7 +51,7 @@ class hotel_folio(models.Model):
         for folio in self:
             for rec in folio.folio_pos_order_ids:
                 rec.write({'state': 'cancel'})
-        return super(hotel_folio, self).action_invoice_create(grouped=False,\
+        return super(hotel_folio, self).action_invoice_create(grouped=False,
                                                 states=['confirmed', 'done'])
 
 
