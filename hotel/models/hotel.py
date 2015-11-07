@@ -573,8 +573,8 @@ class hotel_folio(models.Model):
                                         invoice.id, 'invoice_cancel',
                                         self._cr)
                 sale.write({'state': 'cancel'})
-            for rec in sale.folio_pos_order_ids:
-                    rec.write({'state': 'cancel'})
+#            for rec in sale.folio_pos_order_ids:
+#                    rec.write({'state': 'cancel'})
         return rv
 
     @api.multi

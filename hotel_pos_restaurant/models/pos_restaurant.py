@@ -23,7 +23,6 @@
 
 from openerp import models, fields, api
 
-
 class hotel_folio(models.Model):
 
     _inherit = 'hotel.folio'
@@ -35,14 +34,24 @@ class hotel_folio(models.Model):
 
     @api.multi
     def action_invoice_create(self, grouped=False, states=None):
-        invoice_id = super(hotel_folio, self).action_invoice_create(
-                                                grouped=False,
-                                                states=['confirmed', 'done'])
+        folio = super(hotel_folio, self)
+        state = ['confirmed', 'done']
+        invoice_id = folio.action_invoice_create(grouped=False, states=state)
         for line in self:
             for pos_order in line.folio_pos_order_ids:
                 pos_order.write({'invoice_id': invoice_id})
                 pos_order.action_invoice_state()
         return invoice_id
+
+    @api.multi
+    def action_cancel(self):
+        '''
+        @param self: object pointer
+        '''
+        for folio in self:
+            for rec in folio.folio_pos_order_ids:
+                rec.write({'state': 'cancel'})
+        return super(hotel_folio, self).action_cancel()
 
 class pos_order(models.Model):
 
