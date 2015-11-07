@@ -51,9 +51,7 @@ class hotel_folio(models.Model):
         for folio in self:
             for rec in folio.folio_pos_order_ids:
                 rec.write({'state': 'cancel'})
-        folio = super(hotel_folio, self)
-        state = ['confirmed', 'done']
-        return folio.action_invoice_create(grouped=False, states=state)
+        return super(hotel_folio, self).action_cancel()
 
 
 class pos_order(models.Model):
