@@ -42,6 +42,18 @@ class hotel_folio(models.Model):
                 pos_order.action_invoice_state()
         return invoice_id
 
+    @api.multi
+    def action_cancel(self):
+        '''
+        @param self: object pointer
+        '''
+        for folio in self:
+            for rec in folio.folio_pos_order_ids:
+                rec.write({'state': 'cancel'})
+        return super(hotel_folio, self).action_invoice_create(
+                                                grouped=False,
+                                                states=['confirmed', 'done'])
+
 
 class pos_order(models.Model):
 
