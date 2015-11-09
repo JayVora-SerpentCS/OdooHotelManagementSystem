@@ -95,6 +95,7 @@ class pos_order(models.Model):
                                   'name': order1.product_id.name,
                                   'product_id': order1.product_id.id,
                                   'product_uom_qty': order1.qty,
+                                  'product_uom': order1.product_id.uom_id.id,
                                   'price_unit': order1.price_unit,
                                   'price_subtotal': order1.price_subtotal,
                                   }
