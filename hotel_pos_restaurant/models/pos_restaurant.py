@@ -32,6 +32,27 @@ class hotel_folio(models.Model):
                                            'hotel_folio_id', 'pos_id',
                                            'Orders', readonly=True)
 
+    @api.multi
+    def action_invoice_create(self, grouped=False, states=None):
+        folio = super(hotel_folio, self)
+        state = ['confirmed', 'done']
+        folio = folio.action_invoice_create(grouped=False, states=state)
+        for line in self:
+            for pos_order in line.folio_pos_order_ids:
+                pos_order.write({'invoice_id': folio})
+                pos_order.action_invoice_state()
+        return folio
+
+    @api.multi
+    def action_cancel(self):
+        '''
+        @param self: object pointer
+        '''
+        for folio in self:
+            for rec in folio.folio_pos_order_ids:
+                rec.write({'state': 'cancel'})
+        return super(hotel_folio, self).action_cancel()
+
 
 class pos_order(models.Model):
 
@@ -74,6 +95,7 @@ class pos_order(models.Model):
                                   'name': order1.product_id.name,
                                   'product_id': order1.product_id.id,
                                   'product_uom_qty': order1.qty,
+                                  'product_uom': order1.product_id.uom_id.id,
                                   'price_unit': order1.price_unit,
                                   'price_subtotal': order1.price_subtotal,
                                   }

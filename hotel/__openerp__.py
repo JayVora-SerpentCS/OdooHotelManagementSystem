@@ -26,8 +26,7 @@
     'author': 'Serpent Consulting Services Pvt. Ltd., OpenERP SA',
     'category': 'Generic Modules/Hotel Management',
     'website': 'http://www.serpentcs.com',
-    'depends': ['product_uos', 'sale_stock', 'point_of_sale',
-                'report'],
+    'depends': ['product_uos', 'sale_stock', 'point_of_sale', 'report'],
     'demo': ['views/hotel_data.xml'],
     'data': [
             'security/hotel_security.xml',

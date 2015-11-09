@@ -35,39 +35,6 @@ class hotel_folio(models.Model):
     reservation_id = fields.Many2one(comodel_name='hotel.reservation',
                                      string='Reservation Id')
 
-    @api.model
-    def create(self, vals, check=True):
-        """
-        Overrides orm create method.
-        @param self: The object pointer
-        @param vals: dictionary of fields value.
-        @return: new record set for hotel folio.
-        """
-        if 'service_lines' and 'folio_id' not in vals:
-            if not vals:
-                vals = {}
-            seq_obj = self.env['ir.sequence']
-            vals['name'] = seq_obj.next_by_code('hotel.folio') or 'New'
-            folio_id = super(hotel_folio, self).create(vals)
-            room_lst = []
-            for rec in folio_id:
-                if not rec.reservation_id:
-                    room_lst = rec.room_lines.ids
-#                    for room_rec in rec.room_lines:
-#                        room_lst.append(room_rec.product_id)
-                    for rm in room_lst:
-                        room_obj = self.env['hotel.room'].search([('name',
-                                                                   '=',
-                                                                   rm.name)])
-                        room_obj.write({'isroom': False})
-                        vals = {'room_id': room_obj.id,
-                                'check_in': rec.checkin_date,
-                                'check_out': rec.checkout_date,
-                                'folio_id': rec.id,
-                                }
-                        self.env['folio.room.line'].create(vals)
-        return folio_id
-
     @api.multi
     def write(self, vals):
         """
