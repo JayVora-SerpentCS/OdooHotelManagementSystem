@@ -807,6 +807,22 @@ class hotel_folio_line(models.Model):
             vals.update({'order_id': folio.order_id.id})
         return super(hotel_folio_line, self).create(vals)
 
+    @api.constrains('checkin_date', 'checkout_date')
+    def check_dates(self):
+        '''
+        This method is used to validate the checkin_date and checkout_date.
+        -------------------------------------------------------------------
+        @param self: object pointer
+        @return: raise warning depending on the validation
+        '''
+        if self.checkin_date >= self.checkout_date:
+                raise ValidationError(_('Check in Date Should be \
+                less than the Check Out Date!'))
+        if self.folio_id.date_order and self.checkin_date:
+            if self.checkin_date <= self.folio_id.date_order:
+                raise ValidationError(_('Check in date should be \
+                greater than the current date.'))
+
     @api.multi
     def unlink(self):
         """
@@ -889,17 +905,19 @@ class hotel_folio_line(models.Model):
             self.checkin_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         if not self.checkout_date:
             self.checkout_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-        if self.checkout_date < self.checkin_date:
-            raise except_orm(_('Warning'), _('Checkout must be greater or'
-                                             'equal to checkin date'))
-        if self.checkin_date and self.checkout_date:
-            date_a = time.strptime(self.checkout_date,
-                                   DEFAULT_SERVER_DATETIME_FORMAT)[:5]
-            date_b = time.strptime(self.checkin_date,
-                                   DEFAULT_SERVER_DATETIME_FORMAT)[:5]
-            diffDate = datetime.datetime(*date_a) - datetime.datetime(*date_b)
-            qty = diffDate.days + 1
-            self.product_uom_qty = qty
+        chckin = self.checkin_date
+        chckout = self.checkout_date
+        if chckin and chckout:
+            server_dt = DEFAULT_SERVER_DATETIME_FORMAT
+            chkin_dt = datetime.datetime.strptime(chckin, server_dt)
+            chkout_dt = datetime.datetime.strptime(chckout, server_dt)
+            dur = chkout_dt - chkin_dt
+            sec_dur = dur.seconds
+            if (not dur.days and not sec_dur) or (dur.days and not sec_dur):
+                myduration = dur.days
+            else:
+                myduration = dur.days + 1
+        self.product_uom_qty = myduration
 
     @api.multi
     def button_confirm(self):
