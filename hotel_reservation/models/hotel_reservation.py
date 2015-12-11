@@ -155,11 +155,13 @@ class hotel_reservation(models.Model):
                         raise ValidationError(_('Room Capacity \
                         Exceeded \n Please Select Rooms According to \
                         Members Accomodation.'))
-    
+
     @api.constrains('checkin', 'checkout')
     def check_in_out_dates(self):
-#        When date_order is less then checkin date or 
-#        Checkout date should be greater than the checkin date
+        """
+        When date_order is less then checkin date or
+        Checkout date should be greater than the checkin date.
+        """
         if self.checkout and self.checkin:
             if self.checkin < self.date_order:
                 raise except_orm(_('Warning'), _('Checkin date should be \

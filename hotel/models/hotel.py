@@ -28,6 +28,7 @@ import datetime
 import urllib2
 import time
 
+
 def _offset_format_timestamp1(src_tstamp_str, src_format, dst_format,
                               ignore_unparsable_time=True, context=None):
     """
@@ -923,7 +924,6 @@ class hotel_folio_line(models.Model):
             if self.checkin_date <= self.folio_id.date_order:
                 raise ValidationError(_('Check in date should be \
                 greater than the current date.'))
-
 
     @api.onchange('checkin_date', 'checkout_date')
     def on_change_checkout(self):
