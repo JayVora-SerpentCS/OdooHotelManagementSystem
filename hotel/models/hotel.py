@@ -29,6 +29,56 @@ import urllib2
 import time
 
 
+def _offset_format_timestamp1(src_tstamp_str, src_format, dst_format,
+                              ignore_unparsable_time=True, context=None):
+    """
+    Convert a source timeStamp string into a destination timeStamp string,
+    attempting to apply the
+    correct offset if both the server and local timeZone are recognized,or no
+    offset at all if they aren't or if tz_offset is false (i.e. assuming they
+    are both in the same TZ).
+
+    @param src_tstamp_str: the STR value containing the timeStamp.
+    @param src_format: the format to use when parsing the local timeStamp.
+    @param dst_format: the format to use when formatting the resulting
+     timeStamp.
+    @param server_to_client: specify timeZone offset direction (server=src
+                             and client=dest if True, or client=src and
+                             server=dest if False)
+    @param ignore_unparsable_time: if True, return False if src_tstamp_str
+                                   cannot be parsed using src_format or
+                                   formatted using dst_format.
+
+    @return: destination formatted timestamp, expressed in the destination
+             timezone if possible and if tz_offset is true, or src_tstamp_str
+             if timezone offset could not be determined.
+    """
+    if not src_tstamp_str:
+        return False
+    res = src_tstamp_str
+    if src_format and dst_format:
+        try:
+            # dt_value needs to be a datetime.datetime object\
+            # (so notime.struct_time or mx.DateTime.DateTime here!)
+            dt_value = datetime.datetime.strptime(src_tstamp_str, src_format)
+            if context.get('tz', False):
+                try:
+                    import pytz
+                    src_tz = pytz.timezone(context['tz'])
+                    dst_tz = pytz.timezone('UTC')
+                    src_dt = src_tz.localize(dt_value, is_dst=True)
+                    dt_value = src_dt.astimezone(dst_tz)
+                except Exception:
+                    pass
+            res = dt_value.strftime(dst_format)
+        except Exception:
+            # Normal ways to end up here are if strptime or strftime failed
+            if not ignore_unparsable_time:
+                return False
+            pass
+    return res
+
+
 class hotel_floor(models.Model):
 
     _name = "hotel.floor"
@@ -197,6 +247,33 @@ class hotel_folio(models.Model):
         """
         return self.search_count([('state', '=', 'draft')])
 
+    @api.model
+    def _get_checkin_date(self):
+        if self._context.get('tz'):
+            to_zone = self._context.get('tz')
+        else:
+            to_zone = 'UTC'
+        return _offset_format_timestamp1(time.strftime("%Y-%m-%d 12:00:00"),
+                                         '%Y-%m-%d %H:%M:%S',
+                                         '%Y-%m-%d %H:%M:%S',
+                                         ignore_unparsable_time=True,
+                                         context={'tz': to_zone})
+
+    @api.model
+    def _get_checkout_date(self):
+        if self._context.get('tz'):
+            to_zone = self._context.get('tz')
+        else:
+            to_zone = 'UTC'
+        tm_delta = datetime.timedelta(days=1)
+        return datetime.datetime.strptime(_offset_format_timestamp1
+                                          (time.strftime("%Y-%m-%d 12:00:00"),
+                                           '%Y-%m-%d %H:%M:%S',
+                                           '%Y-%m-%d %H:%M:%S',
+                                           ignore_unparsable_time=True,
+                                           context={'tz': to_zone}),
+                                          '%Y-%m-%d %H:%M:%S') + tm_delta
+
     @api.multi
     def copy(self, default=None):
         '''
@@ -233,9 +310,11 @@ class hotel_folio(models.Model):
     order_id = fields.Many2one('sale.order', 'Order', delegate=True,
                                required=True, ondelete='cascade')
     checkin_date = fields.Datetime('Check In', required=True, readonly=True,
-                                   states={'draft': [('readonly', False)]})
+                                   states={'draft': [('readonly', False)]},
+                                   default=_get_checkin_date)
     checkout_date = fields.Datetime('Check Out', required=True, readonly=True,
-                                    states={'draft': [('readonly', False)]})
+                                    states={'draft': [('readonly', False)]},
+                                    default=_get_checkout_date)
     room_lines = fields.One2many('hotel.folio.line', 'folio_id',
                                  readonly=True,
                                  states={'draft': [('readonly', False)],
@@ -319,7 +398,7 @@ class hotel_folio(models.Model):
                 raise ValidationError(_('Check in Date Should be \
                 less than the Check Out Date!'))
         if self.date_order and self.checkin_date:
-            if self.checkin_date < self.date_order:
+            if self.checkin_date <= self.date_order:
                 raise ValidationError(_('Check in date should be \
                 greater than the current date.'))
 
@@ -341,13 +420,18 @@ class hotel_folio(models.Model):
         if company_ids.ids:
             configured_addition_hours = company_ids[0].additional_hours
         myduration = 0
-        if self.checkin_date and self.checkout_date:
-            chkin_dt = (datetime.datetime.strptime
-                        (self.checkin_date, DEFAULT_SERVER_DATETIME_FORMAT))
-            chkout_dt = (datetime.datetime.strptime
-                         (self.checkout_date, DEFAULT_SERVER_DATETIME_FORMAT))
+        chckin = self.checkin_date
+        chckout = self.checkout_date
+        if chckin and chckout:
+            server_dt = DEFAULT_SERVER_DATETIME_FORMAT
+            chkin_dt = datetime.datetime.strptime(chckin, server_dt)
+            chkout_dt = datetime.datetime.strptime(chckout, server_dt)
             dur = chkout_dt - chkin_dt
-            myduration = dur.days + 1
+            sec_dur = dur.seconds
+            if (not dur.days and not sec_dur) or (dur.days and not sec_dur):
+                myduration = dur.days
+            else:
+                myduration = dur.days + 1
             if configured_addition_hours > 0:
                 additional_hours = abs((dur.seconds / 60) / 60)
                 if additional_hours >= configured_addition_hours:
@@ -695,14 +779,37 @@ class hotel_folio_line(models.Model):
     @api.model
     def _get_checkin_date(self):
         if 'checkin' in self._context:
-            return self._context['checkin']
-        return time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+            if self._context['checkin']:
+                return self._context['checkin']
+        if self._context.get('tz'):
+            to_zone = self._context.get('tz')
+        else:
+            to_zone = 'UTC'
+        return datetime.datetime.strptime(_offset_format_timestamp1
+                                          (time.strftime("%Y-%m-%d 12:00:00"),
+                                           '%Y-%m-%d %H:%M:%S',
+                                           '%Y-%m-%d %H:%M:%S',
+                                           ignore_unparsable_time=True,
+                                           context={'tz': to_zone}),
+                                          '%Y-%m-%d %H:%M:%S')
 
     @api.model
     def _get_checkout_date(self):
         if 'checkout' in self._context:
-            return self._context['checkout']
-        return time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+            if self._context['checkout']:
+                return self._context['checkout']
+        if self._context.get('tz'):
+            to_zone = self._context.get('tz')
+        else:
+            to_zone = 'UTC'
+        tm_delta = datetime.timedelta(days=1)
+        return datetime.datetime.strptime(_offset_format_timestamp1
+                                          (time.strftime("%Y-%m-%d 12:00:00"),
+                                           '%Y-%m-%d %H:%M:%S',
+                                           '%Y-%m-%d %H:%M:%S',
+                                           ignore_unparsable_time=True,
+                                           context={'tz': to_zone}),
+                                          '%Y-%m-%d %H:%M:%S') + tm_delta
 
     _name = 'hotel.folio.line'
     _description = 'hotel folio1 room line'
@@ -802,6 +909,22 @@ class hotel_folio_line(models.Model):
                                           lang=False, update_tax=True,
                                           date_order=False)
 
+    @api.constrains('checkin_date', 'checkout_date')
+    def check_dates(self):
+        '''
+        This method is used to validate the checkin_date and checkout_date.
+        -------------------------------------------------------------------
+        @param self: object pointer
+        @return: raise warning depending on the validation
+        '''
+        if self.checkin_date >= self.checkout_date:
+                raise ValidationError(_('Check in Date Should be \
+                less than the Check Out Date!'))
+        if self.folio_id.date_order and self.checkin_date:
+            if self.checkin_date <= self.folio_id.date_order:
+                raise ValidationError(_('Check in date should be \
+                greater than the current date.'))
+
     @api.onchange('checkin_date', 'checkout_date')
     def on_change_checkout(self):
         '''
@@ -814,17 +937,19 @@ class hotel_folio_line(models.Model):
             self.checkin_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         if not self.checkout_date:
             self.checkout_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-        if self.checkout_date < self.checkin_date:
-            raise except_orm(_('Warning'), _('Checkout must be greater or'
-                                             'equal to checkin date'))
-        if self.checkin_date and self.checkout_date:
-            date_a = time.strptime(self.checkout_date,
-                                   DEFAULT_SERVER_DATETIME_FORMAT)[:5]
-            date_b = time.strptime(self.checkin_date,
-                                   DEFAULT_SERVER_DATETIME_FORMAT)[:5]
-            diffDate = datetime.datetime(*date_a) - datetime.datetime(*date_b)
-            qty = diffDate.days + 1
-            self.product_uom_qty = qty
+        chckin = self.checkin_date
+        chckout = self.checkout_date
+        if chckin and chckout:
+            server_dt = DEFAULT_SERVER_DATETIME_FORMAT
+            chkin_dt = datetime.datetime.strptime(chckin, server_dt)
+            chkout_dt = datetime.datetime.strptime(chckout, server_dt)
+            dur = chkout_dt - chkin_dt
+            sec_dur = dur.seconds
+            if (not dur.days and not sec_dur) or (dur.days and not sec_dur):
+                myduration = dur.days
+            else:
+                myduration = dur.days + 1
+        self.product_uom_qty = myduration
 
     @api.multi
     def button_confirm(self):
