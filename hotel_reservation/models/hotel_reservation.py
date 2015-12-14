@@ -203,10 +203,6 @@ class hotel_reservation(models.Model):
         checkin_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         if not (checkout_date and checkin_date):
             return {'value': {}}
-        if self.checkout and self.checkin:
-            if self.checkout < self.checkin:
-                raise except_orm(_('Warning'), _('Checkout date \
-                should be greater than Checkin date.'))
         delta = datetime.timedelta(days=1)
         dat_a = time.strptime(checkout_date,
                               DEFAULT_SERVER_DATETIME_FORMAT)[:5]
