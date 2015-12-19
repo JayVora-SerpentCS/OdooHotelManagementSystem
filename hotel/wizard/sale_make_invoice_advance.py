@@ -10,9 +10,9 @@ class SaleAdvancePaymentInv(models.TransientModel):
         if self._context.get('active_model') == 'hotel.folio':
             hotel_fol = self.env['hotel.folio']
             hotel = hotel_fol.browse(self._context.get('active_ids',
-                                                               []))
+                                                       []))
             ctx.update({'active_ids': [hotel.order_id.id],
-                            'active_id': hotel.order_id.id})
+                        'active_id': hotel.order_id.id})
         return super(SaleAdvancePaymentInv,
                      self.with_context(ctx))._get_advance_payment_method()
 
@@ -38,8 +38,8 @@ class SaleAdvancePaymentInv(models.TransientModel):
         if self._context.get('active_model') == 'hotel.folio':
             hotel_fol = self.env['hotel.folio']
             hotel = hotel_fol.browse(self._context.get('active_ids',
-                                                               []))
+                                                       []))
             ctx.update({'active_ids': [hotel.order_id.id],
-                            'active_id': hotel.order_id.id})
+                        'active_id': hotel.order_id.id})
         return super(SaleAdvancePaymentInv,
                      self.with_context(ctx)).create_invoices()
