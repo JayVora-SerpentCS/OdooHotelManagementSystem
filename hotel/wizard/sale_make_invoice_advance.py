@@ -16,8 +16,7 @@ class SaleAdvancePaymentInv(models.TransientModel):
         return super(SaleAdvancePaymentInv,
                      self.with_context(ctx))._get_advance_payment_method()
 
-    advance_payment_method = fields.Selection([
-                                               ('delivered',
+    advance_payment_method = fields.Selection([('delivered',
                                                 'Invoiceable lines'),
                                                ('all',
                                                 'Invoiceable lines\
