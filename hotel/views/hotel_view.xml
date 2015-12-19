@@ -526,7 +526,7 @@
                             icon="gtk-new" class="oe_highlight"/> -->
                         <button name="%(sale.action_view_sale_advance_payment_inv)d"
                             string="Create Invoice" type="action" class="btn-primary" states="sale"
-                            attrs="{'invisible': [('invoice_status', '!=', 'to invoice')]}" />
+                            attrs="{'invisible': [('invoice_status', '!=', 'to invoice')]}"/>
                         <!-- <button name="ship_cancel" string="Cancel Folio" states="shipping_except" 
                             icon="gtk-cancel" class="oe_highlight oe_highlight" /> -->
                         <button name="action_cancel_draft" states="cancel" string="Set to Draft"
@@ -585,24 +585,23 @@
                                     <form string="Room Line">
                                         <notebook>
                                             <page string="Folio Line">
-                                                <group>
+                                                <group col="6" colspan="4">
                                                     <field name="checkin_date" />
                                                     <field name="checkout_date" />
-                                                    <separator string="Automatic Declaration"
-                                                        colspan="4" />
+                                                    <separator string="Automatic Declaration" col="6" colspan="4"/>
                                                     <field name="product_uom_qty"
                                                         context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'uom':product_uom}"
                                                         invisible="1" />
                                                     <field name="product_id"
                                                         context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'uom':product_uom}"
-                                                        colspan="4" select="1" domain="[('isroom','=',True)]"
+                                                        select="1" domain="[('isroom','=',True)]"
                                                         string="Room No" />
                                                     <field name="product_uom" string="Rent(UOM)" />
                                                 </group>
                                                 <separator string="Manual Description" colspan="4" />
                                                 <field name="name" colspan="4" select="2"
                                                     placeholder="---Description---" />
-                                                <group>
+                                                <group col="4" colspan="2">
                                                     <field name="price_unit" select="2" string="Rent" />
                                                     <field name="discount" />
                                                     <newline />
@@ -643,18 +642,19 @@
                                     <form string="Service Line">
                                         <notebook>
                                             <page string="Service Line">
-                                                <group>
+                                                <group col="4" colspan="4">
                                                     <field name="ser_checkin_date" />
                                                     <field name="ser_checkout_date" />
                                                 </group>
-                                                <separator string="Automatic Declaration" colspan="4" />
-                                                <group>
-                                                    <field name="product_uom_qty" select="1"
-                                                        context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'hotel':parent.warehouse_id,'uom':product_uom}" />
-                                                    <field name="product_uom" />
+                                                <separator string="Automatic Declaration" col="4" colspan="4" />
+                                                <group col="4" colspan="4">
                                                     <field name="product_id" select="1"
                                                         domain="[('isservice','=',True)]"
                                                         context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'hotel':parent.warehouse_id,'uom':product_uom}" />
+                                                    <field name="product_uom" />
+                                                    <field name="product_uom_qty" select="1"
+                                                        context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'hotel':parent.warehouse_id,'uom':product_uom}"
+                                                        invisible="1"/>
                                                 </group>
                                                 <separator string="Manual Description" colspan="4" />
                                                 <field name="name" colspan="4" select="2"

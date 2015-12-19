@@ -816,11 +816,11 @@ class hotel_folio_line(models.Model):
         @return: raise warning depending on the validation
         '''
         if self.checkin_date >= self.checkout_date:
-                raise ValidationError(_('Check in Date Should be \
+                raise ValidationError(_('Room line Check In Date Should be \
                 less than the Check Out Date!'))
         if self.folio_id.date_order and self.checkin_date:
             if self.checkin_date <= self.folio_id.date_order:
-                raise ValidationError(_('Check in date should be \
+                raise ValidationError(_('Room line check in date should be \
                 greater than the current date.'))
 
     @api.multi
@@ -1042,33 +1042,43 @@ class hotel_service_line(models.Model):
                 sale_unlink_obj.unlink()
         return super(hotel_service_line, self).unlink()
 
-    @api.multi
-    def product_id_change(self, pricelist, product, qty=0,
-                          uom=False, qty_uos=0, uos=False, name='',
-                          partner_id=False, lang=False, update_tax=True,
-                          date_order=False):
+    @api.onchange('product_id')
+    def product_id_change(self):
         '''
         @param self: object pointer
         '''
-        line_ids = [folio.service_line_id.id for folio in self]
-        if product:
-            sale_line_obj = self.env['sale.order.line'].browse(line_ids)
-            return sale_line_obj.product_id_change()
+        if self.product_id and self.folio_id.partner_id:
+            self.name = self.product_id.name
+            self.price_unit = self.product_id.lst_price
+            self.product_uom = self.product_id.uom_id
+            tax_obj = self.env['account.tax']
+            prod = self.product_id
+            self.price_unit = tax_obj._fix_tax_included_price(prod.price,
+                                                              prod.taxes_id,
+                                                              self.tax_id)
 
-    @api.multi
-    def product_uom_change(self, pricelist, product, qty=0,
-                           uom=False, qty_uos=0, uos=False, name='',
-                           partner_id=False, lang=False, update_tax=True,
-                           date_order=False):
+    @api.onchange('product_uom')
+    def product_uom_change(self):
         '''
         @param self: object pointer
         '''
-        if product:
-            return self.product_id_change(pricelist, product, qty=0,
-                                          uom=False, qty_uos=0, uos=False,
-                                          name='', partner_id=partner_id,
-                                          lang=False, update_tax=True,
-                                          date_order=False)
+        if not self.product_uom:
+            self.price_unit = 0.0
+            return
+        self.price_unit = self.product_id.lst_price
+        if self.folio_id.partner_id:
+            prod = self.product_id.with_context(
+                lang=self.folio_id.partner_id.lang,
+                partner=self.folio_id.partner_id.id,
+                quantity=1,
+                date_order=self.folio_id.checkin_date,
+                pricelist=self.folio_id.pricelist_id.id,
+                uom=self.product_uom.id
+            )
+            tax_obj = self.env['account.tax']
+            self.price_unit = tax_obj._fix_tax_included_price(prod.price,
+                                                              prod.taxes_id,
+                                                              self.tax_id)
 
     @api.onchange('ser_checkin_date', 'ser_checkout_date')
     def on_change_checkout(self):
