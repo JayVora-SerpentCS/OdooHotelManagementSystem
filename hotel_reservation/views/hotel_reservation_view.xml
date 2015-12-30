@@ -15,6 +15,7 @@
                         <button name="send_reservation_maill" type="object" string="Send Reservation Email" states="confirm" class="oe_highlight"/>
                         <button name="confirm" string="Confirm" states="draft" class="oe_highlight"/>
                         <button name="done" string="Create Folio" states="confirm" class="oe_highlight"/> 
+                        <button name="cancel" string="Cancel Reservation" states="draft,confirm" class="oe_highlight"/>
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>
@@ -73,7 +74,7 @@
             <field name="name">hotel.reservation.tree</field>
             <field name="model">hotel.reservation</field>
             <field name="arch" type="xml">
-                <tree string="Reservation" colors="blue:state == 'draft';gray:state == 'done'">
+                <tree string="Reservation" colors="blue:state == 'draft';gray:state == 'done';lightgray:state == 'cancel';">
                     <field name="reservation_no"/>
                     <field name="partner_id" select="1"/>
                     <field name="checkin"/>

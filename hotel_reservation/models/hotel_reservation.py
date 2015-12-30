@@ -267,6 +267,22 @@ class hotel_reservation(models.Model):
         return True
 
     @api.multi
+    def cancel_reservation(self):
+        """
+        This method cancel recordset for hotel room reservation line
+        ------------------------------------------------------------------
+        @param self: The object pointer
+        @return: cancel record set for hotel room reservation line.
+        """
+        self.write({'state': 'cancel'})
+        room_reservation_line = self.env['hotel.room.reservation.line'].search([('reservation_id', 'in', self.ids)])
+        room_reservation_line.write({'state': 'unassigned'})
+        reservation_lines = self.env['hotel_reservation.line'].search([('line_id', 'in', self.ids)])
+        for reservation_line in reservation_lines:
+            reservation_line.reserve.write({'isroom': True, 'status': 'available'})
+        return True
+
+    @api.multi
     def send_reservation_maill(self):
         '''
         This function opens a window to compose an email,
@@ -692,7 +708,8 @@ class room_reservation_summary(models.Model):
                             reservline_ids = (reservation_line_obj.search
                                               ([('id', 'in', reservline_ids),
                                                 ('check_in', '<=', chk_date),
-                                                ('check_out', '>=', chk_date)
+                                                ('check_out', '>=', chk_date),
+                                                ('status','!=','cancel')
                                                 ]))
                             if reservline_ids:
                                 room_list_stats.append({'state': 'Reserved',
@@ -813,5 +830,3 @@ class quick_room_reservation(models.TransientModel):
                                       })]
                }))
         return True
-
-# # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
