@@ -1,8 +1,8 @@
 [![Build Status](https://travis-ci.org/JayVora-SerpentCS/hotelmgmt_v8.svg?branch=8.0)](https://travis-ci.org/JayVora-SerpentCS/hotelmgmt_v8)
 [![Build Status](https://travis-ci.org/JayVora-SerpentCS/hotelmgmt_v8.svg?branch=master)](https://travis-ci.org/JayVora-SerpentCS/hotelmgmt_v8)
 
-hotelmgmt_v8
-============
+OpenERP/Odoo Hotel Management System
+====================================
 
 Serpent Consulting services Pvt. Ltd. provide an efficient OpenERP/ODOO Hotel Management Software which includes front office management systems for all sorts of hotel operations and encompasses a comprehensive line of OpenERP solutions for many other aspects of hotel operations including CRS (Central Reservation System), CRM, Spa Scheduling and Management, POS Hotel Management Software as well as real-time hotel booking engine.
 
