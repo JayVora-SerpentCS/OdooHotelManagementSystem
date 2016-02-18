@@ -9,6 +9,7 @@ addons:
       - expect-dev # provides unbuffer utility
       - python-lxml # because pip installation is slow
       - python-xlrd
+      - wkhtmltopdf
 
 env:
   - VERSION="9.0" LINT_CHECK="1"
