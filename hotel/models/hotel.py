@@ -19,7 +19,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 # ---------------------------------------------------------------------------
-from openerp.exceptions import except_orm, Warning, ValidationError
+from openerp.exceptions import except_orm, UserError, ValidationError
 from openerp.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
 from openerp import models, fields, api, _, netsvc
 from decimal import Decimal
@@ -577,7 +577,7 @@ class hotel_folio(models.Model):
                 self.partner_invoice_id = partner_rec.id
                 self.partner_shipping_id = partner_rec.id
                 self.pricelist_id = partner_rec.property_product_pricelist.id
-                raise Warning('Not Any Order For  %s ' % (partner_rec.name))
+                raise UserError('Not Any Order For  %s ' % (partner_rec.name))
             else:
                 self.partner_invoice_id = partner_rec.id
                 self.partner_shipping_id = partner_rec.id
@@ -1094,7 +1094,7 @@ class hotel_service_line(models.Model):
         if not self.ser_checkout_date:
             self.ser_checkout_date = time_a
         if self.ser_checkout_date < self.ser_checkin_date:
-            raise Warning('Checkout must be greater or equal checkin date')
+            raise UserError('Checkout must be greater or equal checkin date')
         if self.ser_checkin_date and self.ser_checkout_date:
             date_a = time.strptime(self.ser_checkout_date,
                                    DEFAULT_SERVER_DATETIME_FORMAT)[:5]
