@@ -1313,6 +1313,7 @@ class account_invoice(models.Model):
 
     @api.multi
     def confirm_paid(self):
+        
         '''
         This method change pos orders states to done when folio invoice
         is in done.
@@ -1321,7 +1322,7 @@ class account_invoice(models.Model):
         '''
         pos_order_obj = self.env['pos.order']
         res = super(account_invoice, self).confirm_paid()
-        pos_ids = pos_order_obj.search([('invoice_id', '=', self._ids)])
+        pos_ids = pos_order_obj.search([('invoice_id', 'in', self._ids)])
         if pos_ids.ids:
             for pos_id in pos_ids:
                 pos_id.write({'state': 'done'})
