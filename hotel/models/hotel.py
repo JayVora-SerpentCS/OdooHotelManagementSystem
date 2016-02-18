@@ -807,6 +807,22 @@ class hotel_folio_line(models.Model):
             vals.update({'order_id': folio.order_id.id})
         return super(hotel_folio_line, self).create(vals)
 
+    @api.constrains('checkin_date', 'checkout_date')
+    def check_dates(self):
+        '''
+        This method is used to validate the checkin_date and checkout_date.
+        -------------------------------------------------------------------
+        @param self: object pointer
+        @return: raise warning depending on the validation
+        '''
+        if self.checkin_date >= self.checkout_date:
+                raise ValidationError(_('Room line Check In Date Should be \
+                less than the Check Out Date!'))
+        if self.folio_id.date_order and self.checkin_date:
+            if self.checkin_date <= self.folio_id.date_order:
+                raise ValidationError(_('Room line check in date should be \
+                greater than the current date.'))
+
     @api.multi
     def unlink(self):
         """
@@ -889,17 +905,19 @@ class hotel_folio_line(models.Model):
             self.checkin_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         if not self.checkout_date:
             self.checkout_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-        if self.checkout_date < self.checkin_date:
-            raise except_orm(_('Warning'), _('Checkout must be greater or'
-                                             'equal to checkin date'))
-        if self.checkin_date and self.checkout_date:
-            date_a = time.strptime(self.checkout_date,
-                                   DEFAULT_SERVER_DATETIME_FORMAT)[:5]
-            date_b = time.strptime(self.checkin_date,
-                                   DEFAULT_SERVER_DATETIME_FORMAT)[:5]
-            diffDate = datetime.datetime(*date_a) - datetime.datetime(*date_b)
-            qty = diffDate.days + 1
-            self.product_uom_qty = qty
+        chckin = self.checkin_date
+        chckout = self.checkout_date
+        if chckin and chckout:
+            server_dt = DEFAULT_SERVER_DATETIME_FORMAT
+            chkin_dt = datetime.datetime.strptime(chckin, server_dt)
+            chkout_dt = datetime.datetime.strptime(chckout, server_dt)
+            dur = chkout_dt - chkin_dt
+            sec_dur = dur.seconds
+            if (not dur.days and not sec_dur) or (dur.days and not sec_dur):
+                myduration = dur.days
+            else:
+                myduration = dur.days + 1
+        self.product_uom_qty = myduration
 
     @api.multi
     def button_confirm(self):
@@ -1024,33 +1042,43 @@ class hotel_service_line(models.Model):
                 sale_unlink_obj.unlink()
         return super(hotel_service_line, self).unlink()
 
-    @api.multi
-    def product_id_change(self, pricelist, product, qty=0,
-                          uom=False, qty_uos=0, uos=False, name='',
-                          partner_id=False, lang=False, update_tax=True,
-                          date_order=False):
+    @api.onchange('product_id')
+    def product_id_change(self):
         '''
         @param self: object pointer
         '''
-        line_ids = [folio.service_line_id.id for folio in self]
-        if product:
-            sale_line_obj = self.env['sale.order.line'].browse(line_ids)
-            return sale_line_obj.product_id_change()
+        if self.product_id and self.folio_id.partner_id:
+            self.name = self.product_id.name
+            self.price_unit = self.product_id.lst_price
+            self.product_uom = self.product_id.uom_id
+            tax_obj = self.env['account.tax']
+            prod = self.product_id
+            self.price_unit = tax_obj._fix_tax_included_price(prod.price,
+                                                              prod.taxes_id,
+                                                              self.tax_id)
 
-    @api.multi
-    def product_uom_change(self, pricelist, product, qty=0,
-                           uom=False, qty_uos=0, uos=False, name='',
-                           partner_id=False, lang=False, update_tax=True,
-                           date_order=False):
+    @api.onchange('product_uom')
+    def product_uom_change(self):
         '''
         @param self: object pointer
         '''
-        if product:
-            return self.product_id_change(pricelist, product, qty=0,
-                                          uom=False, qty_uos=0, uos=False,
-                                          name='', partner_id=partner_id,
-                                          lang=False, update_tax=True,
-                                          date_order=False)
+        if not self.product_uom:
+            self.price_unit = 0.0
+            return
+        self.price_unit = self.product_id.lst_price
+        if self.folio_id.partner_id:
+            prod = self.product_id.with_context(
+                lang=self.folio_id.partner_id.lang,
+                partner=self.folio_id.partner_id.id,
+                quantity=1,
+                date_order=self.folio_id.checkin_date,
+                pricelist=self.folio_id.pricelist_id.id,
+                uom=self.product_uom.id
+            )
+            tax_obj = self.env['account.tax']
+            self.price_unit = tax_obj._fix_tax_included_price(prod.price,
+                                                              prod.taxes_id,
+                                                              self.tax_id)
 
     @api.onchange('ser_checkin_date', 'ser_checkout_date')
     def on_change_checkout(self):

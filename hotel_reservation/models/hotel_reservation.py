@@ -161,19 +161,33 @@ class hotel_reservation(models.Model):
          """
         return self.search_count([('state', '=', 'draft')])
 
-    @api.onchange('date_order', 'checkin')
-    def on_change_checkin(self):
-        '''
-        When you change date_order or checkin it will check whether
-        Checkin date should be greater than the current date
-        ------------------------------------------------------------
-        @param self: object pointer
-        @return: raise warning depending on the validation
-        '''
-        if self.date_order and self.checkin:
+#    @api.onchange('date_order', 'checkin')
+#    def on_change_checkin(self):
+#        '''
+#        When you change date_order or checkin it will check whether
+#        Checkin date should be greater than the current date
+#        ------------------------------------------------------------
+#        @param self: object pointer
+#        @return: raise warning depending on the validation
+#        '''
+#        if self.date_order and self.checkin:
+#            if self.checkin < self.date_order:
+#                raise except_orm(_('Warning'), _('Checkin date should be \
+#                greater than the current date.'))
+
+    @api.constrains('checkin', 'checkout')
+    def check_in_out_dates(self):
+        """
+        When date_order is less then checkin date or
+        Checkout date should be greater than the checkin date.
+        """
+        if self.checkout and self.checkin:
             if self.checkin < self.date_order:
                 raise except_orm(_('Warning'), _('Checkin date should be \
                 greater than the current date.'))
+            if self.checkout < self.checkin:
+                raise except_orm(_('Warning'), _('Checkout date \
+                should be greater than Checkin date.'))
 
     @api.onchange('checkout', 'checkin')
     def on_change_checkout(self):
@@ -189,10 +203,6 @@ class hotel_reservation(models.Model):
         checkin_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         if not (checkout_date and checkin_date):
             return {'value': {}}
-        if self.checkout and self.checkin:
-            if self.checkout < self.checkin:
-                raise except_orm(_('Warning'), _('Checkout date \
-                should be greater than Checkin date.'))
         delta = datetime.timedelta(days=1)
         dat_a = time.strptime(checkout_date,
                               DEFAULT_SERVER_DATETIME_FORMAT)[:5]
