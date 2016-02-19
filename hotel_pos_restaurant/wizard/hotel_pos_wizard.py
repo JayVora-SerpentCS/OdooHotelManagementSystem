@@ -23,7 +23,7 @@
 from openerp import models, fields, api
 
 
-class order_report_wizard(models.TransientModel):
+class OrderReportWizard(models.TransientModel):
     _name = 'order.report.wizard'
     _rec_name = 'date_start'
 

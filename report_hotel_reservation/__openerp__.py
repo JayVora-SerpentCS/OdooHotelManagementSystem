@@ -24,6 +24,7 @@
     "name": "Hotel Reservation Management - Reporting",
     "version": "0.03",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
+    "images": [],
     "website": "http://www.serpentcs.com",
     "depends": ["hotel_reservation"],
     "category": "Generic Modules/Hotel Reservation",

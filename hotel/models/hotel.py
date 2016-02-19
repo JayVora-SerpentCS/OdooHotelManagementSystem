@@ -21,7 +21,8 @@
 # ---------------------------------------------------------------------------
 from openerp.exceptions import except_orm, UserError, ValidationError
 from openerp.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
-from openerp import models, fields, api, _, netsvc
+from openerp import models, fields, api, _
+from openerp import workflow
 from decimal import Decimal
 import datetime
 import urllib2
@@ -78,7 +79,7 @@ def _offset_format_timestamp1(src_tstamp_str, src_format, dst_format,
     return res
 
 
-class hotel_floor(models.Model):
+class HotelFloor(models.Model):
 
     _name = "hotel.floor"
     _description = "Floor"
@@ -87,7 +88,7 @@ class hotel_floor(models.Model):
     sequence = fields.Integer('Sequence', size=64)
 
 
-class product_category(models.Model):
+class ProductCategory(models.Model):
 
     _inherit = "product.category"
 
@@ -96,7 +97,7 @@ class product_category(models.Model):
     isservicetype = fields.Boolean('Is Service Type')
 
 
-class hotel_room_type(models.Model):
+class HotelRoomType(models.Model):
 
     _name = "hotel.room.type"
     _description = "Room Type"
@@ -105,7 +106,7 @@ class hotel_room_type(models.Model):
                              delegate=True, select=True, ondelete='cascade')
 
 
-class product_product(models.Model):
+class ProductProduct(models.Model):
 
     _inherit = "product.product"
 
@@ -114,7 +115,7 @@ class product_product(models.Model):
     isservice = fields.Boolean('Is Service id')
 
 
-class hotel_room_amenities_type(models.Model):
+class HotelRoomAmenitiesType(models.Model):
 
     _name = 'hotel.room.amenities.type'
     _description = 'amenities Type'
@@ -123,7 +124,7 @@ class hotel_room_amenities_type(models.Model):
                              delegate=True, ondelete='cascade')
 
 
-class hotel_room_amenities(models.Model):
+class HotelRoomAmenities(models.Model):
 
     _name = 'hotel.room.amenities'
     _description = 'Room amenities'
@@ -135,7 +136,7 @@ class hotel_room_amenities(models.Model):
                                 'Amenity Catagory')
 
 
-class folio_room_line(models.Model):
+class FolioRoomLine(models.Model):
 
     _name = 'folio.room.line'
     _description = 'Hotel Room Reservation'
@@ -148,7 +149,7 @@ class folio_room_line(models.Model):
     status = fields.Selection(string='state', related='folio_id.state')
 
 
-class hotel_room(models.Model):
+class HotelRoom(models.Model):
 
     _name = 'hotel.room'
     _description = 'Hotel Room'
@@ -194,7 +195,7 @@ class hotel_room(models.Model):
             vals.update({'color': 2, 'status': 'occupied'})
         if 'isroom'in vals and vals['isroom'] is True:
             vals.update({'color': 5, 'status': 'available'})
-        ret_val = super(hotel_room, self).write(vals)
+        ret_val = super(HotelRoom, self).write(vals)
         return ret_val
 
     @api.multi
@@ -218,7 +219,7 @@ class hotel_room(models.Model):
         return self.write({'isroom': True, 'color': 5})
 
 
-class hotel_folio(models.Model):
+class HotelFolio(models.Model):
 
     @api.multi
     def name_get(self):
@@ -450,7 +451,7 @@ class hotel_folio(models.Model):
             tmp_room_lines = vals.get('room_lines', [])
             vals['order_policy'] = vals.get('hotel_policy', 'manual')
             vals.update({'room_lines': []})
-            folio_id = super(hotel_folio, self).create(vals)
+            folio_id = super(HotelFolio, self).create(vals)
             for line in (tmp_room_lines):
                 line[2].update({'folio_id': folio_id})
             vals.update({'room_lines': tmp_room_lines})
@@ -458,8 +459,8 @@ class hotel_folio(models.Model):
         else:
             if not vals:
                 vals = {}
-            vals['name'] = self.env['ir.sequence'].get('hotel.folio')
-            folio_id = super(hotel_folio, self).create(vals)
+            vals['name'] = self.env['ir.sequence'].next_by_code('hotel.folio')
+            folio_id = super(HotelFolio, self).create(vals)
             folio_room_line_obj = self.env['folio.room.line']
             h_room_obj = self.env['hotel.room']
             try:
@@ -504,7 +505,7 @@ class hotel_folio(models.Model):
         for rec in self:
             for res in rec.room_lines:
                 room_lst1.append(res.product_id.id)
-        folio_write = super(hotel_folio, self).write(vals)
+        folio_write = super(HotelFolio, self).write(vals)
         room_lst = []
         for folio_obj in self:
             for folio_rec in folio_obj.room_lines:
@@ -644,13 +645,13 @@ class hotel_folio(models.Model):
         order_ids = [folio.order_id.id for folio in self]
         sale_obj = self.env['sale.order'].browse(order_ids)
         rv = sale_obj.action_cancel()
-        wf_service = netsvc.LocalService("workflow")
+#        wf_service = netsvc.LocalService("workflow")
         for sale in self:
             for pick in sale.picking_ids:
-                wf_service.trg_validate(self._uid, 'stock.picking', pick.id,
+                workflow.trg_validate(self._uid, 'stock.picking', pick.id,
                                         'button_cancel', self._cr)
             for invoice in sale.invoice_ids:
-                wf_service.trg_validate(self._uid, 'account.invoice',
+                workflow.trg_validate(self._uid, 'account.invoice',
                                         invoice.id, 'invoice_cancel',
                                         self._cr)
                 sale.write({'state': 'cancel'})
@@ -730,7 +731,7 @@ class hotel_folio(models.Model):
         return True
 
 
-class hotel_folio_line(models.Model):
+class HotelFolioLine(models.Model):
 
     @api.one
     def copy(self, default=None):
@@ -805,7 +806,7 @@ class hotel_folio_line(models.Model):
         if 'folio_id' in vals:
             folio = self.env["hotel.folio"].browse(vals['folio_id'])
             vals.update({'order_id': folio.order_id.id})
-        return super(hotel_folio_line, self).create(vals)
+        return super(HotelFolioLine, self).create(vals)
 
     @api.constrains('checkin_date', 'checkout_date')
     def check_dates(self):
@@ -848,7 +849,7 @@ class hotel_folio_line(models.Model):
                             room_obj.write({'isroom': True,
                                             'status': 'available'})
                 sale_unlink_obj.unlink()
-        return super(hotel_folio_line, self).unlink()
+        return super(HotelFolioLine, self).unlink()
 
     @api.multi
     def uos_change(self, product_uos, product_uos_qty=0, product_id=None):
@@ -936,10 +937,9 @@ class hotel_folio_line(models.Model):
         '''
         lines = [folio_line.order_line_id for folio_line in self]
         lines.button_done()
-        wf_service = netsvc.LocalService("workflow")
         self.write({'state': 'done'})
         for folio_line in self:
-            wf_service.trg_write(self._uid, 'sale.order',
+            workflow.trg_write(self._uid, 'sale.order',
                                  folio_line.order_line_id.order_id.id,
                                  self._cr)
         return True
@@ -955,7 +955,7 @@ class hotel_folio_line(models.Model):
         return sale_line_obj.copy_data(default=default)
 
 
-class hotel_service_line(models.Model):
+class HotelServiceLine(models.Model):
 
     @api.one
     def copy(self, default=None):
@@ -1026,7 +1026,7 @@ class hotel_service_line(models.Model):
         if 'folio_id' in vals:
             folio = self.env['hotel.folio'].browse(vals['folio_id'])
             vals.update({'order_id': folio.order_id.id})
-        return super(models.Model, self).create(vals)
+        return super(HotelServiceLine, self).create(vals)
 
     @api.multi
     def unlink(self):
@@ -1040,7 +1040,7 @@ class hotel_service_line(models.Model):
             if line.service_line_id:
                 sale_unlink_obj = s_line_obj.browse([line.service_line_id.id])
                 sale_unlink_obj.unlink()
-        return super(hotel_service_line, self).unlink()
+        return super(HotelServiceLine, self).unlink()
 
     @api.onchange('product_id')
     def product_id_change(self):
@@ -1135,7 +1135,7 @@ class hotel_service_line(models.Model):
         return sale_line_obj.copy_data(default=default)
 
 
-class hotel_service_type(models.Model):
+class HotelServiceType(models.Model):
 
     _name = "hotel.service.type"
     _description = "Service Type"
@@ -1144,7 +1144,7 @@ class hotel_service_type(models.Model):
                              delegate=True, select=True, ondelete='cascade')
 
 
-class hotel_services(models.Model):
+class HotelServices(models.Model):
 
     _name = 'hotel.services'
     _description = 'Hotel Services and its charges'
@@ -1154,7 +1154,7 @@ class hotel_services(models.Model):
                                  delegate=True)
 
 
-class res_company(models.Model):
+class ResCompany(models.Model):
 
     _inherit = 'res.company'
 
@@ -1307,7 +1307,7 @@ class CurrencyExchangeRate(models.Model):
             self.total = self.out_amount - ser_tax
 
 
-class account_invoice(models.Model):
+class AccountInvoice(models.Model):
 
     _inherit = 'account.invoice'
 
@@ -1320,7 +1320,7 @@ class account_invoice(models.Model):
         @param self: object pointer
         '''
         pos_order_obj = self.env['pos.order']
-        res = super(account_invoice, self).confirm_paid()
+        res = super(AccountInvoice, self).confirm_paid()
         pos_order_obj.search([('invoice_id', 'in', self._ids)]).\
         write({'state': 'done'})
         return res

@@ -29,7 +29,7 @@ AVAILABLE_STATES = [
 ]
 
 
-class report_hotel_restaurant_status(models.Model):
+class ReportHotelRestaurantStatus(models.Model):
     _name = "report.hotel.restaurant.status"
     _description = "Reservation By State"
     _auto = False

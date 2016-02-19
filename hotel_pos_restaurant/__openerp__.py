@@ -26,6 +26,7 @@
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
     "category": "Generic Modules/Hotel Restaurant Management",
     "website": "http://www.serpentcs.com",
+    "images": [],
     "depends": ["pos_restaurant", "hotel"],
     "demo": ["views/hotel_pos_data.xml"],
     "data": ["security/ir.model.access.csv",

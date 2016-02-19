@@ -25,6 +25,7 @@
     "version": "0.01",
     "author": "Serpent Consulting Services Pvt Ltd",
     "website": "http://www.serpentcs.com",
+    "images": [],
     "category": "Board/Hotel FrontDesk",
     "depends": [
         "board",
