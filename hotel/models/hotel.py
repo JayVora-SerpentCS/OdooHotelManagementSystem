@@ -648,11 +648,11 @@ class HotelFolio(models.Model):
         for sale in self:
             for pick in sale.picking_ids:
                 workflow.trg_validate(self._uid, 'stock.picking', pick.id,
-                                        'button_cancel', self._cr)
+                                      'button_cancel', self._cr)
             for invoice in sale.invoice_ids:
                 workflow.trg_validate(self._uid, 'account.invoice',
-                                        invoice.id, 'invoice_cancel',
-                                        self._cr)
+                                      invoice.id, 'invoice_cancel',
+                                      self._cr)
                 sale.write({'state': 'cancel'})
         return rv
 
@@ -939,8 +939,8 @@ class HotelFolioLine(models.Model):
         self.write({'state': 'done'})
         for folio_line in self:
             workflow.trg_write(self._uid, 'sale.order',
-                                 folio_line.order_line_id.order_id.id,
-                                 self._cr)
+                               folio_line.order_line_id.order_id.id,
+                               self._cr)
         return True
 
     @api.one
@@ -1321,5 +1321,5 @@ class AccountInvoice(models.Model):
         pos_order_obj = self.env['pos.order']
         res = super(AccountInvoice, self).confirm_paid()
         pos_order_obj.search([('invoice_id', 'in', self._ids)]).\
-        write({'state': 'done'})
+                             write({'state': 'done'})
         return res
