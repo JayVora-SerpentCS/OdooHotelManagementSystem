@@ -27,7 +27,7 @@ AVAILABLE_STATES = [
     ('done', 'Done')]
 
 
-class report_hotel_reservation_status(models.Model):
+class ReportHotelReservationStatus(models.Model):
 
     _name = "report.hotel.reservation.status"
     _description = "Reservation By State"
