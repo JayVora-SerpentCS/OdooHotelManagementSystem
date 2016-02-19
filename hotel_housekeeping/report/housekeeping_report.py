@@ -76,5 +76,3 @@ class report_lunchorder(models.AbstractModel):
     _inherit = 'report.abstract_report'
     _template = 'hotel_housekeeping.report_housekeeping'
     _wrapped_report_class = activity_report
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

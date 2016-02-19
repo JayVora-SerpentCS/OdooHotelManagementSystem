@@ -21,9 +21,10 @@
 # ---------------------------------------------------------------------------
 
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
-from openerp import models, fields, api, _, netsvc
+from openerp import models, fields, api, _
 from openerp.exceptions import ValidationError
 import time
+from openerp import workflow
 
 
 class product_category(models.Model):
@@ -91,9 +92,8 @@ as Bad, Good or Ok. ")
         @param self: object pointer
         """
         self.write({'state': 'dirty'})
-        wf_service = netsvc.LocalService('workflow')
-        for id in self.ids:
-            wf_service.trg_create(self._uid, self._name, self.id, self._cr)
+        for housekeep_id in self.ids:
+            workflow.trg_create(self._uid, self._name, housekeep_id, self._cr)
         return True
 
     @api.multi

@@ -38,15 +38,6 @@
         "views/hotel_housekeeping_workflow.xml",
         "views/hotel_housekeeping_view.xml",
     ],
-    "description": """
-    Module for Hotel/Hotel Housekeeping. You can manage:
-    * Housekeeping process
-    * Housekeeping history room wise
-
-      Different reports are also provided, mainly for hotel statistics.
-    """,
     'installable': True,
     'auto_install': False,
 }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

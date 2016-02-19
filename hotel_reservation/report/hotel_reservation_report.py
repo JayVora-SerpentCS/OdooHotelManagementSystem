@@ -126,5 +126,3 @@ class report_test_roomres(models.AbstractModel):
     _inherit = "report.abstract_report"
     _template = "hotel_reservation.report_roomres_qweb"
     _wrapped_report_class = reservation_detail_report
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

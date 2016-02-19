@@ -57,5 +57,3 @@ class report_hotel_restaurant_status(models.Model):
                     hotel_restaurant_reservation c
                 group by c.state,c.reservation_id
             )""")
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -1322,7 +1322,5 @@ class account_invoice(models.Model):
         pos_order_obj = self.env['pos.order']
         res = super(account_invoice, self).confirm_paid()
         pos_order_obj.search([('invoice_id', 'in', self._ids)]).\
-                      write({'state': 'done'})
+        write({'state': 'done'})
         return res
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -101,5 +101,3 @@ class make_folio_wizard(models.TransientModel):
             'view_id': False,
             'type': 'ir.actions.act_window'
         }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -45,16 +45,8 @@
         "views/room_summ_view.xml",
         "views/email_temp_view.xml",
     ],
-    "description": """
-    Module for Hotel/Resort/Property management. You can manage:
-    * Guest Reservation
-    * Group Reservartion
-      Different reports are also provided, mainly for hotel statistics.
-    """,
     'qweb': ['static/src/xml/hotel_room_summary.xml'],
     'css': ["static/src/css/room_summary.css"],
     'installable': True,
     'auto_install': False,
 }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

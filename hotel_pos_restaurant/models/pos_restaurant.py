@@ -106,5 +106,3 @@ class pos_order(models.Model):
                         hf_rec.write({'folio_pos_order_ids':
                                       [(4, order_obj.id)]})
         return super(pos_order, self).action_paid()
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

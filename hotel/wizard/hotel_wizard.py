@@ -39,5 +39,3 @@ class folio_report_wizard(models.TransientModel):
         }
         return self.env['report'].get_action(self, 'hotel.report_hotel_folio',
                                              data=data)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

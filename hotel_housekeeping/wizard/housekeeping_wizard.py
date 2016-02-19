@@ -41,5 +41,3 @@ class hotel_housekeeping_wizard(models.TransientModel):
                         ].get_action(self,
                                      'hotel_housekeeping.report_housekeeping',
                                      data=data)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

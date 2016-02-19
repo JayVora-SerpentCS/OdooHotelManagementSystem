@@ -42,5 +42,3 @@ class order_report_wizard(models.TransientModel):
                         ].get_action(self,
                                      'hotel_pos_restaurant.report_folio_pos',
                                      data=data)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
