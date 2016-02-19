@@ -24,9 +24,9 @@ import time
 from openerp.report import report_sxw
 
 
-class reservation_detail_report(report_sxw.rml_parse):
+class ReservationDetailReport(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
-        super(reservation_detail_report, self).__init__(cr, uid, name,
+        super(ReservationDetailReport, self).__init__(cr, uid, name,
                                                         context)
         self.localcontext.update({
             'time': time,
@@ -100,29 +100,29 @@ class reservation_detail_report(report_sxw.rml_parse):
         return room_used_details
 
 
-class report_test_checkin(models.AbstractModel):
+class ReportTestCheckin(models.AbstractModel):
     _name = "report.hotel_reservation.report_checkin_qweb"
     _inherit = "report.abstract_report"
     _template = "hotel_reservation.report_checkin_qweb"
-    _wrapped_report_class = reservation_detail_report
+    _wrapped_report_class = ReservationDetailReport
 
 
-class report_test_checkout(models.AbstractModel):
+class ReportTestCheckout(models.AbstractModel):
     _name = "report.hotel_reservation.report_checkout_qweb"
     _inherit = "report.abstract_report"
     _template = "hotel_reservation.report_checkout_qweb"
-    _wrapped_report_class = reservation_detail_report
+    _wrapped_report_class = ReservationDetailReport
 
 
-class report_test_maxroom(models.AbstractModel):
+class ReportTestMaxroom(models.AbstractModel):
     _name = "report.hotel_reservation.report_maxroom_qweb"
     _inherit = "report.abstract_report"
     _template = "hotel_reservation.report_maxroom_qweb"
-    _wrapped_report_class = reservation_detail_report
+    _wrapped_report_class = ReservationDetailReport
 
 
-class report_test_roomres(models.AbstractModel):
+class ReportTestRoomres(models.AbstractModel):
     _name = "report.hotel_reservation.report_roomres_qweb"
     _inherit = "report.abstract_report"
     _template = "hotel_reservation.report_roomres_qweb"
-    _wrapped_report_class = reservation_detail_report
+    _wrapped_report_class = ReservationDetailReport

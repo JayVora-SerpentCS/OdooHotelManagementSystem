@@ -26,6 +26,7 @@
     "author": "Serpent Consulting Services Pvt. Ltd.,\
     Odoo Community Association (OCA)",
     "category": "Generic Modules/Hotel Restaurant",
+    "images": [],
     "website": "http://www.serpentcs.com",
     "depends": ["hotel"],
     "license": "",

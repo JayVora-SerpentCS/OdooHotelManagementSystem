@@ -23,7 +23,7 @@
 from openerp import models, fields, api
 
 
-class hotel_housekeeping_wizard(models.TransientModel):
+class HotelHousekeepingWizard(models.TransientModel):
     _name = 'hotel.housekeeping.wizard'
 
     date_start = fields.Datetime('Activity Start Date', required=True)

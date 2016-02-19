@@ -23,7 +23,7 @@
 from openerp import models, fields, api
 
 
-class hotel_reservation_wizard(models.TransientModel):
+class HotelReservationWizard(models.TransientModel):
 
     _name = 'hotel.reservation.wizard'
 
@@ -79,7 +79,7 @@ class hotel_reservation_wizard(models.TransientModel):
                                      data=data)
 
 
-class make_folio_wizard(models.TransientModel):
+class MakeFolioWizard(models.TransientModel):
 
     _name = 'wizard.make.folio'
 

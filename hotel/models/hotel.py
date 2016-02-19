@@ -645,7 +645,6 @@ class HotelFolio(models.Model):
         order_ids = [folio.order_id.id for folio in self]
         sale_obj = self.env['sale.order'].browse(order_ids)
         rv = sale_obj.action_cancel()
-#        wf_service = netsvc.LocalService("workflow")
         for sale in self:
             for pick in sale.picking_ids:
                 workflow.trg_validate(self._uid, 'stock.picking', pick.id,
