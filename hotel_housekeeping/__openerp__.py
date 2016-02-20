@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 # --------------------------------------------------------------------------
 #
 #    OpenERP, Open Source Management Solution
@@ -23,10 +23,13 @@
 {
     "name": "Hotel Housekeeping Management",
     "version": "0.02",
-    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
+    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
+    Odoo Community Association (OCA)",
+    "images": [],
     "category": "Generic Modules/Hotel Housekeeping",
     "website": "http://www.serpentcs.com",
     "depends": ["hotel"],
+    "license": "",
     "demo": [
         "views/hotel_housekeeping_data.xml",
     ],
@@ -38,15 +41,6 @@
         "views/hotel_housekeeping_workflow.xml",
         "views/hotel_housekeeping_view.xml",
     ],
-    "description": """
-    Module for Hotel/Hotel Housekeeping. You can manage:
-    * Housekeeping process
-    * Housekeeping history room wise
-
-      Different reports are also provided, mainly for hotel statistics.
-    """,
     'installable': True,
     'auto_install': False,
 }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 # --------------------------------------------------------------------------
 #
 #    OpenERP, Open Source Management Solution
@@ -23,7 +23,7 @@
 from openerp import models, fields, api
 
 
-class hotel_reservation_wizard(models.TransientModel):
+class HotelReservationWizard(models.TransientModel):
 
     _name = 'hotel.reservation.wizard'
 
@@ -79,7 +79,7 @@ class hotel_reservation_wizard(models.TransientModel):
                                      data=data)
 
 
-class make_folio_wizard(models.TransientModel):
+class MakeFolioWizard(models.TransientModel):
 
     _name = 'wizard.make.folio'
 
@@ -101,5 +101,3 @@ class make_folio_wizard(models.TransientModel):
             'view_id': False,
             'type': 'ir.actions.act_window'
         }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

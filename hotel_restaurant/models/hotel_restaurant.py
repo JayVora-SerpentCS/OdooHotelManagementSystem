@@ -22,8 +22,9 @@
 
 from openerp.exceptions import except_orm, ValidationError
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from openerp import models, fields, api, _, netsvc
+from openerp import models, fields, api, _
 import time
+from openerp import workflow
 
 
 class HotelFolio(models.Model):
@@ -149,9 +150,8 @@ class HotelRestaurantReservation(models.Model):
         @param self: object pointer
         """
         self.write({'state': 'draft'})
-        wf_service = netsvc.LocalService('workflow')
-        for id in self.ids:
-            wf_service.trg_create(self._uid, self._name, self.id, self._cr)
+        for reserve_id in self.ids:
+            workflow.trg_create(self._uid, self._name, reserve_id, self._cr)
         return True
 
     @api.multi

@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 # --------------------------------------------------------------------------
 #
 #    OpenERP, Open Source Management Solution
@@ -23,21 +23,19 @@
 {
     "name": "Hotel POS Restaurant Management",
     "version": "0.03",
-    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
+    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
+    Odoo Community Association (OCA)",
     "category": "Generic Modules/Hotel Restaurant Management",
     "website": "http://www.serpentcs.com",
+    "images": [],
     "depends": ["pos_restaurant", "hotel"],
+    "license": "",
     "demo": ["views/hotel_pos_data.xml"],
     "data": ["security/ir.model.access.csv",
              "views/pos_restaurent_view.xml",
              "views/hotel_pos_report.xml",
              "views/report_pos_management.xml",
              "wizard/hotel_pos_wizard.xml"],
-    "description": """
-    Module for POS management.
-     """,
     "auto_install": False,
     "installable": True
 }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -1,16 +1,15 @@
-<!-- <?xml version="1.0" encoding="utf-8"?> -->
-<!-- <openerp> -->
-<!--     <data> -->
+<?xml version="1.0" encoding="utf-8"?> 
+ <openerp> 
+     <data> 
 <!--         <record model="workflow" id="wkf_hotel"> -->
 <!--             <field name="name">hotel.folio.basic</field> -->
 <!--             <field name="osv">hotel.folio</field> -->
 <!--             <field name="on_create">True</field> -->
 <!--         </record> -->
 
-<!--     #---------------------------------------------- -->
-<!--     # Activity -->
-<!--     #---------------------------------------------- -->
-
+<!--
+      Activity 
+-->
 <!--         <record model="workflow.activity" id="act_draft"> -->
 <!--             <field name="wkf_id" ref="wkf_hotel"/> -->
 <!--             <field name="flow_start">True</field> -->
@@ -111,9 +110,9 @@
 <!--             <field name="action">action_cancel()</field> -->
 <!--         </record> -->
 
-<!--     #---------------------------------------------- -->
+<!--      -->
 <!--     # Transistion -->
-<!--     #---------------------------------------------- -->
+<!--      -->
 
 <!--         <record model="workflow.transition" id="trans_invoice_end_done"> -->
 <!--             <field name="act_from" ref="act_invoice_end"/> -->
@@ -212,9 +211,9 @@
 <!--             <field name="signal">ship_cancel</field> -->
 <!--         </record> -->
 
-<!-- #-------------------------------------------- -->
-<!--         Currency Exchange -->
-<!-- #-------------------------------------------- -->
+<!-- 
+         Currency Exchange 
+ -->
         
 <!--         <record id="wkf_currency" model="workflow"> -->
 <!--             <field name="name">currency.exchange.basic</field> -->
@@ -267,5 +266,5 @@
 <!--             <field name="signal">cur_cancel_draft</field> -->
 <!--         </record> -->
 
-<!--     </data> -->
-<!-- </openerp> -->
+     </data> 
+ </openerp> 

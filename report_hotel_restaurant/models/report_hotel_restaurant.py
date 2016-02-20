@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 # --------------------------------------------------------------------------
 #
 #    OpenERP, Open Source Management Solution
@@ -29,7 +29,7 @@ AVAILABLE_STATES = [
 ]
 
 
-class report_hotel_restaurant_status(models.Model):
+class ReportHotelRestaurantStatus(models.Model):
     _name = "report.hotel.restaurant.status"
     _description = "Reservation By State"
     _auto = False
@@ -57,5 +57,3 @@ class report_hotel_restaurant_status(models.Model):
                     hotel_restaurant_reservation c
                 group by c.state,c.reservation_id
             )""")
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

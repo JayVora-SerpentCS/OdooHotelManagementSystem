@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 # --------------------------------------------------------------------------
 #
 #    OpenERP, Open Source Management Solution
@@ -21,12 +21,13 @@
 # ---------------------------------------------------------------------------
 
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
-from openerp import models, fields, api, _, netsvc
+from openerp import models, fields, api, _
 from openerp.exceptions import ValidationError
 import time
+from openerp import workflow
 
 
-class product_category(models.Model):
+class ProductCategory(models.Model):
 
     _inherit = "product.category"
 
@@ -34,7 +35,7 @@ class product_category(models.Model):
                                     default=lambda *a: True)
 
 
-class hotel_housekeeping_activity_type(models.Model):
+class HotelHousekeepingActivityType(models.Model):
 
     _name = 'hotel.housekeeping.activity.type'
     _description = 'Activity Type'
@@ -44,7 +45,7 @@ class hotel_housekeeping_activity_type(models.Model):
                                   ondelete='cascade')
 
 
-class hotel_activity(models.Model):
+class HotelActivity(models.Model):
 
     _name = 'hotel.activity'
     _description = 'Housekeeping Activity'
@@ -53,7 +54,7 @@ class hotel_activity(models.Model):
                            delegate=True, ondelete='cascade')
 
 
-class hotel_housekeeping(models.Model):
+class HotelHousekeeping(models.Model):
 
     _name = "hotel.housekeeping"
     _description = "Reservation"
@@ -91,9 +92,8 @@ as Bad, Good or Ok. ")
         @param self: object pointer
         """
         self.write({'state': 'dirty'})
-        wf_service = netsvc.LocalService('workflow')
-        for id in self.ids:
-            wf_service.trg_create(self._uid, self._name, self.id, self._cr)
+        for housekeep_id in self.ids:
+            workflow.trg_create(self._uid, self._name, housekeep_id, self._cr)
         return True
 
     @api.multi
@@ -141,7 +141,7 @@ as Bad, Good or Ok. ")
         return True
 
 
-class hotel_housekeeping_activities(models.Model):
+class HotelHousekeepingActivities(models.Model):
 
     _name = "hotel.housekeeping.activities"
     _description = "Housekeeping Activities "
@@ -185,7 +185,7 @@ class hotel_housekeeping_activities(models.Model):
         """
         if self._context is None:
             self._context = {}
-        res = super(hotel_housekeeping_activities, self).default_get(fields)
+        res = super(HotelHousekeepingActivities, self).default_get(fields)
         if self._context.get('room_id', False):
             res.update({'room_id': self._context['room_id']})
         if self._context.get('today_date', False):

@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 # --------------------------------------------------------------------------
 #
 #    OpenERP, Open Source Management Solution
@@ -23,7 +23,7 @@
 from openerp import models, fields, api
 
 
-class hotel_housekeeping_wizard(models.TransientModel):
+class HotelHousekeepingWizard(models.TransientModel):
     _name = 'hotel.housekeeping.wizard'
 
     date_start = fields.Datetime('Activity Start Date', required=True)
@@ -41,5 +41,3 @@ class hotel_housekeeping_wizard(models.TransientModel):
                         ].get_action(self,
                                      'hotel_housekeeping.report_housekeeping',
                                      data=data)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 # --------------------------------------------------------------------------
 #
 #    OpenERP, Open Source Management Solution
@@ -23,10 +23,13 @@
 {
     'name': 'Hotel Management',
     'version': '0.07',
-    'author': 'Serpent Consulting Services Pvt. Ltd., OpenERP SA',
+    'author': 'Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
+    Odoo Community Association (OCA)',
+    'images': [],
     'category': 'Generic Modules/Hotel Management',
     'website': 'http://www.serpentcs.com',
     'depends': ['product_uos', 'sale_stock', 'point_of_sale', 'report'],
+    'license': "",
     'demo': ['views/hotel_data.xml'],
     'data': [
             'security/hotel_security.xml',
@@ -38,16 +41,6 @@
             'views/hotel_view.xml',
             'wizard/hotel_wizard.xml',
     ],
-    'description': '''
-    Module for Hotel/Resort/Property management. You can manage:
-    * Configure Property
-    * Hotel Configuration
-    * Check In, Check out
-    * Manage Folio
-    * Payment
-
-    Different reports are also provided, mainly for hotel statistics.
-    ''',
     'css': ['static/src/css/room_kanban.css'],
     'auto_install': False,
     'installable': True

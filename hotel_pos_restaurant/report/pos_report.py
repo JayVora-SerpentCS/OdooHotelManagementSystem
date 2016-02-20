@@ -1,4 +1,4 @@
-# -*- coding: UTF-8 -*-
+# -*- coding: utf-8 -*-
 # --------------------------------------------------------------------------
 #
 #    OpenERP, Open Source Management Solution
@@ -25,9 +25,9 @@ from openerp import models
 from openerp.report import report_sxw
 
 
-class folio_report1(report_sxw.rml_parse):
+class FolioReport1(report_sxw.rml_parse):
     def __init__(self, cr, uid, name, context):
-        super(folio_report1, self).__init__(cr, uid, name, context)
+        super(FolioReport1, self).__init__(cr, uid, name, context)
         self.localcontext.update({'time': time,
                                   'get_data': self.get_data,
                                   'gettotal': self.gettotal,
@@ -71,10 +71,8 @@ class folio_report1(report_sxw.rml_parse):
         return self.temp
 
 
-class report_lunchorder1(models.AbstractModel):
+class ReportLunchorder1(models.AbstractModel):
     _name = 'report.hotel_pos_restaurant.report_folio_pos'
     _inherit = 'report.abstract_report'
     _template = 'hotel_pos_restaurant.report_folio_pos'
-    _wrapped_report_class = folio_report1
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+    _wrapped_report_class = FolioReport1
