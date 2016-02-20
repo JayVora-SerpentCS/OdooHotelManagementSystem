@@ -1320,6 +1320,6 @@ class AccountInvoice(models.Model):
         '''
         pos_order_obj = self.env['pos.order']
         res = super(AccountInvoice, self).confirm_paid()
-        pos_order_obj.search([('invoice_id', 'in', self._ids)]).\
-                             write({'state': 'done'})
+        pos_odr_rec = pos_order_obj.search([('invoice_id', 'in', self._ids)])
+        pos_odr_rec and pos_odr_rec.write({'state': 'done'})
         return res
