@@ -132,6 +132,19 @@ class hotel_reservation(models.Model):
                                 'order_id', 'invoice_id', string='Folio')
     dummy = fields.Datetime('Dummy')
 
+    @api.multi
+    def unlink(self):
+        """
+        Overrides orm unlink method.
+        @param self: The object pointer
+        @return: True/False.
+        """
+        for reserv_rec in self:
+            if reserv_rec.state != 'draft':
+                raise ValidationError(_('You can not delete Reservation in %s\
+                state.') % (reserv_rec.state))
+        return super(hotel_reservation, self).unlink()
+
     @api.constrains('reservation_line', 'adults', 'children')
     def check_reservation_rooms(self):
         '''
