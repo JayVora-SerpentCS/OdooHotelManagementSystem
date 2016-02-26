@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 #############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -24,8 +24,11 @@
 {
     "name": "Board for Hotel FrontDesk",
     "version": "1.0",
-    "author": "Serpent Consulting Services Pvt Ltd",
+    "author": "Serpent Consulting Services Pvt. Ltd.,\
+    Odoo Community Association (OCA)",
     "website": "http://www.serpentcs.com",
+    "images": [],
+    "license": "",
     "category": "Board/Hotel FrontDesk",
     "depends": [
         "board",
@@ -35,12 +38,5 @@
     "data": [
         "views/board_frontdesk_view.xml"
     ],
-    "description": """
-This module implements a dashboard for hotel FrontDesk that includes:
-    * Calendar view of Today's Check-In and Check-Out
-    * Calendar view of Weekly Check-In and Check-Out
-    * Calendar view of Monthly Check-In and Check-Out
-    """,
-    "active": False,
     "installable": True,
 }

@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 #############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -24,7 +24,10 @@
 {
     "name": "Hotel Reservation Management",
     "version": "0.07",
-    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
+    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
+    Odoo Community Association (OCA)",
+    "images": [],
+    "license": "",
     "category": "Generic Modules/Hotel Reservation",
     "website": "http://www.serpentcs.com",
     "depends": ["hotel", "stock", 'mail', "hotel_report_layout",
@@ -47,12 +50,6 @@
         "views/room_summ_view.xml",
         "views/email_temp_view.xml",
     ],
-    "description": """
-    Module for Hotel/Resort/Property management. You can manage:
-    * Guest Reservation
-    * Group Reservartion
-      Different reports are also provided, mainly for hotel statistics.
-    """,
     'js': ["static/src/js/hotel_room_summary.js", ],
     'qweb': ['static/src/xml/hotel_room_summary.xml'],
     'css': ["static/src/css/room_summary.css"],

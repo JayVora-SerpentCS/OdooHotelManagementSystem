@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 #############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -651,11 +651,11 @@ class HotelFolio(models.Model):
         for sale in self:
             for pick in sale.picking_ids:
                 workflow.trg_validate(self._uid, 'stock.picking', pick.id,
-                                        'button_cancel', self._cr)
+                                      'button_cancel', self._cr)
             for invoice in sale.invoice_ids:
                 workflow.trg_validate(self._uid, 'account.invoice',
-                                        invoice.id, 'invoice_cancel',
-                                        self._cr)
+                                      invoice.id, 'invoice_cancel',
+                                      self._cr)
                 sale.write({'state': 'cancel'})
 #            for rec in sale.folio_pos_order_ids:
 #                    rec.write({'state': 'cancel'})
@@ -971,7 +971,7 @@ class HotelFolioLine(models.Model):
         res = self.write({'state': 'done'})
         for line in self:
             workflow.trg_write(self._uid, 'sale.order',
-                                 line.order_line_id.order_id.id, self._cr)
+                               line.order_line_id.order_id.id, self._cr)
         return res
 
     @api.one
