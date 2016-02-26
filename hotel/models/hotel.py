@@ -20,7 +20,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 #############################################################################
-from openerp.exceptions import except_orm, UserError, ValidationError
+from openerp.exceptions import except_orm, ValidationError
+from openerp.exceptions import Warning as UserError
 from openerp.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
 from openerp import models, fields, api, _
 from openerp import workflow
