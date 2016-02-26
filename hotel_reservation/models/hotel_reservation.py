@@ -29,7 +29,7 @@ import datetime
 import time
 
 
-class hotel_folio(models.Model):
+class HotelFolio(models.Model):
 
     _inherit = 'hotel.folio'
     _order = 'reservation_id desc'
@@ -44,7 +44,7 @@ class hotel_folio(models.Model):
         @param self: The object pointer
         @param vals: dictionary of fields value.
         """
-        folio_write = super(hotel_folio, self).write(vals)
+        folio_write = super(HotelFolio, self).write(vals)
         reservation_line_obj = self.env['hotel.room.reservation.line']
         for folio_obj in self:
             if folio_obj.reservation_id:
@@ -66,7 +66,7 @@ class hotel_folio(models.Model):
         return folio_write
 
 
-class hotel_reservation(models.Model):
+class HotelReservation(models.Model):
 
     _name = "hotel.reservation"
     _rec_name = "reservation_no"
@@ -143,7 +143,7 @@ class hotel_reservation(models.Model):
             if reserv_rec.state != 'draft':
                 raise ValidationError(_('You can not delete Reservation in %s\
                 state.') % (reserv_rec.state))
-        return super(hotel_reservation, self).unlink()
+        return super(HotelReservation, self).unlink()
 
     @api.constrains('reservation_line', 'adults', 'children')
     def check_reservation_rooms(self):
@@ -287,12 +287,14 @@ class hotel_reservation(models.Model):
         @param self: The object pointer
         @return: cancel record set for hotel room reservation line.
         """
+        room_res_line_obj = self.env['hotel.room.reservation.line']
+        hotel_res_line_obj = self.env['hotel_reservation.line']
         self.write({'state': 'cancel'})
-        room_reservation_line = self.env['hotel.room.reservation.line'].\
-        search([('reservation_id', 'in', self.ids)])
+        room_reservation_line = room_res_line_obj.search([('reservation_id',
+                                                           'in', self.ids)])
         room_reservation_line.write({'state': 'unassigned'})
-        reservation_lines = self.env['hotel_reservation.line'].\
-        search([('line_id', 'in', self.ids)])
+        reservation_lines = hotel_res_line_obj.search([('line_id',
+                                                        'in', self.ids)])
         for reservation_line in reservation_lines:
             reservation_line.reserve.write({'isroom': True,
                                             'status': 'available'})
@@ -479,10 +481,10 @@ class hotel_reservation(models.Model):
             self._context = {}
         vals['reservation_no'] = self.env['ir.sequence'
                                           ].get('hotel.reservation')
-        return super(hotel_reservation, self).create(vals)
+        return super(HotelReservation, self).create(vals)
 
 
-class hotel_reservation_line(models.Model):
+class HotelReservationLine(models.Model):
 
     _name = "hotel_reservation.line"
     _description = "Reservation Line"
@@ -546,10 +548,10 @@ class hotel_reservation_line(models.Model):
                 if myobj.ids:
                     rec.write({'isroom': True, 'status': 'available'})
                     myobj.unlink()
-        return super(hotel_reservation_line, self).unlink()
+        return super(HotelReservationLine, self).unlink()
 
 
-class hotel_room_reservation_line(models.Model):
+class HotelRoomReservationLine(models.Model):
 
     _name = 'hotel.room.reservation.line'
     _description = 'Hotel Room Reservation'
@@ -564,10 +566,8 @@ class hotel_room_reservation_line(models.Model):
                                      string='Reservation')
     status = fields.Selection(string='state', related='reservation_id.state')
 
-hotel_room_reservation_line()
 
-
-class hotel_room(models.Model):
+class HotelRoom(models.Model):
 
     _inherit = 'hotel.room'
     _description = 'Hotel Room'
@@ -617,7 +617,7 @@ class hotel_room(models.Model):
         return True
 
 
-class room_reservation_summary(models.Model):
+class RoomReservationSummary(models.Model):
 
     _name = 'room.reservation.summary'
     _description = 'Room reservation summary'
@@ -637,7 +637,7 @@ class room_reservation_summary(models.Model):
         """
         if self._context is None:
             self._context = {}
-        res = super(room_reservation_summary, self).default_get(fields)
+        res = super(RoomReservationSummary, self).default_get(fields)
         if not self.date_from and self.date_to:
             date_today = datetime.datetime.today()
             first_day = datetime.datetime(date_today.year,
@@ -745,7 +745,7 @@ class room_reservation_summary(models.Model):
         return res
 
 
-class quick_room_reservation(models.TransientModel):
+class QuickRoomReservation(models.TransientModel):
     _name = 'quick.room.reservation'
     _description = 'Quick Room Reservation'
 
@@ -810,7 +810,7 @@ class quick_room_reservation(models.TransientModel):
         """
         if self._context is None:
             self._context = {}
-        res = super(quick_room_reservation, self).default_get(fields)
+        res = super(QuickRoomReservation, self).default_get(fields)
         if self._context:
             keys = self._context.keys()
             if 'date' in keys:

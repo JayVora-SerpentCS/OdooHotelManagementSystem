@@ -24,7 +24,7 @@
 from openerp import models, fields, api
 
 
-class wizard_hotel_restaurant(models.TransientModel):
+class WizardHotelRestaurant(models.TransientModel):
 
     _name = 'wizard.hotel.restaurant'
 
@@ -43,10 +43,8 @@ class wizard_hotel_restaurant(models.TransientModel):
                                      'hotel_restaurant.report_res_table',
                                      data=data)
 
-wizard_hotel_restaurant()
 
-
-class folio_rest_reservation(models.TransientModel):
+class FolioRestReservation(models.TransientModel):
     _name = 'folio.rest.reservation'
     _rec_name = 'date_start'
 
@@ -77,8 +75,3 @@ class folio_rest_reservation(models.TransientModel):
                         ].get_action(self,
                                      'hotel_restaurant.report_reserv_order',
                                      data=data)
-
-
-folio_rest_reservation()
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

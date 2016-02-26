@@ -28,7 +28,7 @@ AVAILABLE_STATES = [
     ('done', 'Done')]
 
 
-class report_hotel_reservation_status(models.Model):
+class ReportHotelReservationStatus(models.Model):
 
     _name = "report.hotel.reservation.status"
     _description = "Reservation By State"
@@ -57,5 +57,3 @@ class report_hotel_reservation_status(models.Model):
                     hotel_reservation c
                 group by c.state,c.reservation_no
             )""")
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

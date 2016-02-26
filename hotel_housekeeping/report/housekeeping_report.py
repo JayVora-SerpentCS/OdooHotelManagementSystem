@@ -28,10 +28,10 @@ from datetime import datetime
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 
-class activity_report(report_sxw.rml_parse):
+class ActivityReport(report_sxw.rml_parse):
 
     def __init__(self, cr, uid, name, context):
-        super(activity_report, self).__init__(cr, uid, name, context)
+        super(ActivityReport, self).__init__(cr, uid, name, context)
         self.localcontext.update({
             'time': time,
             'get_room_no': self.get_room_no,
@@ -76,6 +76,4 @@ class report_lunchorder(models.AbstractModel):
     _name = 'report.hotel_housekeeping.report_housekeeping'
     _inherit = 'report.abstract_report'
     _template = 'hotel_housekeeping.report_housekeeping'
-    _wrapped_report_class = activity_report
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+    _wrapped_report_class = ActivityReport
