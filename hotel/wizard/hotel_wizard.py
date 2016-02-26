@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 #############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -24,7 +24,7 @@
 from openerp import models, fields, api
 
 
-class folio_report_wizard(models.TransientModel):
+class FolioReportWizard(models.TransientModel):
     _name = 'folio.report.wizard'
     _rec_name = 'date_start'
 
@@ -40,5 +40,3 @@ class folio_report_wizard(models.TransientModel):
         }
         return self.env['report'].get_action(self, 'hotel.report_hotel_folio',
                                              data=data)
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 #############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -28,10 +28,10 @@ from datetime import datetime
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 
-class activity_report(report_sxw.rml_parse):
+class ActivityReport(report_sxw.rml_parse):
 
     def __init__(self, cr, uid, name, context):
-        super(activity_report, self).__init__(cr, uid, name, context)
+        super(ActivityReport, self).__init__(cr, uid, name, context)
         self.localcontext.update({
             'time': time,
             'get_room_no': self.get_room_no,
@@ -56,7 +56,8 @@ class activity_report(report_sxw.rml_parse):
                 diff = ee_date - ss_date
                 act_val.update({'current_date': activity.today_date,
                                 'activity': (activity.activity_name and
-                                             activity.activity_name.name or ''),
+                                             activity.activity_name.name or
+                                             ''),
                                 'login': (activity.housekeeper and
                                           activity.housekeeper.name or ''),
                                 'clean_start_time': activity.clean_start_time,
@@ -70,11 +71,9 @@ class activity_report(report_sxw.rml_parse):
                                                   room_no).name
 
 
-class report_lunchorder(models.AbstractModel):
+class ReportLunchorder(models.AbstractModel):
 
     _name = 'report.hotel_housekeeping.report_housekeeping'
     _inherit = 'report.abstract_report'
     _template = 'hotel_housekeeping.report_housekeeping'
-    _wrapped_report_class = activity_report
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+    _wrapped_report_class = ActivityReport

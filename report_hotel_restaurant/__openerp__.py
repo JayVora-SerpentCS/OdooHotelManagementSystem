@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 #############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -24,7 +24,10 @@
 {
     "name": "Restaurant Management - Reporting",
     "version": "0.03",
-    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
+    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
+    Odoo Community Association (OCA)",
+    "images": [],
+    "license": "",
     "website": "http://www.serpentcs.com, http://www.openerp.com",
     "depends": ["hotel_restaurant", "report_hotel_reservation"],
     "category": "Generic Modules/Hotel Restaurant",
@@ -32,13 +35,6 @@
         "security/ir.model.access.csv",
         "views/report_hotel_restaurant_view.xml",
     ],
-    "description": """
-    Module shows the status of restaurant reservation
-     * Current status of reserved tables
-     * List status of tables as draft or done state
-    """,
     'installable': True,
     'auto_install': False,
 }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

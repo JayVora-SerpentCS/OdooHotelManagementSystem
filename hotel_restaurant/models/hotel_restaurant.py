@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 #############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -23,11 +23,12 @@
 
 from openerp.exceptions import except_orm, ValidationError
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from openerp import models, fields, api, _, netsvc
+from openerp import models, fields, api, _
+from openerp import workflow
 import time
 
 
-class hotel_folio(models.Model):
+class HotelFolio(models.Model):
 
     _inherit = 'hotel.folio'
 
@@ -41,21 +42,21 @@ class hotel_folio(models.Model):
                                                   'reserves_id', 'Orders')
 
 
-class product_category(models.Model):
+class ProductCategory(models.Model):
 
     _inherit = "product.category"
 
     ismenutype = fields.Boolean('Is Menu Type')
 
 
-class product_product(models.Model):
+class ProductProduct(models.Model):
 
     _inherit = "product.product"
 
     ismenucard = fields.Boolean('Is Menucard')
 
 
-class hotel_menucard_type(models.Model):
+class HotelMenucardType(models.Model):
 
     _name = 'hotel.menucard.type'
     _description = 'Amenities Type'
@@ -64,7 +65,7 @@ class hotel_menucard_type(models.Model):
                               delegate=True, ondelete='cascade')
 
 
-class hotel_menucard(models.Model):
+class HotelMenucard(models.Model):
 
     _name = 'hotel.menucard'
     _description = 'Hotel Menucard'
@@ -76,7 +77,7 @@ class hotel_menucard(models.Model):
                           "for the product, limited to 1024x1024px.")
 
 
-class hotel_restaurant_tables(models.Model):
+class HotelRestaurantTables(models.Model):
 
     _name = "hotel.restaurant.tables"
     _description = "Includes Hotel Restaurant Table"
@@ -85,7 +86,7 @@ class hotel_restaurant_tables(models.Model):
     capacity = fields.Integer('Capacity')
 
 
-class hotel_restaurant_reservation(models.Model):
+class HotelRestaurantReservation(models.Model):
 
     @api.multi
     def create_order(self):
@@ -149,9 +150,8 @@ class hotel_restaurant_reservation(models.Model):
         @param self: object pointer
         """
         self.write({'state': 'draft'})
-        wf_service = netsvc.LocalService('workflow')
-        for id in self.ids:
-            wf_service.trg_create(self._uid, self._name, self.id, self._cr)
+        for res_id in self.ids:
+            workflow.trg_create(self._uid, self._name, res_id, self._cr)
         return True
 
     @api.multi
@@ -252,7 +252,7 @@ class hotel_restaurant_reservation(models.Model):
             self._context = {}
         vals['reservation_id'
              ] = self.env['ir.sequence'].get('hotel.restaurant.reservation')
-        return super(hotel_restaurant_reservation, self).create(vals)
+        return super(HotelRestaurantReservation, self).create(vals)
 
     @api.constrains('start_date', 'end_date')
     def check_start_dates(self):
@@ -267,7 +267,7 @@ class hotel_restaurant_reservation(models.Model):
             than the End Date!'))
 
 
-class hotel_restaurant_kitchen_order_tickets(models.Model):
+class HotelRestaurantKitchenOrderTickets(models.Model):
 
     _name = "hotel.restaurant.kitchen.order.tickets"
     _description = "Includes Hotel Restaurant Order"
@@ -285,7 +285,7 @@ class hotel_restaurant_kitchen_order_tickets(models.Model):
                                help="Kitchen order list")
 
 
-class hotel_restaurant_order(models.Model):
+class HotelRestaurantOrder(models.Model):
 
     @api.multi
     @api.depends('order_list')
@@ -435,7 +435,7 @@ class hotel_restaurant_order(models.Model):
             self._context = {}
         vals['order_no'] = self.env['ir.sequence'
                                     ].get('hotel.restaurant.order')
-        return super(hotel_restaurant_order, self).create(vals)
+        return super(HotelRestaurantOrder, self).create(vals)
 
     @api.multi
     def generate_kot_update(self):
@@ -504,7 +504,7 @@ class hotel_restaurant_order(models.Model):
         return True
 
 
-class hotel_reservation_order(models.Model):
+class HotelReservationOrder(models.Model):
 
     @api.multi
     @api.depends('order_list')
@@ -681,10 +681,10 @@ class hotel_reservation_order(models.Model):
             self._context = {}
         vals['order_number'] = self.env['ir.sequence'
                                         ].get('hotel.reservation.order')
-        return super(hotel_reservation_order, self).create(vals)
+        return super(HotelReservationOrder, self).create(vals)
 
 
-class hotel_restaurant_order_list(models.Model):
+class HotelRestaurantOrderList(models.Model):
 
     @api.one
     @api.depends('item_qty', 'item_rate')
@@ -719,5 +719,3 @@ class hotel_restaurant_order_list(models.Model):
     item_rate = fields.Float('Rate', size=64)
     price_subtotal = fields.Float(compute='_sub_total', method=True,
                                   string='Subtotal')
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
