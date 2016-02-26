@@ -493,6 +493,7 @@ class HotelRestaurantOrder(models.Model):
                         values = {'order_id': hotelfolio,
                                   'name': order1.name.name,
                                   'product_id': order1.name.product_id.id,
+                                  'product_uom': order1.name.uom_id.id,
                                   'product_uom_qty': order1.item_qty,
                                   'price_unit': order1.item_rate,
                                   'price_subtotal': order1.price_subtotal,
