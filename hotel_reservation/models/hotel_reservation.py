@@ -288,11 +288,14 @@ class hotel_reservation(models.Model):
         @return: cancel record set for hotel room reservation line.
         """
         self.write({'state': 'cancel'})
-        room_reservation_line = self.env['hotel.room.reservation.line'].search([('reservation_id', 'in', self.ids)])
+        room_reservation_line = self.env['hotel.room.reservation.line'].\
+        search([('reservation_id', 'in', self.ids)])
         room_reservation_line.write({'state': 'unassigned'})
-        reservation_lines = self.env['hotel_reservation.line'].search([('line_id', 'in', self.ids)])
+        reservation_lines = self.env['hotel_reservation.line'].\
+        search([('line_id', 'in', self.ids)])
         for reservation_line in reservation_lines:
-            reservation_line.reserve.write({'isroom': True, 'status': 'available'})
+            reservation_line.reserve.write({'isroom': True,
+                                            'status': 'available'})
         return True
 
     @api.multi
@@ -722,7 +725,7 @@ class room_reservation_summary(models.Model):
                                               ([('id', 'in', reservline_ids),
                                                 ('check_in', '<=', chk_date),
                                                 ('check_out', '>=', chk_date),
-                                                ('status','!=','cancel')
+                                                ('status', '!=', 'cancel')
                                                 ]))
                             if reservline_ids:
                                 room_list_stats.append({'state': 'Reserved',

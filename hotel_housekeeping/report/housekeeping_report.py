@@ -56,7 +56,8 @@ class activity_report(report_sxw.rml_parse):
                 diff = ee_date - ss_date
                 act_val.update({'current_date': activity.today_date,
                                 'activity': (activity.activity_name and
-                                             activity.activity_name.name or ''),
+                                             activity.activity_name.name or
+                                             ''),
                                 'login': (activity.housekeeper and
                                           activity.housekeeper.name or ''),
                                 'clean_start_time': activity.clean_start_time,
