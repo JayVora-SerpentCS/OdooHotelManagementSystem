@@ -72,7 +72,7 @@ class FolioReport1(report_sxw.rml_parse):
         return self.temp
 
 
-class report_lunchorder1(models.AbstractModel):
+class ReportLunchorder1(models.AbstractModel):
     _name = 'report.hotel_pos_restaurant.report_folio_pos'
     _inherit = 'report.abstract_report'
     _template = 'hotel_pos_restaurant.report_folio_pos'

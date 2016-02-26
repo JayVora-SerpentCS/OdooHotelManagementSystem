@@ -71,7 +71,7 @@ class ActivityReport(report_sxw.rml_parse):
                                                   room_no).name
 
 
-class report_lunchorder(models.AbstractModel):
+class ReportLunchorder(models.AbstractModel):
 
     _name = 'report.hotel_housekeeping.report_housekeeping'
     _inherit = 'report.abstract_report'
