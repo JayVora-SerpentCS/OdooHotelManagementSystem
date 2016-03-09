@@ -417,16 +417,13 @@ class HotelReservation(models.Model):
                     prod = r.product_id.id
                     partner = reservation.partner_id.id
                     price_list = reservation.pricelist_id.id
-                    prod_val = self.env['hotel.folio.line'].\
-                               product_id_change(pricelist=price_list,
-                                                 product=prod,
-                                                 qty=0, uom=False,
-                                                 qty_uos=0, uos=False,
-                                                 name='',
-                                                 partner_id=partner,
-                                                 lang=False,
-                                                 update_tax=True,
-                                                 date_order=False)
+                    folio_line_obj = self.env['hotel.folio.line']
+                    prod_val = folio_line_obj.product_id_change(
+                        pricelist=price_list, product=prod,
+                        qty=0, uom=False, qty_uos=0, uos=False,
+                        name='', partner_id=partner, lang=False,
+                        update_tax=True, date_order=False
+                    )
                     prod_uom = prod_val['value'].get('product_uom', False)
                     price_unit = prod_val['value'].get('price_unit', False)
                     folio_lines.append((0, 0, {
@@ -436,8 +433,7 @@ class HotelReservation(models.Model):
                         'name': reservation['reservation_no'],
                         'product_uom': prod_uom,
                         'price_unit': price_unit,
-                        'product_uom_qty': ((date_a - date_b).days) + 1
-                                    }))
+                        'product_uom_qty': ((date_a - date_b).days) + 1}))
                     res_obj = room_obj.browse([r.id])
                     res_obj.write({'status': 'occupied', 'isroom': False})
             folio_vals.update({'room_lines': folio_lines})
