@@ -416,29 +416,28 @@ class HotelReservation(models.Model):
                 for r in line.reserve:
                     prod = r.product_id.id
                     partner = reservation.partner_id.id
-                    prod_change_val = self.env['hotel.folio.line'].\
-                                      product_id_change(pricelist=reservation.\
-                                                        pricelist_id.id,
-                                                        product=prod,
-                                                        qty=0, uom=False,
-                                                        qty_uos=0, uos=False,
-                                                        name='',
-                                                        partner_id=partner,
-                                                        lang=False,
-                                                        update_tax=True,
-                                                        date_order=False)
-
+                    price_list = reservation.pricelist_id.id
+                    prod_val = self.env['hotel.folio.line'].\
+                               product_id_change(pricelist=price_list,
+                                                 product=prod,
+                                                 qty=0, uom=False,
+                                                 qty_uos=0, uos=False,
+                                                 name='',
+                                                 partner_id=partner,
+                                                 lang=False,
+                                                 update_tax=True,
+                                                 date_order=False)
+                    prod_uom = prod_val['value'].get('product_uom', False)
+                    price_unit = prod_val['value'].get('price_unit', False)
                     folio_lines.append((0, 0, {
                         'checkin_date': checkin_date,
                         'checkout_date': checkout_date,
                         'product_id': r.product_id and r.product_id.id,
                         'name': reservation['reservation_no'],
-                        'product_uom': prod_change_val['value'].\
-                                       get('product_uom', False),
-                        'price_unit': prod_change_val['value'].\
-                                      get('price_unit', False),
+                        'product_uom': prod_uom,
+                        'price_unit': price_unit,
                         'product_uom_qty': ((date_a - date_b).days) + 1
-                    }))
+                                    }))
                     res_obj = room_obj.browse([r.id])
                     res_obj.write({'status': 'occupied', 'isroom': False})
             folio_vals.update({'room_lines': folio_lines})
