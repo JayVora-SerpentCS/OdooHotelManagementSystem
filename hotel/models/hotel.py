@@ -174,6 +174,15 @@ class HotelRoom(models.Model):
     room_line_ids = fields.One2many('folio.room.line', 'room_id',
                                     string='Room Reservation Line')
 
+    @api.model
+    def create(self, vals):
+        uom_obj = self.env['product.uom']
+        vals.update({'type': 'service'})
+        uom_rec = uom_obj.search([('name', 'ilike', 'Hour(s)')], limit=1)
+        if uom_rec:
+            vals.update({'uom_id': uom_rec.id, 'uom_po_id': uom_rec.id})
+        return super(HotelRoom, self).create(vals)
+
     @api.onchange('isroom')
     def isroom_change(self):
         '''
@@ -642,6 +651,42 @@ class HotelFolio(models.Model):
         return res
 
     @api.multi
+    def action_invoice_end(self):
+        '''
+        @param self: object pointer
+        '''
+        sale_order_obj = self.env['sale.order']
+        res = False
+        for o in self:
+            sale_obj = sale_order_obj.browse([o.order_id.id])
+            res = sale_obj.action_invoice_end()
+        return res
+
+    @api.multi
+    def procurement_needed(self):
+        '''
+        @param self: object pointer
+        '''
+        sale_order_obj = self.env['sale.order']
+        res = False
+        for o in self:
+            sale_obj = sale_order_obj.browse([o.order_id.id])
+            res = sale_obj.procurement_needed()
+        return res
+
+    @api.multi
+    def action_done(self):
+        '''
+        @param self: object pointer
+        '''
+        sale_order_obj = self.env['sale.order']
+        res = False
+        for o in self:
+            sale_obj = sale_order_obj.browse([o.order_id.id])
+            res = sale_obj.action_done()
+        return res
+
+    @api.multi
     def action_cancel(self):
         '''
         @param self: object pointer
@@ -663,6 +708,18 @@ class HotelFolio(models.Model):
         return rv
 
     @api.multi
+    def action_button_confirm(self):
+        '''
+        @param self: object pointer
+        '''
+        sale_order_obj = self.env['sale.order']
+        res = False
+        for o in self:
+            sale_obj = sale_order_obj.browse([o.order_id.id])
+            res = sale_obj.action_button_confirm()
+        return res
+
+    @api.multi
     def action_wait(self):
         '''
         @param self: object pointer
@@ -672,10 +729,6 @@ class HotelFolio(models.Model):
         for o in self:
             sale_obj = sale_order_obj.browse([o.order_id.id])
             res = sale_obj.action_wait()
-            if (o.order_policy == 'manual') and (not o.invoice_ids):
-                o.write({'state': 'manual'})
-            else:
-                o.write({'state': 'progress'})
         return res
 
     @api.multi
@@ -1348,7 +1401,7 @@ class AccountInvoice(models.Model):
         '''
         pos_order_obj = self.env['pos.order']
         res = super(AccountInvoice, self).confirm_paid()
-        pos_ids = pos_order_obj.search([('invoice_id', '=', self._ids)])
+        pos_ids = pos_order_obj.search([('invoice_id', 'in', self._ids)])
         if pos_ids.ids:
             for pos_id in pos_ids:
                 pos_id.write({'state': 'done'})
