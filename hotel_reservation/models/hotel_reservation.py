@@ -414,13 +414,29 @@ class HotelReservation(models.Model):
                                       DEFAULT_SERVER_DATETIME_FORMAT)[:5]))
             for line in reservation.reservation_line:
                 for r in line.reserve:
+                    prod = r.product_id.id
+                    partner = reservation.partner_id.id
+                    prod_change_val = self.env['hotel.folio.line'].\
+                                      product_id_change(pricelist=reservation.\
+                                                        pricelist_id.id,
+                                                        product=prod,
+                                                        qty=0, uom=False,
+                                                        qty_uos=0, uos=False,
+                                                        name='',
+                                                        partner_id=partner,
+                                                        lang=False,
+                                                        update_tax=True,
+                                                        date_order=False)
+
                     folio_lines.append((0, 0, {
                         'checkin_date': checkin_date,
                         'checkout_date': checkout_date,
                         'product_id': r.product_id and r.product_id.id,
                         'name': reservation['reservation_no'],
-                        'product_uom': r['uom_id'].id,
-                        'price_unit': r['lst_price'],
+                        'product_uom': prod_change_val['value'].\
+                                       get('product_uom', False),
+                        'price_unit': prod_change_val['value'].\
+                                      get('price_unit', False),
                         'product_uom_qty': ((date_a - date_b).days) + 1
                     }))
                     res_obj = room_obj.browse([r.id])

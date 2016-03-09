@@ -158,6 +158,7 @@
         <record id="hotel_service_6" model="hotel.services">
             <field name="name">Internet</field>
             <field name="isservice">1</field>
+            <field name="type">service</field>
             <field name="categ_id" search="[('isservicetype','=',True), ('name', '=', 'Fixed')]"/> 
             <field name="list_price">200.00</field>
             <field name="available_in_pos">0</field>
@@ -165,6 +166,7 @@
         <record id="hotel_service_0" model="hotel.services">
             <field name="name">Taxi</field>
             <field name="isservice">1</field>
+            <field name="type">service</field>
             <field name="categ_id" search="[('isservicetype','=',True), ('name', '=', 'Variable')]"/>
             <field name="list_price">500.00</field>
             <field name="available_in_pos">0</field>
@@ -172,6 +174,7 @@
         <record id="hotel_service_1" model="hotel.services">
             <field name="name">Laundry</field>
             <field name="isservice">1</field>
+            <field name="type">service</field>
             <field name="categ_id" search="[('isservicetype','=',True), ('name', '=', 'Fixed')]"/> 
             <field name="list_price">150.00</field>
             <field name="available_in_pos">0</field>
