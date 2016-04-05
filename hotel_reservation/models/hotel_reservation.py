@@ -504,7 +504,7 @@ class HotelReservationLine(models.Model):
     line_id = fields.Many2one('hotel.reservation')
     reserve = fields.Many2many('hotel.room',
                                'hotel_reservation_line_room_rel',
-                               'room_id', 'hotel_reservation_line_id',
+                               'hotel_reservation_line_id', 'room_id',
                                domain="[('isroom','=',True),\
                                ('categ_id','=',categ_id)]")
     categ_id = fields.Many2one('product.category', 'Room Type',
