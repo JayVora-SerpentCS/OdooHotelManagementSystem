@@ -911,7 +911,7 @@ class HotelFolioLine(models.Model):
                                      ('room_id', '=', room_obj.id)]
                         for room_line in room_obj.room_line_ids:
                             folio_room_line_myobj = fr_obj.search(folio_arg)
-                            if folio_room_line_myobj.id:
+                            if folio_room_line_myobj:
                                 folio_room_line_myobj.unlink()
                                 room_obj.write({'isroom': True,
                                                 'status': 'available'})

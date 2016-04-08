@@ -414,15 +414,26 @@ class HotelReservation(models.Model):
                                       DEFAULT_SERVER_DATETIME_FORMAT)[:5]))
             for line in reservation.reservation_line:
                 for r in line.reserve:
+                    prod = r.product_id.id
+                    partner = reservation.partner_id.id
+                    price_list = reservation.pricelist_id.id
+                    folio_line_obj = self.env['hotel.folio.line']
+                    prod_val = folio_line_obj.product_id_change(
+                        pricelist=price_list, product=prod,
+                        qty=0, uom=False, qty_uos=0, uos=False,
+                        name='', partner_id=partner, lang=False,
+                        update_tax=True, date_order=False
+                    )
+                    prod_uom = prod_val['value'].get('product_uom', False)
+                    price_unit = prod_val['value'].get('price_unit', False)
                     folio_lines.append((0, 0, {
                         'checkin_date': checkin_date,
                         'checkout_date': checkout_date,
                         'product_id': r.product_id and r.product_id.id,
                         'name': reservation['reservation_no'],
-                        'product_uom': r['uom_id'].id,
-                        'price_unit': r['lst_price'],
-                        'product_uom_qty': ((date_a - date_b).days) + 1
-                    }))
+                        'product_uom': prod_uom,
+                        'price_unit': price_unit,
+                        'product_uom_qty': ((date_a - date_b).days) + 1}))
                     res_obj = room_obj.browse([r.id])
                     res_obj.write({'status': 'occupied', 'isroom': False})
             folio_vals.update({'room_lines': folio_lines})
@@ -493,7 +504,7 @@ class HotelReservationLine(models.Model):
     line_id = fields.Many2one('hotel.reservation')
     reserve = fields.Many2many('hotel.room',
                                'hotel_reservation_line_room_rel',
-                               'room_id', 'hotel_reservation_line_id',
+                               'hotel_reservation_line_id', 'room_id',
                                domain="[('isroom','=',True),\
                                ('categ_id','=',categ_id)]")
     categ_id = fields.Many2one('product.category', 'Room Type',
