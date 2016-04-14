@@ -46,23 +46,23 @@ class HotelFolio(models.Model):
         """
         folio_write = super(HotelFolio, self).write(vals)
         reservation_line_obj = self.env['hotel.room.reservation.line']
+        room_obj = self.env['hotel.room']
+
         for folio_obj in self:
-            if folio_obj.reservation_id:
-                for reservation in folio_obj.reservation_id:
-                    reservation_obj = (reservation_line_obj.search
-                                       ([('reservation_id', '=',
-                                          reservation.id)]))
-                    if len(reservation_obj) == 1:
-                        for line_id in reservation.reservation_line:
-                            line_id = line_id.reserve
-                            for room_id in line_id:
-                                vals = {'room_id': room_id.id,
-                                        'check_in': folio_obj.checkin_date,
-                                        'check_out': folio_obj.checkout_date,
-                                        'state': 'assigned',
-                                        'reservation_id': reservation.id,
-                                        }
-                                reservation_obj.write(vals)
+            resv_id = folio_obj.reservation_id.id
+            for fol_rm_line in folio_obj.room_lines:
+                prod_name = fol_rm_line.product_id.name
+                room_rec = room_obj.search([('name', '=', prod_name)], limit=1)
+                room_vals = {
+                             'check_in': fol_rm_line.checkin_date,
+                             'check_out': fol_rm_line.checkout_date,
+                             }
+                if room_rec:
+                    resev_room_line = (reservation_line_obj.search
+                                       ([('room_id', '=', room_rec.id),
+                                         ('reservation_id', '=', resv_id)]))
+                    if resev_room_line:
+                        resev_room_line.write(room_vals)
         return folio_write
 
 
@@ -694,6 +694,7 @@ class RoomReservationSummary(models.Model):
         all_detail = []
         room_obj = self.env['hotel.room']
         reservation_line_obj = self.env['hotel.room.reservation.line']
+        folio_room_line_obj = self.env['folio.room.line']
         date_range_list = []
         main_header = []
         summary_header_list = ['Rooms']
@@ -723,31 +724,36 @@ class RoomReservationSummary(models.Model):
                 room_detail = {}
                 room_list_stats = []
                 room_detail.update({'name': room.name or ''})
-                if not room.room_reservation_line_ids:
+                if not room.room_reservation_line_ids and \
+                not room.room_line_ids:
                     for chk_date in date_range_list:
                         room_list_stats.append({'state': 'Free',
                                                 'date': chk_date})
                 else:
                     for chk_date in date_range_list:
-                        for room_res_line in room.room_reservation_line_ids:
-                            reservline_ids = [i.ids for i in
-                                              room.room_reservation_line_ids]
-                            reservline_ids = (reservation_line_obj.search
-                                              ([('id', 'in', reservline_ids),
-                                                ('check_in', '<=', chk_date),
-                                                ('check_out', '>=', chk_date),
-                                                ('status', '!=', 'cancel')
-                                                ]))
-                            if reservline_ids:
-                                room_list_stats.append({'state': 'Reserved',
-                                                        'date': chk_date,
-                                                        'room_id': room.id})
-                                break
-                            else:
-                                room_list_stats.append({'state': 'Free',
-                                                        'date': chk_date,
-                                                        'room_id': room.id})
-                                break
+                        reserline_ids = room.room_reservation_line_ids.ids
+                        reservline_ids = (reservation_line_obj.search
+                                          ([('id', 'in', reserline_ids),
+                                            ('check_in', '<=', chk_date),
+                                            ('check_out', '>=', chk_date),
+                                            ('status', '!=', 'cancel')
+                                            ]))
+                        fol_room_line_ids = room.room_line_ids.ids
+                        folio_resrv_ids = (folio_room_line_obj.search
+                                          ([('id', 'in', fol_room_line_ids),
+                                            ('check_in', '<=', chk_date),
+                                            ('check_out', '>=', chk_date),
+                                            ('status', '!=', 'cancel')
+                                            ]))
+                        if reservline_ids or folio_resrv_ids:
+                            room_list_stats.append({'state': 'Reserved',
+                                                    'date': chk_date,
+                                                    'room_id': room.id})
+                        else:
+                            room_list_stats.append({'state': 'Free',
+                                                    'date': chk_date,
+                                                    'room_id': room.id})
+
                 room_detail.update({'value': room_list_stats})
                 all_room_detail.append(room_detail)
             main_header.append({'header': summary_header_list})
