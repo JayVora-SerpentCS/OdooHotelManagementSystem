@@ -508,6 +508,7 @@ class HotelFolio(models.Model):
         @param vals: dictionary of fields value.
         """
         folio_room_line_obj = self.env['folio.room.line']
+        folio_line_obj = self.env['hotel.folio.line']
 #        reservation_line_obj = self.env['hotel.room.reservation.line']
         product_obj = self.env['product.product']
         h_room_obj = self.env['hotel.room']
@@ -537,14 +538,19 @@ class HotelFolio(models.Model):
                 for rom in room_list_obj:
                     room_obj = h_room_obj.search([('name', '=', rom.name)])
                     room_obj.write({'isroom': False})
-                    room_vals = {'room_id': room_obj.id,
-                                 'check_in': folio_obj.checkin_date,
-                                 'check_out': folio_obj.checkout_date,
-                                 'folio_id': folio_obj.id,
-                                 }
-                    folio_romline_rec = (folio_room_line_obj.search
-                                         ([('folio_id', '=', folio_obj.id)]))
-                    folio_romline_rec.write(room_vals)
+                    fol_line_rec = (folio_line_obj.search
+                                    ([('folio_id', '=', folio_obj.id),
+                                      ('product_id.name', '=', room_obj.name)],
+                                     limit=1))
+                    if fol_line_rec:
+                        room_vals = {'check_in': fol_line_rec.checkin_date,
+                                     'check_out': fol_line_rec.checkout_date,
+                                     }
+                        folio_romline_rec = (folio_room_line_obj.search
+                                             ([('folio_id', '=', folio_obj.id),
+                                               ('room_id', '=', room_obj.id)]))
+                        if folio_romline_rec:
+                            folio_romline_rec.write(room_vals)
 #            if folio_obj.reservation_id:
 #                for reservation in folio_obj.reservation_id:
 #                    reservation_obj = (reservation_line_obj.search
