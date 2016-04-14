@@ -53,8 +53,7 @@ class HotelFolio(models.Model):
             for fol_rm_line in folio_obj.room_lines:
                 prod_name = fol_rm_line.product_id.name
                 room_rec = room_obj.search([('name', '=', prod_name)], limit=1)
-                room_vals = {
-                             'check_in': fol_rm_line.checkin_date,
+                room_vals = {'check_in': fol_rm_line.checkin_date,
                              'check_out': fol_rm_line.checkout_date,
                              }
                 if room_rec:
@@ -725,7 +724,7 @@ class RoomReservationSummary(models.Model):
                 room_list_stats = []
                 room_detail.update({'name': room.name or ''})
                 if not room.room_reservation_line_ids and \
-                not room.room_line_ids:
+                   not room.room_line_ids:
                     for chk_date in date_range_list:
                         room_list_stats.append({'state': 'Free',
                                                 'date': chk_date})
@@ -740,11 +739,11 @@ class RoomReservationSummary(models.Model):
                                             ]))
                         fol_room_line_ids = room.room_line_ids.ids
                         folio_resrv_ids = (folio_room_line_obj.search
-                                          ([('id', 'in', fol_room_line_ids),
-                                            ('check_in', '<=', chk_date),
-                                            ('check_out', '>=', chk_date),
-                                            ('status', '!=', 'cancel')
-                                            ]))
+                                           ([('id', 'in', fol_room_line_ids),
+                                             ('check_in', '<=', chk_date),
+                                             ('check_out', '>=', chk_date),
+                                             ('status', '!=', 'cancel')
+                                             ]))
                         if reservline_ids or folio_resrv_ids:
                             room_list_stats.append({'state': 'Reserved',
                                                     'date': chk_date,

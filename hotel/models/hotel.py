@@ -543,8 +543,7 @@ class HotelFolio(models.Model):
                                       ('product_id.name', '=', room_obj.name)],
                                      limit=1))
                     if fol_line_rec:
-                        room_vals = {
-                                     'check_in': fol_line_rec.checkin_date,
+                        room_vals = {'check_in': fol_line_rec.checkin_date,
                                      'check_out': fol_line_rec.checkout_date,
                                      }
                         folio_romline_rec = (folio_room_line_obj.search
