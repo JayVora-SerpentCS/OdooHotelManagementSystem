@@ -405,7 +405,8 @@ class HotelFolio(models.Model):
         @param self: object pointer
         @return: raise warning depending on the validation
         '''
-        if self.checkin_date >= self.checkout_date:
+        if self.checkin_date and self.checkout_date:
+            if self.checkin_date >= self.checkout_date:
                 raise ValidationError(_('Check in Date Should be \
                 less than the Check Out Date!'))
         if self.date_order and self.checkin_date:
@@ -976,7 +977,8 @@ class HotelFolioLine(models.Model):
         @param self: object pointer
         @return: raise warning depending on the validation
         '''
-        if self.checkin_date >= self.checkout_date:
+        if self.checkin_date and self.checkout_date:
+            if self.checkin_date >= self.checkout_date:
                 raise ValidationError(_('Check in Date Should be \
                 less than the Check Out Date!'))
         if self.folio_id.date_order and self.checkin_date:
