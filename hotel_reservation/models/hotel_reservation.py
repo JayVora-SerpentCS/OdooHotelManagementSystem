@@ -648,6 +648,13 @@ class RoomReservationSummary(models.Model):
         if self._context is None:
             self._context = {}
         res = super(RoomReservationSummary, self).default_get(fields)
+        # Added default datetime as today and date to as today + 30.
+        from_dt = datetime.date.today()
+        dt_from = from_dt.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        to_dt = from_dt + relativedelta(days=30)
+        dt_to = to_dt.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        res.update({'date_from': dt_from, 'date_to': dt_to})
+
         if not self.date_from and self.date_to:
             date_today = datetime.datetime.today()
             first_day = datetime.datetime(date_today.year,
@@ -747,7 +754,10 @@ class RoomReservationSummary(models.Model):
                         if reservline_ids or folio_resrv_ids:
                             room_list_stats.append({'state': 'Reserved',
                                                     'date': chk_date,
-                                                    'room_id': room.id})
+                                                    'room_id': room.id,
+                                                    'is_draft': 'No',
+                                                    'data_model': '',
+                                                    'data_id': 0})
                         else:
                             room_list_stats.append({'state': 'Free',
                                                     'date': chk_date,
@@ -846,19 +856,20 @@ class QuickRoomReservation(models.TransientModel):
         """
         hotel_res_obj = self.env['hotel.reservation']
         for res in self:
-            (hotel_res_obj.create
-             ({'partner_id': res.partner_id.id,
-               'partner_invoice_id': res.partner_invoice_id.id,
-               'partner_order_id': res.partner_order_id.id,
-               'partner_shipping_id': res.partner_shipping_id.id,
-               'checkin': res.check_in,
-               'checkout': res.check_out,
-               'warehouse_id': res.warehouse_id.id,
-               'pricelist_id': res.pricelist_id.id,
-               'reservation_line': [(0, 0,
-                                     {'reserve': [(6, 0, [res.room_id.id])],
-                                      'name': (res.room_id and
-                                               res.room_id.name or '')
-                                      })]
-               }))
-        return True
+            rec = (hotel_res_obj.create
+                   ({'partner_id': res.partner_id.id,
+                     'partner_invoice_id': res.partner_invoice_id.id,
+                     'partner_order_id': res.partner_order_id.id,
+                     'partner_shipping_id': res.partner_shipping_id.id,
+                     'checkin': res.check_in,
+                     'checkout': res.check_out,
+                     'warehouse_id': res.warehouse_id.id,
+                     'pricelist_id': res.pricelist_id.id,
+                     'reservation_line': [(0, 0,
+                                           {'reserve': [(6, 0,
+                                                         [res.room_id.id])],
+                                            'name': (res.room_id and
+                                                     res.room_id.name or '')
+                                            })]
+                     }))
+        return rec

@@ -3,7 +3,6 @@
     _lt = openerp.web._lt;
     var QWeb = openerp.web.qweb;
     
-    console.log("asdasdasdasdasdas");
     openerp.hotel_reservation.RoomSummary = openerp.web.form.FormWidget.extend(openerp.web.form.ReinitializeWidgetMixin, {
     	
     	display_name: _lt('Form'),
@@ -73,6 +72,10 @@
             return this.load_form(r);
         },
         
+        events: {
+        'click .table_reserved': 'selected_item',
+        },
+        
         load_form: function(data) {
             self.action_manager = new openerp.web.ActionManager(self);
             
@@ -85,7 +88,18 @@
                         context: {"room_id": $(this).attr("data"), 'date': $(this).attr("date")},
                 });
             });
-        
+
+        },
+        selected_item: function (event) {
+        this.do_action({
+                    type: 'ir.actions.act_window',
+                    res_model: $(event.currentTarget).data('model'),
+                    res_id: $(event.currentTarget).data('id'),
+                    views: [[false,'form']],
+                    target: 'current',
+                    context: {},
+                
+              });
         },
        
         renderElement: function() {
@@ -94,6 +108,21 @@
         }     
     });
 
+    openerp.web.FormView.include({
+         can_be_discarded: function() {
+        if (this.$el.is('.oe_form_dirty')) {
+            if (this.model == 'room.reservation.summary') {
+                this.$el.removeClass('oe_form_dirty');
+                return true;
+            }
+            if (!confirm(_t("Warning, the record has been modified, your changes will be discarded.\n\nAre you sure you want to leave this page ?"))) {
+                return false;
+            }
+            this.$el.removeClass('oe_form_dirty');
+        }
+        return true;
+    },
+    });
     openerp.web.form.custom_widgets.add('Room_Reservation', 'openerp.hotel_reservation.RoomSummary');
 };
 
