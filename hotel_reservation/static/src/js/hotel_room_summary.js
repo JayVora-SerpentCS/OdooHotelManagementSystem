@@ -74,6 +74,7 @@
         
         events: {
         'click .table_reserved': 'selected_item',
+        'click .table_reserved1': 'selected_item1',
         },
         
         load_form: function(data) {
@@ -91,6 +92,17 @@
 
         },
         selected_item: function (event) {
+        this.do_action({
+                    type: 'ir.actions.act_window',
+                    res_model: $(event.currentTarget).data('model'),
+                    res_id: $(event.currentTarget).data('id'),
+                    views: [[false,'form']],
+                    target: 'current',
+                    context: {},
+                
+              });
+        },
+        selected_item1: function (event) {
         this.do_action({
                     type: 'ir.actions.act_window',
                     res_model: $(event.currentTarget).data('model'),
