@@ -75,7 +75,8 @@ class PosOrder(models.Model):
             self.room_no = False
             if rec.folio_id:
                 self.partner_id = rec.folio_id.partner_id.id
-                self.room_no = rec.folio_id.room_lines[0].product_id.name
+                if rec.folio_id.room_lines:
+                    self.room_no = rec.folio_id.room_lines[0].product_id.name
 
     @api.multi
     def action_paid(self):
