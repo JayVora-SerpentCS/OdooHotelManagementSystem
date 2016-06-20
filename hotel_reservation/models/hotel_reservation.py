@@ -520,9 +520,7 @@ class HotelReservationLine(models.Model):
         '''
         hotel_room_obj = self.env['hotel.room']
         hotel_room_ids = hotel_room_obj.search([('categ_id', '=',
-                                                 self.categ_id.id),
-                                                ('isroom', '=', True)])
-        assigned = False
+                                                 self.categ_id.id)])
         room_ids = []
         if not self.line_id.checkin:
             raise except_orm(_('Warning'),
@@ -532,11 +530,19 @@ class HotelReservationLine(models.Model):
         for room in hotel_room_ids:
             assigned = False
             for line in room.room_reservation_line_ids:
-                if(line.check_in >= self.line_id.checkin and
-                   line.check_in <= self.line_id.checkout or
-                   line.check_out <= self.line_id.checkout and
-                   line.check_out >= self.line_id.checkin):
-                    assigned = True
+                if line.status != 'cancel':
+                    if (line.check_in <= self.line_id.checkin <=
+                        line.check_out) or (line.check_in <=
+                                            self.line_id.checkout <=
+                                            line.check_out):
+                        assigned = True
+            for rm_line in room.room_line_ids:
+                if rm_line.status != 'cancel':
+                    if (rm_line.check_in <= self.line_id.checkin <=
+                        rm_line.check_out) or (rm_line.check_in <=
+                                            self.line_id.checkout <=
+                                            rm_line.check_out):
+                        assigned = True
             if not assigned:
                 room_ids.append(room.id)
         domain = {'reserve': [('id', 'in', room_ids)]}
