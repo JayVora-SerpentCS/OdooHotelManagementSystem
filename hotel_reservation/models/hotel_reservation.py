@@ -37,6 +37,11 @@ class HotelFolio(models.Model):
     reservation_id = fields.Many2one(comodel_name='hotel.reservation',
                                      string='Reservation Id')
 
+
+class HotelFolioLineExt(models.Model):
+
+    _inherit = 'hotel.folio.line'
+
     @api.multi
     def write(self, vals):
         """
@@ -44,25 +49,35 @@ class HotelFolio(models.Model):
         @param self: The object pointer
         @param vals: dictionary of fields value.
         """
-        folio_write = super(HotelFolio, self).write(vals)
+        ''' update Hotel Room Reservation line history'''
         reservation_line_obj = self.env['hotel.room.reservation.line']
         room_obj = self.env['hotel.room']
+        prod_id = vals.get('product_id') or self.product_id.id
+        chkin = vals.get('checkin_date') or self.checkin_date
+        chkout = vals.get('checkout_date') or self.checkout_date
+        is_reserved = self.is_reserved
 
-        for folio_obj in self:
-            resv_id = folio_obj.reservation_id.id
-            for fol_rm_line in folio_obj.room_lines:
-                prod_name = fol_rm_line.product_id.name
-                room_rec = room_obj.search([('name', '=', prod_name)], limit=1)
-                room_vals = {'check_in': fol_rm_line.checkin_date,
-                             'check_out': fol_rm_line.checkout_date,
-                             }
-                if room_rec:
-                    resev_room_line = (reservation_line_obj.search
-                                       ([('room_id', '=', room_rec.id),
-                                         ('reservation_id', '=', resv_id)]))
-                    if resev_room_line:
-                        resev_room_line.write(room_vals)
-        return folio_write
+        if prod_id and is_reserved:
+            prod_domain = [('product_id', '=', prod_id)]
+            prod_room = room_obj.search(prod_domain, limit=1)
+
+            if (self.product_id and self.checkin_date and
+                self.checkout_date):
+                old_prd_domain = [('product_id', '=', self.product_id.id)]
+                old_prod_room = room_obj.search(old_prd_domain, limit=1)
+                if prod_room and old_prod_room:
+                    # check for existing room lines.
+                    srch_rmline = [('room_id', '=', old_prod_room.id),
+                                   ('check_in', '=', self.checkin_date),
+                                   ('check_out', '=', self.checkout_date),
+                                   ]
+                    rm_lines = reservation_line_obj.search(srch_rmline)
+                    if rm_lines:
+                        rm_line_vals = {'room_id': prod_room.id,
+                                        'check_in': chkin,
+                                        'check_out': chkout}
+                        rm_lines.write(rm_line_vals)
+        return super(HotelFolioLineExt, self).write(vals)
 
 
 class HotelReservation(models.Model):
@@ -432,7 +447,8 @@ class HotelReservation(models.Model):
                         'name': reservation['reservation_no'],
                         'product_uom': prod_uom,
                         'price_unit': price_unit,
-                        'product_uom_qty': ((date_a - date_b).days) + 1}))
+                        'product_uom_qty': ((date_a - date_b).days) + 1,
+                        'is_reserved': True}))
                     res_obj = room_obj.browse([r.id])
                     res_obj.write({'status': 'occupied', 'isroom': False})
             folio_vals.update({'room_lines': folio_lines})
@@ -751,11 +767,12 @@ class RoomReservationSummary(models.Model):
                                             ('status', '!=', 'cancel')
                                             ]))
                         fol_room_line_ids = room.room_line_ids.ids
+                        chk_state = ['draft', 'cancel']
                         folio_resrv_ids = (folio_room_line_obj.search
                                            ([('id', 'in', fol_room_line_ids),
                                              ('check_in', '<=', chk_date),
                                              ('check_out', '>=', chk_date),
-                                             ('status', '!=', 'cancel')
+                                             ('status', 'not in', chk_state)
                                              ]))
                         if reservline_ids or folio_resrv_ids:
                             room_list_stats.append({'state': 'Reserved',
