@@ -539,6 +539,7 @@
                                             <group>
                                             <field name="checkin_date" />
                                             <field name="checkout_date" />
+                                            <field name="is_reserved" invisible="1"/>
                                             <separator string="Automatic Declaration" colspan="4"/>
                                             <field name="product_uom_qty" context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'uom':product_uom}"
                                                 invisible="1" on_change="product_id_change(parent.pricelist_id,product_id,product_uom_qty,product_uom,product_uos_qty,product_uos,name,parent.partner_id, False, False, parent.date_order)"/>
