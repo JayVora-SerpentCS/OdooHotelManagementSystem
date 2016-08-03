@@ -692,9 +692,10 @@ class HotelFolio(models.Model):
         '''
         if not len(self._ids):
             return False
+        order_ids = [folio.order_id.id for folio in self]
         query = "select id from sale_order_line \
         where order_id IN %s and state=%s"
-        self._cr.execute(query, (tuple(self._ids), 'cancel'))
+        self._cr.execute(query, (tuple(order_ids), 'cancel'))
         cr1 = self._cr
         line_ids = map(lambda x: x[0], cr1.fetchall())
         self.write({'state': 'draft', 'invoice_ids': [], 'shipped': 0})
