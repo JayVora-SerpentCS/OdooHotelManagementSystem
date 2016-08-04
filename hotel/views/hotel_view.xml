@@ -497,7 +497,7 @@
                      <button name="manual_invoice" states="manual" string="Create Invoice" icon="gtk-new" class="oe_highlight"/>
                      <button name="ship_cancel" string="Cancel Folio" states="shipping_except" icon="gtk-cancel" class="oe_highlight oe_highlight" />
                      <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object" icon="gtk-file" class="oe_highlight"/>
-                     <button name="action_cancel" string="Cancel Folio" states="manual,progress" type="object" icon="gtk-cancel" class="oe_highlight"/>
+                     <!-- <button name="action_cancel" string="Cancel Folio" states="manual,progress" type="object" icon="gtk-cancel" class="oe_highlight"/> -->
                      <button name="cancel" string="Cancel Folio" states="draft" icon="gtk-cancel" class="oe_highlight"/>
                      <button name="invoice_cancel" string="Cancel Folio" states="invoice_except" icon="gtk-cancel" class="oe_highlight"/>
                      <field name="state" select="2" widget="statusbar" statusbar_visible="draft,sent,invoiced,done"/>

@@ -613,7 +613,7 @@ class HotelFolio(models.Model):
                 workflow.trg_validate(self._uid, 'account.invoice',
                                       invoice.id, 'invoice_cancel',
                                       self._cr)
-                sale.write({'state': 'cancel'})
+            sale.write({'state': 'cancel'})
 #            for rec in sale.folio_pos_order_ids:
 #                    rec.write({'state': 'cancel'})
         return rv
@@ -698,18 +698,19 @@ class HotelFolio(models.Model):
         self._cr.execute(query, (tuple(order_ids), 'cancel'))
         cr1 = self._cr
         line_ids = map(lambda x: x[0], cr1.fetchall())
-        self.write({'state': 'draft', 'invoice_ids': [], 'shipped': 0})
+        self.write({'invoice_ids': [], 'shipped': 0})
         sale_line_obj = self.env['sale.order.line'].browse(line_ids)
         sale_line_obj.write({'invoiced': False, 'state': 'draft',
                              'invoice_lines': [(6, 0, [])]})
         for inv_id in self._ids:
             # Deleting the existing instance of workflow for SO
-            workflow.trg_delete(self._uid, 'sale.order', inv_id, self._cr)
-            workflow.trg_create(self._uid, 'sale.order', inv_id, self._cr)
+            workflow.trg_delete(self._uid, 'sale.order', order_ids[0], self._cr)
+            workflow.trg_create(self._uid, 'sale.order', order_ids[0], self._cr)
         for (id, name) in self.name_get():
             message = _("The sales order '%s' has been set in \
             draft state.") % (name,)
             self.log(message)
+        self.signal_workflow('draft')
         return True
 
 
