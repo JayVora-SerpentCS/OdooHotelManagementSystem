@@ -528,24 +528,29 @@ class HotelFolio(models.Model):
         order_ids = [folio.order_id.id for folio in self]
         room_lst = []
         sale_obj = self.env['sale.order'].browse(order_ids)
-        invoice_id = (sale_obj.action_invoice_create
-                      (grouped=False, states=['confirmed', 'done']))
-        for line in self:
-            values = {'invoiced': True,
-                      'state': 'progress' if grouped else 'progress',
-                      'hotel_invoice_id': invoice_id
-                      }
-            line.write(values)
-#            for line2 in line.folio_pos_order_ids:
-#                line2.write({'invoice_id': invoice_id})
-#                line2.action_invoice_state()
-            for rec in line.room_lines:
-                room_lst.append(rec.product_id)
-            for room in room_lst:
-                room_obj = self.env['hotel.room'
-                                    ].search([('name', '=', room.name)])
-                room_obj.write({'isroom': True})
-        return invoice_id
+        inv_ids0 = set(inv.id for sale in self.env['sale.order'].browse(order_ids) for inv in sale.invoice_ids)
+        sale_obj.signal_workflow('manual_invoice')
+        inv_ids1 = set(inv.id for sale in self.env['sale.order'].browse(order_ids) for inv in sale.invoice_ids)
+        # determine newly created invoices
+        new_inv_ids = list(inv_ids1 - inv_ids0)
+        if new_inv_ids:
+            for line in self:
+                values = {'invoiced': True,
+                          'state': 'progress' if grouped else 'progress',
+                          'hotel_invoice_id': new_inv_ids and new_inv_ids[0]
+                          }
+                line.write(values)
+    #            for line2 in line.folio_pos_order_ids:
+    #                line2.write({'invoice_id': invoice_id})
+    #                line2.action_invoice_state()
+                for rec in line.room_lines:
+                    room_lst.append(rec.product_id)
+                for room in room_lst:
+                    room_obj = self.env['hotel.room'
+                                        ].search([('name', '=', room.name)])
+                    room_obj.write({'isroom': True})
+            return new_inv_ids and new_inv_ids[0]
+        return True
 
     @api.multi
     def action_invoice_cancel(self):
@@ -639,8 +644,8 @@ class HotelFolio(models.Model):
         res = False
         for o in self:
             sale_obj = sale_order_obj.browse([o.order_id.id])
-            res = sale_obj.action_wait()
-        return res
+            sale_obj.signal_workflow('order_confirm')
+        return True
 
     @api.multi
     def test_state(self, mode):
