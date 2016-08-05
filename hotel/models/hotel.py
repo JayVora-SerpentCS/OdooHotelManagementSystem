@@ -702,15 +702,16 @@ class HotelFolio(models.Model):
         sale_line_obj = self.env['sale.order.line'].browse(line_ids)
         sale_line_obj.write({'invoiced': False, 'state': 'draft',
                              'invoice_lines': [(6, 0, [])]})
-        for inv_id in self._ids:
+        for inv_id in order_ids:
             # Deleting the existing instance of workflow for SO
-            workflow.trg_delete(self._uid, 'sale.order', order_ids[0], self._cr)
-            workflow.trg_create(self._uid, 'sale.order', order_ids[0], self._cr)
+            workflow.trg_delete(self._uid, 'sale.order', inv_id, self._cr)
+            workflow.trg_create(self._uid, 'sale.order', inv_id, self._cr)
         for (id, name) in self.name_get():
             message = _("The sales order '%s' has been set in \
             draft state.") % (name,)
             self.log(message)
-        self.signal_workflow('draft')
+        workflow.trg_delete(self._uid, 'hotel.folio', self.id, self._cr)
+        workflow.trg_create(self._uid, 'hotel.folio', self.id, self._cr)
         return True
 
 
