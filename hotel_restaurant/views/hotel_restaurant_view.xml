@@ -355,8 +355,8 @@
                                 <field name="is_folio"/>
                             </group>
                             <group colspan="2" col="4">
-                                <field name="folio_id" attrs="{'invisible':[('is_folio','=',False)], 'required':[('is_folio','=',True)]}"/>
-                                <field name="room_no" attrs="{'invisible':[('is_folio','=',False)], 'required':[('is_folio','=',True)]}"/>
+                                <field name="folio_id" domain="[('state','not in',['done','cancel'])]" attrs="{'invisible':[('is_folio','=',False)], 'required':[('is_folio','=',True)]}"/>
+                                <field name="room_no" domain="[('isroom','=',True)]" attrs="{'invisible':[('is_folio','=',False)], 'required':[('is_folio','=',True)]}"/>
                             </group>
                             <group colspan="2" col="4">
                                 <field name="cname"/>
