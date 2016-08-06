@@ -313,7 +313,11 @@ class HotelReservation(models.Model):
             reservation_line.reserve.write({'isroom': True,
                                             'status': 'available'})
         return True
-
+    
+    @api.multi
+    def set_to_reservation(self):
+       return self.write({'state':'draft'})
+    
     @api.multi
     def send_reservation_maill(self):
         '''
