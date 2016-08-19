@@ -12,6 +12,8 @@
             <field name="wkf_id" ref="wkf_hotel"/>
             <field name="flow_start">True</field>
             <field name="name">draft</field>
+            <field name="kind">function</field>
+            <field name="action">write({'state':'draft'})</field>
         </record>
         <record id="act_sent" model="workflow.activity">
             <field name="wkf_id" ref="wkf_hotel"/>
@@ -41,15 +43,11 @@
         <record id="act_cancel" model="workflow.activity">
             <field name="wkf_id" ref="wkf_hotel"/>
             <field name="name">cancel</field>
-            <field name="flow_stop">True</field>
-            <field name="kind">stopall</field>
             <field name="action">action_cancel()</field>
         </record>
         <record id="act_cancel2" model="workflow.activity">
             <field name="wkf_id" ref="wkf_hotel"/>
             <field name="name">cancel2</field>
-            <field name="flow_stop">True</field>
-            <field name="kind">stopall</field>
             <field name="action">action_cancel()</field>
         </record>
         <record id="act_invoice" model="workflow.activity">
@@ -90,6 +88,22 @@
             <field name="act_from" ref="act_draft"/>
             <field name="act_to" ref="act_cancel"/>
             <field name="signal">cancel</field>
+        </record>
+        
+        <record id="trans_draft_cancel_draft1" model="workflow.transition">
+            <field name="act_from" ref="act_cancel2"/>
+            <field name="act_to" ref="act_draft"/>
+            <field name="signal">draft</field>
+        </record>
+                <record id="trans_draft_cancel_draft" model="workflow.transition">
+            <field name="act_from" ref="act_cancel"/>
+            <field name="act_to" ref="act_draft"/>
+            <field name="signal">draft</field>
+        </record>
+                <record id="trans_draft_cancel_draft2" model="workflow.transition">
+            <field name="act_from" ref="act_wait_invoice"/>
+            <field name="act_to" ref="act_draft"/>
+            <field name="signal">draft</field>
         </record>
         <record id="trans_sent_router" model="workflow.transition">
             <field name="act_from" ref="act_sent"/>

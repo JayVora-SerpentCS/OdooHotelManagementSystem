@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <openerp>
-	<data>
+    <data>
         <menuitem id="menu_hotel_reporting" name="Hotel Management System" parent="base.menu_reporting" />
 
         <!-- Action of hotel reservation -->
-		<record model="ir.actions.act_window" id="action_view_frontdesk_cal">
-			<field name="name">FrontDesk</field>
-			<field name="res_model">hotel.reservation</field>
-			<field name="view_type">form</field>
-			<field name="view_mode">calendar,form</field>
-			<field name="view_id" ref="hotel_reservation.hotel_calendar_view" />
-		</record>
+        <record model="ir.actions.act_window" id="action_view_frontdesk_cal">
+            <field name="name">FrontDesk</field>
+            <field name="res_model">hotel.reservation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">calendar,form</field>
+            <field name="view_id" ref="hotel_reservation.hotel_calendar_view" />
+        </record>
 
         <!-- Action of hotel restaurant kitchen order tickets -->
         <record id="action_hotel_restaurant_order_board" model="ir.actions.act_window">
@@ -153,5 +153,5 @@
          <menuitem name="Currency Exchange" id="menu_action_desk_currency_exchange" action="action_desk_currency_exchange"
           parent="menu_hotel_reporting" />
 
-	</data>
+    </data>
 </openerp>

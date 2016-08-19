@@ -25,37 +25,38 @@
                     </t>
                     <div class="row">
                         <h2>
-	                        <span><center>Check-In Guest List</center></span>
-                   		</h2>
+                            <span><center>Check-In Guest List</center></span>
+                        </h2>
                     </div>
                     <div class="row mt32 mb32">
-	                    <div class="text-center">
-	                        <strong>From:</strong>
-	                        <font t-esc="formatLang(data['form']['date_start'],date=True)"/>
-	                        <strong>To:</strong>
-	                        <font t-esc="formatLang(data['form']['date_end'],date=True)"/>
-	                    </div>
-                	</div>
-                	<table class="table table-condensed">
-						<tr>
-						    <td><strong>#No</strong></td>
-						    <td><strong>Guest Name</strong></td>
-						    <td><strong>Check-In Date</strong></td>
-						    <td><strong>Room Type</strong></td>
-						    <td><strong>Room No</strong></td>
-						</tr>
-						<tr t-foreach="get_checkout(data['form']['date_start'],data['form']['date_end'])" t-as="info">
-						    <td><span t-field="info.reservation_no"/></td>
-						    <td><span t-field="info.partner_id.name"/></td>
-						    <td><span t-field="info.checkin"/></td>
-						    <td><span t-esc="get_room_type(info.reservation_line)"/></td>
-						    <td><span t-esc="get_room_nos(info.reservation_line)"/></td>
-						</tr>
+                        <div class="text-center">
+                            <strong>From:</strong>
+                            <font t-esc="formatLang(data['form']['date_start'],date=True)"/>
+                            <strong>To:</strong>
+                            <font t-esc="formatLang(data['form']['date_end'],date=True)"/>
+                        </div>
+                    </div>
+                    <table class="table table-condensed">
+                        <tr>
+                            <td><strong>#No</strong></td>
+                            <td><strong>Guest Name</strong></td>
+                            <td><strong>Check-In Date</strong></td>
+                            <td><strong>Room Type</strong></td>
+                            <td><strong>Room No</strong></td>
+                        </tr>
+                        <tr t-foreach="get_checkout(data['form']['date_start'],data['form']['date_end'])" t-as="info">
+                            <td><span t-field="info.reservation_no"/></td>
+                            <td><span t-field="info.partner_id.name"/></td>
+                            <td><span t-field="info.checkin"/></td>
+                            <td><span t-esc="get_room_type(info.reservation_line)"/></td>
+                            <td><span t-esc="get_room_nos(info.reservation_line)"/></td>
+                        </tr>
                      </table>
                 </div>
             </t>
         </t>
-		</t>
+        </t>
    </template>
 </data>
 </openerp>
+

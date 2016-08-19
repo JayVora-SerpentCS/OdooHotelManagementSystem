@@ -49,7 +49,7 @@ class HotelFolioLineExt(models.Model):
         @param self: The object pointer
         @param vals: dictionary of fields value.
         """
-        ''' update Hotel Room Reservation line history'''
+        """update Hotel Room Reservation line history"""
         reservation_line_obj = self.env['hotel.room.reservation.line']
         room_obj = self.env['hotel.room']
         prod_id = vals.get('product_id') or self.product_id.id
@@ -61,8 +61,7 @@ class HotelFolioLineExt(models.Model):
             prod_domain = [('product_id', '=', prod_id)]
             prod_room = room_obj.search(prod_domain, limit=1)
 
-            if (self.product_id and self.checkin_date and
-                self.checkout_date):
+            if (self.product_id and self.checkin_date and self.checkout_date):
                 old_prd_domain = [('product_id', '=', self.product_id.id)]
                 old_prod_room = room_obj.search(old_prd_domain, limit=1)
                 if prod_room and old_prod_room:
@@ -313,6 +312,11 @@ class HotelReservation(models.Model):
             reservation_line.reserve.write({'isroom': True,
                                             'status': 'available'})
         return True
+
+    @api.multi
+    def set_to_draft_reservation(self):
+        for reservation in self:
+            return reservation.write({'state':'draft'})
 
     @api.multi
     def send_reservation_maill(self):

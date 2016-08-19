@@ -24,7 +24,7 @@
             <field name="model_id" ref="hotel_reservation.model_hotel_reservation"/>
             <field name="auto_delete" eval="True"/>
             <field name="body_html"><![CDATA[
-	            <p>Hello <strong>${object.partner_id.name}</strong>,</p>
+                <p>Hello <strong>${object.partner_id.name}</strong>,</p>
                 <p>This is to confirm your booking for a room at the <strong>${object.warehouse_id.name} Hotel</strong>,&nbsp;
                    % if object.warehouse_id.partner_id.city: 
                    <strong>${object.warehouse_id.partner_id.city}</strong>,&nbsp;
@@ -85,9 +85,8 @@ We look forward to providing you quality services at our hotel.
 % if object.warehouse_id.partner_id.website:
 <strong>${object.warehouse_id.partner_id.website}</strong> <br />
 % endif
-    		 ]]></field>
+            ]]></field>
 </record>
-
 
         <!--Email template for hotel reservation reminder before 24hrs-->
         <record id="email_template_reservation_reminder_24hrs" model="email.template">
@@ -160,8 +159,6 @@ We are sure that you will find our services satisfactory. We look forward to pro
 <strong>${object.warehouse_id.partner_id.website}</strong> <br />
 % endif
              ]]></field>
-
-
-  		</record>
-	</data>
+        </record>
+    </data>
 </openerp>

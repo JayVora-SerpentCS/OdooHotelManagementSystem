@@ -16,6 +16,7 @@
                         <button name="confirm" string="Confirm" states="draft" class="oe_highlight"/>
                         <button name="done" string="Create Folio" states="confirm" class="oe_highlight"/> 
                         <button name="cancel" string="Cancel Reservation" states="draft,confirm" class="oe_highlight"/>
+                        <button name="draft" string="Set to Draft" states="cancel" class="oe_highlight"/>
                         <field name="state" widget="statusbar"/>
                     </header>
                     <sheet>

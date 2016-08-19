@@ -1,63 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-<data>
+    <data>
 
-<!--Template for hotel folio -->
-<template id="report_hotel_folio">
-    <t t-call="report.html_container">
-        <t t-foreach="docs" t-as="o">
-            <t t-call="report.external_layout">
-                <div class="page">
-                    <t t-name="report.external_layout_header">
-                        <div class="header">
-                            <div class="row">
-                                <div class="col-xs-3">
-                                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 75px;max-width: 75px;"/>
+    <!--Template for hotel folio -->
+    <template id="report_hotel_folio">
+        <t t-call="report.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="report.external_layout">
+                    <div class="page">
+                        <t t-name="report.external_layout_header">
+                            <div class="header">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 75px;max-width: 75px;"/>
+                                    </div>
+                                    <div class="col-xs-9 text-right" style="margin-top:20px;" t-field="company.name"/>
                                 </div>
-                                <div class="col-xs-9 text-right" style="margin-top:20px;" t-field="company.name"/>
-                            </div>
-                            <div class="row zero_min_height">
-                                <div class="col-xs-12">
-                                    <div style="border-bottom: 1px solid black;"/>
+                                <div class="row zero_min_height">
+                                    <div class="col-xs-12">
+                                        <div style="border-bottom: 1px solid black;"/>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </t>
+                        </t>
                     <div class="row">
                         <h2>
 	                        <span><center>Total Collection</center></span>
-                   		</h2>
+                        </h2>
                     </div>
                     <div class="row mt32 mb32">
-	                    <div class="text-center">
-	                        <strong>From:</strong>
-	                        <span t-esc="formatLang(data['form']['date_start'],date=True)"/>
-	                        <strong>To:</strong>
-	                        <span t-esc="formatLang(data['form']['date_end'],date=True)"/>
-	                    </div>
-                	</div>
-                	<table class="table table-condensed">
-						<tr>
-						    <td><strong>Folio No.</strong></td>
-						    <td><strong>Customer Name</strong></td>
-						    <td><strong>CheckIN</strong></td>
-						    <td><strong>CheckOut</strong></td>
-						    <td><strong>Total</strong></td>
-						</tr>
-						<tr t-foreach="get_data(data['form']['date_start'],data['form']['date_end'])" t-as="info">
-						    <td><span t-field="info.name"/></td>
-						 	<td><span t-field="info.partner_id.name"/></td> 
-						    <td><span t-field="info.checkin_date"/></td>
-						    <td><span t-field="info.checkout_date"/></td>
-						    <td><span t-esc="formatLang(get_total(info.amount_total))"/></td>
-						</tr>
-						<tr>
-						    <td></td>
-						    <td></td>
-						    <td></td>
-						    <td><strong>Net Total:</strong></td>
-						    <td t-esc="formatLang(get_Total())"></td>
-						</tr>
+                        <div class="text-center">
+                            <strong>From:</strong>
+                            <span t-esc="formatLang(data['form']['date_start'],date=True)"/>
+                            <strong>To:</strong>
+                            <span t-esc="formatLang(data['form']['date_end'],date=True)"/>
+                        </div>
+                    </div>
+                    <table class="table table-condensed">
+                        <tr>
+                            <td><strong>Folio No.</strong></td>
+                            <td><strong>Customer Name</strong></td>
+                            <td><strong>CheckIN</strong></td>
+                            <td><strong>CheckOut</strong></td>
+                            <td><strong>Total</strong></td>
+                        </tr>
+                        <tr t-foreach="get_data(data['form']['date_start'],data['form']['date_end'])" t-as="info">
+                            <td><span t-field="info.name"/></td>
+                            <td><span t-field="info.partner_id.name"/></td> 
+                            <td><span t-field="info.checkin_date"/></td>
+                            <td><span t-field="info.checkout_date"/></td>
+                            <td><span t-esc="formatLang(get_total(info.amount_total))"/></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><strong>Net Total:</strong></td>
+                            <td t-esc="formatLang(get_Total())"></td>
+                        </tr>
                      </table>
                 </div>
             </t>
@@ -178,7 +178,6 @@
         </t>
     </t>
 </template>
-
 
 </data>
 </openerp>

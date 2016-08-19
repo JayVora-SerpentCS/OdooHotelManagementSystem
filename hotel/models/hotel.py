@@ -291,7 +291,13 @@ class HotelFolio(models.Model):
         @param self: object pointer
         @param default: dict of default values to be set
         '''
-        return self.env['sale.order'].copy(default=default)
+        res = {}
+        try:
+            res = super(HotelFolio,self).copy(default=default)
+        except Exception, e:
+            raise UserError(_('You can not copy this folio because %s')%e)
+#        return self.env['sale.order'].copy(default=default)
+        return res
 
     @api.multi
     def _invoiced(self, name, arg):
@@ -502,7 +508,7 @@ class HotelFolio(models.Model):
                 self.partner_invoice_id = partner_rec.id
                 self.partner_shipping_id = partner_rec.id
                 self.pricelist_id = partner_rec.property_product_pricelist.id
-                raise UserError('Not Any Order For  %s ' % (partner_rec.name))
+                raise UserError(_('Not Any Order For  %s ' % (partner_rec.name)))
             else:
                 self.partner_invoice_id = partner_rec.id
                 self.partner_shipping_id = partner_rec.id
@@ -528,24 +534,29 @@ class HotelFolio(models.Model):
         order_ids = [folio.order_id.id for folio in self]
         room_lst = []
         sale_obj = self.env['sale.order'].browse(order_ids)
-        invoice_id = (sale_obj.action_invoice_create
-                      (grouped=False, states=['confirmed', 'done']))
-        for line in self:
-            values = {'invoiced': True,
-                      'state': 'progress' if grouped else 'progress',
-                      'hotel_invoice_id': invoice_id
-                      }
-            line.write(values)
-#            for line2 in line.folio_pos_order_ids:
-#                line2.write({'invoice_id': invoice_id})
-#                line2.action_invoice_state()
-            for rec in line.room_lines:
-                room_lst.append(rec.product_id)
-            for room in room_lst:
-                room_obj = self.env['hotel.room'
-                                    ].search([('name', '=', room.name)])
-                room_obj.write({'isroom': True})
-        return invoice_id
+        inv_ids0 = set(inv.id for sale in self.env['sale.order'].browse(order_ids) for inv in sale.invoice_ids)
+        sale_obj.signal_workflow('manual_invoice')
+        inv_ids1 = set(inv.id for sale in self.env['sale.order'].browse(order_ids) for inv in sale.invoice_ids)
+        # determine newly created invoices
+        new_inv_ids = list(inv_ids1 - inv_ids0)
+        if new_inv_ids:
+            for line in self:
+                values = {'invoiced': True,
+                          'state': 'progress' if grouped else 'progress',
+                          'hotel_invoice_id': new_inv_ids and new_inv_ids[0]
+                          }
+                line.write(values)
+    #            for line2 in line.folio_pos_order_ids:
+    #                line2.write({'invoice_id': invoice_id})
+    #                line2.action_invoice_state()
+                for rec in line.room_lines:
+                    room_lst.append(rec.product_id)
+                for room in room_lst:
+                    room_obj = self.env['hotel.room'
+                                        ].search([('name', '=', room.name)])
+                    room_obj.write({'isroom': True})
+            return new_inv_ids and new_inv_ids[0]
+        return True
 
     @api.multi
     def action_invoice_cancel(self):
@@ -613,7 +624,7 @@ class HotelFolio(models.Model):
                 workflow.trg_validate(self._uid, 'account.invoice',
                                       invoice.id, 'invoice_cancel',
                                       self._cr)
-                sale.write({'state': 'cancel'})
+            sale.write({'state': 'cancel'})
 #            for rec in sale.folio_pos_order_ids:
 #                    rec.write({'state': 'cancel'})
         return rv
@@ -636,11 +647,10 @@ class HotelFolio(models.Model):
         @param self: object pointer
         '''
         sale_order_obj = self.env['sale.order']
-        res = False
         for o in self:
             sale_obj = sale_order_obj.browse([o.order_id.id])
-            res = sale_obj.action_wait()
-        return res
+            sale_obj.signal_workflow('order_confirm')
+        return True
 
     @api.multi
     def test_state(self, mode):
@@ -692,16 +702,17 @@ class HotelFolio(models.Model):
         '''
         if not len(self._ids):
             return False
+        order_ids = [folio.order_id.id for folio in self]
         query = "select id from sale_order_line \
         where order_id IN %s and state=%s"
-        self._cr.execute(query, (tuple(self._ids), 'cancel'))
+        self._cr.execute(query, (tuple(order_ids), 'cancel'))
         cr1 = self._cr
         line_ids = map(lambda x: x[0], cr1.fetchall())
-        self.write({'state': 'draft', 'invoice_ids': [], 'shipped': 0})
+        self.write({'invoice_ids': [], 'shipped': 0})
         sale_line_obj = self.env['sale.order.line'].browse(line_ids)
         sale_line_obj.write({'invoiced': False, 'state': 'draft',
                              'invoice_lines': [(6, 0, [])]})
-        for inv_id in self._ids:
+        for inv_id in order_ids:
             # Deleting the existing instance of workflow for SO
             workflow.trg_delete(self._uid, 'sale.order', inv_id, self._cr)
             workflow.trg_create(self._uid, 'sale.order', inv_id, self._cr)
@@ -709,18 +720,20 @@ class HotelFolio(models.Model):
             message = _("The sales order '%s' has been set in \
             draft state.") % (name,)
             self.log(message)
+        workflow.trg_delete(self._uid, 'hotel.folio', self.id, self._cr)
+        workflow.trg_create(self._uid, 'hotel.folio', self.id, self._cr)
         return True
 
 
 class HotelFolioLine(models.Model):
 
-    @api.one
-    def copy(self, default=None):
-        '''
-        @param self: object pointer
-        @param default: dict of default values to be set
-        '''
-        return self.env['sale.order.line'].copy(default=default)
+#    @api.one
+#    def copy(self, default=None):
+#        '''
+#        @param self: object pointer
+#        @param default: dict of default values to be set
+#        '''
+#        return self.env['sale.order.line'].copy(default=default)
 
     @api.multi
     def _amount_line(self, field_name, arg):
@@ -1000,28 +1013,28 @@ class HotelFolioLine(models.Model):
                                line.order_line_id.order_id.id, self._cr)
         return res
 
-    @api.one
-    def copy_data(self, default=None):
-        '''
-        @param self: object pointer
-        @param default: dict of default values to be set
-        '''
-        line_id = self.order_line_id.id
-        sale_line_obj = self.env['sale.order.line'].browse(line_id)
-        return sale_line_obj.copy_data(default=default)
+#    @api.one
+#    def copy_data(self, default=None):
+#        '''
+#        @param self: object pointer
+#        @param default: dict of default values to be set
+#        '''
+#        line_id = self.order_line_id.id
+#        sale_line_obj = self.env['sale.order.line'].browse(line_id)
+#        return sale_line_obj.copy_data(default=default)
 
 
 class HotelServiceLine(models.Model):
 
-    @api.one
-    def copy(self, default=None):
-        '''
-        @param self: object pointer
-        @param default: dict of default values to be set
-        '''
-        line_id = self.service_line_id.id
-        sale_line_obj = self.env['sale.order.line'].browse(line_id)
-        return sale_line_obj.copy(default=default)
+#    @api.one
+#    def copy(self, default=None):
+#        '''
+#        @param self: object pointer
+#        @param default: dict of default values to be set
+#        '''
+#        line_id = self.service_line_id.id
+#        sale_line_obj = self.env['sale.order.line'].browse(line_id)
+#        return sale_line_obj.copy(default=default)
 
     @api.multi
     def _amount_line(self, field_name, arg):
@@ -1146,7 +1159,7 @@ class HotelServiceLine(models.Model):
         if not self.ser_checkout_date:
             self.ser_checkout_date = time_a
         if self.ser_checkout_date < self.ser_checkin_date:
-            raise UserError('Checkout must be greater or equal checkin date')
+            raise UserError(_('Checkout must be greater or equal checkin date'))
         if self.ser_checkin_date and self.ser_checkout_date:
             date_a = time.strptime(self.ser_checkout_date,
                                    DEFAULT_SERVER_DATETIME_FORMAT)[:5]
@@ -1176,15 +1189,15 @@ class HotelServiceLine(models.Model):
             x = line.button_done()
         return x
 
-    @api.one
-    def copy_data(self, default=None):
-        '''
-        @param self: object pointer
-        @param default: dict of default values to be set
-        '''
-        sale_line_obj = self.env['sale.order.line'
-                                 ].browse(self.service_line_id.id)
-        return sale_line_obj.copy_data(default=default)
+#    @api.one
+#    def copy_data(self, default=None):
+#        '''
+#        @param self: object pointer
+#        @param default: dict of default values to be set
+#        '''
+#        sale_line_obj = self.env['sale.order.line'
+#                                 ].browse(self.service_line_id.id)
+#        return sale_line_obj.copy_data(default=default)
 
 
 class HotelServiceType(models.Model):
