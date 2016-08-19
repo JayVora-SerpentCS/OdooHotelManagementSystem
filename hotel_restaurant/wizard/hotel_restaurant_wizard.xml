@@ -76,7 +76,5 @@
         <menuitem name="Restaurant Reports" action="action_folio_rest_reservation"
             id="folio_rest_reservation_menu" parent="hotel.hotel_report_menu" sequence="32"/>
 
-
-
     </data>
 </openerp>

@@ -59,7 +59,7 @@
                                     <td>
                                         <span t-esc="rec2.name"/>
                                     </td>
-                            	</tr>
+                                </tr>
                         </tbody>
                     </table>
                     <div class="row">

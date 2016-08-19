@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-<data>
+    <data>
 
 <!--Template for hotel reservation -->
 <template id="report_roomres_qweb">
@@ -25,46 +25,47 @@
                     </t>
                     <div class="row"> 
                         <h2>
-	                        <span><center>Reservation List</center></span>
-                   		</h2>
+                            <span><center>Reservation List</center></span>
+                        </h2>
                     </div>
                     <div class="row mt32 mb32">
-	                    <div class="text-center">
-	                        <strong>From:</strong>
-	                        <span t-esc="formatLang(data['form']['date_start'],date_time=True)"/>
-	                        <strong>To:</strong>
-	                        <span t-esc="formatLang(data['form']['date_end'],date_time=True)"/>
-	                    </div>
-                	</div>
-                	<table class="table table-condensed">
-						<tr>
-						    <td><strong>#No</strong></td>
-						    <td><strong>Guest Name</strong></td>
-						    <td><strong>Check-In Date</strong></td>
-						    <td><strong>Check-Out Date</strong></td>
-						    <td><strong>Room Details</strong></td>
-						</tr>
-						<tr t-foreach="get_data(data['form']['date_start'],data['form']['date_end'])" t-as="info">
-						    <td><span t-field="info.reservation_no"/></td>
-						    <td><span t-field="info.partner_id.name"/></td>
-						    <td><span t-field="info.checkin"/></td>
-						    <td><span t-field="info.checkout"/></td>
-						    <td>
-						    	<table   t-foreach="info.reservation_line" t-as="line" > 					      
-						         <tr>
-						    	 <td><span t-field="line.categ_id.name"/></td>
-						    	 </tr>
-						    	 <tr t-foreach="line.reserve" t-as="o">
-						    	 		 <td><span t-field="o.name"/></td>	
-						    	 </tr>		
-						    	</table>
-						   </td>
-						</tr>
+                        <div class="text-center">
+                            <strong>From:</strong>
+                            <span t-esc="formatLang(data['form']['date_start'],date_time=True)"/>
+                            <strong>To:</strong>
+                            <span t-esc="formatLang(data['form']['date_end'],date_time=True)"/>
+                        </div>
+                    </div>
+                    <table class="table table-condensed">
+                        <tr>
+                            <td><strong>#No</strong></td>
+                                <td><strong>Guest Name</strong></td>
+                                <td><strong>Check-In Date</strong></td>
+                                <td><strong>Check-Out Date</strong></td>
+                                <td><strong>Room Details</strong></td>
+                        </tr>
+                        <tr t-foreach="get_data(data['form']['date_start'],data['form']['date_end'])" t-as="info">
+                            <td><span t-field="info.reservation_no"/></td>
+                            <td><span t-field="info.partner_id.name"/></td>
+                            <td><span t-field="info.checkin"/></td>
+                            <td><span t-field="info.checkout"/></td>
+                            <td>
+                                <table   t-foreach="info.reservation_line" t-as="line" >
+                                    <tr>
+                                        <td><span t-field="line.categ_id.name"/></td>
+                                    </tr>
+                                    <tr t-foreach="line.reserve" t-as="o">
+                                        <td><span t-field="o.name"/></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
                      </table>
                 </div>
             </t>
         </t>
        </t> 
     </template>
-</data>
+    </data>
 </openerp>
+
