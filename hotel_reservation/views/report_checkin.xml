@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
 <data>
 
 <!--Template for hotel reservation -->
@@ -8,7 +8,16 @@
         <t t-foreach="docs" t-as="o">
             <t t-call="report.external_layout">
                 <div class="page">
-                    <br/><br/>
+                    <t t-name="report.external_layout_header">
+                        <div class="header">
+                            
+                            <div class="row zero_min_height">
+                                <div class="col-xs-12">
+                                    <div style="border-bottom: 1px solid black;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
                     <div class="row">
                         <h2>
                             <span><center>Check-In Guest List</center></span>
@@ -17,9 +26,9 @@
                     <div class="row mt32 mb32">
                         <div class="text-center">
                             <strong>From:</strong>
-                            <font t-esc="formatLang(data['form']['date_start'],date=True)"/>
+                             <font t-esc="data['date_start']"/>
                             <strong>To:</strong>
-                            <font t-esc="formatLang(data['form']['date_end'],date=True)"/>
+                            <font t-esc="data['date_end']"/>
                         </div>
                     </div>
                     <table class="table table-condensed">
@@ -30,12 +39,27 @@
                             <td><strong>Room Type</strong></td>
                             <td><strong>Room No</strong></td>
                         </tr>
-                        <tr t-foreach="get_checkout(data['form']['date_start'],data['form']['date_end'])" t-as="info">
+                        <tr t-foreach="get_checkin" t-as="info">
                             <td><span t-field="info.reservation_no"/></td>
                             <td><span t-field="info.partner_id.name"/></td>
                             <td><span t-field="info.checkin"/></td>
-                            <td><span t-esc="get_room_type(info.reservation_line)"/></td>
-                            <td><span t-esc="get_room_nos(info.reservation_line)"/></td>
+                            <td>
+                                <table   t-foreach="info.reservation_line" t-as="line" >
+                                    <tr>
+                                        <td><span t-field="line.categ_id.name"/></td>
+                                    </tr>
+                                   
+                                </table>
+                            </td>
+                            <td>
+                            	<table   t-foreach="info.reservation_line" t-as="line" >
+                                    <tr t-foreach="line.reserve" t-as="o">
+                                        <td><span t-field="o.name"/></td>
+                                    </tr>
+                                   
+                                </table>                  
+                            </td>
+                            
                         </tr>
                      </table>
                 </div>
@@ -44,4 +68,5 @@
         </t>
    </template>
 </data>
-</openerp>
+</odoo>
+

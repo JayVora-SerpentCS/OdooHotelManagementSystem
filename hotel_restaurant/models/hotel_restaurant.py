@@ -20,11 +20,10 @@
 #
 # ---------------------------------------------------------------------------
 
-from openerp.exceptions import except_orm, ValidationError
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from openerp import models, fields, api, _
+from odoo.exceptions import except_orm, ValidationError
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo import models, fields, api, _
 import time
-from openerp import workflow
 
 
 class HotelFolio(models.Model):
@@ -74,6 +73,7 @@ class HotelMenucard(models.Model):
     image = fields.Binary("Image",
                           help="This field holds the image used as image "
                           "for the product, limited to 1024x1024px.")
+    product_manager = fields.Many2one('res.users', string='Product Manager')
 
 
 class HotelRestaurantTables(models.Model):
@@ -150,8 +150,6 @@ class HotelRestaurantReservation(models.Model):
         @param self: object pointer
         """
         self.write({'state': 'draft'})
-        for reserve_id in self.ids:
-            workflow.trg_create(self._uid, self._name, reserve_id, self._cr)
         return True
 
     @api.multi

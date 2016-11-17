@@ -1,5 +1,6 @@
-<openerp> 
+<odoo> 
     <data>
+    
        <!-- pos order view Inherited -->
        <record id ="hotel_folio_pos_inh" model="ir.ui.view">
             <field name="name">hotel.folio.pos.inh</field>
@@ -12,13 +13,13 @@
                 </xpath>
             </field>
        </record>
-
+		
         <record model="ir.ui.view" id="view_hotelfolio2_form2_inherited">
             <field name="name">hotel.folio2.form2.inherited</field>
             <field name="model">hotel.folio</field>
             <field name="inherit_id" ref="hotel.view_hotel_folio1_form"/>
             <field name="arch" type="xml">
-                <xpath expr ="//form/sheet/notebook/page[@name='foreign exchange']"  position ="after">
+       			<xpath expr ="//form/sheet/notebook/page[@name='foreign exchange']"  position ="after">
                     <page string="POS Restaurant">
 	                    <separator string="POS Orders Details" colspan="4"/>
 	                    <field name="folio_pos_order_ids" colspan="4" nolabel="1"> 
@@ -35,7 +36,7 @@
                     </page>
                 </xpath>
             </field>
-        </record>
-
-</data>
-</openerp>
+        </record>   
+        
+	</data>
+</odoo>

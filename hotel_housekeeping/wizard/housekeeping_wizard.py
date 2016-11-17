@@ -20,8 +20,7 @@
 #
 # ---------------------------------------------------------------------------
 
-from openerp import models, fields, api
-
+from odoo import models, fields, api
 
 class HotelHousekeepingWizard(models.TransientModel):
     _name = 'hotel.housekeeping.wizard'

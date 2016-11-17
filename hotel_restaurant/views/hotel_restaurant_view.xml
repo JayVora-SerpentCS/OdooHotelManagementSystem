@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<openerp>
-    <data>
+<odoo>
         <menuitem  id="hotel_restaurant_menu" name="Restaurant" parent="hotel.hotel_management_menu" sequence="3"/>
 
         <record model="ir.ui.view" id="view_hotelfolio1_form1_inherited">
@@ -112,9 +111,9 @@
             <field name="arch" type="xml">
                 <form string="Table Reservation" >
                     <header>
-                        <button string="Confirm" name="confirm" states="draft" type="workflow" icon="gtk-ok"/>
-                        <button string="Done" name="done" states="confirm" type="workflow" icon="gtk-apply"/>
-                        <button string="Cancel" name="cancel" states="confirm" type="workflow" icon="gtk-cancel"/>
+                        <button string="Confirm" name="table_reserved" states="draft" type="object" icon="gtk-ok"/>
+                        <button string="Done" name="table_done" states="confirm" type="object" icon="gtk-apply"/>
+                        <button string="Cancel" name="table_cancel" states="confirm" type="object" icon="gtk-cancel"/>
                         <button string="Set to Draft" name="action_set_to_draft" states="cancel" type="object" icon="gtk-file"/>
                         <button string="Create Order" name="create_order" type="object" states="done" icon="gtk-new"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done"/>
@@ -564,7 +563,7 @@
             <field name="model">hotel.menucard.type</field>
             <field name="arch" type="xml">
                 <tree string="Hotel Food Items Type">
-                    <field name="complete_name"/>
+                    <field name="display_name"/>
                 </tree>
             </field>
         </record>
@@ -634,8 +633,8 @@
                                     <field name="rental" select="2"/>
                                     <!-- <field name="price_margin"/> -->
                                     <field name="price_extra"/>
-                                    <field name="uos_id" />
-                                    <field name="uos_coeff" />
+                                    <!-- <field name="uos_id" /> -->
+                                    <!-- <field name="uos_coeff" /> -->
                                     <!-- <field name="purchase_ok" select="2"/> -->
                                     <separator string="Suppliers" colspan='4' />
                                     <field name="seller_ids" colspan="4" nolabel="1" widget="one2many_list"/>
@@ -757,5 +756,4 @@
                   action="hotel_restaurent_food_category_action"
                   sequence="13"
                   parent="menu_hotel_food_item"/>
-	</data>
-</openerp>
+</odoo>

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<openerp>
+<odoo>
 	<data>
 
 		<!-- State By restaurant -->
@@ -73,4 +73,4 @@
         </record>
 
     </data>
-</openerp>
+</odoo>

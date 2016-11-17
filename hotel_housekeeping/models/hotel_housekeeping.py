@@ -20,11 +20,11 @@
 #
 # ---------------------------------------------------------------------------
 
-from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
-from openerp import models, fields, api, _
-from openerp.exceptions import ValidationError
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
+from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
 import time
-from openerp import workflow
+from odoo import workflow
 
 
 class ProductCategory(models.Model):
@@ -92,8 +92,6 @@ as Bad, Good or Ok. ")
         @param self: object pointer
         """
         self.write({'state': 'dirty'})
-        for housekeep_id in self.ids:
-            workflow.trg_create(self._uid, self._name, housekeep_id, self._cr)
         return True
 
     @api.multi

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-# --------------------------------------------------------------------------
+#############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services PVT. LTD.
+#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
 #    (<http://www.serpentcs.com>)
+#    Copyright (C) 2004 OpenERP SA (<http://www.openerp.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -18,49 +19,40 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
-# ---------------------------------------------------------------------------
+#############################################################################
 
 import time
-from openerp import models
-from openerp.report import report_sxw
+from odoo import api, fields, models
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from dateutil import parser
 
-
-class FolioReport1(report_sxw.rml_parse):
-    def __init__(self, cr, uid, name, context):
-        super(FolioReport1, self).__init__(cr, uid, name, context)
-        self.localcontext.update({'time': time,
-                                  'get_data': self.get_data,
-                                  'gettotal': self.gettotal,
-                                  'getTotal': self.getTotal,
-                                  'get_pos': self.get_pos,
-                                  })
-        self.temp = 0.0
+class ReportLunchorder1(models.AbstractModel):
+    _name = 'report.hotel_pos_restaurant.report_folio_pos'
 
     def get_data(self, date_start, date_end):
-        folio_obj = self.pool.get('hotel.folio')
-        tids = folio_obj.search(self.cr, self.uid,
-                                [('checkin_date', '>=', date_start),
+        folio_obj = self.env['hotel.folio']
+        tids = folio_obj.search([('checkin_date', '>=', date_start),
                                  ('checkout_date', '<=', date_end)])
-        res = folio_obj.browse(self.cr, self.uid, tids)
         folio_ids = []
-        for rec in res:
+        for rec in tids:
             if rec.folio_pos_order_ids:
                 folio_ids.append(rec)
         return folio_ids
 
     def get_pos(self, date_start, date_end):
-        folio_obj = self.pool.get('hotel.folio')
-        tids = folio_obj.search(self.cr, self.uid,
-                                [('checkin_date', '>=', date_start),
+        folio_obj = self.env['hotel.folio']
+        tids = folio_obj.search([('checkin_date', '>=', date_start),
                                  ('checkout_date', '<=', date_end)])
-        res = folio_obj.browse(self.cr, self.uid, tids)
         posorder_ids = []
-        for rec in res:
+        for rec in tids:
             if rec.folio_pos_order_ids:
                 posorder_ids.append(rec.folio_pos_order_ids)
-        return posorder_ids
+            return posorder_ids
 
     def gettotal(self, pos_order):
+        self.temp = 0.0
         amount = 0.0
         for x in pos_order:
             amount = amount + float(x.amount_total)
@@ -68,11 +60,32 @@ class FolioReport1(report_sxw.rml_parse):
         return amount
 
     def getTotal(self):
+        self.temp = 0.0
         return self.temp
 
-
-class ReportLunchorder1(models.AbstractModel):
-    _name = 'report.hotel_pos_restaurant.report_folio_pos'
-    _inherit = 'report.abstract_report'
-    _template = 'hotel_pos_restaurant.report_folio_pos'
-    _wrapped_report_class = FolioReport1
+    @api.model
+    def render_html(self, docids, data=None):
+        self.model = self.env.context.get('active_model')
+        docs = self.env[self.model].browse(self.env.context.get('active_ids', []))
+      
+        date_start = data['form'].get('date_start', fields.Date.today())
+        date_end = data['form'].get('date_end', str(datetime.now() + relativedelta(months=+1, day=1, days=-1))[:10])
+        pos_order = data['form'].get('pos_order')
+        get_data = self.with_context(data['form'].get('used_context',{})).get_data(date_start, date_end)
+        get_pos = self.with_context(data['form'].get('used_context',{})).get_pos(date_start, date_end)
+#        gettotal = self.with_context(data['form'].get('used_context',{})).gettotal(pos_order)
+        getTotal = self.with_context(data['form'].get('used_context',{})).getTotal()
+        docargs = {
+            'doc_ids': docids,
+            'doc_model': self.model,
+            'data': data['form'],
+            'docs': docs,
+            'time': time,
+            'get_data': get_data,
+            'get_pos' : get_pos,
+#            'gettotal' : gettotal,
+            'getTotal' : getTotal,     
+        }
+        docargs['data'].update({'date_end':parser.parse(docargs.get('data').get('date_end')).strftime('%m/%d/%Y')})
+        docargs['data'].update({'date_start':parser.parse(docargs.get('data').get('date_start')).strftime('%m/%d/%Y')})
+        return self.env['report'].render('hotel_pos_restaurant.report_folio_pos', docargs)

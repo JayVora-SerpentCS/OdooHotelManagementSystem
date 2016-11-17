@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
 	<data>
 
         <!--Report for hotel folio pos order-->
@@ -15,4 +15,4 @@
         />
 
 	</data>
-</openerp>
+</odoo>

@@ -1,6 +1,5 @@
 <?xml version="1.0" ?>
-<openerp>
-    <data>
+<odoo>
 
         <!--Form view for wizard hotel restaurant -->
         <record model="ir.ui.view" id="wizard_hotel_restaurant_form_view">
@@ -76,7 +75,4 @@
         <menuitem name="Restaurant Reports" action="action_folio_rest_reservation"
             id="folio_rest_reservation_menu" parent="hotel.hotel_report_menu" sequence="32"/>
 
-
-
-    </data>
-</openerp>
+</odoo>

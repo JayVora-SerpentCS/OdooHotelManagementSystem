@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<openerp>
-	<data>
+<odoo>
 		
 		<report 
 			id="report_hotel_res_order_kot"
@@ -65,5 +64,4 @@
         />
 
 		
-	</data>
-</openerp>
+</odoo>

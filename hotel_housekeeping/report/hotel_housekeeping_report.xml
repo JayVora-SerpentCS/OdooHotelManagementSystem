@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<openerp>
-	<data>
+<odoo>
 
       <!--Report for hotel housekeeping -->
       <report 
@@ -13,5 +12,4 @@
             menu="False"
         />
 
-	</data>
-</openerp>
+</odoo>

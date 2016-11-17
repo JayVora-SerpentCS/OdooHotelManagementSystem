@@ -19,15 +19,14 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 # ---------------------------------------------------------------------------
-from openerp.exceptions import except_orm, UserError, ValidationError
-from openerp.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
-from openerp import models, fields, api, _
-from openerp import workflow
+from odoo.exceptions import except_orm, UserError, ValidationError
+from odoo.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
+from odoo import models, fields, api, _
+from odoo import workflow
 from decimal import Decimal
 import datetime
 import urllib2
 import time
-
 
 def _offset_format_timestamp1(src_tstamp_str, src_format, dst_format,
                               ignore_unparsable_time=True, context=None):
@@ -135,6 +134,8 @@ class HotelRoomAmenities(models.Model):
     rcateg_id = fields.Many2one('hotel.room.amenities.type',
                                 'Amenity Catagory')
 
+    product_manager = fields.Many2one('res.users', string='Product Manager')
+
 
 class FolioRoomLine(models.Model):
 
@@ -171,6 +172,7 @@ class HotelRoom(models.Model):
     capacity = fields.Integer('Capacity')
     room_line_ids = fields.One2many('folio.room.line', 'room_id',
                                     string='Room Reservation Line')
+    product_manager = fields.Many2one('res.users', string='Product Manager')
 
     @api.onchange('isroom')
     def isroom_change(self):
@@ -498,7 +500,7 @@ class HotelFolio(models.Model):
         @param vals: dictionary of fields value.
         """
         folio_room_line_obj = self.env['folio.room.line']
-#        reservation_line_obj = self.env['hotel.room.reservation.line']
+        reservation_line_obj = self.env['hotel.room.reservation.line']
         product_obj = self.env['product.product']
         h_room_obj = self.env['hotel.room']
         room_lst1 = []
@@ -535,22 +537,22 @@ class HotelFolio(models.Model):
                     folio_romline_rec = (folio_room_line_obj.search
                                          ([('folio_id', '=', folio_obj.id)]))
                     folio_romline_rec.write(room_vals)
-#            if folio_obj.reservation_id:
-#                for reservation in folio_obj.reservation_id:
-#                    reservation_obj = (reservation_line_obj.search
-#                                       ([('reservation_id', '=',
-#                                          reservation.id)]))
-#                    if len(reservation_obj) == 1:
-#                        for line_id in reservation.reservation_line:
-#                            line_id = line_id.reserve
-#                            for room_id in line_id:
-#                                vals = {'room_id': room_id.id,
-#                                        'check_in': folio_obj.checkin_date,
-#                                        'check_out': folio_obj.checkout_date,
-#                                        'state': 'assigned',
-#                                        'reservation_id': reservation.id,
-#                                        }
-#                                reservation_obj.write(vals)
+            if folio_obj.reservation_id:
+                for reservation in folio_obj.reservation_id:
+                    reservation_obj = (reservation_line_obj.search
+                                       ([('reservation_id', '=',
+                                          reservation.id)]))
+                    if len(reservation_obj) == 1:
+                        for line_id in reservation.reservation_line:
+                            line_id = line_id.reserve
+                            for room_id in line_id:
+                                vals = {'room_id': room_id.id,
+                                        'check_in': folio_obj.checkin_date,
+                                        'check_out': folio_obj.checkout_date,
+                                        'state': 'assigned',
+                                        'reservation_id': reservation.id,
+                                        }
+                                reservation_obj.write(vals)
         return folio_write
 
     @api.onchange('warehouse_id')
@@ -791,6 +793,9 @@ class HotelFolioLine(models.Model):
                                    default=_get_checkin_date)
     checkout_date = fields.Datetime('Check Out', required=True,
                                     default=_get_checkout_date)
+    is_reserved = fields.Boolean('Is Reserved',
+                                 help='True when folio line created from \
+                                 Reservation')
 #    product_uom = fields.Many2one('product.uom',string='Unit of Measure',
 #                                  required=True, default=_get_uom_id)
 
@@ -850,16 +855,16 @@ class HotelFolioLine(models.Model):
                 sale_unlink_obj.unlink()
         return super(HotelFolioLine, self).unlink()
 
-    @api.multi
-    def uos_change(self, product_uos, product_uos_qty=0, product_id=None):
-        '''
-        @param self: object pointer
-        '''
-        for folio in self:
-            line = folio.order_line_id
-            line.uos_change(product_uos, product_uos_qty=0,
-                            product_id=None)
-        return True
+    # @api.multi
+    # def uos_change(self, product_uos, product_uos_qty=0, product_id=None):
+    #     '''
+    #     @param self: object pointer
+    #     '''
+    #     for folio in self:
+    #         line = folio.order_line_id
+    #         line.uos_change(product_uos, product_uos_qty=0,
+    #                         product_id=None)
+    #     return True
 
     @api.onchange('product_id')
     def product_id_change(self):
@@ -1151,7 +1156,7 @@ class HotelServices(models.Model):
     service_id = fields.Many2one('product.product', 'Service_id',
                                  required=True, ondelete='cascade',
                                  delegate=True)
-
+    product_manager = fields.Many2one('res.users', string='Product Manager')
 
 class ResCompany(models.Model):
 

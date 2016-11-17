@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<openerp>
+<odoo>
 	<data noupdate="1">
 
 		<!-- Workflow definition -->
@@ -76,4 +76,4 @@
 		</record>
 
 	</data>
-</openerp>
+</odoo>

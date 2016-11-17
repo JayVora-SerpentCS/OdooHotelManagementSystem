@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-# --------------------------------------------------------------------------
+#############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services PVT. LTD.
+#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
 #    (<http://www.serpentcs.com>)
+#    Copyright (C) 2004 OpenERP SA (<http://www.openerp.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -18,74 +19,141 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
-# ---------------------------------------------------------------------------
-from openerp import models
+#############################################################################
+
 import time
-from openerp.report import report_sxw
+from odoo import api, fields, models
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from dateutil import parser
 
 
-class ReservationDetailReport(report_sxw.rml_parse):
-    def __init__(self, cr, uid, name, context):
-        super(ReservationDetailReport, self).__init__(cr, uid, name,
-                                                      context)
-        self.localcontext.update({
-            'time': time,
-            'get_data': self.get_data,
-            'get_checkin': self.get_checkin,
-            'get_checkout': self.get_checkout,
-            'get_room_type': self._get_room_type,
-            'get_room_nos': self._get_room_nos,
-            'get_room_used_detail': self._get_room_used_detail,
-        })
-        self.context = context
-
-    def _get_room_type(self, reservation_line):
-        room_types = ''
-        for line in reservation_line:
-            if line.categ_id:
-                room_types += line.categ_id.name
-                room_types += ' '
-
-        return room_types
-
-    def _get_room_nos(self, reservation_line):
-        room_nos = ''
-        for line in reservation_line:
-            for room in line.reserve:
-                room_nos += room.name
-                room_nos += ' '
-        return room_nos
-
-    def get_data(self, date_start, date_end):
-        reservation_obj = self.pool.get('hotel.reservation')
-        tids = reservation_obj.search(self.cr, self.uid,
-                                      [('checkin', '>=', date_start),
+class ReportTestCheckin(models.AbstractModel):
+    _name = "report.hotel_reservation.report_checkin_qweb"
+    
+    def _get_room_type(self, date_start, date_end):
+        reservation_obj = self.env['hotel.reservation']
+        tids = reservation_obj.search([('checkin', '>=', date_start),
                                        ('checkout', '<=', date_end)])
-        res = reservation_obj.browse(self.cr, self.uid, tids)
+        res = reservation_obj.browse(tids)
         return res
 
+    def _get_room_nos(self, date_start, date_end):
+        reservation_obj = self.env['hotel.reservation']
+        tids = reservation_obj.search([('checkin', '>=', date_start),
+                                       ('checkout', '<=', date_end)])
+        res = reservation_obj.browse(tids)
+        return res
+
+   
     def get_checkin(self, date_start, date_end):
-        reservation_obj = self.pool.get('hotel.reservation')
-        tids = reservation_obj.search(self.cr, self.uid,
-                                      [('checkin', '>=', date_start),
+        reservation_obj = self.env['hotel.reservation']
+        res = reservation_obj.search([('checkin', '>=', date_start),
                                        ('checkin', '<=', date_end)])
-        res = reservation_obj.browse(self.cr, self.uid, tids)
+        return res
+   
+    @api.multi
+    def render_html(self, docids, data=None):
+        self.model = self.env.context.get('active_model')
+        docs = self.env[self.model].browse(self.env.context.get('active_ids', []))
+
+        date_start = data['form'].get('date_start', fields.Date.today())
+        date_end = data['form'].get('date_end', str(datetime.now() + relativedelta(months=+1, day=1, days=-1))[:10])
+        _get_room_type = self.with_context(data['form'].get('used_context',{}))._get_room_type(date_start, date_end)
+        _get_room_nos = self.with_context(data['form'].get('used_context',{}))._get_room_nos(date_start, date_end)
+        get_checkin = self.with_context(data['form'].get('used_context',{})).get_checkin(date_start, date_end)
+        docargs = {
+            'doc_ids': docids,
+            'doc_model': self.model,
+            'data': data['form'],
+            'docs': docs,
+            'time': time,
+            'get_room_type': _get_room_type,
+            'get_room_nos': _get_room_nos,
+            'get_checkin': get_checkin,
+          
+        }
+        docargs['data'].update({'date_end':parser.parse(docargs.get('data').get('date_end')).strftime('%m/%d/%Y')})
+        docargs['data'].update({'date_start':parser.parse(docargs.get('data').get('date_start')).strftime('%m/%d/%Y')})
+        return self.env['report'].render('hotel_reservation.report_checkin_qweb', docargs)
+
+
+class ReportTestCheckout(models.AbstractModel):
+    _name = "report.hotel_reservation.report_checkout_qweb"
+    
+    def _get_room_type(self, date_start, date_end):
+        reservation_obj = self.env['hotel.reservation']
+        res = reservation_obj.search([('checkout', '>=', date_start),
+                                       ('checkout', '<=', date_end)])
+        return res
+    
+    def _get_room_nos(self, date_start, date_end):
+        reservation_obj = self.env['hotel.reservation']
+        res = reservation_obj.search([('checkout', '>=', date_start),
+                                       ('checkout', '<=', date_end)])
         return res
 
     def get_checkout(self, date_start, date_end):
-        reservation_obj = self.pool.get('hotel.reservation')
-        tids = reservation_obj.search(self.cr, self.uid,
-                                      [('checkout', '>=', date_start),
+        reservation_obj = self.env['hotel.reservation']
+        res = reservation_obj.search([('checkout', '>=', date_start),
                                        ('checkout', '<=', date_end)])
-        res = reservation_obj.browse(self.cr, self.uid, tids)
+        return res
+    
+    @api.multi
+    def render_html(self, docids, data=None):
+        self.model = self.env.context.get('active_model')
+        docs = self.env[self.model].browse(self.env.context.get('active_ids', []))
+        date_start = data['form'].get('date_start', fields.Date.today())
+        date_end = data['form'].get('date_end', str(datetime.now() + relativedelta(months=+1, day=1, days=-1))[:10])
+        _get_room_type = self.with_context(data['form'].get('used_context',{}))._get_room_type(date_start, date_end)
+        _get_room_nos = self.with_context(data['form'].get('used_context',{}))._get_room_nos(date_start, date_end)
+        get_checkout = self.with_context(data['form'].get('used_context',{})).get_checkout(date_start, date_end)
+        docargs = {
+            'doc_ids': docids,
+            'doc_model': self.model,
+            'data': data['form'],
+            'docs': docs,
+            'time': time,
+            'get_room_type': _get_room_type,
+            'get_room_nos': _get_room_nos,
+            'get_checkout': get_checkout,
+          
+        }
+        docargs['data'].update({'date_end':parser.parse(docargs.get('data').get('date_end')).strftime('%m/%d/%Y')})
+        docargs['data'].update({'date_start':parser.parse(docargs.get('data').get('date_start')).strftime('%m/%d/%Y')})
+        return self.env['report'].render('hotel_reservation.report_checkout_qweb', docargs)
+
+    
+class ReportTestMaxroom(models.AbstractModel):
+    _name = "report.hotel_reservation.report_maxroom_qweb"
+    
+    def _get_room_type(self, date_start, date_end):
+        reservation_obj = self.env['hotel.reservation']
+        tids = reservation_obj.search([('checkin', '>=', date_start),
+                                       ('checkout', '<=', date_end)])
+        res = reservation_obj.browse(tids)
         return res
 
+    def _get_room_nos(self, date_start, date_end):
+        reservation_obj = self.env['hotel.reservation']
+        tids = reservation_obj.search([('checkin', '>=', date_start),
+                                       ('checkout', '<=', date_end)])
+        res = reservation_obj.browse(tids)
+        return res
+    
+    def get_data(self, date_start, date_end):
+        reservation_obj = self.env['hotel.reservation']
+        res = reservation_obj.search([('checkin', '>=', date_start),
+                                       ('checkout', '<=', date_end)])
+        return res
+    
     def _get_room_used_detail(self, date_start, date_end):
 
         room_used_details = []
-        hotel_room_obj = self.pool.get('hotel.room')
-        room_ids = hotel_room_obj.search(self.cr, self.uid, [])
-        for room in hotel_room_obj.browse(self.cr, self.uid, room_ids):
+        hotel_room_obj = self.env['hotel.room']
+        room_ids = hotel_room_obj.search([])
+        for room in hotel_room_obj.browse(room_ids.ids):
             counter = 0
             details = {}
             if room.room_reservation_line_ids:
@@ -93,36 +161,86 @@ class ReservationDetailReport(report_sxw.rml_parse):
                     if(room_resv_line.check_in >= date_start and
                        room_resv_line.check_in <= date_end):
                         counter += 1
-                if counter >= 1:
-                    details.update({'name': room.name or '',
-                                    'no_of_times_used': counter})
-                    room_used_details.append(details)
+            if counter >= 1:
+                details.update({'name': room.name or '',
+                                'no_of_times_used': counter})
+                room_used_details.append(details)
         return room_used_details
+    
+    @api.multi
+    def render_html(self, docids, data=None):
+        self.model = self.env.context.get('active_model')
+        docs = self.env[self.model].browse(self.env.context.get('active_ids', []))
 
-
-class ReportTestCheckin(models.AbstractModel):
-    _name = "report.hotel_reservation.report_checkin_qweb"
-    _inherit = "report.abstract_report"
-    _template = "hotel_reservation.report_checkin_qweb"
-    _wrapped_report_class = ReservationDetailReport
-
-
-class ReportTestCheckout(models.AbstractModel):
-    _name = "report.hotel_reservation.report_checkout_qweb"
-    _inherit = "report.abstract_report"
-    _template = "hotel_reservation.report_checkout_qweb"
-    _wrapped_report_class = ReservationDetailReport
-
-
-class ReportTestMaxroom(models.AbstractModel):
-    _name = "report.hotel_reservation.report_maxroom_qweb"
-    _inherit = "report.abstract_report"
-    _template = "hotel_reservation.report_maxroom_qweb"
-    _wrapped_report_class = ReservationDetailReport
-
-
+        date_start = data['form'].get('date_start', fields.Date.today())
+        date_end = data['form'].get('date_end', str(datetime.now() + relativedelta(months=+1, day=1, days=-1))[:10])
+        
+        _get_room_type = self.with_context(data['form'].get('used_context',{}))._get_room_type(date_start, date_end)
+        _get_room_nos = self.with_context(data['form'].get('used_context',{}))._get_room_nos(date_start, date_end)
+        get_data = self.with_context(data['form'].get('used_context',{})).get_data(date_start, date_end)
+        _get_room_used_detail = self.with_context(data['form'].get('used_context',{}))._get_room_used_detail(date_start, date_end)
+        docargs = {
+            'doc_ids': docids,
+            'doc_model': self.model,
+            'data': data['form'],
+            'docs': docs,
+            'time': time,
+            'get_room_type': _get_room_type,
+            'get_room_nos': _get_room_nos,
+            'get_data' : get_data,
+            '_get_room_used_detail':_get_room_used_detail,
+          
+        }
+        docargs['data'].update({'date_end':parser.parse(docargs.get('data').get('date_end')).strftime('%m/%d/%Y')})
+        docargs['data'].update({'date_start':parser.parse(docargs.get('data').get('date_start')).strftime('%m/%d/%Y')})
+        return self.env['report'].render('hotel_reservation.report_maxroom_qweb', docargs)    
+    
 class ReportTestRoomres(models.AbstractModel):
     _name = "report.hotel_reservation.report_roomres_qweb"
-    _inherit = "report.abstract_report"
-    _template = "hotel_reservation.report_roomres_qweb"
-    _wrapped_report_class = ReservationDetailReport
+    
+    def _get_room_type(self, date_start, date_end):
+        reservation_obj = self.env['hotel.reservation']
+        tids = reservation_obj.search([('checkin', '>=', date_start),
+                                       ('checkout', '<=', date_end)])
+        res = reservation_obj.browse(tids)
+        return res
+
+    def _get_room_nos(self, date_start, date_end):
+        reservation_obj = self.env['hotel.reservation']
+        tids = reservation_obj.search([('checkin', '>=', date_start),
+                                       ('checkout', '<=', date_end)])
+        res = reservation_obj.browse(tids)
+        return res
+    
+
+    def get_data(self, date_start, date_end):
+        reservation_obj = self.env['hotel.reservation']
+        res = reservation_obj.search([('checkin', '>=', date_start),
+                                       ('checkout', '<=', date_end)])
+        return res
+    
+    @api.multi
+    def render_html(self, docids, data=None):
+        self.model = self.env.context.get('active_model')
+        docs = self.env[self.model].browse(self.env.context.get('active_ids', []))
+
+        date_start = data['form'].get('date_start', fields.Date.today())
+        date_end = data['form'].get('date_end', str(datetime.now() + relativedelta(months=+1, day=1, days=-1))[:10])
+        _get_room_type = self.with_context(data['form'].get('used_context',{}))._get_room_type(date_start, date_end)
+        _get_room_nos = self.with_context(data['form'].get('used_context',{}))._get_room_nos(date_start, date_end)
+        get_data = self.with_context(data['form'].get('used_context',{})).get_data(date_start, date_end)
+        docargs = {
+            'doc_ids': docids,
+            'doc_model': self.model,
+            'data': data['form'],
+            'docs': docs,
+            'time': time,
+            'get_room_type': _get_room_type,
+            'get_room_nos': _get_room_nos,
+            'get_data': get_data,
+          
+        }
+        docargs['data'].update({'date_end':parser.parse(docargs.get('data').get('date_end')).strftime('%m/%d/%Y')})
+        docargs['data'].update({'date_start':parser.parse(docargs.get('data').get('date_start')).strftime('%m/%d/%Y')})
+        return self.env['report'].render('hotel_reservation.report_roomres_qweb', docargs)
+

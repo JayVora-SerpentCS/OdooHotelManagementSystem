@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-# --------------------------------------------------------------------------
+#############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services PVT. LTD.
+#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
 #    (<http://www.serpentcs.com>)
+#    Copyright (C) 2004 OpenERP SA (<http://www.openerp.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -18,9 +19,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
-# ---------------------------------------------------------------------------
+#############################################################################
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 
 
 class HotelFolio(models.Model):
@@ -34,14 +35,14 @@ class HotelFolio(models.Model):
 
     @api.multi
     def action_invoice_create(self, grouped=False, states=None):
-        folio = super(HotelFolio, self)
         state = ['confirmed', 'done']
-        folio = folio.action_invoice_create(grouped=False, states=state)
+        folio = super(HotelFolio, self)
+        invoice_id = folio.action_invoice_create(grouped=False, states=state)
         for line in self:
             for pos_order in line.folio_pos_order_ids:
-                pos_order.write({'invoice_id': folio})
+                pos_order.write({'invoice_id': invoice_id})
                 pos_order.action_invoice_state()
-        return folio
+        return invoice_id
 
     @api.multi
     def action_cancel(self):
@@ -96,7 +97,6 @@ class PosOrder(models.Model):
                                   'name': order1.product_id.name,
                                   'product_id': order1.product_id.id,
                                   'product_uom_qty': order1.qty,
-                                  'product_uom': order1.product_id.uom_id.id,
                                   'price_unit': order1.price_unit,
                                   'price_subtotal': order1.price_subtotal,
                                   }

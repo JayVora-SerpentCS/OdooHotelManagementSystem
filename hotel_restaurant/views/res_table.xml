@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-<data>
+<odoo>
 
 <!--Template for hotel restaurant -->
 
@@ -13,9 +12,9 @@
                         <div class="header">
                             <div class="row">
                                 <div class="col-xs-3">
-                                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 45px;"/>
+                                    <img t-if="res_company.logo" t-att-src="'data:image/png;base64,%s' % res_company.logo" style="max-height: 45px;"/>
                                 </div>
-                                <div class="col-xs-9 text-right" style="margin-top:20px;" t-field="company.rml_header1"/>
+                                <div class="col-xs-9 text-right" style="margin-top:20px;" t-field="res_company.rml_header1"/>
                             </div>
                             <div class="row zero_min_height">
                                 <div class="col-xs-12">
@@ -29,12 +28,12 @@
                             <span><strong><center>Table Reservation List</center></strong></span>
                         </h2>
                     </div>
-                    <div class="row mt32 mb32">
+                 <div class="row mt32 mb32">
                         <div class="text-center">
                             <strong>From:</strong>
-                            <span t-esc="formatLang(data['form']['date_start'],date=True)"/>
+                            <span t-esc="data['date_start']"/>
                             <strong>To:</strong>
-                            <span t-esc="formatLang(data['form']['date_end'],date=True)"/>
+                            <span t-esc="data['date_end']"/>
                         </div>
                     </div>
                     <table class="table table-condensed container">
@@ -47,18 +46,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr t-foreach="get_res_data(data['form']['date_start'],data['form']['date_end'])" t-as="o">
+                            <tr t-foreach="Reservations" t-as="reservations">
                                 <td style="white-space: nowrap;">
-                                    <span t-esc="o.reservation_id"/>
+                                    <span t-esc="reservations.get('reservation', '')" />
                                 </td>
                                 <td style="white-space: nowrap;">
-                                    <span t-att-style="style" t-esc="o.cname.name"/>
+                                    <span t-esc="reservations.get('name', '')" />
                                 </td>
                                 <td style="white-space: nowrap;">
-                                    <span t-att-style="style" t-esc="formatLang(o.start_date, date=True)"/>
+                                    <span t-esc="reservations.get('start_date', '')" />
                                 </td>
                                 <td style="white-space: nowrap;">
-                                    <span t-att-style="style" t-esc="formatLang(o.end_date, date=True)"/>
+                                    <span t-esc="reservations.get('end_date', '')" />
                                 </td>
                             </tr>
                         </tbody>
@@ -68,5 +67,4 @@
             </t>
         </t>
 </template>
-</data>
-</openerp>
+</odoo>

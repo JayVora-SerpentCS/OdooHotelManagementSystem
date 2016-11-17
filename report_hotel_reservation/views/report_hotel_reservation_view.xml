@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<openerp>
+<odoo>
 	<data>
 		<!-- State By Reservation -->
 		<record model="ir.ui.view" id="view_hotel_reservation_status_tree">
@@ -72,4 +72,4 @@
 		</record>
 
 	</data>
-</openerp>
+</odoo>

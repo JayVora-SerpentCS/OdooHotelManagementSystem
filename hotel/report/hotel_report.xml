@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<openerp>
-	<data>
+<odoo>
 
         <!--Report for hotel folio -->
 		<report id="hotel_folio_details"
@@ -11,5 +10,4 @@
 			menu="False"
 			auto="False"/>
 
-	</data>
-</openerp>
+</odoo>

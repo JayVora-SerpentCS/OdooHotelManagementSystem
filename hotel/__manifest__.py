@@ -22,13 +22,12 @@
 
 {
     'name': 'Hotel Management',
-    'version': '10.0.0.1',
-    'author': 'Serpent Consulting Services Pvt. Ltd., OpenERP SA',
-    'images': [],
+    'version': '0.07',
+    'author': 'Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
+    Odoo Community Association (OCA)',
     'category': 'Generic Modules/Hotel Management',
     'website': 'http://www.serpentcs.com',
     'depends': ['sale_stock', 'point_of_sale', 'report'],
-    'license': "",
     'demo': ['views/hotel_data.xml'],
     'data': [
             'security/hotel_security.xml',
@@ -42,5 +41,4 @@
     'css': ['static/src/css/room_kanban.css'],
     'auto_install': False,
     'installable': True,
-    'application': True,
 }

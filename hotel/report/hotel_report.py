@@ -21,38 +21,44 @@
 # ---------------------------------------------------------------------------
 
 import time
-from openerp import models
-from openerp.report import report_sxw
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+from dateutil import parser
+from odoo import api, fields, models
+from dateutil import parser
 
 
-class FolioReport(report_sxw.rml_parse):
-    def __init__(self, cr, uid, name, context):
-        super(FolioReport, self).__init__(cr, uid, name, context)
-        self.localcontext.update({'time': time,
-                                  'get_data': self.get_data,
-                                  'get_Total': self.getTotal,
-                                  'get_total': self.gettotal,
-                                  })
-        self.temp = 0.0
+class FolioReport(models.AbstractModel):
+    _name = 'report.hotel.report_hotel_folio'
 
     def get_data(self, date_start, date_end):
-        folio_obj = self.pool.get('hotel.folio')
-        tids = folio_obj.search(self.cr, self.uid,
-                                [('checkin_date', '>=', date_start),
-                                 ('checkout_date', '<=', date_end)])
-        res = folio_obj.browse(self.cr, self.uid, tids)
-        return res
+        total_amount = 0.0
+        data_1 = []
+        folio_obj = self.env['hotel.folio']
+        tids = folio_obj.search([('checkin_date', '>=', date_start), ('checkout_date', '<=', date_end)])
+        for data in tids:
+            data_1.append({'name':data.name, 'partner':data.partner_id.name, 'checkin':parser.parse(data.checkin_date).strftime('%m/%d/%Y %H:%M:%S'), 'checkout':parser.parse(data.checkin_date).strftime('%m/%d/%Y %H:%M:%S'), 'amount':data.amount_total})
+            total_amount += data.amount_total
+        data_1.append({'total_amount':total_amount})
+        return data_1
 
-    def gettotal(self, total):
-        self.temp = self.temp + float(total)
-        return total
+    @api.model
+    def render_html(self, docids, data=None):
+        self.model = self.env.context.get('active_model')
+        docs = self.env[self.model].browse(self.env.context.get('active_ids', []))
 
-    def getTotal(self):
-        return self.temp
+        date_start = data['form'].get('date_start', fields.Date.today())
+        date_end = data['form'].get('date_end', str(datetime.now() + relativedelta(months=+1, day=1, days=-1))[:10])
 
-
-class ReportLunchorder(models.AbstractModel):
-    _name = 'report.hotel.report_hotel_folio'
-    _inherit = 'report.abstract_report'
-    _template = 'hotel.report_hotel_folio'
-    _wrapped_report_class = FolioReport
+        data_res = self.with_context(data['form'].get('used_context',{})).get_data(date_start, date_end)
+        docargs = {
+            'doc_ids': docids,
+            'doc_model': self.model,
+            'data': data['form'],
+            'docs': docs,
+            'time': time,
+            'folio_data': data_res,
+        }
+        docargs['data'].update({'date_end':parser.parse(docargs.get('data').get('date_end')).strftime('%m/%d/%Y')})
+        docargs['data'].update({'date_start':parser.parse(docargs.get('data').get('date_start')).strftime('%m/%d/%Y')})
+        return self.env['report'].render('hotel.report_hotel_folio', docargs)

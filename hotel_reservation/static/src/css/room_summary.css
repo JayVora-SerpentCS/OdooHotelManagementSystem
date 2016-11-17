@@ -13,6 +13,16 @@
 	text-align: center;
 	min-width:100px;
 	vertical-align: middle;
+	cursor:pointer;
+}
+.table_reserved1
+{
+	background-color: blue;
+	color: white;
+	text-align: center;
+	min-width:100px;
+	vertical-align: middle;
+	cursor:pointer;
 }
 .table_free
 {

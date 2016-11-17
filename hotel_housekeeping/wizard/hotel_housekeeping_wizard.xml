@@ -1,6 +1,5 @@
 <?xml version="1.0" ?>
-<openerp>
-	<data>
+<odoo>
 
         <!--Form view for hotel housekeeping wizard -->
 		<record model="ir.ui.view" id="hotel_housekeeping_wizard_form_view">
@@ -36,5 +35,4 @@
 			action="action_hotel_housekeeping_wizard" parent="hotel.hotel_report_menu"
 			sequence="29" />
 
-	</data>
-</openerp>
+</odoo>

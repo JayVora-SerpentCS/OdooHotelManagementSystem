@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
         <menuitem id="hotel_management_menu" name="Hotel Management" />
         <!-- web_icon="data/hotel-grey.png" -->
         <!-- web_icon_hover="data/hotel-color.png" -->
@@ -98,7 +97,7 @@
             <field name="model">hotel.room.type</field>
             <field name="arch" type="xml">
                 <tree string=" Hotel Room Type">
-                    <field name="complete_name" />
+                    <field name="display_name"/>
                 </tree>
             </field>
         </record>
@@ -141,7 +140,7 @@
             <field name="model">hotel.room.amenities.type</field>
             <field name="arch" type="xml">
                 <tree string="Hotel Room Amenities Type">
-                    <field name="complete_name" />
+                    <field name="display_name"/>
                 </tree>
             </field>
         </record>
@@ -181,7 +180,6 @@
                                 <group colspan="4" col="4">
                                     <field name="type" select="2" string="Amenity Type" />
                                     <field name="product_manager" select="2" string="Amenity manager" />
-                                    <field name="state" select="2" />
                                     <field name="categ_id" select="1"
                                         domain="[('isamenitytype','=',True)]" />
                                     <field name="uom_id" />
@@ -204,8 +202,8 @@
                                     <field name="sale_ok" select="2" />
                                     <field name="standard_price" />
                                     <field name="rental" select="2" />
-                                    <field name="uos_id" />
-                                    <field name="uos_coeff" />
+                                    <!-- <field name="uos_id" /> -->
+                                    <!-- <field name="uos_coeff" /> -->
                                 </group>
                                 <newline />
                                 <group>
@@ -282,9 +280,6 @@
             <field name="model">hotel.room</field>
             <field name="arch" type="xml">
                 <form string="Hotel Room">
-                    <header>
-                        <field name="state" string="Room Status" widget='statusbar' />
-                    </header>
                     <sheet>
                         <div class="oe_title">
                             <label for="name" string="Name" />
@@ -328,8 +323,8 @@
                                     <field name="rental" select="2" />
                                     <field name="standard_price" />
                                     <field name="cost_method" string="Cost Method"/>
-                                    <field name="uos_id" />
-                                    <field name="uos_coeff" />
+                                    <!-- <field name="uos_id" /> -->
+                                    <!-- <field name="uos_coeff" /> -->
                                     <newline />
                                 </group>
                                 <newline />
@@ -379,7 +374,7 @@
                     <field name="name" />
                     <field name="categ_id" select="1" />
                     <field name="list_price" string="Room rate" />
-                    <field name="state" string="Status" />
+                    <field name="status" string="Status" />
                     <newline />
                     <filter name="available" string="Available"
                         domain="[('status','=', 'available')]" help="Available Rooms" />
@@ -843,7 +838,7 @@
             <field name="model">hotel.service.type</field>
             <field name="arch" type="xml">
                 <tree string="Service Type">
-                    <field name="complete_name" />
+                    <field name="display_name"/>
                 </tree>
             </field>
         </record>
@@ -884,7 +879,6 @@
                                 <group>
                                     <group colspan="4" col="4">
                                         <field name="type" select="2" string="Service Type" />
-                                        <field name="state" select="2" />
                                         <field name="categ_id" domain="[('isservicetype','=',True)]"
                                             select="1" />
                                         <field name="product_manager" select="2" string="Service Manager" />
@@ -909,8 +903,8 @@
                                     <field name="sale_ok" select="2" />
                                     <field name="standard_price" />
                                     <field name="rental" select="2" />
-                                    <field name="uos_id" />
-                                    <field name="uos_coeff" />
+                                    <!-- <field name="uos_id" /> -->
+                                    <!-- <field name="uos_coeff" /> -->
                                 </group>
                                 <newline />
                                 <group>
@@ -1120,5 +1114,4 @@
             action="open_currency_exchange_tree" sequence="22"
             parent="hotel_configuration_menu" />
 
-    </data>
-</openerp>
+</odoo>

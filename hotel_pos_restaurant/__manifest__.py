@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-# --------------------------------------------------------------------------
+#############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services PVT. LTD.
+#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
 #    (<http://www.serpentcs.com>)
+#    Copyright (C) 2004 OpenERP SA (<http://www.openerp.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -18,24 +19,22 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
-# ---------------------------------------------------------------------------
+#############################################################################
 
 {
-    "name": "Board for Hotel FrontDesk",
-    "version": "0.01",
-    "author": "Serpent Consulting Services Pvt. Ltd.,\
+    "name": "Hotel POS Restaurant Management",
+    "version": "0.10",
+    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA)",
+    "category": "Generic Modules/Hotel Restaurant Management",
     "website": "http://www.serpentcs.com",
-    "images": [],
-    "category": "Board/Hotel FrontDesk",
-    "depends": [
-        "board",
-        "report_hotel_restaurant",
-        "hotel_pos_restaurant"
-        ],
-    "license": "",
-    "data": [
-        "views/board_frontdesk_view.xml"
-    ],
-    "installable": True,
+    "depends": ["hotel"],
+    "demo": ["views/hotel_pos_data.xml"],
+    "data": ["security/ir.model.access.csv",
+             "views/pos_restaurent_view.xml",
+             "views/hotel_pos_report.xml",
+             "views/report_pos_management.xml",
+             "wizard/hotel_pos_wizard.xml"],
+    "auto_install": False,
+    "installable": True
 }
