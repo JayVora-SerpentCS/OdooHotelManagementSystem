@@ -19,15 +19,14 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 # ---------------------------------------------------------------------------
-
-import time
-import datetime
-import urllib2
-from odoo import models, fields, api, _
-from odoo.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
 from odoo.exceptions import except_orm, UserError, ValidationError
+from odoo.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
+from odoo import models, fields, api, _
 from odoo import workflow
 from decimal import Decimal
+import datetime
+import urllib2
+import time
 
 
 def _offset_format_timestamp1(src_tstamp_str, src_format, dst_format,
@@ -502,7 +501,7 @@ class HotelFolio(models.Model):
         @param vals: dictionary of fields value.
         """
         folio_room_line_obj = self.env['folio.room.line']
-        reservation_line_obj = self.env['hotel.room.reservation.line']
+#        reservation_line_obj = self.env['hotel.room.reservation.line']
         product_obj = self.env['product.product']
         h_room_obj = self.env['hotel.room']
         room_lst1 = []
@@ -539,22 +538,22 @@ class HotelFolio(models.Model):
                     folio_romline_rec = (folio_room_line_obj.search
                                          ([('folio_id', '=', folio_obj.id)]))
                     folio_romline_rec.write(room_vals)
-            if folio_obj.reservation_id:
-                for reservation in folio_obj.reservation_id:
-                    reservation_obj = (reservation_line_obj.search
-                                       ([('reservation_id', '=',
-                                          reservation.id)]))
-                    if len(reservation_obj) == 1:
-                        for line_id in reservation.reservation_line:
-                            line_id = line_id.reserve
-                            for room_id in line_id:
-                                vals = {'room_id': room_id.id,
-                                        'check_in': folio_obj.checkin_date,
-                                        'check_out': folio_obj.checkout_date,
-                                        'state': 'assigned',
-                                        'reservation_id': reservation.id,
-                                        }
-                                reservation_obj.write(vals)
+#            if folio_obj.reservation_id:
+#                for reservation in folio_obj.reservation_id:
+#                    reservation_obj = (reservation_line_obj.search
+#                                       ([('reservation_id', '=',
+#                                          reservation.id)]))
+#                    if len(reservation_obj) == 1:
+#                        for line_id in reservation.reservation_line:
+#                            line_id = line_id.reserve
+#                            for room_id in line_id:
+#                                vals = {'room_id': room_id.id,
+#                                        'check_in': folio_obj.checkin_date,
+#                                        'check_out': folio_obj.checkout_date,
+#                                        'state': 'assigned',
+#                                        'reservation_id': reservation.id,
+#                                        }
+#                                reservation_obj.write(vals)
         return folio_write
 
     @api.onchange('warehouse_id')
@@ -1100,7 +1099,7 @@ class HotelServiceLine(models.Model):
         if not self.ser_checkout_date:
             self.ser_checkout_date = time_a
         if self.ser_checkout_date < self.ser_checkin_date:
-            raise _('Checkout must be greater or equal checkin date')
+            raise UserError('Checkout must be greater or equal checkin date')
         if self.ser_checkin_date and self.ser_checkout_date:
             date_a = time.strptime(self.ser_checkout_date,
                                    DEFAULT_SERVER_DATETIME_FORMAT)[:5]

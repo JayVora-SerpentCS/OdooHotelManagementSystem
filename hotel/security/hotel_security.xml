@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<data noupdate="1">
+<data noupdate="1">
 
-		<!--Group for hotel manager -->
-		<record id="group_hotel_manager" model="res.groups">
-			<field name="name">Hotel Management/ Manager</field>
-		</record>
+    <!--Group for hotel manager -->
+    <record id="group_hotel_manager" model="res.groups">
+        <field name="name">Hotel Management/ Manager</field>
+    </record>
 
-		<!--Group for hotel user -->
-		<record id="group_hotel_user" model="res.groups">
-			<field name="name">Hotel Management / User</field>
-		</record>
-
-	</data>
+    <!--Group for hotel user -->
+    <record id="group_hotel_user" model="res.groups">
+        <field name="name">Hotel Management / User</field>
+    </record>
+</data>
 </odoo>

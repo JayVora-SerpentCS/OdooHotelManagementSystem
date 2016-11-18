@@ -33,9 +33,9 @@
 					<div class="row mt32 mb32">
 						<div class="text-center">
 							<strong>From:</strong>
-							<span t-esc="formatLang(data['date_start'])" />
+							<span t-esc="data['date_start']" />
 							<strong>To:</strong>
-							<span t-esc="formatLang(data['date_end'])" />
+							<span t-esc="data['date_end']" />
 						</div>
 					</div>
 					<t t-if="data['check'] == True">
@@ -201,9 +201,9 @@
 					<div class="row mt32 mb32">
 						<div class="text-center">
 							<strong>From:</strong>
-							<span t-esc="formatLang(data['date_start'])" />
+							<span t-esc="data['date_start']" />
 							<strong>To:</strong>
-							<span t-esc="formatLang(data['date_end'])" />
+							<span t-esc="data['date_end']" />
 						</div>
 					</div>
 					<t t-if="data['check'] == True">

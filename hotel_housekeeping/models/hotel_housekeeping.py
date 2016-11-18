@@ -20,10 +20,11 @@
 #
 # ---------------------------------------------------------------------------
 
-import time
-from odoo import models, fields, api, _
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
+from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
+import time
+from odoo import workflow
 
 
 class ProductCategory(models.Model):
@@ -90,7 +91,7 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.state = 'dirty'
+        self.write({'state': 'dirty'})
         return True
 
     @api.multi
@@ -101,7 +102,7 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.state = 'cancel'
+        self.write({'state': 'cancel'})
         return True
 
     @api.multi
@@ -112,7 +113,7 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.state = 'done'
+        self.write({'state': 'done'})
         return True
 
     @api.multi
@@ -123,7 +124,7 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.state = 'inspect'
+        self.write({'state': 'inspect'})
         return True
 
     @api.multi
@@ -134,7 +135,7 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.state = 'clean'
+        self.write({'state': 'clean'})
         return True
 
 

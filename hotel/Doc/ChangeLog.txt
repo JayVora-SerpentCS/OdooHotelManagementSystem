@@ -1,0 +1,28 @@
+============================================================================================================================
+ Version Change Log (hotel)
+============================================================================================================================
+0.07 on 2013-10-31 by Murtuza Saleh
+    *Improved hotel.room kanban view as per in v9.
+
+0.06 on 2013-10-29 by Ashish Thakkar
+	*Set the product_category_tree_view in the hotel_view.xml file.
+	*Improved the code to get the hierarchy in rooms,amenities and services. 
+
+0.05 on 2013-10-28 by Anu Patel
+    * Set the default value of check in date and check out date.
+    * Improved calculation of duration for hotel check in - checkout.
+    
+0.04 on 2013-10-28 by Anu Patel
+    * Improved ir.sequence for hotel.folio.
+    * Improved hotel folio line one2many field as faced problem because of product_uos field.
+    
+0.03 on 2013-10-25 by Anu Patel
+    * Improved on_change in hotel folio line where product_id onchange is not working.
+    * Removed on_chage from .xml file as there is no need to define there.
+    
+0.02 on 2013-10-26 by Anu Patel
+    * Improved the code for removed the workflow in hotel folio as workflow is no longer used in v9.
+    * Improved states used in hotel folio from sale order as per in v9.
+    
+0.01 on 2013-10-16 by Ashish Thakkar
+    * Made the module installable in v9.
