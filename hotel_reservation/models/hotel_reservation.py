@@ -415,7 +415,7 @@ class HotelReservation(models.Model):
                 'date_order': reservation.date_order,
                 'warehouse_id': reservation.warehouse_id.id,
                 'partner_id': reservation.partner_id.id,
-#                'pricelist_id': reservation.pricelist_id.id,
+#               'pricelist_id': reservation.pricelist_id.id,
                 'partner_invoice_id': reservation.partner_invoice_id.id,
                 'partner_shipping_id': reservation.partner_shipping_id.id,
                 'checkin_date': reservation.checkin,
@@ -432,15 +432,15 @@ class HotelReservation(models.Model):
                                       DEFAULT_SERVER_DATETIME_FORMAT)[:5]))
             for line in reservation.reservation_line:
                 for r in line.reserve:
-#                    prod_val = folio_line_obj.product_id_change()
-#                    prod_uom = prod_val['value'].get('product_uom', False)
-#                    price_unit = prod_val['value'].get('price_unit', False)
+#                   prod_val = folio_line_obj.product_id_change()
+#                   prod_uom = prod_val['value'].get('product_uom', False)
+#                   price_unit = prod_val['value'].get('price_unit', False)
                     folio_lines.append((0, 0, {
                         'checkin_date': checkin_date,
                         'checkout_date': checkout_date,
                         'product_id': r.product_id and r.product_id.id,
                         'name': reservation['reservation_no'],
-#                        'product_uom': prod_uom,
+#                       'product_uom': prod_uom,
                         'product_uom_qty': ((date_a - date_b).days) + 1,
                         'is_reserved': True}))
                     res_obj = room_obj.browse([r.id])
@@ -546,17 +546,16 @@ class HotelReservationLine(models.Model):
             assigned = False
             for line in room.room_reservation_line_ids:
                 if line.status != 'cancel':
-                    if (line.check_in <= self.line_id.checkin <=
-                        line.check_out) or (line.check_in <=
-                                            self.line_id.checkout <=
+                    if (line.check_in <= self.line_id.checkin <= \
+                        line.check_out) or (line.check_in <= \
+                                            self.line_id.checkout <= \
                                             line.check_out):
                         assigned = True
             for rm_line in room.room_line_ids:
                 if rm_line.status != 'cancel':
-                    if (rm_line.check_in <= self.line_id.checkin <=
-                        rm_line.check_out) or (rm_line.check_in <=
-                                            self.line_id.checkout <=
-                                            rm_line.check_out):
+                    if (rm_line.check_in <= self.line_id.checkin <= \
+                        rm_line.check_out) or (rm_line.check_in <= \
+                        self.line_id.checkout <= rm_line.check_out):
                         assigned = True
             if not assigned:
                 room_ids.append(room.id)

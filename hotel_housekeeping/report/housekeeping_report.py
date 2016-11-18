@@ -36,8 +36,8 @@ class ActivityReport(models.AbstractModel):
         act_val = {}
         house_keep_act_obj = self.env['hotel.housekeeping.activities']
 
-        activity_line_ids = (house_keep_act_obj.search([('clean_start_time',
-                            '>=', date_start),
+        activity_line_ids = (house_keep_act_obj.search([
+                        ('clean_start_time', '>=', date_start),
                         ('clean_end_time', '<=', date_end),
                         ('a_list', '=', room_no)]))
         for activity in activity_line_ids:
@@ -66,8 +66,8 @@ class ActivityReport(models.AbstractModel):
         (self.env.context.get('active_ids', []))
 
         date_start = data.get('date_start', fields.Date.today())
-        date_end = data.get('date_end', str(datetime.now() +
-                                relativedelta(months=+1, day=1, days=-1))[:10])
+        date_end = data.get('date_end', str(datetime.now()
+                         + relativedelta(months=+1, day=1, days=-1))[:10])
         room_no = data.get('room_no')[0]
         get_room_activity_detail_res = self.with_context(data['form'].
                         get('used_context', {})).get_room_activity_detail(
@@ -84,5 +84,4 @@ class ActivityReport(models.AbstractModel):
                                 get('date_end')).strftime('%m/%d/%Y')})
         docargs['data'].update({'date_start': parser.parse(docargs.get('data').
                                 get('date_start')).strftime('%m/%d/%Y')})
-        return self.env['report'].render(
-                            'hotel_housekeeping.report_housekeeping', docargs)
+        return self.env['report'].render('hotel_housekeeping.report_housekeeping', docargs)

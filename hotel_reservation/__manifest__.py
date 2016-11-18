@@ -45,7 +45,7 @@
         "views/max_room.xml",
         "views/room_res.xml",
         "views/room_summ_view.xml",
-#        "views/email_temp_view.xml",
+#       "views/email_temp_view.xml",
     ],
     'js': ["static/src/js/hotel_room_summary.js", ],
     'qweb': ['static/src/xml/hotel_room_summary.xml'],

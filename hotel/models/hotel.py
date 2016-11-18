@@ -1100,7 +1100,7 @@ class HotelServiceLine(models.Model):
         if not self.ser_checkout_date:
             self.ser_checkout_date = time_a
         if self.ser_checkout_date < self.ser_checkin_date:
-            raise UserError('Checkout must be greater or equal checkin date')
+            raise _('Checkout must be greater or equal checkin date')
         if self.ser_checkin_date and self.ser_checkout_date:
             date_a = time.strptime(self.ser_checkout_date,
                                    DEFAULT_SERVER_DATETIME_FORMAT)[:5]

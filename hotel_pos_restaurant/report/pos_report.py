@@ -26,7 +26,6 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from dateutil import parser
 from odoo import api, fields, models
-from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 
 class ReportLunchorder1(models.AbstractModel):
@@ -70,15 +69,15 @@ class ReportLunchorder1(models.AbstractModel):
         docs = self.env[self.model].browse(
                                     self.env.context.get('active_ids', []))
         date_start = data.get('date_start', fields.Date.today())
-        date_end = data.get('date_end', str(datetime.now() +
+        date_end = data.get('date_end', str(datetime.now() + \
                                 relativedelta(months=+1, day=1, days=-1))[:10])
-        get_data = self.with_context(data['form'].get('used_context',
+        get_data = self.with_context(data['form'].get('used_context', \
                                         {})).get_data(date_start, date_end)
         get_pos = self.with_context(data['form'].get('used_context',
                                         {})).get_pos(date_start, date_end)
-#        gettotal = self.with_context(data['form'].get('used_context',
+#       gettotal = self.with_context(data['form'].get('used_context',
 #                                       {})).gettotal(pos_order)
-        getTotal = self.with_context(data['form'].get('used_context',
+        getTotal = self.with_context(data['form'].get('used_context', \
                                                 {})).getTotal()
         docargs = {
             'doc_ids': docids,
@@ -88,12 +87,12 @@ class ReportLunchorder1(models.AbstractModel):
             'time': time,
             'get_data': get_data,
             'get_pos': get_pos,
-#            'gettotal' : gettotal,
+#           'gettotal' : gettotal,
             'getTotal': getTotal,
         }
         docargs['data'].update({'date_end': parser.parse(docargs.get(
                                 'data').get('date_end')).strftime('%m/%d/%Y')})
-        docargs['data'].update({'date_start': parser.parse(docargs.get(
+        docargs['data'].update({'date_start': parser.parse(docargs.get( \
                              'data').get('date_start')).strftime('%m/%d/%Y')})
-        return self.env['report'].render(
+        return self.env['report'].render( \
                         'hotel_pos_restaurant.report_folio_pos', docargs)

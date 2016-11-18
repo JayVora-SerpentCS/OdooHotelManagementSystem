@@ -21,7 +21,7 @@
 # ---------------------------------------------------------------------------
 
 import time
-from odoo import models, fields, api ,_
+from odoo import models, fields, api, _
 from odoo.exceptions import except_orm, ValidationError
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 

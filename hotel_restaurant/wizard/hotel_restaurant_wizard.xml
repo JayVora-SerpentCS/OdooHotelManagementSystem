@@ -1,78 +1,76 @@
 <?xml version="1.0" ?>
 <odoo>
 
-        <!--Form view for wizard hotel restaurant -->
-        <record model="ir.ui.view" id="wizard_hotel_restaurant_form_view">
-            <field name="name">wizard.hotel.restaurant.form</field>
-            <field name="model">wizard.hotel.restaurant</field>
-            <field name="arch" type="xml">
-                <form string="Reservation List" >
-                  <group col="4">
-                     <field name="date_start"/>
-                     <field name="date_end"/>
-                  </group>
-                  <footer>
-                      <button name="print_report" string="Table Reservation List" type="object" class="oe_highlight"/>
-                      or
-                      <button string="Cancel" class="oe_link" special="cancel"/>
-                  </footer>
-                </form>
-            </field>
-        </record>
+	<!--Form view for wizard hotel restaurant -->
+	<record model="ir.ui.view" id="wizard_hotel_restaurant_form_view">
+		<field name="name">wizard.hotel.restaurant.form</field>
+		<field name="model">wizard.hotel.restaurant</field>
+		<field name="arch" type="xml">
+			<form string="Reservation List">
+				<group col="4">
+					<field name="date_start" />
+					<field name="date_end" />
+				</group>
+				<footer>
+					<button name="print_report" string="Table Reservation List"
+						type="object" class="oe_highlight" />
+					or
+					<button string="Cancel" class="oe_link" special="cancel" />
+				</footer>
+			</form>
+		</field>
+	</record>
 
-        <!--Action for wizard hotel restaurant -->
-        <record id="action_wizard_hotel_restaurant" model="ir.actions.act_window">
-            <field name="name">Table Reservation List</field>
-            <field name="res_model">wizard.hotel.restaurant</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
-        </record>
+	<!--Action for wizard hotel restaurant -->
+	<record id="action_wizard_hotel_restaurant" model="ir.actions.act_window">
+		<field name="name">Table Reservation List</field>
+		<field name="res_model">wizard.hotel.restaurant</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
 
-        <menuitem
-            name="Table Reservation List" 
-            action="action_wizard_hotel_restaurant" 
-            parent="hotel.hotel_report_menu"
-            id="wizard_list_menu"
-            sequence="30"/>
+	<menuitem name="Table Reservation List" action="action_wizard_hotel_restaurant"
+		parent="hotel.hotel_report_menu" id="wizard_list_menu" sequence="30" />
 
 
-        <!--Form view for folio report wizard -->
-        <record model="ir.ui.view" id="view_folio_rest_reservation">
-            <field name="name">view.folio.rest.reservation</field>
-            <field name="model">folio.rest.reservation</field>
-            <field name="arch" type="xml">
-                <form string="Order Report" >
-                    <group col="4">
-                        <field name="date_start" required="1" />
-                        <field name="date_end" required="1" />
-                    <group col="4">
-                        <field name="check"/>
-                    </group>
-                    </group>
-                    <footer>
-                        <button name="print_rest_report" string="Restaurant Reserved Order" type="object"
-                            class="oe_highlight" />
-                        
-                        <button name="print_reserv_report" string="Restaurant Orders" type="object"
-                            class="oe_highlight" />
-                        or
-                        <button string="Cancel" class="oe_link" special="cancel" />
-                    </footer>
-                </form>
-            </field>
-        </record>
+	<!--Form view for folio report wizard -->
+	<record model="ir.ui.view" id="view_folio_rest_reservation">
+		<field name="name">view.folio.rest.reservation</field>
+		<field name="model">folio.rest.reservation</field>
+		<field name="arch" type="xml">
+			<form string="Order Report">
+				<group col="4">
+					<field name="date_start" required="1" />
+					<field name="date_end" required="1" />
+					<group col="4">
+						<field name="check" />
+					</group>
+				</group>
+				<footer>
+					<button name="print_rest_report" string="Restaurant Reserved Order"
+						type="object" class="oe_highlight" />
 
-        <!--Action for folio report wizard -->
-        <record model="ir.actions.act_window" id="action_folio_rest_reservation">
-            <field name="name">Restaurant Reports</field>
-            <field name="res_model">folio.rest.reservation</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
-        </record>
+					<button name="print_reserv_report" string="Restaurant Orders"
+						type="object" class="oe_highlight" />
+					or
+					<button string="Cancel" class="oe_link" special="cancel" />
+				</footer>
+			</form>
+		</field>
+	</record>
 
-        <menuitem name="Restaurant Reports" action="action_folio_rest_reservation"
-            id="folio_rest_reservation_menu" parent="hotel.hotel_report_menu" sequence="32"/>
+	<!--Action for folio report wizard -->
+	<record model="ir.actions.act_window" id="action_folio_rest_reservation">
+		<field name="name">Restaurant Reports</field>
+		<field name="res_model">folio.rest.reservation</field>
+		<field name="view_type">form</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+
+	<menuitem name="Restaurant Reports" action="action_folio_rest_reservation"
+		id="folio_rest_reservation_menu" parent="hotel.hotel_report_menu"
+		sequence="32" />
 
 </odoo>

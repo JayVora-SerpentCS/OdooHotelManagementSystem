@@ -24,7 +24,6 @@ import time
 from odoo import models, fields, api, _
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 from odoo.exceptions import ValidationError
-from odoo import workflow
 
 
 class ProductCategory(models.Model):
