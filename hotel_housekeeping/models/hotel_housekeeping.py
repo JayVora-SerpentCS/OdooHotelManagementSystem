@@ -20,10 +20,10 @@
 #
 # ---------------------------------------------------------------------------
 
+import time
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
-import time
 from odoo import workflow
 
 
@@ -91,7 +91,7 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'dirty'})
+        self.state = 'dirty'
         return True
 
     @api.multi
@@ -102,7 +102,7 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'cancel'})
+        self.state = 'cancel'
         return True
 
     @api.multi
@@ -113,7 +113,7 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'done'})
+        self.state = 'done'
         return True
 
     @api.multi
@@ -124,7 +124,7 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'inspect'})
+        self.state = 'inspect'
         return True
 
     @api.multi
@@ -135,7 +135,7 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'clean'})
+        self.state = 'clean'
         return True
 
 

@@ -19,14 +19,15 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 # ---------------------------------------------------------------------------
-from odoo.exceptions import except_orm, UserError, ValidationError
-from odoo.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
+
+import time
+import urllib2
+import datetime
 from odoo import models, fields, api, _
+from odoo.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.exceptions import except_orm, UserError, ValidationError
 from odoo import workflow
 from decimal import Decimal
-import datetime
-import urllib2
-import time
 
 
 def _offset_format_timestamp1(src_tstamp_str, src_format, dst_format,
