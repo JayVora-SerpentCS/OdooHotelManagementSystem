@@ -22,6 +22,7 @@
 
 from odoo import models, fields, api
 
+
 class HotelHousekeepingWizard(models.TransientModel):
     _name = 'hotel.housekeeping.wizard'
 

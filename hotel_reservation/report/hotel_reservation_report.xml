@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <odoo>
-    <data>
 
 		<!--Report for hotel checkin details -->
         <report id="hotel_checkin_details"
@@ -37,5 +36,5 @@
             file="hotel_reservation.report_maxroom_qweb"
             name="hotel_reservation.report_maxroom_qweb"
             menu="False"/>
-    </data>
-    </odoo>
+
+</odoo>

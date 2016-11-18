@@ -1,5 +1,4 @@
 <odoo> 
-    <data>
     
        <!-- pos order view Inherited -->
        <record id ="hotel_folio_pos_inh" model="ir.ui.view">
@@ -38,5 +37,4 @@
             </field>
         </record>   
         
-	</data>
 </odoo>

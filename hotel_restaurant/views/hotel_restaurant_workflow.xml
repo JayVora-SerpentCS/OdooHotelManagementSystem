@@ -1,6 +1,5 @@
 <?xml version="1.0" ?>
 <odoo>
-<data>
 
 	<!-- Workflow definition -->
 
@@ -67,5 +66,5 @@
        <field name="act_to" ref="act_create_order" />
        <field name="signal">create_order</field>
     </record>
-</data>
+    
 </odoo>

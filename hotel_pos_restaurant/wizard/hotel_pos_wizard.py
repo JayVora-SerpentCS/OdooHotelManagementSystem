@@ -23,6 +23,7 @@
 
 from odoo import models, fields, api
 
+
 class OrderReportWizard(models.TransientModel):
     _name = 'order.report.wizard'
     _rec_name = 'date_start'

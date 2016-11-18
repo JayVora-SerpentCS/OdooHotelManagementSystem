@@ -21,12 +21,12 @@
 #
 #############################################################################
 
-from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from odoo.exceptions import except_orm, ValidationError
+import time
+import datetime
 from dateutil.relativedelta import relativedelta
 from odoo import models, fields, api, _
-import datetime
-import time
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.exceptions import except_orm, ValidationError
 
 
 class HotelFolio(models.Model):
@@ -154,7 +154,7 @@ class HotelReservation(models.Model):
         """
         for reserv_rec in self:
             if reserv_rec.state != 'draft':
-                raise ValidationError(_('You can not delete Reservation in %s\
+                raise ValidationError(_('You cannot delete Reservation in %s\
                 state.') % (reserv_rec.state))
         return super(HotelReservation, self).unlink()
 
@@ -316,7 +316,7 @@ class HotelReservation(models.Model):
     @api.multi
     def set_to_draft_reservation(self):
         for reservation in self:
-            return reservation.write({'state':'draft'})
+            return reservation.write({'state': 'draft'})
 
     @api.multi
     def send_reservation_maill(self):
@@ -432,9 +432,6 @@ class HotelReservation(models.Model):
                                       DEFAULT_SERVER_DATETIME_FORMAT)[:5]))
             for line in reservation.reservation_line:
                 for r in line.reserve:
-                    prod = r.product_id.id
-                    partner = reservation.partner_id.id
-                    folio_line_obj = self.env['hotel.folio.line']
 #                    prod_val = folio_line_obj.product_id_change()
 #                    prod_uom = prod_val['value'].get('product_uom', False)
 #                    price_unit = prod_val['value'].get('price_unit', False)
@@ -450,6 +447,8 @@ class HotelReservation(models.Model):
                     res_obj.write({'status': 'occupied', 'isroom': False})
             folio_vals.update({'room_lines': folio_lines})
             folio = hotel_folio_obj.create(folio_vals)
+            """ It is used for confirm folio when we can reservation for
+            Hotel Reservation"""
             if folio:
                 for rm_line in folio.room_lines:
                     rm_line.product_id_change()

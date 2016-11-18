@@ -37,9 +37,9 @@ class ReportHotelReservationStatus(models.Model):
     nbr = fields.Integer('Reservation', readonly=True)
     state = fields.Selection(AVAILABLE_STATES, 'State', size=16,
                              readonly=True)
-    
+
     def init(self):
-        
+
         """
         This method is for initialization for report hotel reservation
         status Module.

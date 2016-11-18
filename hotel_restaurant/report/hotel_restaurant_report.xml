@@ -62,6 +62,5 @@
             name="hotel_restaurant.report_reserv_order"
             menu="False"
         />
-
 		
 </odoo>

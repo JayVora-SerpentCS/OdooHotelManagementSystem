@@ -2,25 +2,25 @@
 <odoo>
     <data noupdate="1">
 
-    <!-- Floor  -->
+    	<!-- Floor  -->
+    	
+		<record id="hotel_floor_ground0" model="hotel.floor">
+		    <field eval="&quot;Ground&quot;" name="name"/>
+		</record>
+		<record id="hotel_floor_first0" model="hotel.floor">
+		    <field eval="&quot;First&quot;" name="name"/>
+		    <field eval="1" name="sequence"/>
+		</record>
+		<record id="hotel_floor_second0" model="hotel.floor">
+		    <field eval="&quot;Second&quot;" name="name"/>
+		    <field eval="2" name="sequence"/>
+		</record>
+		<record id="hotel_floor_third0" model="hotel.floor">
+		    <field eval="&quot;Third&quot;" name="name"/>
+		    <field eval="3" name="sequence"/>
+		</record>
 
-        <record id="hotel_floor_ground0" model="hotel.floor">
-            <field eval="&quot;Ground&quot;" name="name"/>
-        </record>
-        <record id="hotel_floor_first0" model="hotel.floor">
-            <field eval="&quot;First&quot;" name="name"/>
-            <field eval="1" name="sequence"/>
-        </record>
-        <record id="hotel_floor_second0" model="hotel.floor">
-            <field eval="&quot;Second&quot;" name="name"/>
-            <field eval="2" name="sequence"/>
-        </record>
-        <record id="hotel_floor_third0" model="hotel.floor">
-            <field eval="&quot;Third&quot;" name="name"/>
-            <field eval="3" name="sequence"/>
-        </record>
-
-    <!-- hotel_room_amenities_type  -->
+    	<!-- hotel_room_amenities_type  -->
 
         <record id="hotel_room_amenities_type_0" model="hotel.room.amenities.type">
             <field name="name">All Aminities</field>
@@ -47,7 +47,7 @@
             <field name="isamenitytype">1</field>
         </record>
 
-    <!-- hotel_room_type    -->
+    	<!-- hotel_room_type    -->
 
         <record id="rooms" model="hotel.room.type">
             <field name="name">All Rooms</field>
@@ -86,7 +86,7 @@
             <field name="name">Variable</field>
         </record>
 
-    <!-- hotel_room -->
+    	<!-- hotel_room -->
 
         <record id="hotel_room_0" model="hotel.room">
             <field name="name">Single-101</field>
@@ -153,7 +153,7 @@
             <field name="available_in_pos">6</field>
         </record>
 
-            <!-- hotel_services --> 
+		<!-- hotel_services --> 
 
         <record id="hotel_service_6" model="hotel.services">
             <field name="name">Internet</field>

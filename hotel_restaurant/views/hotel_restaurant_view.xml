@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <odoo>
+
         <menuitem  id="hotel_restaurant_menu" name="Restaurant" parent="hotel.hotel_management_menu" sequence="3"/>
 
         <record model="ir.ui.view" id="view_hotelfolio1_form1_inherited">
@@ -738,6 +739,7 @@
             <field name="view_mode">kanban,tree,form</field>
             <field name="search_view_id" ref="view_hotel_menucard_search_new"/>
         </record>
+        
         <menuitem name="Food Items"
         id="menu_open_hotel_menucard_form"
         action="action_hotel_menucard_form"
@@ -751,9 +753,11 @@
             <field name="view_type">tree</field>
             <field name="view_id" ref="hotel.product_category_tree_view"/>
         </record>
+        
         <menuitem name="Foods Items by Type" 
                   id="menu_hotel_restaurent_food_category_action" 
                   action="hotel_restaurent_food_category_action"
                   sequence="13"
                   parent="menu_hotel_food_item"/>
+                  
 </odoo>

@@ -19,14 +19,16 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 # ---------------------------------------------------------------------------
-from odoo.exceptions import except_orm, UserError, ValidationError
-from odoo.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
-from odoo import models, fields, api, _
-from odoo import workflow
-from decimal import Decimal
+
+import time
 import datetime
 import urllib2
-import time
+from odoo import models, fields, api, _
+from odoo.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.exceptions import except_orm, UserError, ValidationError
+from odoo import workflow
+from decimal import Decimal
+
 
 def _offset_format_timestamp1(src_tstamp_str, src_format, dst_format,
                               ignore_unparsable_time=True, context=None):
@@ -1157,6 +1159,7 @@ class HotelServices(models.Model):
                                  required=True, ondelete='cascade',
                                  delegate=True)
     product_manager = fields.Many2one('res.users', string='Product Manager')
+
 
 class ResCompany(models.Model):
 

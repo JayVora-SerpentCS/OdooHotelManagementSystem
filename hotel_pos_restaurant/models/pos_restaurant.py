@@ -36,7 +36,7 @@ class HotelFolio(models.Model):
     @api.multi
     def action_invoice_create(self, grouped=False, states=None):
         state = ['confirmed', 'done']
-        folio = super(HotelFolio, self)
+        folio = super(HotelFolio)
         invoice_id = folio.action_invoice_create(grouped=False, states=state)
         for line in self:
             for pos_order in line.folio_pos_order_ids:

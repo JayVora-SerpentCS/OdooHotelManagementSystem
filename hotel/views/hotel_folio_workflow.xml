@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?> 
  <odoo> 
-     <data> 
+    
 <!--         <record model="workflow" id="wkf_hotel"> -->
 <!--             <field name="name">hotel.folio.basic</field> -->
 <!--             <field name="osv">hotel.folio</field> -->
@@ -265,6 +265,5 @@
 <!--             <field name="act_to" ref="act_cur_cancel_draft"/> -->
 <!--             <field name="signal">cur_cancel_draft</field> -->
 <!--         </record> -->
-
-     </data> 
+   
  </odoo> 

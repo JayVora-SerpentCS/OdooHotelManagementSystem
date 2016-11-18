@@ -79,7 +79,7 @@ class HotelReservationWizard(models.TransientModel):
                                      'hotel_reservation.report_maxroom_qweb',
                                      data=data)
 
- 
+
 class MakeFolioWizard(models.TransientModel):
 
     _name = 'wizard.make.folio'

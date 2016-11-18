@@ -22,12 +22,12 @@
 
 {
     "name": "Hotel Restaurant Management",
-    "version": "0.02",
-    "author": "Serpent Consulting Services Pvt. Ltd.,\
-    Odoo Community Association (OCA)",
+    "version": "10.0.0.1",
+    "author": "Serpent Consulting Services Pvt. Ltd.",
     "category": "Generic Modules/Hotel Restaurant",
     "website": "http://www.serpentcs.com",
     "depends": ["hotel"],
+    'license': "AGPL-3",
     "demo": [
         "views/hotel_restaurant_data.xml",
     ],

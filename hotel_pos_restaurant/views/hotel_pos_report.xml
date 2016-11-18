@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-	<data>
 
         <!--Report for hotel folio pos order-->
 
@@ -14,5 +13,4 @@
             menu="False"
         />
 
-	</data>
 </odoo>

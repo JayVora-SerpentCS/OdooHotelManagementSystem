@@ -823,8 +823,7 @@
                     <sheet>
                         <group>
                             <field name="name" select="1" string="Service Name" />
-                            <field name="parent_id" domain="[('isservicetype','=',True)]"
-                                select="1" />
+                            <field name="parent_id" domain="[('isservicetype','=',True)]"/>
                             <field name="isservicetype" invisible="1" />
                         </group>
                     </sheet>
