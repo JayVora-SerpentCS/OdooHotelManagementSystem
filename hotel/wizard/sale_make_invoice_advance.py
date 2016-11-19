@@ -56,11 +56,16 @@ class SaleAdvancePaymentInv(models.TransientModel):
     @api.multi
     def create_invoices(self):
         ctx = self.env.context.copy()
+        hotel = False
         if self._context.get('active_model') == 'hotel.folio':
             hotel_fol = self.env['hotel.folio']
             hotel = hotel_fol.browse(self._context.get('active_ids',
                                                        []))
             ctx.update({'active_ids': [hotel.order_id.id],
-                        'active_id': hotel.order_id.id})
-        return super(SaleAdvancePaymentInv,
-                     self.with_context(ctx)).create_invoices()
+                        'active_id': hotel.order_id.id,
+                        'invoice_origin': hotel.name})
+        res = super(SaleAdvancePaymentInv,
+                    self.with_context(ctx)).create_invoices()
+        if hotel and res.get('res_id', False):
+            hotel.write({'hotel_invoice_id': res['res_id']})  
+        return res
