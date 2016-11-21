@@ -405,9 +405,9 @@ class HotelRestaurantOrder(models.Model):
     order_list = fields.One2many('hotel.restaurant.order.list', 'o_list',
                                  'Order List')
     tax = fields.Float('Tax (%) ')
-    amount_subtotal = fields.Float(compute='_sub_total', method=True,
+    amount_subtotal = fields.Float(_compute_='_sub_total', method=True,
                                    string='Subtotal')
-    amount_total = fields.Float(compute='_total', method=True,
+    amount_total = fields.Float(_compute_='_total', method=True,
                                 string='Total')
     state = fields.Selection([('draft', 'Draft'), ('order', 'Order Created'),
                               ('done', 'Done'), ('cancel', 'Cancelled')],
@@ -656,9 +656,9 @@ class HotelReservationOrder(models.Model):
     order_list = fields.One2many('hotel.restaurant.order.list', 'o_l',
                                  'Order List')
     tax = fields.Float('Tax (%) ', size=64)
-    amount_subtotal = fields.Float(compute='_sub_total', method=True,
+    amount_subtotal = fields.Float(_compute_='_sub_total', method=True,
                                    string='Subtotal')
-    amount_total = fields.Float(compute='_total', method=True, string='Total')
+    amount_total = fields.Float(_compute_='_total', method=True, string='Total')
     kitchen_id = fields.Integer('Kitchen id')
     rest_id = fields.Many2many('hotel.restaurant.order.list', 'reserv_id',
                                'kitchen_id', 'res_kit_ids', "Rest")
@@ -720,5 +720,5 @@ class HotelRestaurantOrderList(models.Model):
     name = fields.Many2one('hotel.menucard', 'Item Name', required=True)
     item_qty = fields.Char('Qty', size=64, required=True)
     item_rate = fields.Float('Rate', size=64)
-    price_subtotal = fields.Float(compute='_sub_total', method=True,
+    price_subtotal = fields.Float(_compute_='_sub_total', method=True,
                                   string='Subtotal')

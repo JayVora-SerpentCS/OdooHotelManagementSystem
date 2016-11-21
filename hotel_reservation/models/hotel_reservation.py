@@ -48,8 +48,7 @@ class HotelFolioLineExt(models.Model):
         Overrides orm write method.
         @param self: The object pointer
         @param vals: dictionary of fields value.
-        """
-        """update Hotel Room Reservation line history"""
+        update Hotel Room Reservation line history"""
         reservation_line_obj = self.env['hotel.room.reservation.line']
         room_obj = self.env['hotel.room']
         prod_id = vals.get('product_id') or self.product_id.id
@@ -447,15 +446,13 @@ class HotelReservation(models.Model):
                     res_obj.write({'status': 'occupied', 'isroom': False})
             folio_vals.update({'room_lines': folio_lines})
             folio = hotel_folio_obj.create(folio_vals)
-            """ It is used for confirm folio when we can reservation for \
-            Hotel Reservation"""
+            """ It is used for confirm folio when we can reservation for Hotel Reservation """
             if folio:
                 for rm_line in folio.room_lines:
                     rm_line.product_id_change()
-            self._cr.execute('insert into hotel_folio_reservation_rel' \
+            self._cr.execute('insert into hotel_folio_reservation_rel' 
                              '(order_id, invoice_id) values (%s,%s)',
-                             (reservation.id, folio.id) \
-                             )
+                             (reservation.id, folio.id))
             reservation.write({'state': 'done'})
         return True
 
@@ -534,7 +531,7 @@ class HotelReservationLine(models.Model):
         @param self: object pointer
         '''
         hotel_room_obj = self.env['hotel.room']
-        hotel_room_ids = hotel_room_obj.search([('categ_id', '=', \
+        hotel_room_ids = hotel_room_obj.search([('categ_id', '=', 
                                                  self.categ_id.id)])
         room_ids = []
         if not self.line_id.checkin:
@@ -546,15 +543,15 @@ class HotelReservationLine(models.Model):
             assigned = False
             for line in room.room_reservation_line_ids:
                 if line.status != 'cancel':
-                    if (line.check_in <= self.line_id.checkin <= \
-                        line.check_out) or (line.check_in <= \
-                                            self.line_id.checkout <= \
+                    if (line.check_in <= self.line_id.checkin <= 
+                        line.check_out) or (line.check_in <= 
+                                            self.line_id.checkout <= 
                                             line.check_out):
                         assigned = True
             for rm_line in room.room_line_ids:
                 if rm_line.status != 'cancel':
-                    if (rm_line.check_in <= self.line_id.checkin <= \
-                        rm_line.check_out) or (rm_line.check_in <= \
+                    if (rm_line.check_in <= self.line_id.checkin <= 
+                        rm_line.check_out) or (rm_line.check_in <= 
                         self.line_id.checkout <= rm_line.check_out):
                         assigned = True
             if not assigned:
