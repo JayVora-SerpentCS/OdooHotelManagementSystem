@@ -1,4 +1,5 @@
 <?xml version="1.0" ?>
+<!DOCTYPE xml>
 <odoo>
 	<!--Form view for folio report wizard -->
 	<record model="ir.ui.view" id="view_hotel_folio_wizard">

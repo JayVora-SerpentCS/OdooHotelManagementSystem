@@ -447,14 +447,14 @@ class HotelReservation(models.Model):
                     res_obj.write({'status': 'occupied', 'isroom': False})
             folio_vals.update({'room_lines': folio_lines})
             folio = hotel_folio_obj.create(folio_vals)
-            """ It is used for confirm folio when we can reservation for
+            """ It is used for confirm folio when we can reservation for \
             Hotel Reservation"""
             if folio:
                 for rm_line in folio.room_lines:
                     rm_line.product_id_change()
-            self._cr.execute('insert into hotel_folio_reservation_rel'
+            self._cr.execute('insert into hotel_folio_reservation_rel' \
                              '(order_id, invoice_id) values (%s,%s)',
-                             (reservation.id, folio.id)
+                             (reservation.id, folio.id) \
                              )
             reservation.write({'state': 'done'})
         return True
@@ -534,7 +534,7 @@ class HotelReservationLine(models.Model):
         @param self: object pointer
         '''
         hotel_room_obj = self.env['hotel.room']
-        hotel_room_ids = hotel_room_obj.search([('categ_id', '=',
+        hotel_room_ids = hotel_room_obj.search([('categ_id', '=', \
                                                  self.categ_id.id)])
         room_ids = []
         if not self.line_id.checkin:

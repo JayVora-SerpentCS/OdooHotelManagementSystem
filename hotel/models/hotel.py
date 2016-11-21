@@ -21,11 +21,11 @@
 # ---------------------------------------------------------------------------
 
 import time
-import urllib2
 import datetime
-from odoo import models, fields, api, _
-from odoo.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
+import urllib2
 from odoo.exceptions import except_orm, UserError, ValidationError
+from odoo.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
+from odoo import models, fields, api, _
 from odoo import workflow
 from decimal import Decimal
 
@@ -34,10 +34,9 @@ def _offset_format_timestamp1(src_tstamp_str, src_format, dst_format,
                               ignore_unparsable_time=True, context=None):
     """
     Convert a source timeStamp string into a destination timeStamp string,
-    attempting to apply the
-    correct offset if both the server and local timeZone are recognized,or no
-    offset at all if they aren't or if tz_offset is false (i.e. assuming they
-    are both in the same TZ).
+    attempting to apply the correct offset if both the server and local
+    timeZone are recognized,or no offset at all if they aren't or if
+    tz_offset is false (i.e. assuming they are both in the same TZ).
 
     @param src_tstamp_str: the STR value containing the timeStamp.
     @param src_format: the format to use when parsing the local timeStamp.
@@ -49,7 +48,6 @@ def _offset_format_timestamp1(src_tstamp_str, src_format, dst_format,
     @param ignore_unparsable_time: if True, return False if src_tstamp_str
                                    cannot be parsed using src_format or
                                    formatted using dst_format.
-
     @return: destination formatted timestamp, expressed in the destination
              timezone if possible and if tz_offset is true, or src_tstamp_str
              if timezone offset could not be determined.
@@ -582,7 +580,7 @@ class HotelFolio(models.Model):
                 self.partner_invoice_id = partner_rec.id
                 self.partner_shipping_id = partner_rec.id
                 self.pricelist_id = partner_rec.property_product_pricelist.id
-                raise UserError('Not Any Order For  %s ' % (partner_rec.name))
+                raise _('Not Any Order For  %s ' % (partner_rec.name))
             else:
                 self.partner_invoice_id = partner_rec.id
                 self.partner_shipping_id = partner_rec.id
@@ -736,7 +734,7 @@ class HotelFolio(models.Model):
 
 class HotelFolioLine(models.Model):
 
-    @api.one
+    @api.multi
     def copy(self, default=None):
         '''
         @param self: object pointer
@@ -950,7 +948,7 @@ class HotelFolioLine(models.Model):
                                self._cr)
         return True
 
-    @api.one
+    @api.multi
     def copy_data(self, default=None):
         '''
         @param self: object pointer
@@ -963,7 +961,7 @@ class HotelFolioLine(models.Model):
 
 class HotelServiceLine(models.Model):
 
-    @api.one
+    @api.multi
     def copy(self, default=None):
         '''
         @param self: object pointer
@@ -1100,7 +1098,7 @@ class HotelServiceLine(models.Model):
         if not self.ser_checkout_date:
             self.ser_checkout_date = time_a
         if self.ser_checkout_date < self.ser_checkin_date:
-            raise UserError('Checkout must be greater or equal checkin date')
+            raise _('Checkout must be greater or equal checkin date')
         if self.ser_checkin_date and self.ser_checkout_date:
             date_a = time.strptime(self.ser_checkout_date,
                                    DEFAULT_SERVER_DATETIME_FORMAT)[:5]
@@ -1130,7 +1128,7 @@ class HotelServiceLine(models.Model):
             x = line.button_done()
         return x
 
-    @api.one
+    @api.multi
     def copy_data(self, default=None):
         '''
         @param self: object pointer

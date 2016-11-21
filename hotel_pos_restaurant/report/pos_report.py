@@ -66,10 +66,10 @@ class ReportLunchorder1(models.AbstractModel):
     @api.model
     def render_html(self, docids, data=None):
         self.model = self.env.context.get('active_model')
-        docs = self.env[self.model].browse(
-                                    self.env.context.get('active_ids', []))
+        docs = self.env[self.model].browse( \
+                                self.env.context.get('active_ids', []))
         date_start = data.get('date_start', fields.Date.today())
-        date_end = data.get('date_end', str(datetime.now() + \
+        date_end = data.get('date_end', str(datetime.now() +
                                 relativedelta(months=+1, day=1, days=-1))[:10])
         get_data = self.with_context(data['form'].get('used_context', \
                                         {})).get_data(date_start, date_end)
@@ -77,7 +77,7 @@ class ReportLunchorder1(models.AbstractModel):
                                         {})).get_pos(date_start, date_end)
 #       gettotal = self.with_context(data['form'].get('used_context',
 #                                       {})).gettotal(pos_order)
-        getTotal = self.with_context(data['form'].get('used_context', \
+        getTotal = self.with_context(data['form'].get('used_context',
                                                 {})).getTotal()
         docargs = {
             'doc_ids': docids,

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE xml>
+
 <odoo>
 	<data noupdate="1">
 
@@ -11,5 +13,6 @@
 		<record id="group_hotel_user" model="res.groups">
 			<field name="name">Hotel Management / User</field>
 		</record>
+
 	</data>
 </odoo>

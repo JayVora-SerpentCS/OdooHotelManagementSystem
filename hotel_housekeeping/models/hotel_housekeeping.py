@@ -24,7 +24,6 @@ import time
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError
-from odoo import workflow
 
 
 class ProductCategory(models.Model):
@@ -145,7 +144,7 @@ class HotelHousekeepingActivities(models.Model):
     _description = "Housekeeping Activities "
 
     a_list = fields.Many2one('hotel.housekeeping', string='Reservation')
-#    room_id = fields.Many2one('hotel.room', string='Room No')
+#   room_id = fields.Many2one('hotel.room', string='Room No')
     today_date = fields.Date('Today Date')
     activity_name = fields.Many2one('hotel.activity',
                                     string='Housekeeping Activity')
