@@ -500,7 +500,7 @@ class HotelFolio(models.Model):
         @param vals: dictionary of fields value.
         """
         folio_room_line_obj = self.env['folio.room.line']
-#        reservation_line_obj = self.env['hotel.room.reservation.line']
+        reservation_line_obj = self.env['hotel.room.reservation.line']
         product_obj = self.env['product.product']
         h_room_obj = self.env['hotel.room']
         room_lst1 = []
@@ -537,22 +537,22 @@ class HotelFolio(models.Model):
                     folio_romline_rec = (folio_room_line_obj.search
                                          ([('folio_id', '=', folio_obj.id)]))
                     folio_romline_rec.write(room_vals)
-#            if folio_obj.reservation_id:
-#                for reservation in folio_obj.reservation_id:
-#                    reservation_obj = (reservation_line_obj.search
-#                                       ([('reservation_id', '=',
-#                                          reservation.id)]))
-#                    if len(reservation_obj) == 1:
-#                        for line_id in reservation.reservation_line:
-#                            line_id = line_id.reserve
-#                            for room_id in line_id:
-#                                vals = {'room_id': room_id.id,
-#                                        'check_in': folio_obj.checkin_date,
-#                                        'check_out': folio_obj.checkout_date,
-#                                        'state': 'assigned',
-#                                        'reservation_id': reservation.id,
-#                                        }
-#                                reservation_obj.write(vals)
+            if folio_obj.reservation_id:
+                for reservation in folio_obj.reservation_id:
+                    reservation_obj = (reservation_line_obj.search
+                                       ([('reservation_id', '=',
+                                          reservation.id)]))
+                    if len(reservation_obj) == 1:
+                        for line_id in reservation.reservation_line:
+                            line_id = line_id.reserve
+                            for room_id in line_id:
+                                vals = {'room_id': room_id.id,
+                                        'check_in': folio_obj.checkin_date,
+                                        'check_out': folio_obj.checkout_date,
+                                        'state': 'assigned',
+                                        'reservation_id': reservation.id,
+                                        }
+                                reservation_obj.write(vals)
         return folio_write
 
     @api.onchange('warehouse_id')
@@ -772,14 +772,14 @@ class HotelFolioLine(models.Model):
             return self._context['checkout']
         return time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
-#    def _get_uom_id(self):
-#        try:
-#            proxy = self.pool.get('ir.model.data')
-#            result = proxy.get_object_reference(self._cr, self._uid,
+#   def _get_uom_id(self):
+#       try:
+#           proxy = self.pool.get('ir.model.data')
+#           result = proxy.get_object_reference(self._cr, self._uid,
 #              'product','product_uom_unit')
-#            return result[1]
-#        except Exception:
-#            return False
+#           return result[1]
+#       except Exception:
+#           return False
 
     _name = 'hotel.folio.line'
     _description = 'hotel folio1 room line'
@@ -796,7 +796,7 @@ class HotelFolioLine(models.Model):
     is_reserved = fields.Boolean('Is Reserved',
                                  help='True when folio line created from \
                                  Reservation')
-#    product_uom = fields.Many2one('product.uom',string='Unit of Measure',
+#   product_uom = fields.Many2one('product.uom',string='Unit of Measure',
 #                                  required=True, default=_get_uom_id)
 
     @api.model
@@ -855,16 +855,16 @@ class HotelFolioLine(models.Model):
                 sale_unlink_obj.unlink()
         return super(HotelFolioLine, self).unlink()
 
-    # @api.multi
-    # def uos_change(self, product_uos, product_uos_qty=0, product_id=None):
-    #     '''
-    #     @param self: object pointer
-    #     '''
-    #     for folio in self:
-    #         line = folio.order_line_id
-    #         line.uos_change(product_uos, product_uos_qty=0,
-    #                         product_id=None)
-    #     return True
+#    @api.multi
+#    def uos_change(self, product_uos, product_uos_qty=0, product_id=None):
+#         '''
+#             @param self: object pointer
+#         '''
+#         for folio in self:
+#             line = folio.order_line_id
+#             line.uos_change(product_uos, product_uos_qty=0,
+#                             product_id=None)
+#         return True
 
     @api.onchange('product_id')
     def product_id_change(self):

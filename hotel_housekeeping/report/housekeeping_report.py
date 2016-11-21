@@ -36,7 +36,11 @@ class ActivityReport(models.AbstractModel):
         act_val = {}
         house_keep_act_obj = self.env['hotel.housekeeping.activities']
 
-        activity_line_ids = (house_keep_act_obj.search([('clean_start_time', '>=', date_start), ('clean_end_time', '<=', date_end), ('a_list', '=', room_no)]))
+        activity_line_ids = (house_keep_act_obj.search([
+                   ('clean_start_time', '>=', date_start),
+                   ('clean_end_time', '<=', date_end),
+                   ('a_list', '=', room_no)]))
+
         for activity in activity_line_ids:
             ss_date = datetime.strptime(activity.clean_start_time,
                                         DEFAULT_SERVER_DATETIME_FORMAT)
@@ -59,12 +63,16 @@ class ActivityReport(models.AbstractModel):
     @api.model
     def render_html(self, docids, data=None):
         self.model = self.env.context.get('active_model')
-        docs = self.env[self.model].browse(self.env.context.get('active_ids', []))
+        docs = self.env[self.model].browse(self.env.context.get(
+                                                    'active_ids', []))
 
         date_start = data['form'].get('date_start', fields.Date.today())
-        date_end = data['form'].get('date_end', str(datetime.now() + relativedelta(months=+1, day=1, days=-1))[:10])
+        date_end = data['form'].get('date_end', str(datetime.now()
+                            + relativedelta(months=+1, day=1, days=-1))[:10])
         room_no = data['form'].get('room_no')[0]
-        get_room_activity_detail_res = self.with_context(data['form'].get('used_context', {})).get_room_activity_detail(date_start, date_end, room_no)
+        get_room_activity_detail_res = self.with_context(data['form'].get(
+                            'used_context', {})).get_room_activity_detail(
+                                            date_start, date_end, room_no)
         docargs = {
             'doc_ids': docids,
             'doc_model': self.model,
@@ -73,6 +81,9 @@ class ActivityReport(models.AbstractModel):
             'time': time,
             'get_room_activity_detail': get_room_activity_detail_res,
         }
-        docargs['data'].update({'date_end': parser.parse(docargs.get('data').get('date_end')).strftime('%m/%d/%Y')})
-        docargs['data'].update({'date_start': parser.parse(docargs.get('data').get('date_start')).strftime('%m/%d/%Y')})
-        return self.env['report'].render('hotel_housekeeping.report_housekeeping', docargs)
+        docargs['data'].update({'date_end': parser.parse(docargs.get(
+                    'data').get('date_end')).strftime('%m/%d/%Y')})
+        docargs['data'].update({'date_start': parser.parse(docargs.get(
+                    'data').get('date_start')).strftime('%m/%d/%Y')})
+        return self.env['report'].render(
+                'hotel_housekeeping.report_housekeeping', docargs)
