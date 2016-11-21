@@ -32,20 +32,21 @@ class FolioReport(models.AbstractModel):
 
     def get_data(self, date_start, date_end):
         total_amount = 0.0
-        data_1 = []
+        data_folio = []
         folio_obj = self.env['hotel.folio']
-        tids = folio_obj.search([('checkin_date', '>=', date_start), \
-                            ('checkout_date', '<=', date_end)])
+        tids = folio_obj.search([('checkin_date', '>=', date_start),
+                                 ('checkout_date', '<=', date_end)])
         for data in tids:
-            data_1.append({'name': data.name, 'partner': data.partner_id.name,
-                           'checkin': parser.parse( \
+            data_folio.append({'name': data.name,
+                               'partner': data.partner_id.name,
+                            'checkin': parser.parse( \
                             data.checkin_date).strftime('%m/%d/%Y %H:%M:%S'),
                            'checkout': parser.parse( \
                             data.checkin_date).strftime('%m/%d/%Y %H:%M:%S'),
                            'amount': data.amount_total})
             total_amount += data.amount_total
-        data_1.append({'total_amount': total_amount})
-        return data_1
+        data_folio.append({'total_amount': total_amount})
+        return data_folio
 
     @api.model
     def render_html(self, docids, data=None):

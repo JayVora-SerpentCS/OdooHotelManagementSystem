@@ -64,7 +64,7 @@ class ActivityReport(models.AbstractModel):
     def render_html(self, docids, data=None):
         self.model = self.env.context.get('active_model')
         docs = self.env[self.model].browse(self.env.context.get(
-                                                    'active_ids', []))
+                                               'active_ids', []))
 
         date_start = data['form'].get('date_start', fields.Date.today())
         date_end = data['form'].get('date_end', str(datetime.now()
