@@ -658,7 +658,8 @@ class HotelReservationOrder(models.Model):
     tax = fields.Float('Tax (%) ', size=64)
     amount_subtotal = fields.Float(_compute_='_sub_total', method=True,
                                    string='Subtotal')
-    amount_total = fields.Float(_compute_='_total', method=True, string='Total')
+    amount_total = fields.Float(_compute_='_total', method=True,
+                                string='Total')
     kitchen_id = fields.Integer('Kitchen id')
     rest_id = fields.Many2many('hotel.restaurant.order.list', 'reserv_id',
                                'kitchen_id', 'res_kit_ids', "Rest")

@@ -54,13 +54,17 @@ class ReportTestCheckin(models.AbstractModel):
     @api.multi
     def render_html(self, docids, data=None):
         self.model = self.env.context.get('active_model')
-        docs = self.env[self.model].browse(self.env.context.get('active_ids', []))
+        docs = self.env[self.model].browse(
+                            self.env.context.get('active_ids', []))
         date_start = data.get('date_start', fields.Date.today())
         date_end = data.get('date_end', str(datetime.now() +
                                 relativedelta(months=+1, day=1, days=-1))[:10])
-        _get_room_type = self.with_context(data['form'].get('used_context', {}))._get_room_type(date_start, date_end)
-        _get_room_nos = self.with_context(data['form'].get('used_context', {}))._get_room_nos(date_start, date_end)
-        get_checkin = self.with_context(data['form'].get('used_context', {})).get_checkin(date_start, date_end)
+        _get_room_type = self.with_context(data['form'].get(
+                'used_context', {}))._get_room_type(date_start, date_end)
+        _get_room_nos = self.with_context(data['form'].get(
+                'used_context', {}))._get_room_nos(date_start, date_end)
+        get_checkin = self.with_context(data['form'].get(
+                'used_context', {})).get_checkin(date_start, date_end)
         docargs = {
             'doc_ids': docids,
             'doc_model': self.model,
@@ -84,19 +88,19 @@ class ReportTestCheckout(models.AbstractModel):
     def _get_room_type(self, date_start, date_end):
         reservation_obj = self.env['hotel.reservation']
         res = reservation_obj.search([('checkout', '>=', date_start), 
-                                       ('checkout', '<=', date_end)])
+                                      ('checkout', '<=', date_end)])
         return res
 
     def _get_room_nos(self, date_start, date_end):
         reservation_obj = self.env['hotel.reservation']
         res = reservation_obj.search([('checkout', '>=', date_start), 
-                                       ('checkout', '<=', date_end)])
+                                      ('checkout', '<=', date_end)])
         return res
 
     def get_checkout(self, date_start, date_end):
         reservation_obj = self.env['hotel.reservation']
         res = reservation_obj.search([('checkout', '>=', date_start), 
-                                       ('checkout', '<=', date_end)])
+                                      ('checkout', '<=', date_end)])
         return res
 
     @api.multi

@@ -446,7 +446,8 @@ class HotelReservation(models.Model):
                     res_obj.write({'status': 'occupied', 'isroom': False})
             folio_vals.update({'room_lines': folio_lines})
             folio = hotel_folio_obj.create(folio_vals)
-            """ It is used for confirm folio when we can reservation for Hotel Reservation """
+            """ It is used for confirm folio when \
+                we can reservation for Hotel Reservation """
             if folio:
                 for rm_line in folio.room_lines:
                     rm_line.product_id_change()
@@ -460,7 +461,7 @@ class HotelReservation(models.Model):
     def onchange_check_dates(self, checkin_date=False, checkout_date=False,
                              duration=False):
         '''
-        This mathod gives the duration between check in checkout if
+        This method gives the duration between check in checkout if
         customer will leave only for some hour it would be considers
         as a whole day. If customer will checkin checkout for more or equal
         hours, which configured in company as additional hours than it would
@@ -551,8 +552,8 @@ class HotelReservationLine(models.Model):
             for rm_line in room.room_line_ids:
                 if rm_line.status != 'cancel':
                     if (rm_line.check_in <= self.line_id.checkin <= 
-                        rm_line.check_out) or (rm_line.check_in <= 
-                        self.line_id.checkout <= rm_line.check_out):
+                         rm_line.check_out) or (rm_line.check_in <=  
+                         self.line_id.checkout <= rm_line.check_out):
                         assigned = True
             if not assigned:
                 room_ids.append(room.id)

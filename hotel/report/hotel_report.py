@@ -51,11 +51,12 @@ class FolioReport(models.AbstractModel):
     @api.model
     def render_html(self, docids, data=None):
         self.model = self.env.context.get('active_model')
-        docs = self.env[self.model].browse(self.env.context.get('active_ids', []))
+        docs = self.env[self.model].browse(
+                        self.env.context.get('active_ids', []))
 
         date_start = data['form'].get('date_start', fields.Date.today())
-        date_end = data['form'].get('date_end', str(datetime.now()
-                    + relativedelta(months=+1, day=1, days=-1))[:10])
+        date_end = data['form'].get('date_end', str(datetime.now() + 
+                        relativedelta(months=+1, day=1, days=-1))[:10])
 
         data_res = self.with_context(data['form'].get(
                     'used_context', {})).get_data(date_start, date_end)
@@ -70,5 +71,6 @@ class FolioReport(models.AbstractModel):
         docargs['data'].update({'date_end': parser.parse(docargs.get(
                                 'data').get('date_end')).strftime('%m/%d/%Y')})
         docargs['data'].update({'date_start': parser.parse(docargs.get(
-                                'data').get('date_start')).strftime('%m/%d/%Y')})
-        return self.env['report'].render('hotel.report_hotel_folio', docargs)
+                              'data').get('date_start')).strftime('%m/%d/%Y')})
+        return self.env['report'].render(
+                        'hotel.report_hotel_folio', docargs)
