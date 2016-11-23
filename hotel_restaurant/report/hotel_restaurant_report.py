@@ -49,13 +49,14 @@ class HotelRestaurantReport(models.AbstractModel):
     @api.model
     def render_html(self, docids, data=None):
         self.model = self.env.context.get('active_model')
-        docs = self.env[self.model].browse(
-                            self.env.context.get('active_ids', []))
+        docs = self.env[self.model].browse(self.env.context.get('active_ids',
+                                                                []))
         date_start = data.get('date_start', fields.Date.today())
-        date_end = data.get('date_end', str(datetime.now() +
-                            relativedelta(months=+1, day=1, days=-1))[:10])
-        reservation_res = self.with_context(data['form'].get(
-            'used_context', {})).get_res_data(date_start, date_end)
+        date_end = data['form'].get('date_end', str(datetime.now() +
+                                    relativedelta(months=+1,
+                                                  day=1, days=-1))[:10])
+        rm_act = self.with_context(data['form'].get('used_context', {}))
+        reservation_res = rm_act.get_res_data(date_start, date_end)
         docargs = {
             'doc_ids': docids,
             'doc_model': self.model,
@@ -64,12 +65,16 @@ class HotelRestaurantReport(models.AbstractModel):
             'time': time,
             'Reservations': reservation_res,
         }
-        docargs['data'].update({'date_end': parser.parse(docargs.get(
-                    'data').get('date_end')).strftime('%m/%d/%Y')})
-        docargs['data'].update({'date_start': parser.parse(docargs.get(
-                    'data').get('date_start')).strftime('%m/%d/%Y')})
-        return self.env['report'].render(
-                    'hotel_restaurant.report_res_table', docargs)
+        docargs['data'].update({'date_end':
+                                parser.parse(docargs.get('data').
+                                             get('date_end')).
+                                strftime('%m/%d/%Y')})
+        docargs['data'].update({'date_start':
+                                parser.parse(docargs.get('data').
+                                             get('date_start')).
+                                strftime('%m/%d/%Y')})
+        render_model = 'hotel_restaurant.report_res_table'
+        return self.env['report'].render(render_model, docargs)
 
 
 class ReportKot(models.AbstractModel):
@@ -106,11 +111,14 @@ class FolioRestReport(models.AbstractModel):
                 data.append({
                              'folio_name': record.name,
                              'customer_name': record.partner_id.name,
-                             'checkin_date': parser.parse(
-                       record.checkin_date).strftime('%m/%d/%Y %H:%M:%S'),
-                'checkout_date': parser.parse(
-                       record.checkout_date).strftime('%m/%d/%Y %H:%M:%S'),
-            'total_amount': total_amount, 'total_order': total_order})
+                             'checkin_date':
+                              parser.parse(record.checkin_date).
+                              strftime('%m/%d/%Y %H:%M:%S'),
+                              'checkout_date':
+                              parser.parse(record.checkout_date).
+                              strftime('%m/%d/%Y %H:%M:%S'),
+                              'total_amount': total_amount,
+                              'total_order': total_order})
         data.append({'total': total})
         return data
 
@@ -124,17 +132,16 @@ class FolioRestReport(models.AbstractModel):
                 order_data = []
                 for order in record.hotel_reservation_order_ids:
                     order_data.append({'order_no': order.order_number,
-                        'order_date': parser.parse(
-                            order.date1).strftime('%m/%d/%Y %H:%M:%S'),
-                        'state': order.state, 'table_no': len(order.table_no),
-                        'order_len': len(order.order_list),
-                        'amount_total': order.amount_total
-                    })
+                                       'order_date': parser.parse(order.date1).
+                                        strftime('%m/%d/%Y %H:%M:%S'),
+                                        'state': order.state,
+                                        'table_no': len(order.table_no),
+                                        'order_len': len(order.order_list),
+                                        'amount_total': order.amount_total})
                 data.append({
                              'folio_name': record.name,
                              'customer_name': record.partner_id.name,
-                             'order_data': order_data
-                })
+                             'order_data': order_data})
         return data
 
     @api.model
@@ -145,12 +152,11 @@ class FolioRestReport(models.AbstractModel):
         docs = self.env[self.model].browse(act_ids)
         date_start = data['form'].get('date_start', fields.Date.today())
         date_end = data['form'].get('date_end', str(datetime.now() +
-                        relativedelta(months=+1, day=1, days=-1))[:10])
-
-        get_data_res = self.with_context(data['form'].get('used_context',
-                            {})).get_data(date_start, date_end)
-        get_rest_res = self.with_context(data['form'].get('used_context',
-                            {})).get_rest(date_start, date_end)
+                                    relativedelta(months=+1,
+                                                  day=1, days=-1))[:10])
+        rm_act = self.with_context(data['form'].get('used_context', {}))
+        get_data_res = rm_act.get_data(date_start, date_end)
+        get_rest_res = rm_act.get_rest(date_start, date_end)
         docargs = {
             'doc_ids': docids,
             'doc_model': self.model,
@@ -160,12 +166,16 @@ class FolioRestReport(models.AbstractModel):
             'GetData': get_data_res,
             'GetRest': get_rest_res,
         }
-        docargs['data'].update({'date_end': parser.parse(docargs.get(
-                            'data').get('date_end')).strftime('%m/%d/%Y')})
-        docargs['data'].update({'date_start': parser.parse(docargs.get(
-                            'data').get('date_start')).strftime('%m/%d/%Y')})
-        return self.env['report'].render(
-                        'hotel_restaurant.report_rest_order', docargs)
+        docargs['data'].update({'date_end':
+                                parser.parse(docargs.get('data').
+                                             get('date_end')).
+                                strftime('%m/%d/%Y')})
+        docargs['data'].update({'date_start':
+                                parser.parse(docargs.get('data').
+                                             get('date_start')).
+                                strftime('%m/%d/%Y')})
+        render_model = 'hotel_restaurant.report_rest_order'
+        return self.env['report'].render(render_model, docargs)
 
 
 class FolioReservReport(models.AbstractModel):
@@ -188,13 +198,13 @@ class FolioReservReport(models.AbstractModel):
                 total += total_amount
                 data.append({'folio_name': record.name,
                              'customer_name': record.partner_id.name,
-                             'checkin_date': parser.parse(
-                        record.checkin_date).strftime('%m/%d/%Y %H:%M:%S'),
-                             'checkout_date': parser.parse(
-                        record.checkout_date).strftime('%m/%d/%Y %H:%M:%S'),
-                     'total_amount': total_amount,
-                     'total_order': total_order
-                })
+                             'checkin_date': parser.parse(record.checkin_date).
+                                             strftime('%m/%d/%Y %H:%M:%S'),
+                             'checkout_date': parser.parse(record.
+                                                           checkout_date).
+                                              strftime('%m/%d/%Y %H:%M:%S'),
+                             'total_amount': total_amount,
+                             'total_order': total_order})
         data.append({'total': total})
         return data
 
@@ -210,35 +220,32 @@ class FolioReservReport(models.AbstractModel):
                 for order in record.hotel_restaurant_order_ids:
                     order_data.append({
                                        'order_no': order.order_no,
-                                       'order_date':
-                                       parser.parse(order.o_date).strftime(
-                                       '%m/%d/%Y %H:%M:%S'),
+                                       'order_date': parser.parse(order.
+                                                                  o_date).
+                                                     strftime('%m/%d/%Y \
+                                                               %H:%M:%S'),
                                        'state': order.state,
                                        'room_no': order.room_no.name,
                                        'table_no': len(order.table_no),
-                                       'amount_total': order.amount_total
-                    })
+                                       'amount_total': order.amount_total})
                 data.append({
                              'folio_name': record.name,
                              'customer_name': record.partner_id.name,
-                             'order_data': order_data
-                })
+                             'order_data': order_data})
         return data
 
     @api.model
     def render_html(self, docids, data=None):
         self.model = self.env.context.get('active_model')
-        act_ids = self.env.context.get('active_ids', [])
-        docs = self.env[self.model].browse(act_ids)
-
+        docs = self.env[self.model].browse(self.env.context.get('active_ids',
+                                                                []))
         date_start = data.get('date_start', fields.Date.today())
-        date_end = data.get('date_end', str(datetime.now() +
-                            relativedelta(months=+1, day=1, days=-1))[:10])
-
-        get_data_res = self.with_context(data['form'].get(
-                        'used_context', {})).get_data(date_start, date_end)
-        get_reserv_res = self.with_context(data['form'].get(
-                        'used_context', {})).get_reserv(date_start, date_end)
+        date_end = data['form'].get('date_end', str(datetime.now() +
+                                    relativedelta(months=+1,
+                                                  day=1, days=-1))[:10])
+        rm_act = self.with_context(data['form'].get('used_context', {}))
+        get_data_res = rm_act.get_data(date_start, date_end)
+        get_reserv_res = rm_act.get_reserv(date_start, date_end)
         docargs = {
             'doc_ids': docids,
             'doc_model': self.model,
@@ -248,9 +255,13 @@ class FolioReservReport(models.AbstractModel):
             'GetData': get_data_res,
             'GetReserv': get_reserv_res,
         }
-        docargs['data'].update({'date_end': parser.parse(docargs.get(
-                            'data').get('date_end')).strftime('%m/%d/%Y')})
-        docargs['data'].update({'date_start': parser.parse(docargs.get(
-                            'data').get('date_start')).strftime('%m/%d/%Y')})
-        return self.env['report'].render(
-                      'hotel_restaurant.report_reserv_order', docargs)
+        docargs['data'].update({'date_end':
+                                parser.parse(docargs.get('data').
+                                             get('date_end')).
+                                strftime('%m/%d/%Y')})
+        docargs['data'].update({'date_start':
+                                parser.parse(docargs.get('data').
+                                             get('date_start')).
+                                strftime('%m/%d/%Y')})
+        render_model = 'hotel_restaurant.report_reserv_order'
+        return self.env['report'].render(render_model, docargs)

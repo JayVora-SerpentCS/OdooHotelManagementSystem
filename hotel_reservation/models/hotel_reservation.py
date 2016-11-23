@@ -441,7 +441,6 @@ class HotelReservation(models.Model):
                     res_obj.write({'status': 'occupied', 'isroom': False})
             folio_vals.update({'room_lines': folio_lines})
             folio = hotel_folio_obj.create(folio_vals)
-            ''' It is used for confirm folio '''
             if folio:
                 for rm_line in folio.room_lines:
                     rm_line.product_id_change()
@@ -546,8 +545,9 @@ class HotelReservationLine(models.Model):
             for rm_line in room.room_line_ids:
                 if rm_line.status != 'cancel':
                     if (rm_line.check_in <= self.line_id.checkin <=
-                         rm_line.check_out) or (rm_line.check_in <=
-                         self.line_id.checkout <= rm_line.check_out):
+                        rm_line.check_out) or (rm_line.check_in <=
+                                               self.line_id.checkout <=
+                                               rm_line.check_out):
                         assigned = True
             if not assigned:
                 room_ids.append(room.id)

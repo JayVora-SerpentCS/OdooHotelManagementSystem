@@ -66,20 +66,17 @@ class ReportLunchorder1(models.AbstractModel):
     @api.model
     def render_html(self, docids, data=None):
         self.model = self.env.context.get('active_model')
-        act_ids = self.env.context.get('active_ids', [])
-        docs = self.env[self.model].browse(act_ids)
-
+        docs = self.env[self.model].browse(self.env.context.get('active_ids',
+                                                                []))
         date_start = data.get('date_start', fields.Date.today())
-        date_end = data.get('date_end', str(datetime.now() +
-                            relativedelta(months=+1, day=1, days=-1))[:10])
-        get_data = self.with_context(data['form'].get('used_context',
-                                        {})).get_data(date_start, date_end)
-        get_pos = self.with_context(data['form'].get('used_context',
-                                        {})).get_pos(date_start, date_end)
-#       gettotal = self.with_context(data['form'].get('used_context',
-#                                       {})).gettotal(pos_order)
-        getTotal = self.with_context(data['form'].get('used_context',
-                                                {})).getTotal()
+        date_end = data['form'].get('date_end', str(datetime.now() +
+                                    relativedelta(months=+1,
+                                                  day=1, days=-1))[:10])
+        rm_act = self.with_context(data['form'].get('used_context', {}))
+        get_data = rm_act.get_data(date_start, date_end)
+        get_pos = rm_act.get_pos(date_start, date_end)
+#       gettotal = rm_act.gettotal(pos_order)
+        getTotal = rm_act.getTotal()
         docargs = {
             'doc_ids': docids,
             'doc_model': self.model,
@@ -91,9 +88,13 @@ class ReportLunchorder1(models.AbstractModel):
 #           'gettotal' : gettotal,
             'getTotal': getTotal,
         }
-        docargs['data'].update({'date_end': parser.parse(docargs.get(
-                         'data').get('date_end')).strftime('%m/%d/%Y')})
-        docargs['data'].update({'date_start': parser.parse(docargs.get(
-                        'data').get('date_start')).strftime('%m/%d/%Y')})
-        return self.env['report'].render(
-                        'hotel_pos_restaurant.report_folio_pos', docargs)
+        docargs['data'].update({'date_end':
+                                parser.parse(docargs.get('data').
+                                             get('date_end')).
+                                strftime('%m/%d/%Y')})
+        docargs['data'].update({'date_start':
+                                parser.parse(docargs.get('data').
+                                             get('date_start')).
+                                strftime('%m/%d/%Y')})
+        render_model = 'hotel_pos_restaurant.report_folio_pos'
+        return self.env['report'].render(render_model, docargs)
