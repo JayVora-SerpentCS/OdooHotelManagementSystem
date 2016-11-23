@@ -111,7 +111,7 @@ class FolioRestReport(models.AbstractModel):
                 data.append({'folio_name': record.name,
                              'customer_name': record.partner_id.name,
                              'checkin_date': parser.parse(record.checkin_date).
-                                             strftime('%m/%d/%Y %H:%M:%S'),
+                              strftime('%m/%d/%Y %H:%M:%S'),
                              'checkout_date': parser.parse(record.
                                                            checkout_date).
                              strftime('%m/%d/%Y %H:%M:%S'),
@@ -131,7 +131,7 @@ class FolioRestReport(models.AbstractModel):
                 for order in record.hotel_reservation_order_ids:
                     order_data.append({'order_no': order.order_number,
                                        'order_date': parser.parse(order.date1).
-                                        strftime('%m/%d/%Y %H:%M:%S'),
+                    strftime('%m/%d/%Y %H:%M:%S'),
                                        'state': order.state,
                                        'table_no': len(order.table_no),
                                        'order_len': len(order.order_list),
@@ -163,13 +163,12 @@ class FolioRestReport(models.AbstractModel):
             'GetData': get_data_res,
             'GetRest': get_rest_res,
         }
-        docar['data'].update({'date_end':
-                                parser.parse(docar.get('data').get('date_end')
-                                             ).strftime('%m/%d/%Y')})
-        docar['data'].update({'date_start':
-                                parser.parse(docar.get('data').get('date_start'
-                                                                   )
-                                             ).strftime('%m/%d/%Y')})
+        docar['data'].update({'date_end': parser.parse(docar.get('data').
+                                                       get('date_end')).
+        strftime('%m/%d/%Y')})
+        docar['data'].update({'date_start': parser.parse(docar.get('data').
+                                                         get('date_start').
+        strftime('%m/%d/%Y')})
         render_model = 'hotel_restaurant.report_rest_order'
         return self.env['report'].render(render_model, docar)
 
@@ -217,7 +216,7 @@ class FolioReservReport(models.AbstractModel):
                     order_data.append({'order_no': order.order_no,
                                        'order_date': parser.parse(order.
                                                                   o_date).
-                                        strftime('%m/%d/%Y %H:%M:%S'),
+                    strftime('%m/%d/%Y %H:%M:%S'),
                                        'state': order.state,
                                        'room_no': order.room_no.name,
                                        'table_no': len(order.table_no),
