@@ -35,7 +35,7 @@ class FolioReport(models.AbstractModel):
         data_folio = []
         folio_obj = self.env['hotel.folio']
         act_domain = [('checkin_date', '>=', date_start),
-                      ('checkout_date', '<=', date_end)] 
+                      ('checkout_date', '<=', date_end)]
         tids = folio_obj.search(act_domain)
         for data in tids:
             data_folio.append({'name': data.name,
@@ -57,7 +57,7 @@ class FolioReport(models.AbstractModel):
                         self.env.context.get('active_ids', []))
 
         date_start = data['form'].get('date_start', fields.Date.today())
-        date_end = data['form'].get('date_end', str(datetime.now() + 
+        date_end = data['form'].get('date_end', str(datetime.now() +
                         relativedelta(months=+1, day=1, days=-1))[:10])
 
         data_res = self.with_context(data['form'].get(
@@ -73,11 +73,5 @@ class FolioReport(models.AbstractModel):
         docargs['data'].update({'date_end': parser.parse(docargs.get(
                             'data').get('date_end')).strftime('%m/%d/%Y')})
         docargs['data'].update({'date_start': parser.parse(docargs.get(
-<<<<<<< HEAD
                             'data').get('date_start')).strftime('%m/%d/%Y')})
         return self.env['report'].render('hotel.report_hotel_folio', docargs)
-=======
-                              'data').get('date_start')).strftime('%m/%d/%Y')})
-        return self.env['report'].render(
-                        'hotel.report_hotel_folio', docargs)
->>>>>>> 7a6b8c07d267c325f1261cd1af4d8274a1874e2a

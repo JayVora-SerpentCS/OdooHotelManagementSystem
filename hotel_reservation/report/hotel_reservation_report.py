@@ -55,19 +55,11 @@ class ReportTestCheckin(models.AbstractModel):
     @api.multi
     def render_html(self, docids, data=None):
         self.model = self.env.context.get('active_model')
-<<<<<<< HEAD
         act_ids = self.env.context.get('active_ids', [])
         docs = self.env[self.model].browse(act_ids)
         date_start = data.get('date_start', fields.Date.today())
         date_end = data.get('date_end', str(datetime.now() +
                             relativedelta(months=+1, day=1, days=-1))[:10])
-=======
-        docs = self.env[self.model].browse(
-                            self.env.context.get('active_ids', []))
-        date_start = data.get('date_start', fields.Date.today())
-        date_end = data.get('date_end', str(datetime.now() +
-                                relativedelta(months=+1, day=1, days=-1))[:10])
->>>>>>> 7a6b8c07d267c325f1261cd1af4d8274a1874e2a
         _get_room_type = self.with_context(data['form'].get(
                 'used_context', {}))._get_room_type(date_start, date_end)
         _get_room_nos = self.with_context(data['form'].get(

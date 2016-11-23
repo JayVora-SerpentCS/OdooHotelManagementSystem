@@ -46,8 +46,8 @@ class ReportHotelRestaurantStatus(models.Model):
         @param self: The object pointer
         @param cr: database cursor
         """
-        cr, uid, context = self.env.args
-        cr.execute("""
+
+        self.env.cr.execute("""
             create or replace view report_hotel_restaurant_status as (
                 select
                     min(c.id) as id,

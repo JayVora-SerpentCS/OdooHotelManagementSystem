@@ -360,33 +360,33 @@ class HotelReservation(models.Model):
             'force_send': True
         }
 
-    @api.model
-    def reservation_reminder_24hrs(self):
-        """
-        This method is for scheduler
-        every 1day scheduler will call this method to
-        find all tomorrow's reservations.
-        ----------------------------------------------
-        @param self: The object pointer
-        @return: send a mail
-        """
-        now_str = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-        now_date = datetime.datetime.strptime(now_str,
-                                              DEFAULT_SERVER_DATETIME_FORMAT)
-        ir_model_data = self.env['ir.model.data']
-        template_id = (ir_model_data.get_object_reference
-                       ('hotel_reservation',
-                        'email_template_reservation_reminder_24hrs')[1])
-        template_rec = self.env['email.template'].browse(template_id)
-        for travel_rec in self.search([]):
-            checkin_date = (datetime.datetime.strptime
-                            (travel_rec.checkin,
-                             DEFAULT_SERVER_DATETIME_FORMAT))
-            difference = relativedelta(now_date, checkin_date)
-            if(difference.days == -1 and travel_rec.partner_id.email and
-               travel_rec.state == 'confirm'):
-                template_rec.send_mail(travel_rec.id, force_send=True)
-        return True
+#    @api.model
+#    def reservation_reminder_24hrs(self):
+#        """
+#        This method is for scheduler
+#        every 1day scheduler will call this method to
+#        find all tomorrow's reservations.
+#        ----------------------------------------------
+#        @param self: The object pointer
+#        @return: send a mail
+#        """
+#        now_str = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+#        now_date = datetime.datetime.strptime(now_str,
+#                                              DEFAULT_SERVER_DATETIME_FORMAT)
+#        ir_model_data = self.env['ir.model.data']
+#        template_id = (ir_model_data.get_object_reference
+#                       ('hotel_reservation',
+#                        'email_template_reservation_reminder_24hrs')[1])
+#        template_rec = self.env['email.template'].browse(template_id)
+#        for travel_rec in self.search([]):
+#            checkin_date = (datetime.datetime.strptime
+#                            (travel_rec.checkin,
+#                             DEFAULT_SERVER_DATETIME_FORMAT))
+#            difference = relativedelta(now_date, checkin_date)
+#            if(difference.days == -1 and travel_rec.partner_id.email and
+#               travel_rec.state == 'confirm'):
+#                template_rec.send_mail(travel_rec.id, force_send=True)
+#        return True
 
     @api.multi
     def _create_folio(self):
@@ -441,16 +441,11 @@ class HotelReservation(models.Model):
                     res_obj.write({'status': 'occupied', 'isroom': False})
             folio_vals.update({'room_lines': folio_lines})
             folio = hotel_folio_obj.create(folio_vals)
-<<<<<<< HEAD
-            "It is used for confirm folio "
-=======
-            """ It is used for confirm folio when \
-                we can reservation for Hotel Reservation """
->>>>>>> 7a6b8c07d267c325f1261cd1af4d8274a1874e2a
+            ''' It is used for confirm folio '''
             if folio:
                 for rm_line in folio.room_lines:
                     rm_line.product_id_change()
-            self._cr.execute('insert into hotel_folio_reservation_rel' 
+            self._cr.execute('insert into hotel_folio_reservation_rel'
                              '(order_id, invoice_id) values (%s,%s)',
                              (reservation.id, folio.id))
             reservation.write({'state': 'done'})
@@ -531,7 +526,7 @@ class HotelReservationLine(models.Model):
         @param self: object pointer
         '''
         hotel_room_obj = self.env['hotel.room']
-        hotel_room_ids = hotel_room_obj.search([('categ_id', '=', 
+        hotel_room_ids = hotel_room_obj.search([('categ_id', '=',
                                                  self.categ_id.id)])
         room_ids = []
         if not self.line_id.checkin:
@@ -543,15 +538,15 @@ class HotelReservationLine(models.Model):
             assigned = False
             for line in room.room_reservation_line_ids:
                 if line.status != 'cancel':
-                    if (line.check_in <= self.line_id.checkin <= 
-                        line.check_out) or (line.check_in <= 
-                                            self.line_id.checkout <= 
+                    if (line.check_in <= self.line_id.checkin <=
+                        line.check_out) or (line.check_in <=
+                                            self.line_id.checkout <=
                                             line.check_out):
                         assigned = True
             for rm_line in room.room_line_ids:
                 if rm_line.status != 'cancel':
-                    if (rm_line.check_in <= self.line_id.checkin <= 
-                         rm_line.check_out) or (rm_line.check_in <=  
+                    if (rm_line.check_in <= self.line_id.checkin <=
+                         rm_line.check_out) or (rm_line.check_in <=
                          self.line_id.checkout <= rm_line.check_out):
                         assigned = True
             if not assigned:
