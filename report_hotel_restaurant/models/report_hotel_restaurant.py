@@ -20,7 +20,7 @@
 #
 # ---------------------------------------------------------------------------
 
-from odoo import api, fields, models
+from odoo import fields, models
 
 AVAILABLE_STATES = [
     ('draft', 'Draft'),
@@ -35,7 +35,7 @@ class ReportHotelRestaurantStatus(models.Model):
     _auto = False
 
     reservation_id = fields.Char('Reservation No', size=64, readonly=True)
-    nbr = fields.Integer('Reservation', readonly=True)
+    nbr = fields.Integer('Reservatioorder_datan', readonly=True)
     state = fields.Selection(AVAILABLE_STATES, 'State', size=16,
                              readonly=True)
 

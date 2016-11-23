@@ -216,8 +216,8 @@ class FolioReservReport(models.AbstractModel):
             if record.hotel_restaurant_order_ids:
                 order_data = []
                 for order in record.hotel_restaurant_order_ids:
-                    order_date = parser.parse(order.o_date) \
-                                .strftime('%m/%d/%Y %H:%M:%S')
+                    order_date = parser.parse(order.o_date)
+                    order_date = order_date.strftime('%m/%d/%Y %H:%M:%S')
                     order_data.append({'order_no': order.order_no,
                                        'order_date': order_date,
                                        'state': order.state,
@@ -250,13 +250,11 @@ class FolioReservReport(models.AbstractModel):
             'GetData': get_data_res,
             'GetReserv': get_reserv_res,
         }
-        date_end_data = parser.parse(docargs \
-                                     .get('data').get('date_end')) \
-                                     .strftime('%m/%d/%Y')
-        docargs['data'].update({'date_end': date_end_data})
-        date_start_data = parser.parse(docargs \
-                                     .get('data').get('date_start')) \
-                                     .strftime('%m/%d/%Y')
-        docargs['data'].update({'date_start': date_start_data})
+        dt_end = parser.parse(docargs.get('data').get('date_end'))
+        date_end = dt_end.strftime('%m/%d/%Y')
+        docargs['data'].update({'date_end': date_end})
+        dt_start = parser.parse(docargs.get('data').get('date_start'))
+        date_start = dt_start.strftime('%m/%d/%Y')
+        docargs['data'].update({'date_start': date_start})
         render_model = 'hotel_restaurant.report_reserv_order'
         return self.env['report'].render(render_model, docargs)
