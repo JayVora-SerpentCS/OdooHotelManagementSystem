@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE xml>
 <odoo>
 	<menuitem id="hotel_management_menu" name="Hotel Management" />
@@ -412,7 +412,6 @@
 					<t t-name="kanban-box">
 						<div
 							t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
-
 							<div class="o_dropdown_kanban dropdown" groups="base.group_user">
 								<a class="dropdown-toggle btn" data-toggle="dropdown" href="#">
 									<span class="fa fa-bars fa-lg" />
@@ -481,7 +480,6 @@
 			</kanban>
 		</field>
 	</record>
-
 
 	<!-- Action for hotel room -->
 	<record model="ir.actions.act_window" id="action_hotel_room_form">
@@ -1122,8 +1120,8 @@
 		<field name="domain">['|','|',('isroom','=',True), ('iscategid' , '=',
 			True), ('isservice', '=', True)]
 		</field>
-		<field name="context">{'search_default_categ_id':active_id,
-			'default_categ_id':active_id}
+		<field name="context">{'search_default_categ_id': active_id,
+			'default_categ_id': active_id}
 		</field>
 	</record>
 
@@ -1133,14 +1131,14 @@
 		<field name="name">Rooms</field>
 		<field eval="'ir.actions.act_window,%d'%action_room_cate" name="value" />
 	</record>
-	
+
 	<record id="ir_room_category_openAme" model="ir.values">
 		<field eval="'tree_but_open'" name="key2" />
 		<field eval="'product.category'" name="model" />
 		<field name="name">Amenities</field>
 		<field eval="'ir.actions.act_window,%d'%action_room_cate" name="value" />
 	</record>
-	
+
 	<record id="ir_room_category_openSer" model="ir.values">
 		<field eval="'tree_but_open'" name="key2" />
 		<field eval="'product.category'" name="model" />

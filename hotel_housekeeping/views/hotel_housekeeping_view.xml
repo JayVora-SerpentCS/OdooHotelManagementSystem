@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE xml>
 <odoo>
 	<!--============================================================ Housekeeping 
@@ -48,7 +48,6 @@
 						colspan="4" nolabel="1">
 						<form string="Activity Lines">
 							<group colspan="4" col="4">
-								<!-- <field name="room_id" /> -->
 								<field name="today_date" />
 								<field name="activity_name" />
 								<field name="housekeeper" />

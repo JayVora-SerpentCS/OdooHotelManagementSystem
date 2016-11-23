@@ -68,7 +68,6 @@
 												<span t-field="line.categ_id.name" />
 											</td>
 										</tr>
-
 									</table>
 								</td>
 								<td>
@@ -91,4 +90,3 @@
 	</template>
 
 </odoo>
-

@@ -10,6 +10,7 @@
 		</record>
 
 		<!--Group for hotel user -->
+
 		<record id="group_hotel_user" model="res.groups">
 			<field name="name">Hotel Management / User</field>
 		</record>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE xml>
 <odoo>
 	<!--Template for hotel folio -->
@@ -70,14 +70,12 @@
 									<t t-esc="folio.get('total_amount', '')" />
 								</t>
 							</td>
-
 						</tr>
 					</table>
 				</div>
 			</t>
 		</t>
 	</template>
-
 
 	<!--Template for currency exchange -->
 	<template id="report_currency_exchange">
@@ -104,7 +102,8 @@
 							</h3>
 						</div>
 						<br />
-						<table width="100%">
+						<table width="100%
+							">
 							<tr>
 								<td width="50%" style="text-align:left;">
 									<strong>Serial No. :</strong>
@@ -155,8 +154,7 @@
 						<table class="table table-bordered" width="100%">
 							<tr>
 								<th width="25%" style="text-align:center;">
-									<strong>Currency purchased
-										(indicating cash)
+									<strong>Currency purchased(indicating cash)
 									</strong>
 								</th>
 								<th width="25%" style="text-align:center;">

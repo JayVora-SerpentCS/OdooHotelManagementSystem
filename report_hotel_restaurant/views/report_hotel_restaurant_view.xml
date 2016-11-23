@@ -71,5 +71,9 @@
 		<field name="res_model">report.hotel.restaurant.status</field>
 		<field name="view_type">form</field>
 		<field name="view_mode">graph,tree</field>
+<<<<<<< HEAD
+	</record>
+=======
 	</record>s
+>>>>>>> 7a6b8c07d267c325f1261cd1af4d8274a1874e2a
 </odoo>

@@ -143,7 +143,6 @@
 			<field name="uom_id" ref="product.product_uom_kgm" />
 			<field name="uom_po_id" ref="product.product_uom_kgm" />
 			<field name="list_price">85.00</field>
-			<field name="list_price">60.00</field>
 			<field name="image" type="base64"
 				file="hotel_pos_restaurant/static/img/chole.png" />
 		</record>
@@ -156,7 +155,6 @@
 			<field name="uom_id" ref="product.product_uom_kgm" />
 			<field name="uom_po_id" ref="product.product_uom_kgm" />
 			<field name="list_price">85.00</field>
-			<field name="list_price">60</field>
 			<field name="image" type="base64"
 				file="hotel_pos_restaurant/static/img/bhaji_paw.jpg" />
 		</record>
@@ -169,7 +167,6 @@
 			<field name="uom_id" ref="product.product_uom_kgm" />
 			<field name="uom_po_id" ref="product.product_uom_kgm" />
 			<field name="list_price">85.00</field>
-			<field name="list_price">40</field>
 			<field name="image" type="base64"
 				file="hotel_pos_restaurant/static/img/khandvi.jpg" />
 		</record>
@@ -182,7 +179,6 @@
 			<field name="uom_id" ref="product.product_uom_kgm" />
 			<field name="uom_po_id" ref="product.product_uom_kgm" />
 			<field name="list_price">85.00</field>
-			<field name="list_price">80</field>
 			<field name="image" type="base64"
 				file="hotel_pos_restaurant/static/img/Halva.jpg" />
 		</record>
@@ -196,7 +192,6 @@
 			<field name="uom_id" ref="product.product_uom_kgm" />
 			<field name="uom_po_id" ref="product.product_uom_kgm" />
 			<field name="list_price">85.00</field>
-			<field name="list_price">30.00</field>
 			<field name="image" type="base64"
 				file="hotel_pos_restaurant/static/img/dosa.png" />
 		</record>
@@ -209,7 +204,6 @@
 			<field name="uom_id" ref="product.product_uom_kgm" />
 			<field name="uom_po_id" ref="product.product_uom_kgm" />
 			<field name="list_price">85.00</field>
-			<field name="list_price">40.00</field>
 			<field name="image" type="base64"
 				file="hotel_pos_restaurant/static/img/Idli_sambar.jpg" />
 		</record>
@@ -222,7 +216,6 @@
 			<field name="uom_id" ref="product.product_uom_kgm" />
 			<field name="uom_po_id" ref="product.product_uom_kgm" />
 			<field name="list_price">85.00</field>
-			<field name="list_price">30.00</field>
 			<field name="image" type="base64"
 				file="hotel_pos_restaurant/static/img/upma.jpg" />
 		</record>
@@ -235,7 +228,6 @@
 			<field name="uom_id" ref="product.product_uom_kgm" />
 			<field name="uom_po_id" ref="product.product_uom_kgm" />
 			<field name="list_price">85.00</field>
-			<field name="list_price">50.00</field>
 			<field name="image" type="base64"
 				file="hotel_pos_restaurant/static/img/vada_sambhar.jpg" />
 		</record>
@@ -248,7 +240,6 @@
 			<field name="uom_id" ref="product.product_uom_kgm" />
 			<field name="uom_po_id" ref="product.product_uom_kgm" />
 			<field name="list_price">85.00</field>
-			<field name="list_price">70.00</field>
 			<field name="image" type="base64"
 				file="hotel_pos_restaurant/static/img/uttapam.jpg" />
 		</record>
@@ -261,7 +252,6 @@
 			<field name="uom_id" ref="product.product_uom_kgm" />
 			<field name="uom_po_id" ref="product.product_uom_kgm" />
 			<field name="list_price">85.00</field>
-			<field name="list_price">60.00</field>
 			<field name="image" type="base64"
 				file="hotel_pos_restaurant/static/img/appam1.jpg" />
 		</record>
@@ -274,7 +264,6 @@
 			<field name="uom_id" ref="product.product_uom_kgm" />
 			<field name="uom_po_id" ref="product.product_uom_kgm" />
 			<field name="list_price">85.00</field>
-			<field name="list_price">50.00</field>
 			<field name="image" type="base64"
 				file="hotel_pos_restaurant/static/img/pongal.jpg" />
 		</record>

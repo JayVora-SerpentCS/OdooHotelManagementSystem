@@ -34,8 +34,9 @@ class FolioReport(models.AbstractModel):
         total_amount = 0.0
         data_folio = []
         folio_obj = self.env['hotel.folio']
-        tids = folio_obj.search([('checkin_date', '>=', date_start),
-                                 ('checkout_date', '<=', date_end)])
+        act_domain = [('checkin_date', '>=', date_start),
+                      ('checkout_date', '<=', date_end)] 
+        tids = folio_obj.search(act_domain)
         for data in tids:
             data_folio.append({'name': data.name,
                                'partner': data.partner_id.name,
@@ -43,7 +44,8 @@ class FolioReport(models.AbstractModel):
                             data.checkin_date).strftime('%m/%d/%Y %H:%M:%S'),
                            'checkout': parser.parse(
                             data.checkin_date).strftime('%m/%d/%Y %H:%M:%S'),
-                           'amount': data.amount_total})
+                           'amount': data.amount_total
+            })
             total_amount += data.amount_total
         data_folio.append({'total_amount': total_amount})
         return data_folio
@@ -69,8 +71,13 @@ class FolioReport(models.AbstractModel):
             'folio_data': data_res,
         }
         docargs['data'].update({'date_end': parser.parse(docargs.get(
-                                'data').get('date_end')).strftime('%m/%d/%Y')})
+                            'data').get('date_end')).strftime('%m/%d/%Y')})
         docargs['data'].update({'date_start': parser.parse(docargs.get(
+<<<<<<< HEAD
+                            'data').get('date_start')).strftime('%m/%d/%Y')})
+        return self.env['report'].render('hotel.report_hotel_folio', docargs)
+=======
                               'data').get('date_start')).strftime('%m/%d/%Y')})
         return self.env['report'].render(
                         'hotel.report_hotel_folio', docargs)
+>>>>>>> 7a6b8c07d267c325f1261cd1af4d8274a1874e2a

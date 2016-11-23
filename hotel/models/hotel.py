@@ -23,7 +23,7 @@
 import time
 import datetime
 import urllib2
-from odoo.exceptions import except_orm, UserError, ValidationError
+from odoo.exceptions import except_orm, ValidationError
 from odoo.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
 from odoo import models, fields, api, _
 from odoo import workflow

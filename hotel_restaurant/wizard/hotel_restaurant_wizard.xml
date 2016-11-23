@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE xml>
 <odoo>
 
@@ -34,7 +34,6 @@
 	<menuitem name="Table Reservation List" action="action_wizard_hotel_restaurant"
 		parent="hotel.hotel_report_menu" id="wizard_list_menu" sequence="30" />
 
-
 	<!--Form view for folio report wizard -->
 	<record model="ir.ui.view" id="view_folio_rest_reservation">
 		<field name="name">view.folio.rest.reservation</field>
@@ -51,7 +50,6 @@
 				<footer>
 					<button name="print_rest_report" string="Restaurant Reserved Order"
 						type="object" class="oe_highlight" />
-
 					<button name="print_reserv_report" string="Restaurant Orders"
 						type="object" class="oe_highlight" />
 					or

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE xml>
 <odoo>
 
@@ -650,8 +650,6 @@
 								<group colspan="4" col="4">
 									<field name="type" select="2" string="Food Type" />
 									<field name="product_manager" select="2" string="Food Manager" />
-									<!-- <field name="procure_method"/> -->
-									<!-- </group> <group colspan="4" col="4"> -->
 									<field name="uom_id" />
 									<field name="uom_po_id" />
 								</group>
@@ -667,18 +665,13 @@
 						</page>
 						<page string="Procurement">
 							<group colspan="4" col="4">
-								<!-- <field name="supply_method"/> -->
 								<field name="cost_method" />
 								<field name="active" select="2" />
 								<field name="list_price" />
 								<field name="sale_ok" select="2" />
 								<field name="standard_price" />
 								<field name="rental" select="2" />
-								<!-- <field name="price_margin"/> -->
 								<field name="price_extra" />
-								<!-- <field name="uos_id" /> -->
-								<!-- <field name="uos_coeff" /> -->
-								<!-- <field name="purchase_ok" select="2"/> -->
 								<separator string="Suppliers" colspan='4' />
 								<field name="seller_ids" colspan="4" nolabel="1"
 									widget="one2many_list" />
