@@ -85,7 +85,6 @@ class ReportLunchorder1(models.AbstractModel):
             'time': time,
             'get_data': get_data,
             'get_pos': get_pos,
-#           'gettotal' : gettotal,
             'getTotal': getTotal,
         }
         docargs['data'].update({'date_end':

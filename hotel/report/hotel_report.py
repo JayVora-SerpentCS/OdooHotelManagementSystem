@@ -41,9 +41,9 @@ class FolioReport(models.AbstractModel):
             data_folio.append({'name': data.name,
                                'partner': data.partner_id.name,
                                'checkin': parser.parse(data.checkin_date).
-                                          strftime('%m/%d/%Y %H:%M:%S'),
-                               'checkout': parser.parse(data.checkin_date).
                                            strftime('%m/%d/%Y %H:%M:%S'),
+                               'checkout': parser.parse(data.checkin_date).
+                                            strftime('%m/%d/%Y %H:%M:%S'),
                                'amount': data.amount_total})
             total_amount += data.amount_total
         data_folio.append({'total_amount': total_amount})
