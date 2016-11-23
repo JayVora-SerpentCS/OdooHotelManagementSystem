@@ -197,10 +197,10 @@ class FolioReservReport(models.AbstractModel):
                 data.append({'folio_name': record.name,
                              'customer_name': record.partner_id.name,
                              'checkin_date': parser.parse(record.checkin_date).
-                                             strftime('%m/%d/%Y %H:%M:%S'),
+                             strftime('%m/%d/%Y %H:%M:%S'),
                              'checkout_date': parser.parse(record.
                                                            checkout_date).
-                              strftime('%m/%d/%Y %H:%M:%S'),
+                             strftime('%m/%d/%Y %H:%M:%S'),
                              'total_amount': total_amount,
                              'total_order': total_order})
         data.append({'total': total})
@@ -216,10 +216,10 @@ class FolioReservReport(models.AbstractModel):
             if record.hotel_restaurant_order_ids:
                 order_data = []
                 for order in record.hotel_restaurant_order_ids:
+                    order_date = parser.parse(order.o_date) \
+                                .strftime('%m/%d/%Y %H:%M:%S')
                     order_data.append({'order_no': order.order_no,
-                                       'order_date': parser.parse(order.
-                                                                  o_date).
-                    strftime('%m/%d/%Y %H:%M:%S'),
+                                       'order_date': order_date,
                                        'state': order.state,
                                        'room_no': order.room_no.name,
                                        'table_no': len(order.table_no),
@@ -250,13 +250,13 @@ class FolioReservReport(models.AbstractModel):
             'GetData': get_data_res,
             'GetReserv': get_reserv_res,
         }
-        docargs['data'].update({'date_end':
-                                parser.parse(docargs.get('data').get('date_end'
-                                                                     )
-                                             ).strftime('%m/%d/%Y')})
-        docargs['data'].update({'date_start':
-                                parser.parse(docargs.get('data').
-                                             get('date_start')).
-        strftime('%m/%d/%Y')})
+        date_end_data = parser.parse(docargs \
+                                     .get('data').get('date_end')) \
+                                     .strftime('%m/%d/%Y')
+        docargs['data'].update({'date_end': date_end_data})
+        date_start_data = parser.parse(docargs \
+                                     .get('data').get('date_start')) \
+                                     .strftime('%m/%d/%Y')
+        docargs['data'].update({'date_start': date_start_data})
         render_model = 'hotel_restaurant.report_reserv_order'
         return self.env['report'].render(render_model, docargs)
