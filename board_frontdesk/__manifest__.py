@@ -22,7 +22,7 @@
 
 {
     "name": "Board for Hotel FrontDesk",
-    "version": "0.01",
+    "version": "10.0",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA)",
     "website": "http://www.serpentcs.com",
