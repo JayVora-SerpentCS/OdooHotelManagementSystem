@@ -967,8 +967,6 @@ class HotelServiceLine(models.Model):
         @param self: object pointer
         @param default: dict of default values to be set
         '''
-        line_id = self.service_line_id.id
-        sale_line_obj = self.env['sale.order.line'].browse(line_id)
         return super(HotelServiceLine, self).copy(default=default)
 
     @api.multi

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE xml>
-<odoo>
-
-    <!--Report for hotel folio -->
-    <report id="hotel_folio_details" string="Folio Total" model="hotel.folio" name="folio.total" rml="hotel/report/total_folio.rml" menu="False" auto="False" />
-
-</odoo>
