@@ -24,7 +24,7 @@
     </record>
 
     <!-- Action for room reservation summary -->
-    <record model="ir.actions.act_window" id="action_desk_hotel_reservation_summary">
+    <record id="action_desk_hotel_reservation_summary" model="ir.actions.act_window">
         <field name="name">action.desk.hotel.reservation.summary</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">room.reservation.summary</field>
@@ -33,7 +33,7 @@
     </record>
     
     <!-- Tree view of Current Table Reservation -->
-    <record model="ir.ui.view" id="view_board_hotel_restaurant_reservation_tree">
+    <record id="view_board_hotel_restaurant_reservation_tree" model="ir.ui.view">
         <field name="name">view.board.hotel.restaurant.reservation.tree</field>
         <field name="model">hotel.restaurant.reservation</field>
         <field name="arch" type="xml">
@@ -68,7 +68,7 @@
     </record>
 
     <!-- Form view of board -->
-    <record model="ir.ui.view" id="board_frontdesk_form">
+    <record id="board_frontdesk_form" model="ir.ui.view">
         <field name="name">board.frontdesk.form</field>
         <field name="model">board.board</field>
         <field name="type">form</field>
@@ -88,7 +88,7 @@
     </record>
 
     <!-- Action of board -->
-    <record model="ir.actions.act_window" id="open_board_frontdesk">
+    <record id="open_board_frontdesk" model="ir.actions.act_window">
         <field name="name">FrontDesk Dashboard</field>
         <field name="res_model">board.board</field>
         <field name="view_type">form</field>
@@ -100,7 +100,7 @@
     <menuitem name="Hotel FrontDesk Board" action="open_board_frontdesk" sequence="1" id="menu_board_frontdesk" icon="terp-graph" parent="menu_hotel_reporting" />
 
     <!-- Action for report hotel reservation status -->
-    <record model="ir.actions.act_window" id="action_report_hotel_reservation_status_tree_graph_bar12">
+    <record id="action_report_hotel_reservation_status_tree_graph_bar12" model="ir.actions.act_window">
         <field name="name">States By Reservation</field>
         <field name="res_model">report.hotel.reservation.status</field>
         <field name="view_type">form</field>
@@ -112,7 +112,7 @@
     <menuitem name="States By Reservation" action="action_report_hotel_reservation_status_tree_graph_bar12" id="menu_hotel_reservation_status_tree_graph_bar11" sequence="34" parent="menu_hotel_reporting" />
 
     <!-- Action for report hotel restaurant status -->
-    <record model="ir.actions.act_window" id="action_report_hotel_restaurant_board">
+    <record id="action_report_hotel_restaurant_board" model="ir.actions.act_window">
         <field name="name">States By Restaurants</field>
         <field name="res_model">report.hotel.restaurant.status</field>
         <field name="view_type">form</field>
@@ -124,7 +124,7 @@
     <menuitem name="States By Restaurant" action="action_report_hotel_restaurant_board" id="menu_action_report_hotel_restaurant_board" sequence="35" parent="menu_hotel_reporting" />
 
     <!-- Action for currency exchange -->
-    <record model="ir.actions.act_window" id="action_desk_currency_exchange">
+    <record id="action_desk_currency_exchange" model="ir.actions.act_window">
         <field name="name">action.desk.currency.exchange</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">currency.exchange</field>
