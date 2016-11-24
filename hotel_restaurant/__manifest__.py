@@ -22,8 +22,9 @@
 
 {
     "name": "Hotel Restaurant Management",
-    "version": "10.0.0.1",
-    "author": "Serpent Consulting Services Pvt. Ltd.",
+    "version": "10.0.1.0.0",
+    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
+    Odoo Community Association (OCA)",
     "category": "Generic Modules/Hotel Restaurant",
     "website": "http://www.serpentcs.com",
     "depends": ["hotel"],
