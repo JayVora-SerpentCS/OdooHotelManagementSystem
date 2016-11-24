@@ -70,4 +70,5 @@
         <field name="view_type">form</field>
         <field name="view_mode">graph,tree</field>
     </record>
+
 </odoo>
