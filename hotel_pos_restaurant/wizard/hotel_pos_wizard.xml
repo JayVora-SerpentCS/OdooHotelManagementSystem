@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE xml>
 <odoo>
+
     <!--Form view for folio report wizard -->
     <record model="ir.ui.view" id="view_hotel_order_wizard">
         <field name="name">order.report.wizard</field>

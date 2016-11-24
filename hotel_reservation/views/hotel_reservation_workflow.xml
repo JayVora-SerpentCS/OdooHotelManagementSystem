@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE xml>
 <odoo>
+
     <record model="workflow" id="wkf_reservation">
         <field name="name">hotel.reservation.basic</field>
         <field name="osv">hotel.reservation</field>

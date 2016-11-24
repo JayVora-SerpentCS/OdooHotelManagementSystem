@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE xml>
 <odoo>
+
     <!-- State By Reservation -->
     <record model="ir.ui.view" id="view_hotel_reservation_status_tree">
         <field name="name">report.hotel.reservation.status.tree</field>

@@ -1,6 +1,7 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE xml>
 <odoo>
+
     <menuitem id="hotel_management_menu" name="Hotel Management" />
     <!-- web_icon="data/hotel-grey.png" -->
     <!-- web_icon_hover="data/hotel-color.png" -->

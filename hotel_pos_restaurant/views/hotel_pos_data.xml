@@ -314,6 +314,5 @@
             <field name="available_in_pos" eval="False" />
         </record>
 
-
     </data>
 </odoo>

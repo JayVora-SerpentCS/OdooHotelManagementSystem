@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE xml>
 <odoo>
+
     <!--============================================================ Housekeeping 
         ============================================================ -->
 
@@ -236,4 +237,5 @@
     </record>
     <menuitem name="Activities" id="menu_open_h_activity_form"
         action="action_h_activity_form" parent="menu_hotel_activity" />
+
 </odoo>

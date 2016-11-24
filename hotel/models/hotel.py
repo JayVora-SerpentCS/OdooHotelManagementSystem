@@ -282,7 +282,7 @@ class HotelFolio(models.Model):
         @param self: object pointer
         @param default: dict of default values to be set
         '''
-        return self.env['sale.order'].copy(default=default)
+        return super(HotelFolio, self).copy(default=default)
 
     @api.multi
     def _invoiced(self, name, arg):
@@ -740,7 +740,7 @@ class HotelFolioLine(models.Model):
         @param self: object pointer
         @param default: dict of default values to be set
         '''
-        return self.env['sale.order.line'].copy(default=default)
+        return super(HotelFolioLine, self).copy(default=default)
 
     @api.multi
     def _amount_line(self, field_name, arg):
@@ -969,7 +969,7 @@ class HotelServiceLine(models.Model):
         '''
         line_id = self.service_line_id.id
         sale_line_obj = self.env['sale.order.line'].browse(line_id)
-        return sale_line_obj.copy(default=default)
+        return super(HotelServiceLine, self).copy(default=default)
 
     @api.multi
     def _amount_line(self, field_name, arg):

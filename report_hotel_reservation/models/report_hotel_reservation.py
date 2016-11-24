@@ -20,7 +20,7 @@
 #
 # ---------------------------------------------------------------------------
 
-from odoo import api, fields, models, _
+from odoo import fields, models
 
 AVAILABLE_STATES = [
     ('draft', 'Draft'),

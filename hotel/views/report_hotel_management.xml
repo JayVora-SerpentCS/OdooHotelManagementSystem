@@ -1,6 +1,7 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE xml>
 <odoo>
+
     <!--Template for hotel folio -->
     <template id="report_hotel_folio">
         <t t-call="report.html_container">
@@ -269,4 +270,6 @@
             </t>
         </t>
     </template>
+    
 </odoo>
+
