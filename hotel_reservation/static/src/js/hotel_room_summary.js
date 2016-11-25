@@ -1,4 +1,4 @@
- openerp.hotel_reservation = function(openerp) {
+openerp.hotel_reservation = function(openerp) {
     var _t = openerp.web._t;
     _lt = openerp.web._lt;
     var QWeb = openerp.web.qweb;
@@ -54,8 +54,8 @@
            if (!this.summary_header || !this.room_summary)
                 return;
            // don't render anything until we have summary_header and room_summary
-              
-           this.destroy_content();
+
+//           this.destroy_content();
            
            if (this.get("summary_header")) {
             this.summary_header = py.eval(this.get("summary_header"));
@@ -88,7 +88,7 @@
         },
        
         renderElement: function() {
-             this.destroy_content();
+//             this.destroy_content();
              this.$el.html(QWeb.render("summaryDetails", {widget: this}));
         }     
     });
@@ -108,6 +108,6 @@
         return true;
     },
     });
-    openerp.web.form.custom_widgets.add('Room_Reservation', 'openerp.hotel_reservation.RoomSummary');
+    openerp.web.form.custom_widgets.add('Room_Reservation', 'odoo.hotel_reservation.RoomSummary');
 };
 
