@@ -23,7 +23,7 @@
 
 {
     "name": "Hotel Reservation Management",
-    "version": "0.01",
+    'version': '1.0',
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA)",
     "category": "Generic Modules/Hotel Reservation",

@@ -22,7 +22,7 @@
 
 {
     "name": "Restaurant Management - Reporting",
-    "version": "0.01",
+    'version': '1.0',
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA)",
     "website": "http://www.serpentcs.com, http://www.openerp.com",
