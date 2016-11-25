@@ -3,7 +3,7 @@
 <odoo>
 
     <!--Form view for folio report wizard -->
-    <record model="ir.ui.view" id="view_hotel_order_wizard">
+    <record id="view_hotel_order_wizard" model="ir.ui.view">
         <field name="name">order.report.wizard</field>
         <field name="model">order.report.wizard</field>
         <field name="arch" type="xml">
@@ -26,7 +26,7 @@
     </record>
 
     <!--Action for folio report wizard -->
-    <record model="ir.actions.act_window" id="hotel_order_wizard">
+    <record id="hotel_order_wizard" model="ir.actions.act_window">
         <field name="name">Pos Order Report</field>
         <field name="res_model">order.report.wizard</field>
         <field name="view_type">form</field>
@@ -34,7 +34,7 @@
         <field name="target">new</field>
     </record>
 
-    <menuitem name="Pos Order Report" action="hotel_order_wizard"
-        id="wizard_order_menu" parent="hotel.hotel_report_menu" sequence="32" />
+    <menuitem id="wizard_order_menu" name="Pos Order Report" action="hotel_order_wizard"
+         parent="hotel.hotel_report_menu" sequence="32" />
 
 </odoo>

@@ -4,7 +4,7 @@
     <data noupdate="1">
 
         <!-- Sequences for hotel folio -->
-        <record model="ir.sequence" id="seq_hotel_folio">
+        <record id="seq_hotel_folio" model="ir.sequence">
             <field name="name">Hotel Folio</field>
             <field name="code">hotel.folio</field>
             <field name="prefix">Folio/</field>
@@ -12,7 +12,7 @@
         </record>
         
         <!-- Sequences for currency exchange -->
-        <record model="ir.sequence" id="seq_currency_exchange">
+        <record id="seq_currency_exchange" model="ir.sequence">
             <field name="name">Currency Exchange</field>
             <field name="code">currency.exchange</field>
             <field name="prefix">ECR/</field>

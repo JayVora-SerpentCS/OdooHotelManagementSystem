@@ -3,7 +3,7 @@
 <odoo>
 
     <!--Form view for hotel housekeeping wizard -->
-    <record model="ir.ui.view" id="hotel_housekeeping_wizard_form_view">
+    <record id="hotel_housekeeping_wizard_form_view" model="ir.ui.view">
         <field name="name">hotel.housekeeping.wizard.form</field>
         <field name="model">hotel.housekeeping.wizard</field>
         <field name="arch" type="xml">

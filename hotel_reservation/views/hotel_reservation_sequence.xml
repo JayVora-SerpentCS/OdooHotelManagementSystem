@@ -4,7 +4,7 @@
 
     <data noupdate="1">
 
-        <record model="ir.sequence" id="seq_hotel_reservation">
+        <record id="seq_hotel_reservation" model="ir.sequence">
             <field name="name">Hotel Reservation</field>
             <field name="code">hotel.reservation</field>
             <field name="prefix">R/</field>

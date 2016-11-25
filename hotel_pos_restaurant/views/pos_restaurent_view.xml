@@ -16,7 +16,7 @@
         </field>
     </record>
 
-    <record model="ir.ui.view" id="view_hotelfolio2_form2_inherited">
+    <record id="view_hotelfolio2_form2_inherited" model="ir.ui.view">
         <field name="name">hotel.folio2.form2.inherited</field>
         <field name="model">hotel.folio</field>
         <field name="inherit_id" ref="hotel.view_hotel_folio1_form" />

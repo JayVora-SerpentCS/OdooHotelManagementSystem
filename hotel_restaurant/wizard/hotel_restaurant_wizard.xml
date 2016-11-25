@@ -3,7 +3,7 @@
 <odoo>
 
     <!--Form view for wizard hotel restaurant -->
-    <record model="ir.ui.view" id="wizard_hotel_restaurant_form_view">
+    <record id="wizard_hotel_restaurant_form_view" model="ir.ui.view">
         <field name="name">wizard.hotel.restaurant.form</field>
         <field name="model">wizard.hotel.restaurant</field>
         <field name="arch" type="xml">
@@ -31,11 +31,12 @@
         <field name="target">new</field>
     </record>
 
-    <menuitem name="Table Reservation List" action="action_wizard_hotel_restaurant"
-        parent="hotel.hotel_report_menu" id="wizard_list_menu" sequence="30" />
+    <menuitem id="wizard_list_menu" name="Table Reservation List"
+        action="action_wizard_hotel_restaurant"
+        parent="hotel.hotel_report_menu" sequence="30" />
 
     <!--Form view for folio report wizard -->
-    <record model="ir.ui.view" id="view_folio_rest_reservation">
+    <record id="view_folio_rest_reservation" model="ir.ui.view">
         <field name="name">view.folio.rest.reservation</field>
         <field name="model">folio.rest.reservation</field>
         <field name="arch" type="xml">
@@ -60,7 +61,7 @@
     </record>
 
     <!--Action for folio report wizard -->
-    <record model="ir.actions.act_window" id="action_folio_rest_reservation">
+    <record id="action_folio_rest_reservation" model="ir.actions.act_window">
         <field name="name">Restaurant Reports</field>
         <field name="res_model">folio.rest.reservation</field>
         <field name="view_type">form</field>
@@ -68,8 +69,9 @@
         <field name="target">new</field>
     </record>
 
-    <menuitem name="Restaurant Reports" action="action_folio_rest_reservation"
-        id="folio_rest_reservation_menu" parent="hotel.hotel_report_menu"
-        sequence="32" />
+    <menuitem id="folio_rest_reservation_menu"
+         name="Restaurant Reports" action="action_folio_rest_reservation"
+         parent="hotel.hotel_report_menu"
+         sequence="32" />
 
 </odoo>

@@ -6,7 +6,7 @@
         ============================================================ -->
 
     <!-- Form view of hotel reservation -->
-    <record model="ir.ui.view" id="view_hotel_reservation_form">
+    <record id="view_hotel_reservation_form" model="ir.ui.view">
         <field name="name">hotel.reservation.form</field>
         <field name="model">hotel.reservation</field>
         <field name="arch" type="xml">
@@ -79,7 +79,7 @@
     </record>
 
     <!-- Tree view of hotel reservation -->
-    <record model="ir.ui.view" id="view_hotel_reservation_tree">
+    <record id="view_hotel_reservation_tree" model="ir.ui.view">
         <field name="name">hotel.reservation.tree</field>
         <field name="model">hotel.reservation</field>
         <field name="arch" type="xml">
@@ -95,7 +95,7 @@
     </record>
 
     <!-- Search view of hotel reservation -->
-    <record model="ir.ui.view" id="view_hotel_reservation_search">
+    <record id="view_hotel_reservation_search" model="ir.ui.view">
         <field name="name">hotel.reservation.search</field>
         <field name="model">hotel.reservation</field>
         <field name="arch" type="xml">
@@ -124,7 +124,7 @@
     </record>
 
     <!-- Graph view of hotel reservation -->
-    <record model="ir.ui.view" id="view_hotel_reservation_graph">
+    <record id="view_hotel_reservation_graph" model="ir.ui.view">
         <field name="name">hotel.reservation.graph</field>
         <field name="model">hotel.reservation</field>
         <field name="arch" type="xml">
@@ -136,7 +136,7 @@
     </record>
 
     <!-- Calendar view of hotel reservation -->
-    <record model="ir.ui.view" id="hotel_calendar_view">
+    <record id="hotel_calendar_view" model="ir.ui.view">
         <field name="name">Room Reservation</field>
         <field name="model">hotel.reservation</field>
         <field name="priority" eval="2" />
@@ -149,7 +149,7 @@
     </record>
 
     <!-- gantt view of hotel reservation -->
-    <record model="ir.ui.view" id="hotel_gantt_view">
+    <record id="hotel_gantt_view" model="ir.ui.view">
         <field name="name">hotel.gantt</field>
         <field name="model">hotel.reservation</field>
         <field name="priority" eval="2" />
@@ -160,7 +160,7 @@
     </record>
 
     <!-- Action of hotel reservation -->
-    <record model="ir.actions.act_window" id="action_hotel_reservation_tree_all">
+    <record id="action_hotel_reservation_tree_all" model="ir.actions.act_window">
         <field name="name">Reservations</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">hotel.reservation</field>
@@ -207,7 +207,7 @@
         </field>
     </record>
 
-    <record model="ir.ui.view" id="view_hotel_folio1_form_inherited">
+    <record id="view_hotel_folio1_form_inherited" model="ir.ui.view">
         <field name="name">hotel.folio.form.inherited</field>
         <field name="model">hotel.folio</field>
         <field name="inherit_id" ref="hotel.view_hotel_folio1_form" />
@@ -217,7 +217,7 @@
             </field>
         </field>
     </record>
-    <record model="ir.ui.view" id="view_hotel_folio1_tree_inherited">
+    <record id="view_hotel_folio1_tree_inherited" model="ir.ui.view">
         <field name="name">hotel.folio.tree.inherited</field>
         <field name="model">hotel.folio</field>
         <field name="inherit_id" ref="hotel.view_hotel_folio1_tree" />
@@ -230,7 +230,7 @@
 
 
     <!-- Form view of room reservation summary -->
-    <record model="ir.ui.view" id="room_reservation_summary_form_view">
+    <record id="room_reservation_summary_form_view" model="ir.ui.view">
         <field name="name">room.reservation.summary.form</field>
         <field name="model">room.reservation.summary</field>
         <field name="arch" type="xml">
@@ -261,7 +261,7 @@
     </record>
 
     <!-- Form view of quick room reservation -->
-    <record model="ir.ui.view" id="quick_room_reservation_form_view">
+    <record id="quick_room_reservation_form_view" model="ir.ui.view">
         <field name="name">quick.room.reservation.form</field>
         <field name="model">quick.room.reservation</field>
         <field name="arch" type="xml">
@@ -294,7 +294,7 @@
     </record>
 
     <!-- Action for room reservation summary -->
-    <record model="ir.actions.act_window" id="action_hotel_reservation_summary">
+    <record id="action_hotel_reservation_summary" model="ir.actions.act_window">
         <field name="name">Room Reservations Summary</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">room.reservation.summary</field>
@@ -302,7 +302,7 @@
         <field name="view_mode">form</field>
     </record>
 
-    <menuitem name="Reservations Summary" id="menu_action_hotel_reservation_summary"
+    <menuitem id="menu_action_hotel_reservation_summary" name="Reservations Summary"
         action="action_hotel_reservation_summary" parent="menu_hotel_reservation"
         sequence="3" />
 

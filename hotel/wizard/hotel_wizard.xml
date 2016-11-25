@@ -3,7 +3,7 @@
 <odoo>
 
     <!--Form view for folio report wizard -->
-    <record model="ir.ui.view" id="view_hotel_folio_wizard">
+    <record id="view_hotel_folio_wizard" model="ir.ui.view">
         <field name="name">folio.report.wizard</field>
         <field name="model">folio.report.wizard</field>
         <field name="arch" type="xml">
@@ -22,7 +22,7 @@
     </record>
 
     <!--Action for folio report wizard -->
-    <record model="ir.actions.act_window" id="hotel_folio_wizard">
+    <record id="hotel_folio_wizard" model="ir.actions.act_window">
         <field name="name">Hotel Folio Report</field>
         <field name="res_model">folio.report.wizard</field>
         <field name="view_type">form</field>

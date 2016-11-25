@@ -11,7 +11,7 @@ Installation
 To install this module, you need to:
 
 install 'stock', 'mail', 'sale_stock', 'point_of_sale',
-'hotel_report_layout',email_template modules
+'hotel_report_layout' modules
 
 Configuration
 

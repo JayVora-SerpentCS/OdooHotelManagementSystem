@@ -3,22 +3,22 @@
 <odoo>
     <data noupdate="1">
 
-        <!--Sequences for hotel foodorder -->
-        <record model="ir.sequence" id="seq_hotel_rest_order">
+        <!--Sequences for hotel food order -->
+        <record id="seq_hotel_rest_order" model="ir.sequence">
             <field name="name">Hotel Order</field>
             <field name="code">hotel.restaurant.order</field>
             <field name="prefix">0R/</field>
             <field name="padding">5</field>
         </record>
 
-        <record model="ir.sequence" id="seq_hotel_table">
+        <record id="seq_hotel_table" model="ir.sequence">
             <field name="name">Hotel Reservation</field>
             <field name="code">hotel.restaurant.reservation</field>
             <field name="prefix">R0/</field>
             <field name="padding">5</field>
         </record>
 
-        <record model="ir.sequence" id="seq_hotel_resorder">
+        <record id="seq_hotel_resorder" model="ir.sequence">
             <field name="name">Hotel Reservation</field>
             <field name="code">hotel.reservation.order</field>
             <field name="prefix">0RR/</field>

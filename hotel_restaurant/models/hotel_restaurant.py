@@ -149,7 +149,7 @@ class HotelRestaurantReservation(models.Model):
         --------------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'draft'})
+        self.state = 'draft'
         return True
 
     @api.multi
@@ -185,7 +185,7 @@ class HotelRestaurantReservation(models.Model):
                 reservation with table those already reserved in this \
                 reservation period'))
             else:
-                self.write({'state': 'confirm'})
+                self.state = 'confirm'
             return True
 
     @api.multi
@@ -196,7 +196,7 @@ class HotelRestaurantReservation(models.Model):
         --------------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'cancel'})
+        self.state = 'cancel'
         return True
 
     @api.multi
@@ -207,7 +207,7 @@ class HotelRestaurantReservation(models.Model):
         --------------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'done'})
+        self.state = 'done'
         return True
 
     _name = "hotel.restaurant.reservation"
@@ -346,7 +346,7 @@ class HotelRestaurantOrder(models.Model):
         ----------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'draft'})
+        self.state = 'draft'
         return True
 
     @api.multi
@@ -384,7 +384,7 @@ class HotelRestaurantOrder(models.Model):
                 restaurant_order_list_obj.create(o_line)
                 res.append(order_line.id)
             self.rest_item_id = [(6, 0, res)]
-            self.write({'state': 'order'})
+            self.state = 'order'
         return True
 
     _name = "hotel.restaurant.order"
@@ -502,7 +502,7 @@ class HotelRestaurantOrder(models.Model):
                         hf_rec = hotel_folio_obj.browse(order_obj.folio_id.id)
                         hf_rec.write({'hotel_restaurant_order_ids':
                                       [(4, order_obj.id)]})
-                self.write({'state': 'done'})
+                self.state = 'done'
         return True
 
 

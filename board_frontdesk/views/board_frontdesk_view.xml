@@ -5,7 +5,7 @@
     <menuitem id="menu_hotel_reporting" name="Reports" parent="hotel.hotel_management_menu" sequence="7" />
     
     <!-- Action of hotel reservation -->
-    <record model="ir.actions.act_window" id="action_view_frontdesk_cal">
+    <record id="action_view_frontdesk_cal" model="ir.actions.act_window">
         <field name="name">FrontDesk</field>
         <field name="res_model">hotel.reservation</field>
         <field name="view_type">form</field>
