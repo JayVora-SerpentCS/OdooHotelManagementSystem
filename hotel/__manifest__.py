@@ -22,7 +22,8 @@
 
 {
     'name': 'Hotel Management',
-    'description-file': "0.01",
+    'version': '0.01',
+    'description-file': "ChangeLog.txt",
     'author': 'Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA),',
     'images': [],
