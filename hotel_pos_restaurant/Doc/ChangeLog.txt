@@ -1,6 +1,14 @@
 ============================================================================================================================
- Version Change Log (Hotel POS Restaurant)
+ Version Change Log (hotel_pos_restaurant)
 ============================================================================================================================
+0.04 on 2016-11-25 by Krishna Prajapati
+    * Migration the module as per v10 standard
 
-0.1 on 2016-11-24 by Krishna Prajapati
-    * Made the module installable in v10.
+0.03 on 2015-10-30 by Anu Patel
+    * Imprved the pos_invoice creation code to create and inovice form pos order. 
+
+0.02 on 2015-10-30 by Ashish Thakkar
+	* Solved the xpath error and improved code. 
+
+0.01 on 2015-10-26 by Ashish Thakkar
+    * Standardized the module as per v9 standards.

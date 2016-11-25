@@ -22,14 +22,14 @@
 
 {
     'name': 'Hotel Management',
-    'version': "0.1",
+    'version': "0.08",
     'author': 'Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA),',
     'images': [],
     'category': 'Generic Modules/Hotel Management',
     'website': 'http://www.serpentcs.com',
     'depends': ['sale_stock', 'point_of_sale', 'report'],
-    'license': "",
+    'license': "AGPL-3",
     'demo': ['views/hotel_data.xml'],
     'data': [
             'security/hotel_security.xml',
