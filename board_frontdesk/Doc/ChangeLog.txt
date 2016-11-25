@@ -1,10 +1,6 @@
 ============================================================================================================================
  Version Change Log (board_frontdesk)
 ============================================================================================================================
-0.02 on 2016-11-25 by Krishna Prajapati
+
+0.01 on 2016-11-25 by Krishna Prajapati
     * Migration the module as per v10 standard
-
-0.01 on 2013-10-31 by Murtuza Saleh
-    * Moved 'Hotel Management System' menu as per v9 standards.
-
-

@@ -1,11 +1,5 @@
 ============================================================================================================================
  Version Change Log (hotel_restaurant)
 ============================================================================================================================
-0.03 on 2016-11-25 by Krishna Prajapati
+0.01 on 2016-11-25 by Krishna Prajapati
     * Migration the module as per v10 standard
-    
-0.02 on 2015-10-29 by Ashish Thakkar
-	* Solved the xpath error and improved code to get the hierarchy of food. 
-
-0.01 on 2015-10-26 by Ashish Thakkar
-    * Standardized the module as per v9 standards.

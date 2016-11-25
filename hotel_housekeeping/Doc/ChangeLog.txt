@@ -1,11 +1,6 @@
 ============================================================================================================================
  Version Change Log (hotel_housekeeping)
 ============================================================================================================================
-0.03 on 2016-11-25 by Krishna Prajapati
+
+0.01 on 2016-11-25 by Krishna Prajapati
     * Migration the module as per v10 standard
-    
-0.02 on 2014-01-07 by Ashish Thakkar
-    * Demo data for hotel housekeeping activities.
-    
-0.01 on 2013-10-24 by Ashish Thakkar
-    * Standardized the module as per v9 standards.

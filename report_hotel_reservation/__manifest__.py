@@ -22,7 +22,7 @@
 
 {
     "name": "Hotel Reservation Management - Reporting",
-    "version": "0.05",
+    "version": "0.01",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA)",
     "website": "http://www.serpentcs.com",
