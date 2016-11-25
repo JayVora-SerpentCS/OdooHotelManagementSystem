@@ -2,5 +2,5 @@
  Version Change Log (Board Front Desk)
 ============================================================================================================================
 
-0.01 on 2016-11-24 by Krishna Prajapati
+0.1 on 2016-11-24 by Krishna Prajapati
     * Made the module installable in v10.
