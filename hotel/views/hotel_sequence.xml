@@ -1,30 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<openerp>
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE xml>
+<odoo>
     <data noupdate="1">
 
         <!-- Sequences for hotel folio -->
-        <record model="ir.sequence" id="seq_hotel_folio">
+        <record id="seq_hotel_folio" model="ir.sequence">
             <field name="name">Hotel Folio</field>
             <field name="code">hotel.folio</field>
             <field name="prefix">Folio/</field>
             <field name="padding">5</field>
         </record>
-<!--         <record model="ir.sequence.type" id="seq_type_hotel_folio"> -->
-<!--             <field name="name">Hotel Folio</field> -->
-<!--             <field name="code">hotel.folio</field> -->
-<!--         </record> -->
         
-        <!-- Sequences for curency exchange -->
-        <record model="ir.sequence" id="seq_currency_exchange">
+        <!-- Sequences for currency exchange -->
+        <record id="seq_currency_exchange" model="ir.sequence">
             <field name="name">Currency Exchange</field>
             <field name="code">currency.exchange</field>
             <field name="prefix">ECR/</field>
             <field name="padding">5</field>
         </record>
-<!--         <record model="ir.sequence.type" id="seq_type_currency_exchange"> -->
-<!--             <field name="name">Currency Exchange</field> -->
-<!--             <field name="code">currency.exchange</field> -->
-<!--         </record> -->
 
     </data>
-</openerp>
+</odoo>

@@ -22,18 +22,17 @@
 
 {
     "name": "Board for Hotel FrontDesk",
-    "version": "0.01",
-    "author": "Serpent Consulting Services Pvt. Ltd.,\
+    "version": "10.0.1.0.0",
+    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA)",
     "website": "http://www.serpentcs.com",
-    "images": [],
     "category": "Board/Hotel FrontDesk",
     "depends": [
         "board",
         "report_hotel_restaurant",
         "hotel_pos_restaurant"
         ],
-    "license": "",
+    'license': "AGPL-3",
     "data": [
         "views/board_frontdesk_view.xml"
     ],

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-# --------------------------------------------------------------------------
+#############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services PVT. LTD.
+#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
 #    (<http://www.serpentcs.com>)
+#    Copyright (C) 2004 OpenERP SA (<http://www.openerp.com>)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -18,29 +19,23 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
-# ---------------------------------------------------------------------------
+#############################################################################
 
 {
-    "name": "Hotel Housekeeping Management",
-    "version": "0.02",
+    "name": "Hotel POS Restaurant Management",
+    "version": "10.0.1.0.0",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA)",
-    "images": [],
-    "category": "Generic Modules/Hotel Housekeeping",
+    "category": "Generic Modules/Hotel Restaurant Management",
     "website": "http://www.serpentcs.com",
     "depends": ["hotel"],
-    "license": "",
-    "demo": [
-        "views/hotel_housekeeping_data.xml",
-    ],
-    "data": [
-        "security/ir.model.access.csv",
-        "report/hotel_housekeeping_report.xml",
-        "views/activity_detail.xml",
-        "wizard/hotel_housekeeping_wizard.xml",
-        "views/hotel_housekeeping_workflow.xml",
-        "views/hotel_housekeeping_view.xml",
-    ],
-    'installable': True,
-    'auto_install': False,
+    'license': "AGPL-3",
+    "demo": ["views/hotel_pos_data.xml"],
+    "data": ["security/ir.model.access.csv",
+             "views/pos_restaurent_view.xml",
+             "views/hotel_pos_report.xml",
+             "views/report_pos_management.xml",
+             "wizard/hotel_pos_wizard.xml"],
+    "auto_install": False,
+    "installable": True
 }

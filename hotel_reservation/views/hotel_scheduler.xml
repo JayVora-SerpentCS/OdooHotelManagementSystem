@@ -1,29 +1,18 @@
-<?xml version="1.0" encoding='UTF-8'?>
-<openerp>
-    <data>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE xml>
+<odoo>
 
-        <!--Scheduler for hotel room -->
-        <record model="ir.cron" id="room_analytic_cron">
-            <field name="name">Room analysis</field>
-            <field name="interval_number">1</field>
-            <field name="interval_type">minutes</field>
-            <field name="numbercall">-1</field>
-            <field name="doall" eval="False"/>
-            <field name="model" eval="'hotel.room'"/>
-            <field name="function" eval="'cron_room_line'"/>
-            <field name="args" eval="'()'" />
-        </record>
+    <!-- inform Guest About reservation before 24 hours -->
+    <record id="Guest_reservation_reminder_24hrs" model="ir.cron">
+        <field name="name">Inform Guest About Reservation Before 24hours
+        </field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False" />
+        <field name="model" eval="'hotel.reservation'" />
+        <field name="function" eval="'reservation_reminder_24hrs'" />
+        <field name="args" eval="'()'" />
+    </record>
 
-        <!-- inform Guest About reservation before 24 hours -->
-        <record model="ir.cron" id="Guest_reservation_reminder_24hrs">
-            <field name="name">Inform Guest About Reservation Before 24hours</field>
-            <field name="interval_number">1</field>
-            <field name="interval_type">days</field>
-            <field name="numbercall">-1</field>
-            <field name="doall" eval="False"/>
-            <field name="model" eval="'hotel.reservation'"/>
-            <field name="function" eval="'reservation_reminder_24hrs'"/>
-            <field name="args" eval="'()'"/> 
-        </record>
-    </data>
-</openerp>
+</odoo>

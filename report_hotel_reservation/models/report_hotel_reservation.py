@@ -19,7 +19,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 # ---------------------------------------------------------------------------
-from openerp import models, fields
+
+from odoo import fields, models
 
 AVAILABLE_STATES = [
     ('draft', 'Draft'),
@@ -38,14 +39,16 @@ class ReportHotelReservationStatus(models.Model):
     state = fields.Selection(AVAILABLE_STATES, 'State', size=16,
                              readonly=True)
 
-    def init(self, cr):
+    def init(self):
+
         """
         This method is for initialization for report hotel reservation
         status Module.
         @param self: The object pointer
         @param cr: database cursor
         """
-        cr.execute("""
+
+        self.env.cr.execute("""
             create or replace view report_hotel_reservation_status as (
                 select
                     min(c.id) as id,

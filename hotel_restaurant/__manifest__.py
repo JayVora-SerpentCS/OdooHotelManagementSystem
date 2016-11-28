@@ -21,19 +21,27 @@
 # ---------------------------------------------------------------------------
 
 {
-    "name": "Hotel Reservation Management - Reporting",
-    "version": "0.03",
+    "name": "Hotel Restaurant Management",
+    "version": "10.0.1.0.0",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA)",
-    "images": [],
+    "category": "Generic Modules/Hotel Restaurant",
     "website": "http://www.serpentcs.com",
-    "depends": ["hotel_reservation"],
-    "license": "",
-    "category": "Generic Modules/Hotel Reservation",
+    "depends": ["hotel"],
+    'license': "AGPL-3",
+    "demo": [
+        "views/hotel_restaurant_data.xml",
+    ],
     "data": [
         "security/ir.model.access.csv",
-        "views/report_hotel_reservation_view.xml",
+        "report/hotel_restaurant_report.xml",
+        "wizard/hotel_restaurant_wizard.xml",
+        "views/res_table.xml",
+        "views/kot.xml",
+        "views/bill.xml",
+        "views/folio_order_report.xml",
+        "views/hotel_restaurant_sequence.xml",
+        "views/hotel_restaurant_view.xml",
     ],
-    'installable': True,
-    'auto_install': False,
+    "installable": True
 }

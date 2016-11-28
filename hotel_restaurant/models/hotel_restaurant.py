@@ -20,11 +20,10 @@
 #
 # ---------------------------------------------------------------------------
 
-from openerp.exceptions import except_orm, ValidationError
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
-from openerp import models, fields, api, _
 import time
-from openerp import workflow
+from odoo import models, fields, api, _
+from odoo.exceptions import except_orm, ValidationError
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 
 class HotelFolio(models.Model):
@@ -74,6 +73,7 @@ class HotelMenucard(models.Model):
     image = fields.Binary("Image",
                           help="This field holds the image used as image "
                           "for the product, limited to 1024x1024px.")
+    product_manager = fields.Many2one('res.users', string='Product Manager')
 
 
 class HotelRestaurantTables(models.Model):
@@ -149,9 +149,7 @@ class HotelRestaurantReservation(models.Model):
         --------------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'draft'})
-        for reserve_id in self.ids:
-            workflow.trg_create(self._uid, self._name, reserve_id, self._cr)
+        self.state = 'draft'
         return True
 
     @api.multi
@@ -187,7 +185,7 @@ class HotelRestaurantReservation(models.Model):
                 reservation with table those already reserved in this \
                 reservation period'))
             else:
-                self.write({'state': 'confirm'})
+                self.state = 'confirm'
             return True
 
     @api.multi
@@ -198,7 +196,7 @@ class HotelRestaurantReservation(models.Model):
         --------------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'cancel'})
+        self.state = 'cancel'
         return True
 
     @api.multi
@@ -209,7 +207,7 @@ class HotelRestaurantReservation(models.Model):
         --------------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'done'})
+        self.state = 'done'
         return True
 
     _name = "hotel.restaurant.reservation"
@@ -348,7 +346,7 @@ class HotelRestaurantOrder(models.Model):
         ----------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'draft'})
+        self.state = 'draft'
         return True
 
     @api.multi
@@ -386,7 +384,7 @@ class HotelRestaurantOrder(models.Model):
                 restaurant_order_list_obj.create(o_line)
                 res.append(order_line.id)
             self.rest_item_id = [(6, 0, res)]
-            self.write({'state': 'order'})
+            self.state = 'order'
         return True
 
     _name = "hotel.restaurant.order"
@@ -407,9 +405,9 @@ class HotelRestaurantOrder(models.Model):
     order_list = fields.One2many('hotel.restaurant.order.list', 'o_list',
                                  'Order List')
     tax = fields.Float('Tax (%) ')
-    amount_subtotal = fields.Float(compute='_sub_total', method=True,
+    amount_subtotal = fields.Float(_compute_='_sub_total', method=True,
                                    string='Subtotal')
-    amount_total = fields.Float(compute='_total', method=True,
+    amount_total = fields.Float(_compute_='_total', method=True,
                                 string='Total')
     state = fields.Selection([('draft', 'Draft'), ('order', 'Order Created'),
                               ('done', 'Done'), ('cancel', 'Cancelled')],
@@ -504,7 +502,7 @@ class HotelRestaurantOrder(models.Model):
                         hf_rec = hotel_folio_obj.browse(order_obj.folio_id.id)
                         hf_rec.write({'hotel_restaurant_order_ids':
                                       [(4, order_obj.id)]})
-                self.write({'state': 'done'})
+                self.state = 'done'
         return True
 
 
@@ -658,9 +656,10 @@ class HotelReservationOrder(models.Model):
     order_list = fields.One2many('hotel.restaurant.order.list', 'o_l',
                                  'Order List')
     tax = fields.Float('Tax (%) ', size=64)
-    amount_subtotal = fields.Float(compute='_sub_total', method=True,
+    amount_subtotal = fields.Float(_compute_='_sub_total', method=True,
                                    string='Subtotal')
-    amount_total = fields.Float(compute='_total', method=True, string='Total')
+    amount_total = fields.Float(_compute_='_total', method=True,
+                                string='Total')
     kitchen_id = fields.Integer('Kitchen id')
     rest_id = fields.Many2many('hotel.restaurant.order.list', 'reserv_id',
                                'kitchen_id', 'res_kit_ids', "Rest")
@@ -691,7 +690,7 @@ class HotelReservationOrder(models.Model):
 
 class HotelRestaurantOrderList(models.Model):
 
-    @api.one
+    @api.multi
     @api.depends('item_qty', 'item_rate')
     def _sub_total(self):
         '''
@@ -722,5 +721,5 @@ class HotelRestaurantOrderList(models.Model):
     name = fields.Many2one('hotel.menucard', 'Item Name', required=True)
     item_qty = fields.Char('Qty', size=64, required=True)
     item_rate = fields.Float('Rate', size=64)
-    price_subtotal = fields.Float(compute='_sub_total', method=True,
+    price_subtotal = fields.Float(_compute_='_sub_total', method=True,
                                   string='Subtotal')

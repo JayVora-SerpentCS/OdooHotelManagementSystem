@@ -20,7 +20,7 @@
 #
 # ---------------------------------------------------------------------------
 
-from openerp import models, fields
+from odoo import fields, models
 
 AVAILABLE_STATES = [
     ('draft', 'Draft'),
@@ -35,18 +35,19 @@ class ReportHotelRestaurantStatus(models.Model):
     _auto = False
 
     reservation_id = fields.Char('Reservation No', size=64, readonly=True)
-    nbr = fields.Integer('Reservation', readonly=True)
+    nbr = fields.Integer('Reservatioorder_datan', readonly=True)
     state = fields.Selection(AVAILABLE_STATES, 'State', size=16,
                              readonly=True)
 
-    def init(self, cr):
+    def init(self):
         """
         This method is for initialization for report hotel restaurant
         status Module.
         @param self: The object pointer
         @param cr: database cursor
         """
-        cr.execute("""
+
+        self.env.cr.execute("""
             create or replace view report_hotel_restaurant_status as (
                 select
                     min(c.id) as id,

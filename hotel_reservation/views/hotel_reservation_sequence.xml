@@ -1,18 +1,15 @@
-<?xml version="1.0"?>
-<openerp>
-<data noupdate="1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE xml>
+<odoo>
 
-    <!--Sequences for hotel reservation -->
-    
-<!-- 	<record model="ir.sequence.type" id="seq_type_hotel_reservation"> -->
-<!-- 		<field name="name">Hotel Reservation</field> -->
-<!-- 		<field name="code">hotel.reservation</field> -->
-<!-- 	</record> -->
-	<record model="ir.sequence" id="seq_hotel_reservation">
-		<field name="name">Hotel Reservation</field>
-		<field name="code">hotel.reservation</field>
-		<field name="prefix">R/</field>
-		<field name="padding">5</field>
-	</record>
-</data>
-</openerp>
+    <data noupdate="1">
+
+        <record id="seq_hotel_reservation" model="ir.sequence">
+            <field name="name">Hotel Reservation</field>
+            <field name="code">hotel.reservation</field>
+            <field name="prefix">R/</field>
+            <field name="padding">5</field>
+        </record>
+    </data>
+
+</odoo>

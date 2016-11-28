@@ -21,18 +21,24 @@
 # ---------------------------------------------------------------------------
 
 {
-    "name": "Restaurant Management - Reporting",
-    "version": "0.03",
+    "name": "Hotel Housekeeping Management",
+    "version": "10.0.1.0.0",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA)",
-    "website": "http://www.serpentcs.com, http://www.openerp.com",
     "images": [],
-    "depends": ["hotel_restaurant", "report_hotel_reservation"],
-    "license": "",
-    "category": "Generic Modules/Hotel Restaurant",
+    "category": "Generic Modules/Hotel Housekeeping",
+    "website": "http://www.serpentcs.com",
+    "depends": ["hotel"],
+    "license": "AGPL-3",
+    "demo": [
+        "views/hotel_housekeeping_data.xml",
+    ],
     "data": [
         "security/ir.model.access.csv",
-        "views/report_hotel_restaurant_view.xml",
+        "report/hotel_housekeeping_report.xml",
+        "views/activity_detail.xml",
+        "wizard/hotel_housekeeping_wizard.xml",
+        "views/hotel_housekeeping_view.xml",
     ],
     'installable': True,
     'auto_install': False,

@@ -37,7 +37,6 @@ class SaleAdvancePaymentInv(models.TransientModel):
                         'active_id': hotel.order_id.id})
         return super(SaleAdvancePaymentInv,
                      self.with_context(ctx))._get_advance_payment_method()
-
     advance_payment_method = fields.Selection([('delivered',
                                                 'Invoiceable lines'),
                                                ('all',

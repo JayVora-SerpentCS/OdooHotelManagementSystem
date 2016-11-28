@@ -12,7 +12,7 @@ Installation
 
 To install this module, you need to:
 
-install 'pos_restaurant', 'product_uos', 'sale_stock', 'point_of_sale', 'report' modules
+install 'pos_restaurant', 'sale_stock', 'point_of_sale', 'hotel_report_layout' modules
 
 Configuration
 

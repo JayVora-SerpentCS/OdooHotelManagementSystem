@@ -20,11 +20,10 @@
 #
 # ---------------------------------------------------------------------------
 
-from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
-from openerp import models, fields, api, _
-from openerp.exceptions import ValidationError
 import time
-from openerp import workflow
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
+from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
 
 
 class ProductCategory(models.Model):
@@ -91,9 +90,7 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'dirty'})
-        for housekeep_id in self.ids:
-            workflow.trg_create(self._uid, self._name, housekeep_id, self._cr)
+        self.state = 'dirty'
         return True
 
     @api.multi
@@ -104,7 +101,7 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'cancel'})
+        self.state = 'cancel'
         return True
 
     @api.multi
@@ -115,7 +112,7 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'done'})
+        self.state = 'done'
         return True
 
     @api.multi
@@ -126,7 +123,7 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'inspect'})
+        self.state = 'inspect'
         return True
 
     @api.multi
@@ -137,7 +134,7 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'clean'})
+        self.state = 'clean'
         return True
 
 
@@ -147,7 +144,7 @@ class HotelHousekeepingActivities(models.Model):
     _description = "Housekeeping Activities "
 
     a_list = fields.Many2one('hotel.housekeeping', string='Reservation')
-#    room_id = fields.Many2one('hotel.room', string='Room No')
+#   room_id = fields.Many2one('hotel.room', string='Room No')
     today_date = fields.Date('Today Date')
     activity_name = fields.Many2one('hotel.activity',
                                     string='Housekeeping Activity')

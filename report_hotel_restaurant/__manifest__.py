@@ -21,21 +21,18 @@
 # ---------------------------------------------------------------------------
 
 {
-    "name": "Hotel POS Restaurant Management",
-    "version": "0.03",
+    "name": "Restaurant Management - Reporting",
+    "version": "10.0.1.0.0",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
-    Odoo Community Association (OCA)",
-    "category": "Generic Modules/Hotel Restaurant Management",
-    "website": "http://www.serpentcs.com",
-    "images": [],
-    "depends": ["pos_restaurant", "hotel"],
-    "license": "",
-    "demo": ["views/hotel_pos_data.xml"],
-    "data": ["security/ir.model.access.csv",
-             "views/pos_restaurent_view.xml",
-             "views/hotel_pos_report.xml",
-             "views/report_pos_management.xml",
-             "wizard/hotel_pos_wizard.xml"],
+     Odoo Community Association (OCA)",
+    "website": "http://www.serpentcs.com, http://www.openerp.com",
+    "depends": ["hotel_restaurant", "report_hotel_reservation"],
+    "license": "AGPL-3",
+    "category": "Generic Modules/Hotel Restaurant",
+    "data": [
+        "security/ir.model.access.csv",
+        "views/report_hotel_restaurant_view.xml",
+    ],
+    "installable": True,
     "auto_install": False,
-    "installable": True
 }

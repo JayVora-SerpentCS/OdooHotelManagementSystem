@@ -19,24 +19,24 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 # ---------------------------------------------------------------------------
-from openerp.exceptions import except_orm, UserError, ValidationError
-from openerp.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
-from openerp import models, fields, api, _
-from openerp import workflow
-from decimal import Decimal
+
+import time
 import datetime
 import urllib2
-import time
+from odoo.exceptions import except_orm, ValidationError
+from odoo.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
+from odoo import models, fields, api, _
+from odoo import workflow
+from decimal import Decimal
 
 
 def _offset_format_timestamp1(src_tstamp_str, src_format, dst_format,
                               ignore_unparsable_time=True, context=None):
     """
     Convert a source timeStamp string into a destination timeStamp string,
-    attempting to apply the
-    correct offset if both the server and local timeZone are recognized,or no
-    offset at all if they aren't or if tz_offset is false (i.e. assuming they
-    are both in the same TZ).
+    attempting to apply the correct offset if both the server and local
+    timeZone are recognized,or no offset at all if they aren't or if
+    tz_offset is false (i.e. assuming they are both in the same TZ).
 
     @param src_tstamp_str: the STR value containing the timeStamp.
     @param src_format: the format to use when parsing the local timeStamp.
@@ -48,7 +48,6 @@ def _offset_format_timestamp1(src_tstamp_str, src_format, dst_format,
     @param ignore_unparsable_time: if True, return False if src_tstamp_str
                                    cannot be parsed using src_format or
                                    formatted using dst_format.
-
     @return: destination formatted timestamp, expressed in the destination
              timezone if possible and if tz_offset is true, or src_tstamp_str
              if timezone offset could not be determined.
@@ -135,6 +134,8 @@ class HotelRoomAmenities(models.Model):
     rcateg_id = fields.Many2one('hotel.room.amenities.type',
                                 'Amenity Catagory')
 
+    product_manager = fields.Many2one('res.users', string='Product Manager')
+
 
 class FolioRoomLine(models.Model):
 
@@ -171,6 +172,7 @@ class HotelRoom(models.Model):
     capacity = fields.Integer('Capacity')
     room_line_ids = fields.One2many('folio.room.line', 'room_id',
                                     string='Room Reservation Line')
+    product_manager = fields.Many2one('res.users', string='Product Manager')
 
     @api.onchange('isroom')
     def isroom_change(self):
@@ -280,7 +282,7 @@ class HotelFolio(models.Model):
         @param self: object pointer
         @param default: dict of default values to be set
         '''
-        return self.env['sale.order'].copy(default=default)
+        return super(HotelFolio, self).copy(default=default)
 
     @api.multi
     def _invoiced(self, name, arg):
@@ -498,7 +500,7 @@ class HotelFolio(models.Model):
         @param vals: dictionary of fields value.
         """
         folio_room_line_obj = self.env['folio.room.line']
-#        reservation_line_obj = self.env['hotel.room.reservation.line']
+        reservation_line_obj = self.env['hotel.room.reservation.line']
         product_obj = self.env['product.product']
         h_room_obj = self.env['hotel.room']
         room_lst1 = []
@@ -535,22 +537,22 @@ class HotelFolio(models.Model):
                     folio_romline_rec = (folio_room_line_obj.search
                                          ([('folio_id', '=', folio_obj.id)]))
                     folio_romline_rec.write(room_vals)
-#            if folio_obj.reservation_id:
-#                for reservation in folio_obj.reservation_id:
-#                    reservation_obj = (reservation_line_obj.search
-#                                       ([('reservation_id', '=',
-#                                          reservation.id)]))
-#                    if len(reservation_obj) == 1:
-#                        for line_id in reservation.reservation_line:
-#                            line_id = line_id.reserve
-#                            for room_id in line_id:
-#                                vals = {'room_id': room_id.id,
-#                                        'check_in': folio_obj.checkin_date,
-#                                        'check_out': folio_obj.checkout_date,
-#                                        'state': 'assigned',
-#                                        'reservation_id': reservation.id,
-#                                        }
-#                                reservation_obj.write(vals)
+            if folio_obj.reservation_id:
+                for reservation in folio_obj.reservation_id:
+                    reservation_obj = (reservation_line_obj.search
+                                       ([('reservation_id', '=',
+                                          reservation.id)]))
+                    if len(reservation_obj) == 1:
+                        for line_id in reservation.reservation_line:
+                            line_id = line_id.reserve
+                            for room_id in line_id:
+                                vals = {'room_id': room_id.id,
+                                        'check_in': folio_obj.checkin_date,
+                                        'check_out': folio_obj.checkout_date,
+                                        'state': 'assigned',
+                                        'reservation_id': reservation.id,
+                                        }
+                                reservation_obj.write(vals)
         return folio_write
 
     @api.onchange('warehouse_id')
@@ -578,7 +580,7 @@ class HotelFolio(models.Model):
                 self.partner_invoice_id = partner_rec.id
                 self.partner_shipping_id = partner_rec.id
                 self.pricelist_id = partner_rec.property_product_pricelist.id
-                raise UserError('Not Any Order For  %s ' % (partner_rec.name))
+                raise _('Not Any Order For  %s ' % (partner_rec.name))
             else:
                 self.partner_invoice_id = partner_rec.id
                 self.partner_shipping_id = partner_rec.id
@@ -732,13 +734,13 @@ class HotelFolio(models.Model):
 
 class HotelFolioLine(models.Model):
 
-    @api.one
+    @api.multi
     def copy(self, default=None):
         '''
         @param self: object pointer
         @param default: dict of default values to be set
         '''
-        return self.env['sale.order.line'].copy(default=default)
+        return super(HotelFolioLine, self).copy(default=default)
 
     @api.multi
     def _amount_line(self, field_name, arg):
@@ -770,14 +772,14 @@ class HotelFolioLine(models.Model):
             return self._context['checkout']
         return time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
-#    def _get_uom_id(self):
-#        try:
-#            proxy = self.pool.get('ir.model.data')
-#            result = proxy.get_object_reference(self._cr, self._uid,
+#   def _get_uom_id(self):
+#       try:
+#           proxy = self.pool.get('ir.model.data')
+#           result = proxy.get_object_reference(self._cr, self._uid,
 #              'product','product_uom_unit')
-#            return result[1]
-#        except Exception:
-#            return False
+#           return result[1]
+#       except Exception:
+#           return False
 
     _name = 'hotel.folio.line'
     _description = 'hotel folio1 room line'
@@ -791,7 +793,10 @@ class HotelFolioLine(models.Model):
                                    default=_get_checkin_date)
     checkout_date = fields.Datetime('Check Out', required=True,
                                     default=_get_checkout_date)
-#    product_uom = fields.Many2one('product.uom',string='Unit of Measure',
+    is_reserved = fields.Boolean('Is Reserved',
+                                 help='True when folio line created from \
+                                 Reservation')
+#   product_uom = fields.Many2one('product.uom',string='Unit of Measure',
 #                                  required=True, default=_get_uom_id)
 
     @api.model
@@ -850,16 +855,16 @@ class HotelFolioLine(models.Model):
                 sale_unlink_obj.unlink()
         return super(HotelFolioLine, self).unlink()
 
-    @api.multi
-    def uos_change(self, product_uos, product_uos_qty=0, product_id=None):
-        '''
-        @param self: object pointer
-        '''
-        for folio in self:
-            line = folio.order_line_id
-            line.uos_change(product_uos, product_uos_qty=0,
-                            product_id=None)
-        return True
+#    @api.multi
+#    def uos_change(self, product_uos, product_uos_qty=0, product_id=None):
+#         '''
+#             @param self: object pointer
+#         '''
+#         for folio in self:
+#             line = folio.order_line_id
+#             line.uos_change(product_uos, product_uos_qty=0,
+#                             product_id=None)
+#         return True
 
     @api.onchange('product_id')
     def product_id_change(self):
@@ -943,7 +948,7 @@ class HotelFolioLine(models.Model):
                                self._cr)
         return True
 
-    @api.one
+    @api.multi
     def copy_data(self, default=None):
         '''
         @param self: object pointer
@@ -956,15 +961,13 @@ class HotelFolioLine(models.Model):
 
 class HotelServiceLine(models.Model):
 
-    @api.one
+    @api.multi
     def copy(self, default=None):
         '''
         @param self: object pointer
         @param default: dict of default values to be set
         '''
-        line_id = self.service_line_id.id
-        sale_line_obj = self.env['sale.order.line'].browse(line_id)
-        return sale_line_obj.copy(default=default)
+        return super(HotelServiceLine, self).copy(default=default)
 
     @api.multi
     def _amount_line(self, field_name, arg):
@@ -1093,7 +1096,7 @@ class HotelServiceLine(models.Model):
         if not self.ser_checkout_date:
             self.ser_checkout_date = time_a
         if self.ser_checkout_date < self.ser_checkin_date:
-            raise UserError('Checkout must be greater or equal checkin date')
+            raise _('Checkout must be greater or equal checkin date')
         if self.ser_checkin_date and self.ser_checkout_date:
             date_a = time.strptime(self.ser_checkout_date,
                                    DEFAULT_SERVER_DATETIME_FORMAT)[:5]
@@ -1123,7 +1126,7 @@ class HotelServiceLine(models.Model):
             x = line.button_done()
         return x
 
-    @api.one
+    @api.multi
     def copy_data(self, default=None):
         '''
         @param self: object pointer
@@ -1151,6 +1154,7 @@ class HotelServices(models.Model):
     service_id = fields.Many2one('product.product', 'Service_id',
                                  required=True, ondelete='cascade',
                                  delegate=True)
+    product_manager = fields.Many2one('res.users', string='Product Manager')
 
 
 class ResCompany(models.Model):
