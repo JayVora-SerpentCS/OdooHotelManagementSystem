@@ -22,17 +22,17 @@
 
 {
     "name": "Restaurant Management - Reporting",
-    'version': '1.0.1',
+    "version": "10.0.1.0.0",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA)",
     "website": "http://www.serpentcs.com, http://www.openerp.com",
     "depends": ["hotel_restaurant", "report_hotel_reservation"],
-    'license': "AGPL-3",
+    "license": "AGPL-3",
     "category": "Generic Modules/Hotel Restaurant",
     "data": [
         "security/ir.model.access.csv",
         "views/report_hotel_restaurant_view.xml",
     ],
-    'installable': True,
-    'auto_install': False,
+    "installable": True,
+    "auto_install": False,
 }
