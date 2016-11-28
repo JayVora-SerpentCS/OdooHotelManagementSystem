@@ -1,9 +1,9 @@
-odoo.define('hotel_reservation', function(require) {
-'use strict';
-
-var kanban_widgets = require('hr_timesheet_sheet.timesheet'); 
-
-odoo.hotel_reservation.RoomSummary = odoo.web.form.FormWidget.extend(openerp.web.form.ReinitializeWidgetMixin, {
+ openerp.hotel_reservation = function(openerp) {
+    var _t = openerp.web._t;
+    _lt = openerp.web._lt;
+    var QWeb = openerp.web.qweb;
+    
+    openerp.hotel_reservation.RoomSummary = openerp.web.form.FormWidget.extend(openerp.web.form.ReinitializeWidgetMixin, {
 
         display_name: _lt('Form'),
         view_type: "form",
@@ -24,10 +24,10 @@ odoo.hotel_reservation.RoomSummary = odoo.web.form.FormWidget.extend(openerp.web
             this.summary_header = [];
             this.room_summary = [];
             this.field_manager.on("field_changed:date_from", this, function() {
-                this.set({"date_from": odoo.web.str_to_datetime(this.field_manager.get_field_value("date_from"))});
+                this.set({"date_from": openerp.web.str_to_datetime(this.field_manager.get_field_value("date_from"))});
             });
             this.field_manager.on("field_changed:date_to", this, function() {
-                this.set({"date_to": odoo.web.str_to_datetime(this.field_manager.get_field_value("date_to"))});
+                this.set({"date_to": openerp.web.str_to_datetime(this.field_manager.get_field_value("date_to"))});
             });
             
             this.field_manager.on("field_changed:summary_header", this, function() {
@@ -40,7 +40,7 @@ odoo.hotel_reservation.RoomSummary = odoo.web.form.FormWidget.extend(openerp.web
         },
         
         initialize_field: function() {
-            odoo.web.form.ReinitializeWidgetMixin.initialize_field.call(this);
+            openerp.web.form.ReinitializeWidgetMixin.initialize_field.call(this);
             var self = this;
             self.on("change:summary_header", self, self.initialize_content);
             self.on("change:room_summary", self, self.initialize_content);
@@ -54,7 +54,7 @@ odoo.hotel_reservation.RoomSummary = odoo.web.form.FormWidget.extend(openerp.web
            if (!this.summary_header || !this.room_summary)
                 return;
            // don't render anything until we have summary_header and room_summary
-
+              
            this.destroy_content();
            
            if (this.get("summary_header")) {
@@ -89,11 +89,11 @@ odoo.hotel_reservation.RoomSummary = odoo.web.form.FormWidget.extend(openerp.web
        
         renderElement: function() {
              this.destroy_content();
-             this.$el.html(kanban_widgets.render("summaryDetails", {widget: this}));
+             this.$el.html(QWeb.render("summaryDetails", {widget: this}));
         }     
     });
 
-    odoo.web.FormView.include({
+    openerp.web.FormView.include({
          can_be_discarded: function() {
         if (this.$el.is('.oe_form_dirty')) {
             if (this.model == 'room.reservation.summary') {
@@ -108,6 +108,6 @@ odoo.hotel_reservation.RoomSummary = odoo.web.form.FormWidget.extend(openerp.web
         return true;
     },
     });
-    odoo.web.form.custom_widgets.add('Room_Reservation', 'odoo.hotel_reservation.RoomSummary');
+    openerp.web.form.custom_widgets.add('Room_Reservation', 'openerp.hotel_reservation.RoomSummary');
 };
 
