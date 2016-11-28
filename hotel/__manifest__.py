@@ -22,7 +22,7 @@
 
 {
     'name': 'Hotel Management',
-    'version': '1.0',
+    'version': '10.0.0.0.0',
     'author': 'Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA),',
     'images': [],
