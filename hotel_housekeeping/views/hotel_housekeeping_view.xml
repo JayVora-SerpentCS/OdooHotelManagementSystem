@@ -17,15 +17,15 @@
                 <sheet>
                     <h1 align="right">
                         <button string="Clean" name="room_clean" states="dirty"
-                            type="object" icon="gtk-clear" />
+                            type="object" icon="fa-pencil-square" />
                         <button string="Inspect" name="room_inspect" states="clean"
-                            type="object" icon="gtk-find" />
+                            type="object" icon="fa-search" />
                         <button string="Done" name="room_done" states="inspect"
-                            type="object" icon="terp-camera_test" />
+                            type="object" icon="fa-check" />
                         <button string="Cancel" name="room_cancel" states="clean,inspect"
-                            type="object" icon="gtk-cancel" />
+                            type="object" icon="fa-times-circle" />
                         <button string="Set to Dirty" name="action_set_to_dirty"
-                            states="cancel" type="object" icon="gtk-index" />
+                            states="cancel" type="object" icon="fa-pencil-square-o" />
                     </h1>
                     <h1>
                         <label string="Housekeeping" />
