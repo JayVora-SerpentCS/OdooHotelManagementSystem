@@ -17,7 +17,7 @@
                 <sheet>
                     <h1 align="right">
                         <button string="Clean" name="room_clean" states="dirty"
-                            type="object" icon="fa-pencil-square" />
+                            type="object" icon="fa-paint-brush" />
                         <button string="Inspect" name="room_inspect" states="clean"
                             type="object" icon="fa-search" />
                         <button string="Done" name="room_done" states="inspect"

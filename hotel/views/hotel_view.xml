@@ -524,11 +524,11 @@
                     <!-- <button name="ship_cancel" string="Cancel Folio" states="shipping_except" 
                         icon="gtk-cancel" class="oe_highlight oe_highlight" /> -->
                     <button name="action_cancel_draft" states="cancel" string="Set to Draft"
-                        type="object" icon="gtk-file" class="oe_highlight" />
+                        type="object" icon="fa-check-square-o" class="oe_highlight" />
                     <button name="action_cancel" string="Cancel Folio" states="sale"
-                        type="object" icon="gtk-cancel" class="oe_highlight" />
+                        type="object" icon="fa-close" class="oe_highlight" />
                     <button name="action_cancel" string="Cancel Folio" states="draft"
-                        icon="gtk-cancel" type="object" class="oe_highlight" />
+                        icon="fa-close" type="object" class="oe_highlight" />
                     <!-- <button name="action_cancel" string="Cancel Folio" states="manual,progress" 
                         type="object" icon="gtk-cancel" class="oe_highlight"/> -->
                     <!-- <button name="cancel" string="Cancel Folio" states="draft" icon="gtk-cancel" 
@@ -1031,11 +1031,11 @@
             <form string=" Currency Exchange">
                 <header>
                     <button name="cur_confirm" string="Done" states='draft'
-                        icon="gtk-ok" />
+                        icon="fa-check" />
                     <button name="cur_cancel" string="Cancel" states='draft'
-                        icon="gtk-cancel" />
+                        icon="fa-close" />
                     <button name="cur_cancel_draft" string="do_draft" states='cancel'
-                        icon="gtk-ok" />
+                        icon="fa-check" />
                     <button name="%(report_hotel_currency)d" states='done' type="action"
                         string="Print" class="oe_highlight" />
                     <field name="state" widget="statusbar" statusbar_visible="draft,done" />

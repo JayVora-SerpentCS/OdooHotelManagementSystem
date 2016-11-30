@@ -285,8 +285,8 @@
                 <footer>
                     <group colspan="2" col="2">
                         <button string="Save" name="room_reserve" type="object"
-                            icon="gtk-ok" />
-                        <button string="Cancel" special="cancel" icon="gtk-cancel" />
+                            icon="fa-check" />
+                        <button string="Cancel" special="cancel" icon="fa-close" />
                     </group>
                 </footer>
             </form>
