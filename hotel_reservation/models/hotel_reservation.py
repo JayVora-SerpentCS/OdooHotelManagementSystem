@@ -316,7 +316,11 @@ class HotelReservation(models.Model):
     @api.multi
     def set_to_draft_reservation(self):
         for reservation in self:
-            return reservation.write({'state':'draft'})
+            reservation.write({'state':'draft'})
+            # Deleting the existing instance of workflow for PO
+            self.delete_workflow(cr, uid, [reservation.id])
+            self.create_workflow(cr, uid, [reservation.id])
+        return True
 
     @api.multi
     def send_reservation_maill(self):
