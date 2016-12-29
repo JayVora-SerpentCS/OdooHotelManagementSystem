@@ -315,7 +315,8 @@ class HotelReservation(models.Model):
     @api.multi
     def set_to_draft_reservation(self):
         for reservation in self:
-            return reservation.write({'state': 'draft'})
+            reservation.write({'state': 'draft'})
+        return True
 
     @api.multi
     def send_reservation_maill(self):
