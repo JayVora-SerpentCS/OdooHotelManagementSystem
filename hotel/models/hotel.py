@@ -1310,6 +1310,14 @@ class AccountInvoice(models.Model):
 
     _inherit = 'account.invoice'
 
+    @api.model
+    def create(self, vals):
+        cr, uid, context = self.env.args
+        context = dict(context)
+        if context.get('invoice_origin', False):
+            vals.update({'origin': context['invoice_origin']})
+        return super(AccountInvoice, self).create(vals)
+    
     @api.multi
     def confirm_paid(self):
         '''
