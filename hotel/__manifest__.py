@@ -31,6 +31,7 @@
     'depends': ['sale_stock', 'point_of_sale', 'report'],
     'license': "AGPL-3",
     'demo': ['views/hotel_data.xml'],
+    'images': ['static/description/HotelManagement.png'],
     'data': [
             'security/hotel_security.xml',
             'security/ir.model.access.csv',
