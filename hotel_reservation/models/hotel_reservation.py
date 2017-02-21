@@ -318,8 +318,8 @@ class HotelReservation(models.Model):
         for reservation in self:
             reservation.write({'state':'draft'})
             # Deleting the existing instance of workflow for PO
-            self.delete_workflow(cr, uid, [reservation.id])
-            self.create_workflow(cr, uid, [reservation.id])
+            reservation.delete_workflow()
+            reservation.create_workflow()
         return True
 
     @api.multi
