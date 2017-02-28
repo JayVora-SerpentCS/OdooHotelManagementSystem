@@ -1317,7 +1317,7 @@ class AccountInvoice(models.Model):
         if context.get('invoice_origin', False):
             vals.update({'origin': context['invoice_origin']})
         return super(AccountInvoice, self).create(vals)
-    
+
     @api.multi
     def confirm_paid(self):
         '''
