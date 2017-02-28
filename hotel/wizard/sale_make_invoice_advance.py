@@ -67,5 +67,5 @@ class SaleAdvancePaymentInv(models.TransientModel):
         res = super(SaleAdvancePaymentInv,
                     self.with_context(ctx)).create_invoices()
         if hotel and res.get('res_id', False):
-            hotel.write({'hotel_invoice_id': res['res_id']})  
+            hotel.write({'hotel_invoice_id': res['res_id']})
         return res
