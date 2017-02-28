@@ -25,7 +25,6 @@
     "version": "10.0.1.0.0",
     'author': 'Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA),',
-    'images': [],
     'category': 'Generic Modules/Hotel Management',
     'website': 'http://www.serpentcs.com',
     'depends': ['sale_stock', 'point_of_sale', 'report'],
