@@ -317,8 +317,6 @@ class HotelReservation(models.Model):
     def set_to_draft_reservation(self):
         for reservation in self:
             reservation.write({'state':'draft'})
-            # Deleting the existing instance of workflow for PO
-            reservation.delete_workflow()
             reservation.create_workflow()
         return True
 
