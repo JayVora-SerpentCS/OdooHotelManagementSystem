@@ -317,7 +317,6 @@ class HotelReservation(models.Model):
     def set_to_draft_reservation(self):
         for reservation in self:
             reservation.write({'state':'draft'})
-            reservation.create_workflow()
         return True
 
     @api.multi
