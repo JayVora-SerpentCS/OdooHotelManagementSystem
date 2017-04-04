@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+   <record id="hotel_folio_pos_inh" model="ir.ui.view">
+        <field name="name">hotel.folio.pos.inh</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group/field[@name='partner_id']"
+                position="after">
+                <field name="folio_id" />
+                <field name="room_no" />
+            </xpath>
+            <xpath expr="//form/header/button[@name='action_pos_order_invoice']" position="attributes">
+        		<attribute name="states">""</attribute>
+        		<attribute name="attrs">{'readonly': [('partner_id','=',False)],'invisible':['|',('state', '!=', 'paid'),('folio_id','!=',False)]}</attribute>
+        	</xpath>
+        </field>
+    </record> 
+
+</odoo>
