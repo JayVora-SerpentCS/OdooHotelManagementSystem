@@ -1,0 +1,21 @@
+# -*- coding: utf-8 -*-
+# Part of Odoo. See LICENSE file for full copyright and licensing details.
+{
+    'name': 'Pos Options Bar',
+    'version': '10.0.1.0.0',
+    'category': 'Point Of Sale',
+    'sequence': 6,
+    'summary': 'Touchscreen Interface for Shops',
+    'author': 'Serpent Consulting Services Pvt. Ltd',
+    'website': 'http://www.serpentcs.com',
+    'installable': True,
+    'application': True,
+    'data':[
+            'security/ir.model.access.csv',
+            'view/templates.xml',
+           ],
+    'depends': ['point_of_sale'],
+    'qweb': ['static/src/xml/pos_options.xml'],
+    'auto_install': False,
+}
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
