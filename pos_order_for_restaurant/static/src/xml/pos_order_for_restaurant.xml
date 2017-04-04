@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- vim:fdl=1:
+-->
+<templates id="template_pos_custom_view" xml:space="preserve">
+
+    <t t-name="AlertPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup popup-alert alert-warning">
+                <div class='title alert_header'> 
+                    <t t-if="widget.warning_icon"> 
+                        <i class="fa fa-exclamation-triangle"/>
+                    </t>
+                    <t t-if="! widget.warning_icon"> 
+                        <i class="fa fa-check-square"/>
+                    </t>
+                    <t t-esc="widget.title" />
+                </div><br/>
+                <div class="message"><t t-esc="widget.message" /></div>
+                <div class="footer alert">
+                    <div class="button ok">
+                        Ok
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="AlertDialog">
+        <div class="dialog">
+            <div style="height:130px;">
+                <div class='title alert_header'> 
+                    <t t-if="warning_icon"> 
+                        <i class="fa fa-exclamation-triangle"/>
+                    </t>
+                    <t t-if="! warning_icon"> 
+                        <i class="fa fa-check-square"/>
+                    </t>
+                    <t t-esc="title" />
+                </div><br/>
+                <div class="message"><t t-esc="message" /></div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="ParcelOrderPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup">
+                <p class='title'> 
+                    <t t-esc="widget.title" />
+                </p>
+                <div>
+                    <div class="client-detail parcel_container">
+                        <span id="parcel_order_lbl" class='label input_label' >Parcel Order  </span>
+                        <input type="textbox" id="take_away_txt" class="textbox" style="width: 65%;"/><br/>
+                    </div>
+                </div>
+                <div class="footer"> 
+                    <div class="button cancel">
+                        Cancel 
+                    </div>
+                    <div class="button ok">
+                        Ok
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+ 
+    <t t-name="DeliveryOrderPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup">
+                <p class='title'> 
+                    <t t-esc="widget.title" />
+                </p>
+                <t t-esc="widget.delivery"> 
+                <div id="add_partner" class="delivery_container"> 
+                    <table> 
+                        <tr> 
+                            <td ><div class="control-div"><span class='label input_label' >Customer </span></div></td>
+                            <td> 
+                                <span id="dialog_partner" class="client-detail" > 
+                                    <select id="partner_selection" style="width:100%;text-align:left;">
+                                        <option value=""></option>
+                                        <t t-foreach="widget.pos.partner_list" t-as="partner">
+                                            <option t-att-value= "partner.name"><t t-esc="partner.name"/></option>
+                                        </t>
+                                    </select>
+                                </span><br/><br />
+                            </td>
+                        </tr>
+                        <tr> 
+                            <td><div class="control-div"><span id="delivery_order_person_number"  class='label input_label' >Phone  </span></div></td>
+                            <td> 
+                                <div class="client-detail" >
+                                    <input type="textbox" class="textbox" id="person_number_txt"  style="width:100%;text-align: left;"/> <br />
+                                </div><br/><br />
+                            </td>
+                        </tr>
+                        <tr> 
+                            <td><div class="control-div"><span id="driver"  class='label input_label' >Delivery Boy</span></div></td>
+                            <td> 
+                                <div id="add_driver" class="client-detail" >
+                                    <select id="driver_name"  style="width:100%;text-align: left;">
+                                        <option value=""></option>
+                                        <t t-foreach="widget.pos.delivery_boy" t-as="userlist">
+                                            <option t-att-value= "userlist.name"><t t-esc="userlist.name"/></option>
+                                        </t>
+                                    </select> 
+                                </div><br/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                </t>
+                <div class="footer"> 
+                    <div class='button new_customer'>
+                        <i class='fa fa-user'></i>
+                        <i class='fa fa-plus'></i>
+                    </div>
+                    <div class="button cancel">
+                        Cancel 
+                    </div>
+                    <div class="button ok">
+                        Ok
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="OrderSelectorWidget">
+        <div id="options">
+            <button>Options</button>
+        </div>
+        <div class="order-selector" id="order-selector">
+            <span class="orders touch-scrollable">
+                <t t-foreach="widget.pos.get_order_list()" t-as="order">
+                    <t t-if='order === widget.pos.get_order() and ! widget.pos.get_order().getParcel() and ! widget.pos.get_order().getDriver() and !widget.pos.get_order().get_table_name()'>
+                        <span class="order-button select-order selected" t-att-data-uid="order.uid">
+                            <span class='order-sequence'>
+                                <t t-esc='order.sequence_number' />
+                            </span>
+                            <t t-esc="moment(order.creation_date).format('hh:mm')"/>
+                        </span>
+                    </t>
+                    <t t-if='order === widget.pos.get_order() and ! widget.pos.get_order().getParcel() and ! widget.pos.get_order().getDriver() and widget.pos.get_order().get_table_name()'>
+                        <span class="order-button select-order selected" 
+                            t-att-data-uid="order.uid"
+                            t-att-id="order.get_name().replace(' ', '_')" 
+                            t-att-name="order.get('creationDate').toString('t')" 
+                            t-att-data="order.get('reserved_seat')">
+                            <span class='order-sequence'>
+                                <t t-esc='order.sequence_number' />
+                            </span>
+                            <t t-esc="widget.pos.get_order().get_table_name()"/>
+                        </span>
+                    </t>
+                     <t t-if='order === widget.pos.get_order() and widget.pos.get_order().getParcel()'>
+                        <span class="order-button select-order selected" t-att-data-uid="order.uid">
+                            <span class='order-sequence'>
+                                <t t-esc='order.sequence_number' />
+                            </span>
+                            <t t-esc="order.getParcel()"/>
+                        </span>
+                    </t>
+                    <t t-if='order === widget.pos.get_order() and widget.pos.get_order().getDriver()'>
+                        <span class="order-button select-order selected" t-att-data-uid="order.uid">
+                            <span class='order-sequence'>
+                                <t t-esc='order.sequence_number' />
+                            </span>
+                            <t t-if="order.get_client()">
+                                <t t-esc="order.get_client().name"/>
+                            </t>
+                        </span>
+                    </t>
+                    <t t-if='order !== widget.pos.get_order()'>
+                        <span class="order-button select-order" t-att-data-uid="order.uid"  t-att-id="order.get_name().replace(' ', '_')" 
+                            t-att-name="order.get('creationDate').toString('t')" 
+                            t-att-data="order.get('reserved_seat')">
+                            <span class='order-sequence'>
+                                <t t-esc='order.sequence_number' />
+                            </span>
+                        </span>
+                    </t>
+                </t>
+            </span>
+            <span class="order-button square neworder-button">
+                <i class='fa fa-plus' />
+            </span>
+            <span class="order-button square deleteorder-button">
+                <i class='fa fa-minus' />
+            </span>
+        </div>
+    </t>
+
+    <t t-extend="PosTicket">
+        <t t-jquery=".receipt-orderlines" t-operation="before"> 
+            <br />
+            <t t-if ="order.getParcel()">
+                Parcel : <t t-esc="order.getParcel()"/>
+                <br />
+            </t>
+            <t t-if="order.get_table_name()">
+                Table: <t t-esc="order.get_table_name()"/><br />
+            </t>
+            <t t-if="order.get_client()">
+                Customer : <t t-esc="order.get_client_name()"/>
+                <br />
+            </t>
+            <t t-if="order.getDriver()"> 
+                <t t-foreach="order.pos.delivery_boy" t-as="user">
+                       <t t-if="(user.id == order.getDriver())">
+                           Delivery Boy : <t t-esc="user.name"/>
+                       </t>
+                   </t>
+                <br />
+            </t> 
+            <br />
+        </t>
+    </t>
+
+    <t t-extend="XmlReceipt">
+        <t t-jquery=".orderlines" t-operation="before"> 
+            <div line-ratio='2.6'> 
+                <t t-if ="order.getParcel()">
+                    <line>
+                        <left>
+                            Parcel : <t t-esc="order.getParcel()"/>
+                            <br />
+                        </left>
+                    </line>
+                </t>
+                <t t-if="order.get_table_name()">
+                    <line>
+                        <left>
+                            Table : <t t-esc="order.get_table_name()"/>
+                            <br />
+                        </left>
+                    </line>
+                </t>
+                <t t-if="order.get_client()">
+                    <line>
+                        <left> 
+                            Customer : <t t-esc="order.get_client_name()"/>
+                            <br />
+                        </left>
+                    </line>
+                </t>
+                <t t-if="order.getDriver()">
+                    <line>
+                        <left> 
+                            <t t-foreach="order.pos.delivery_boy" t-as="user">
+                                <t t-if="(user.id == order.getDriver())">
+                                    Delivery Boy : <t t-esc="user.name"/>
+                                </t>
+                            </t>
+                        </left>
+                    </line>
+                 </t> 
+                <br /><br />
+            </div>
+        </t>
+    </t>
+
+    <t t-name="add-customer">
+        <div class="client-details-box clearfix" id="add_customer"> 
+            <br/>
+            <div class='client-detail'>
+                <span class='label input_label customer_lable' >Name</span>
+                <input id="customer_name" class='detail client-name textbox customer_input'  name='name'  type='textbox'></input>
+            </div>
+            <div class='client-detail'>
+                <span class='label input_label customer_lable' >Street</span>
+                <input id="input_street" class='detail client-address-street textbox customer_input'  name='street' ></input>
+            </div>
+            <div class='client-detail'>
+                <span class='label input_label customer_lable' >Street2</span>
+                <input id="input_street2" class='detail client-address-street textbox customer_input'  name='street' ></input>
+            </div>
+            <div class='client-detail'>
+                <span class='label input_label customer_lable' >City</span>
+                <input id="input_city" class='detail client-address-city textbox customer_input'  name='city' ></input>
+            </div>
+            <div class='client-detail'>
+                <span class='label input_label customer_lable' >Postcode</span>
+                <input id="input_zip" class='detail client-address-zip textbox customer_input'  name='zip'  ></input>
+            </div>
+            <div class='client-detail'>
+                <span class='label input_label customer_lable' >Phone</span>
+                <input id="input_phone" class='detail client-phone textbox customer_input'  name='phone'  type='tel'></input>
+            </div>
+            <br/><br/>
+        </div>
+    </t>
+
+    <t t-name="FloorScreenWidget">
+        <div class='floor-screen screen'>
+            <div class='screen-content-flexbox'>
+                <t t-if='widget.pos.floors.length > 1'>
+                    <div class='floor-selector'>
+                        <t t-foreach="widget.pos.floors" t-as="floor">
+                            <t t-if="floor.id === widget.floor.id">
+                                <span class='button button-floor active' t-att-data-id="floor.id"><t t-esc="floor.name" /></span>
+                            </t>
+                            <t t-if="floor.id !== widget.floor.id">
+                                <span class='button button-floor' t-att-data-id="floor.id"><t t-esc="floor.name" /></span>
+                            </t>
+                        </t>
+                        <button class="back" style="background: #6EC89B;color: white;">Back</button>
+                    </div>
+                </t>
+                <div class='floor-map' t-att-style='widget.get_floor_style()' >
+                    <div class='empty-floor oe_hidden'>
+                        This floor has no tables yet, use the <i class="fa fa-plus"></i> button in the editing toolbar to create new tables.
+                    </div>
+                    <div class='tables'></div>
+                    <span class='edit-button editing'><i class='fa fa-pencil'></i></span>
+                    <div class='edit-bar oe_hidden'>
+                        <span class='edit-button new-table'>
+                            <i class='fa fa-plus'></i>
+                        </span>
+                        <span class='edit-button dup-table needs-selection'>
+                            <i class='fa fa-files-o'></i>
+                        </span>
+                        <span class='edit-button rename needs-selection'>
+                            <i class='fa fa-font'></i>
+                        </span>
+                        <span class='edit-button seats needs-selection'>
+                            <i class='fa fa-user'></i>
+                        </span>
+                        <span class='edit-button shape needs-selection'>
+                            <span class='button-option square'><i class='fa fa-square-o'></i></span>
+                            <span class='button-option round oe_hidden'><i class='fa fa-circle-o'></i></span>
+                        </span> 
+                        <span class='edit-button color'>
+                            <i class='fa fa-tint'></i>
+                            <div class='color-picker fg-picker oe_hidden'>
+                                <div  class='close-picker'>
+                                    <i class='fa fa-times' />
+                                </div>
+                                <span class='color tl'  style='background-color:#EB6D6D' />
+                                <span class='color'     style='background-color:#35D374' />
+                                <span class='color tr'  style='background-color:#6C6DEC' />
+                                <span class='color'     style='background-color:#EBBF6D' />
+                                <span class='color'     style='background-color:#EBEC6D' />
+                                <span class='color'     style='background-color:#AC6DAD' />
+                                <span class='color bl'  style='background-color:#6C6D6D' />
+                                <span class='color'     style='background-color:#ACADAD' />
+                                <span class='color br'  style='background-color:#4ED2BE' />
+                            </div>
+                            <div class='color-picker bg-picker oe_hidden'>
+                                <div  class='close-picker'>
+                                    <i class='fa fa-times' />
+                                </div>
+                                <span class='color tl'  style='background-color:rgb(244, 149, 149)' />
+                                <span class='color'     style='background-color:rgb(130, 233, 171)' />
+                                <span class='color tr'  style='background-color:rgb(136, 137, 242)' />
+                                <span class='color'     style='background-color:rgb(255, 214, 136)' />
+                                <span class='color'     style='background-color:rgb(254, 255, 154)' />
+                                <span class='color'     style='background-color:rgb(209, 171, 210)' />
+                                <span class='color bl'  style='background-color:rgb(75, 75, 75)'    />
+                                <span class='color'     style='background-color:rgb(210, 210, 210)' />
+                                <span class='color br'  style='background-color:rgb(127, 221, 236)' />
+                            </div>
+                        </span>
+                        <span class='edit-button trash needs-selection'>
+                            <i class='fa fa-trash'></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="order_type"> 
+                    <t t-if="widget.pos.config.display_parcel"> 
+                        <button id="take_away" t-attf-style="width:{{ widget.width }};height:48px;font-size:18px;">Take Away</button>
+                    </t>
+                    <t t-if="widget.pos.config.display_delivery"> 
+                        <button id="delivery"  t-attf-style="width:{{ widget.width }};height:48px;font-size:18px;">Delivery</button>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </t>
+    <t t-name="TableWidget">
+        <t t-if='!widget.selected'>
+            <div class='table' t-att-id="widget.table.id" t-att-style='widget.table_style_str()'> 
+                <span class='label'>
+                    <t t-esc='widget.table.name' />
+                </span>
+                <span class="seat_textbox">
+                    <input type="textbox" t-att-booked="widget.table.available_capacities" t-att-id="widget.table.id +'_sit_reserv'" t-att-value="widget.table.seating_capacities" style="display:none;width: 81%;margin-left: 22px;height: 15px;margin-bottom: 0px;"/>
+                </span>
+                 <span class="table-seats">
+                    <t t-esc="widget.table.seating_capacities" />
+                </span>
+            </div>
+        </t>
+        <t t-if='widget.selected'>
+            <div class='table selected' t-att-style='widget.table_style_str()'>
+                <span class='label'>
+                    <t t-esc='widget.table.name' />
+                </span>
+                <span class="table-seats"><t t-esc="widget.table.capacities" /></span>
+                <span class='table-handle top'></span>
+                <span class='table-handle bottom'></span>
+                <span class='table-handle left'></span>
+                <span class='table-handle right'></span>
+                <span class='table-handle top right'></span>
+                <span class='table-handle top left'></span>
+                <span class='table-handle bottom right'></span>
+                <span class='table-handle bottom left'></span>
+            </div>
+        </t>
+    </t>
+
+    <t t-name="NumberPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup popup-number">
+                <p class="title"><t t-esc=" widget.options.title || '' " /></p>
+                <div class='popup-input value active'>
+                    <t t-esc='widget.inputbuffer' />
+                </div>
+                <t t-if="widget.add_customer">
+                    <div id="add_customer">   
+                        <span id="customer_dropdown" class="client-detail">
+                            <label class='label input_label' style="margin-top:2%;">Customer </label><br/>
+                            <select id="customer_selection" style="width:250px;">
+                                <option value=""></option>
+                                <t t-foreach="widget.pos.partner_list" t-as="partner">
+                                    <option t-att-value= "partner.name"><t t-esc="partner.name"/></option>
+                                </t>
+                            </select>
+                        </span>
+                    </div>
+                </t>
+                <div class='popup-numpad'>
+                    <button class="input-button number-char" data-action='1'>1</button>
+                    <button class="input-button number-char" data-action='2'>2</button>
+                    <button class="input-button number-char" data-action='3'>3</button>
+                    <t t-if="widget.options.cheap">
+                        <button class="mode-button add" data-action='+1'>+1</button>
+                    </t><t t-if="!widget.options.cheap">
+                        <button class="mode-button add" data-action='+10'>+10</button>
+                    </t>
+                    <br />
+                    <button class="input-button number-char" data-action='4'>4</button>
+                    <button class="input-button number-char" data-action='5'>5</button>
+                    <button class="input-button number-char" data-action='6'>6</button>
+                    <t t-if="widget.options.cheap">
+                        <button class="mode-button add" data-action='+2'>+2</button>
+                    </t><t t-if="!widget.options.cheap">
+                        <button class="mode-button add" data-action='+20'>+20</button>
+                    </t>
+                    <br />
+                    <button class="input-button number-char" data-action='7'>7</button>
+                    <button class="input-button number-char" data-action='8'>8</button>
+                    <button class="input-button number-char" data-action='9'>9</button>
+                    <t t-if="widget.options.cheap">
+                        <button class="mode-button add" data-action='+5'>+5</button>
+                    </t><t t-if="!widget.options.cheap">
+                        <button class="mode-button add" data-action='+50'>+50</button>
+                    </t>
+                    <br />
+                    <button class="input-button numpad-char" data-action='CLEAR' >C</button>
+                    <button class="input-button number-char" data-action='0'>0</button>
+                    <button class="input-button number-char dot" data-action='.'>.</button>
+                    <button class="input-button numpad-backspace" data-action='BACKSPACE' >
+                        <img style="pointer-events: none;" src="/point_of_sale/static/src/img/backspace.png" width="24" height="21" />
+                    </button>
+                    <br />
+                </div>
+                <div class="footer">
+                    <div class="button cancel">
+                        Cancel 
+                    </div>
+                    <div class="button confirm">
+                        Ok
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="ReassignTableScreenWidget">
+        <div class='reassign_table_screen_button screen'>
+            <div class='screen-content'>
+                <div class='top-content'>
+                    <h1>Table Options</h1>
+                    <span class='button next re_assign_order_button'>
+                        Apply
+                    </span>
+                </div>
+                <div class='left-content pc40 touch-scrollable scrollable-y'>
+                    <div class='table_options_buttons'>
+                        <button class='oe_sidebar_print' id="re_assign_order">Re-assign Order</button>
+                        <button class='oe_sidebar_print' id="merge_order">Merge Order</button>
+                        <button  id="back_screen">Back</button>
+                    </div>
+                </div>
+                <div class='right-content pc60 touch-scrollable scrollable-y'>
+                    <section class='re_assign_table_container reassign_table_screen_content'></section>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="select-table" class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix" >
+        <div id="select_table">
+            <t t-if="table.re_assign and ! table.delivery">
+                <input class="marge_table" type="checkbox" /><br/>
+                <label for="booked_table" id="booked_table_lbl" class='label input_label' style="font-size:21px;"><b>Booked Table</b></label> 
+                <select id="booked_table" class='form-control'>
+                    <option value="" disabled = "disabled" selected = "selected"><b>Select Booked Table</b></option>
+                    <t t-foreach="table.booked_table" t-as="b_table">
+                        <t t-if="b_table[2]">
+                            <option t-att-id="b_table[3]" 
+                                    t-att-item="b_table[0]" 
+                                    t-att-value= "b_table[2]"><b><t t-esc="b_table[1]"/></b>
+                            </option>
+                        </t>
+                    </t>
+                </select><br/><br/>
+            </t>
+            <table  class="scrollable-y" style="max-height:455px;" id="table_list"> 
+                <t t-if="table.empty_table" t-foreach="table.empty_table" t-as="option">
+                    <t t-if="option[5] and option[7] == 'available'">
+                        <tr t-att-class="'area_'+option[6]" style="background:red;background: linear-gradient(to bottom, #FFADAD, #FF3333);"> 
+                            <td >
+                                <input class="field_boolean" type="checkbox" t-att-id="option[0]" t-att-value="option[1]" />
+                            </td>
+                            <td style="width:215px;text-align:center;"><b style="color: currentcolor;"><t t-esc="option[1]"/></b></td>
+                            <td style="width: 90px;"><img style="height:10px" src="/web/static/src/img/stock_person.png"/>
+                                <b>
+                                    <span t-att-id="option[0]+'_leaft_seat'" style="color: currentcolor;">
+                                        <t t-esc="option[3]"/>
+                                    </span>
+                                    <input type="textbox" t-att-booked="option[4]" 
+                                                          t-att-id="option[0]+'_reserv_sit'" 
+                                                          t-att-value="option[3]" 
+                                                          class="input_seat" 
+                                                          style="margin-left: 5px;width:25px;height: 15px;margin-bottom: 0px;">
+                                    </input>
+                                </b>
+                            </td>
+                        </tr>
+                    </t>
+                    <t t-if="!option[5] and option[7] == 'available'">
+                        <tr t-att-class="'area_'+option[6]" style="background: lightgray;"> 
+                            <td >
+                                <input class="field_boolean" type="checkbox" t-att-id="option[0]" t-att-value="option[1]" />
+                            </td>
+                            <td style="width:215px; text-align: center;"><b style="color: currentcolor;"><t t-esc="option[1]"/></b></td>
+                            <td style="width: 90px;"><img style="height:10px" src="/web/static/src/img/stock_person.png"/>
+                                <b><span t-att-id="option[0]+'_leaft_seat'" style="color: currentcolor;"><t t-esc="option[3]"/></span><input type="textbox" t-att-booked="option[4]" t-att-id="option[0]+'_reserv_sit'" t-att-value="option[3]" class="input_seat" style="margin-left: 5px;width:25px;height: 15px;margin-bottom: 0px;"></input></b>
+                            </td>
+                        </tr>
+                    </t>
+                </t>
+            </table>
+        </div>
+    </t>
+
+     <t t-name="TableGuestsButton">
+        <div class='control-button' style="display:none;">
+            <span class='control-button-number'>
+                <t t-esc="widget.guests()" />
+            </span>
+            Guests
+        </div>
+    </t>
+
+    <t t-name="BackToFloorButton">
+        <span class="order-button floor-button" style="display:none !important;">
+            <i class='fa fa-angle-double-left'/>
+            <t t-esc="floor.name"/>
+            <span class='table-name'>
+                ( <t t-esc="table.name" /> )
+            </span>
+        </span>
+    </t>
+
+     <t t-name="TransferOrderButton">
+        <div class='control-button' style="display:none">
+            <i class='fa fa-arrow-right' /> Transfer
+        </div>
+    </t>
+
+</templates>

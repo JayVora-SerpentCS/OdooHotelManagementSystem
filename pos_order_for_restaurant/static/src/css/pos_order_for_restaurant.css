@@ -1,0 +1,343 @@
+/*.......select2 style........*/
+.hide_over_flow{
+    overflow: hidden !important;
+}
+.select2-container .select2-choice {
+    height: 38px !important;
+    line-height: 33px !important;
+    color: #555555 !important;
+}
+
+/*.......popup style.......*/
+
+.pos .popup input{
+    font-size:22px !important;
+}
+.popup-alert{
+    height:30% !important;
+}
+.parcel_container{
+    margin-top: 5%;
+}
+.delivery_container{
+    margin-left: 9%;
+    margin-top: 5%;
+}
+.control-div{
+    margin-bottom: 26px;
+}
+
+/*.......ui-dialog style.......*/
+
+.pos .modal-dialog {
+    z-index: 0 !important;
+}
+.alert_dialog_button{
+    width: 110px; 
+    height: 40px;
+    text-align: center;
+    border-radius: 2px;
+    margin: 3px;
+    margin-top: 10px; 
+    margin-right: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid #cacaca;
+    background: #e2e2e2;
+    color: #555555;
+}
+.alert_dialog{
+    float: right;
+    width: 110px;
+    height: 52px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 2px;
+    margin: 3px;
+    margin-top: 10px;
+    margin-right: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid #cacaca;
+    background: #e2e2e2;
+
+}
+.alert_dialog_warning{
+    font-size: 20px !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    background: #F0EEEE !important;
+    background-color: #F0EEEE !important;
+    height:185px !important;
+    color: #555555;
+}
+.alert_header{
+    border-bottom: 1px solid;
+    padding: 4px;
+    color: white;
+    background: slategray !important; 
+    position: relative;
+}
+.ui-dialog{
+    z-index: 1002;
+    top: 96.5px;
+    left: 395.5px;
+    background-color: #F0EEEE !important; 
+}
+.ui-widget-overlay{
+ /*  height: 1311px;*/
+   background: black;
+   filter: alpha(opacity=30);
+   opacity: 0.3;
+   margin: -8px;
+   margin-top: -25px;
+}
+
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+    float: right;
+}
+.ui-dialog .ui-dialog-buttonpane {
+    height: 40px;
+    margin-top : 5px;
+}
+.ui-dialog{
+    background: white;
+    padding: 10px;
+    border-radius: 3px;
+    font-family: sans-serif;
+    box-shadow: 0px 10px 40px rgba(0,0,0,0.4);
+}
+.ui-dialog button{
+    padding: 8px;
+    min-width: 48px;
+}
+.ui-dialog .ui-icon-closethick{
+    float: right;
+}
+.ui-dialog .ui-dialog-content .ui-widget-content{
+    overflow-y: auto;
+}
+.ui-dialog .ui-dialog-titlebar {
+   font-size: 18px;
+   padding: 7px 15px;
+   font-weight: bold;
+   color: gray;
+   border-bottom: 1px solid #cacaca;
+   -moz-border-radius: 2px 2px 0 0;
+   -webkit-border-radius: 2px 2px 0 0;
+   border-radius: 2px 2px 0 0;
+}
+.ui-dialog .ui-dialog-buttonpane{
+   border-top: 1px solid #ddd;
+   height : 45px;
+}
+.ui-dialog .ui-dialog-buttonpane button {
+ margin: 6px 4px 0 0;
+}
+.ui-dialog .ui-dialog-titlebar-close {
+   padding: 0;
+   float:right;
+   text-indent:1px;
+}
+.ui-icon-closethick{
+   background-position: -96px -128px;
+}
+.ui-dialog-titlebar-close:before {
+   content: "×";
+   font-size: 18px;
+   font-weight: bold;
+   line-height: 16px;
+   color: black;
+   text-shadow: 0 1px 0 white;
+   padding: 0;
+   cursor: pointer;
+   background: transparent;
+   border: 0;
+}
+.ui-dialog .ui-dialog-titlebar-close .ui-icon-closethick {
+   display: none;
+}
+.ui-dialog .client-detail {
+    line-height: 45px;    
+}
+.ui-dialog .client-detail input {
+    height: 30px;
+    width: 225px;
+    font-size: 18px;
+}
+.ui-dialog .client-details-box{
+    position: relative;
+    font-size: 18px;
+}
+.ui-dialog .client-details-box .client-detail > .label{
+    font-weight: bold;
+    display: inline-block;
+    width: 64px;
+    text-align: right;
+    margin-right: 23px;
+}
+
+/* ......floor screen style .......*/
+
+.floor-map .table .label {
+    z-index: 0 !important;
+}
+
+.floor-map .table .order-count {
+    z-index: 0 !important;
+}
+
+.floor-map .table .table-seats {
+    z-index: 0 !important;
+}
+.floor-map {
+    height: 85% !important;
+}
+
+/*.....add customer dialog style ....*/
+
+.customer_lable{
+    color: gray;
+}
+.customer_input{
+    text-align: left;
+    display: inline-block;
+    overflow: hidden;
+    background: white;
+    min-height: 40px;
+    font-family: "Lato";
+    font-size: 20px;
+    color: #444;
+    padding: 10px;
+    border-radius: 3px;
+    border: none;
+    box-shadow: 0px 0px 0px 1px rgb(220,220,220) inset;
+    box-sizing: border-box;
+}
+
+.popup_height{
+    height:515px !important;
+}
+.floor-map .table.selected{
+    z-index:0 !important;
+}
+.pos div#options button{
+    margin-right:2px;
+    margin-top:2px;
+    background: #359766;;
+    color: white;
+    font-size: 12px;
+    line-height: 33px;
+    border-color: transparent;
+}
+.reassign_table_screen_button{
+    border-left: 1px solid #c7c7c7;
+    border-bottom: 1px solid #cecece;
+    border-top: 1px solid #cecece;
+}
+#back_screen{
+    display: block !important;
+    width: 95% !important;
+    font-size: 21px !important;
+    color: gray !important;
+    line-height: 45px;
+    margin-top: 4%;
+    margin-left: 3%;
+}
+.oe_sidebar_print{
+    display: block !important;
+    width: 95% !important;
+    font-size: 21px !important;
+    color:gray;
+    margin-top: 4%;
+    margin-left: 3%;
+    line-height: 45px;
+}
+.oe_sidebar_print.highlight{
+    background: slategray;
+    color:white !important;
+}
+.reassign_order_color{
+    background: rgb(110,200,155) !important;
+}
+.re_assign_table_container{
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    float: left;
+    width: 100%;
+}
+#select_table {
+    margin-top:10px;
+    overflow-y: auto;
+}
+#booked_table{
+    height:30px;
+    width:225px;
+    margin-left: 1%;
+}
+#table_list tr {
+    width: 318px;
+    margin:3px;
+    float:left;
+    height:36px;
+}
+#table_list tr input {
+    height:25px;
+    width:25px;
+    margin: 6px;
+}
+.form-control {
+    display: inline;
+    width: 100%;
+    height: 10px;
+    padding: 6px 12px;
+    font-size: 16px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+         box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+         transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+.form-control:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+}
+.form-control::-moz-placeholder {
+    color: #777;
+    opacity: 1;
+}
+.form-control:-ms-input-placeholder {
+    color: #777;
+}
+.form-control::-webkit-input-placeholder {
+    color: #777;
+}
+.form-control[disabled],
+.form-control[readonly],
+fieldset[disabled] .form-control {
+    cursor: not-allowed;
+    background-color: #eee;
+    opacity: 1;
+}
+textarea.form-control {
+    height: auto;
+}
+.re_assign_order_button{
+    background: rgb(110,200,155) !important;
+    color: white !important;
+    bordr: solid 1px rgb(110,200,155) !important;
+}
+.pos .order-button{
+    height : 43px !important;
+}
