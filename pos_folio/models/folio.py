@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from odoo import api, fields, models, _
-from odoo.exceptions import UserError
-
+from odoo import api, fields, models
 
 class PosOrder(models.Model):
     _inherit = "pos.order"
@@ -17,7 +15,7 @@ class PosOrder(models.Model):
         order_fields['folio_id'] = ui_order.get('folio_id',False)
         table_data = ui_order.get("table_data")
         if table_data:
-            if ui_order.get('folio_id',False) :
+            if ui_order.get('folio_id', False) :
                 restaurant_table_obj = self.env['restaurant.table']
                 restaurant_table_obj.sudo().remove_table_order(table_data)
         return order_fields

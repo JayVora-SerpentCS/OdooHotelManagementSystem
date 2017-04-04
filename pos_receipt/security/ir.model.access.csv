@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pos_order_line_state_user,pos_order_line_state,model_pos_order_line_state,point_of_sale.group_pos_user,1,1,1,1
+access_pos_order_line_state_manager,pos_order_line_state,model_pos_order_line_state,point_of_sale.group_pos_manager,1,1,1,1
+access_pos_order_line_state_order_screen,pos_order_line_state,model_pos_order_line_state,group_order_screen,1,1,0,0
+access_pos_order_line_state_kitchen_screen,pos_order_line_state,model_pos_order_line_state,group_kitchen_screen,1,1,0,0
+access_ir_module_module_receipt,access_ir_module_module_receipt,base.model_ir_module_module,point_of_sale.group_pos_user,1,1,1,1
