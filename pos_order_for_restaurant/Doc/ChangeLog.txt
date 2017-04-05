@@ -1,5 +1,0 @@
-===============================================================================
- Version Change Log (pos_order_for_restaurant)
-===============================================================================
-1.0.1 --> 4 April 2017 : Krishna Prajapati
-    * Developed new module pos_order_for_restaurant.

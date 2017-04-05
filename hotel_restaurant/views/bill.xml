@@ -148,7 +148,6 @@
         </t>
     </template>
 
-
     <!--Template for hotel restaurant reservation -->
     <template id="report_res_order_bill">
         <t t-call="report.html_container">
