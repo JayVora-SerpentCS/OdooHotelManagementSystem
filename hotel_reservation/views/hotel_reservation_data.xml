@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE xml>
 <odoo>
-
     <data noupdate="1">
 
         <!-- Demo data for hotel reservation -->
@@ -25,5 +24,4 @@
         </record>
 
     </data>
-    
 </odoo>

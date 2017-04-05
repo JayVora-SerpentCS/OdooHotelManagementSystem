@@ -944,7 +944,7 @@
         <field name="name">Rooms by Category</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">product.category</field>
-        	<field name="domain">[('parent_id','=',False),('isroomtype','=',True)]
+        <field name="domain">[('parent_id','=',False),('isroomtype','=',True)]
         </field>
         <field name="view_type">tree</field>
         <field name="view_id" ref="product_category_tree_view" />
@@ -956,7 +956,7 @@
         <field name="name">Amenities by Category</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">product.category</field>
-        	<field name="domain">[('parent_id','=',False),('isamenitytype','=',True)]
+        <field name="domain">[('parent_id','=',False),('isamenitytype','=',True)]
         </field>
         <field name="view_type">tree</field>
         <field name="view_id" ref="product_category_tree_view" />
@@ -968,7 +968,7 @@
         <field name="name">Services by Category</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">product.category</field>
-        	<field name="domain">[('parent_id','=',False),('isservicetype','=',True)]
+        <field name="domain">[('parent_id','=',False),('isservicetype','=',True)]
         </field>
         <field name="view_type">tree</field>
         <field name="view_id" ref="product_category_tree_view" />

@@ -2,9 +2,7 @@
 <!DOCTYPE xml>
 <odoo>
 
-    <!--============================================================ Reservation 
-        ============================================================ -->
-
+    <!-- ======== Reservation ======== -->
     <!-- Form view of hotel reservation -->
     <record id="view_hotel_reservation_form" model="ir.ui.view">
         <field name="name">hotel.reservation.form</field>
@@ -228,7 +226,6 @@
         </field>
     </record>
 
-
     <!-- Form view of room reservation summary -->
     <record id="room_reservation_summary_form_view" model="ir.ui.view">
         <field name="name">room.reservation.summary.form</field>
@@ -257,7 +254,6 @@
                 </sheet>
             </form>
         </field>
-
     </record>
 
     <!-- Form view of quick room reservation -->
