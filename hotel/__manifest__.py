@@ -1,34 +1,14 @@
 # -*- coding: utf-8 -*-
-# --------------------------------------------------------------------------
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
-#    (<http://www.serpentcs.com>)
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>
-#
-# ---------------------------------------------------------------------------
+# See LICENSE file for full copyright and licensing details.
 
 {
     'name': 'Hotel Management',
     "version": "10.0.1.0.0",
-    'author': 'Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
-    Odoo Community Association (OCA),',
+    'author': 'Serpent Consulting Services Pvt. Ltd.,',
     'category': 'Generic Modules/Hotel Management',
     'website': 'http://www.serpentcs.com',
     'depends': ['sale_stock', 'point_of_sale', 'report'],
-    'license': "AGPL-3",
+    'license': 'AGPL-3',
     'demo': ['views/hotel_data.xml'],
     'images': ['static/description/HotelManagement.png'],
     'data': [

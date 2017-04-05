@@ -3,8 +3,6 @@
 <odoo>
 
     <menuitem id="hotel_management_menu" name="Hotel Management" />
-    <!-- web_icon="data/hotel-grey.png" -->
-    <!-- web_icon_hover="data/hotel-color.png" -->
     <menuitem id="hotel_configuration_menu" name="Configuration"
         sequence="20" parent="hotel_management_menu" />
     <menuitem id="hotel_report_menu" name="Pdf Reports" sequence="6"
@@ -21,7 +19,7 @@
         </field>
     </record>
 
-    <!-- ########Company Configuration###### -->
+    <!-- 	 Company Configuration ====== -->
     <record id="res_company_inherit_config_hotel" model="ir.ui.view">
         <field name="name">res.company.inherit.config.hotel</field>
         <field name="model">res.company</field>
@@ -33,7 +31,7 @@
         </field>
     </record>
 
-    <!--==================================================== Floor ==================================================== -->
+    <!-- ====== Floor ====== -->
     <!-- Form view of hotel floor -->
     <record id="view_hotel_floor_form" model="ir.ui.view">
         <field name="name">hotel.floor.form</field>
@@ -74,7 +72,7 @@
         action="open_hotel_floor_form_tree" sequence="21"
         parent="hotel_configuration_menu" />
 
-    <!--======= Room Type ======= -->
+    <!-- ====== Room Type ====== -->
     <!-- Form view of hotel room type -->
     <record id="view_hotel_room_type_form" model="ir.ui.view">
         <field name="name">hotel.room_type.form</field>
@@ -118,7 +116,7 @@
         action="open_hotel_room_type_form_tree" sequence="6"
         parent="hotel.menu_hotel_room" />
 
-    <!--==== Amenities Type ==== -->
+    <!-- ====== Amenities Type ====== -->
     <!-- Form view of hotel room amenities type -->
     <record id="view_hotel_room_amenities_type_form" model="ir.ui.view">
         <field name="name">hotel.room_amenities_type_form</field>
@@ -162,7 +160,7 @@
         id="menu_action_hotel_room_amenities_type_view_form" action="action_hotel_room_amenities_type_view_form"
         sequence="3" parent="hotel.menu_amenity" />
 
-    <!--===== Room Amenities ===== -->
+    <!-- ====== Room Amenities ====== -->
     <!-- Form view of hotel room amenities -->
     <record id="view_hotel_room_amenities_form" model="ir.ui.view">
         <field name="name">hotel.room.amenities.form</field>
@@ -273,8 +271,7 @@
         action="action_hotel_room_amenities_view_form" sequence="2"
         parent="hotel.menu_amenity" />
 
-    <!--=================================================== Rooms =================================================== -->
-
+    <!-- ====== Rooms ====== -->
     <!-- Form view of hotel room -->
     <record id="view_hotel_room_form" model="ir.ui.view">
         <field name="name">hotel.room.form</field>
@@ -496,7 +493,7 @@
     <menuitem id="menu_open_hotel_room_form" name="Rooms" action="action_hotel_room_form"
         sequence="5" parent="hotel.menu_hotel_room" />
 
-    <!--=== Hotel Folio ==== -->
+    <!-- ====== Hotel Folio ====== -->
     <!-- Form view of hotel folio -->
     <record id="view_hotel_folio1_form" model="ir.ui.view">
         <field name="name">hotel.folio.form</field>
@@ -506,35 +503,15 @@
                 <header>
                     <button name="action_confirm" states="draft" string="Confirm Sale"
                         class="btn-primary" type="object" />
-                    <!-- <button name="order_confirm" string="Confirm Folio" states="draft" 
-                        icon="gtk-apply" class="oe_highlight"/> -->
-                    <!-- <button name="invoice_recreate" string="Recreate Invoice" states="invoice_except" 
-                        icon="gtk-redo" class="oe_highlight"/> -->
-                    <!-- <button name="invoice_corrected" string="Invoice Corrected" states="invoice_except" 
-                        icon="gtk-paste-v" class="oe_highlight"/> -->
-                    <!-- <button name="ship_recreate" string="Recreate Procurement" states="shipping_except" 
-                        icon="gtk-redo" class="oe_highlight"/> -->
-                    <!-- <button name="ship_corrected" string="Procurement Corrected" states="shipping_except" 
-                        icon="gtk-paste-v" class="oe_highlight"/> -->
-                    <!-- <button name="manual_invoice" states="manual" string="Create Invoice" 
-                        icon="gtk-new" class="oe_highlight"/> -->
                     <button name="%(sale.action_view_sale_advance_payment_inv)d"
-                        string="Create Invoice" type="action" class="btn-primary" states="sale"
-                        attrs="{'invisible': [('invoice_status', '!=', 'to invoice')]}" />
-                    <!-- <button name="ship_cancel" string="Cancel Folio" states="shipping_except" 
-                        icon="gtk-cancel" class="oe_highlight oe_highlight" /> -->
+                        string="Create Invoice" type="action" class="btn-primary"
+                        attrs="{'invisible': [('invoice_status', '!=', 'to_invoice'), ('hotel_invoice_id', '!=', False)]}" />
                     <button name="action_cancel_draft" states="cancel" string="Set to Draft"
                         type="object" icon="fa-check-square-o" class="oe_highlight" />
                     <button name="action_cancel" string="Cancel Folio" states="sale"
                         type="object" icon="fa-close" class="oe_highlight" />
                     <button name="action_cancel" string="Cancel Folio" states="draft"
                         icon="fa-close" type="object" class="oe_highlight" />
-                    <!-- <button name="action_cancel" string="Cancel Folio" states="manual,progress" 
-                        type="object" icon="gtk-cancel" class="oe_highlight"/> -->
-                    <!-- <button name="cancel" string="Cancel Folio" states="draft" icon="gtk-cancel" 
-                        class="oe_highlight"/> -->
-                    <!-- <button name="invoice_cancel" string="Cancel Folio" states="invoice_except" 
-                        icon="gtk-cancel" class="oe_highlight"/> -->
                     <button name="action_done" type="object" string="Set to Done"
                         states="sale" attrs="{'invisible': [('invoice_status', '!=', 'invoiced')]}"
                         help="If a Hotel Folio is done, you cannot modify it manually anymore. However, you will still be able to invoice or deliver. This is used to freeze the Hotel Folio." />
@@ -603,16 +580,8 @@
                                                 <separator string="States" colspan="4" />
                                                 <field name="state" select="2" />
                                                 <field name="invoice_status" />
-                                                <!-- <field name="invoiced" select="2"/> -->
                                             </group>
                                         </page>
-                                        <!-- <page string="Extra Info"> -->
-                                        <!-- <group> -->
-                                        <!-- <field name="product_uos_qty"/> -->
-                                        <!-- <field name="product_uos" /> -->
-                                        <!-- <field name="address_allotment_id" select="2"/> -->
-                                        <!-- </group> -->
-                                        <!-- </page> -->
                                         <page string="History">
                                             <separator string="Invoice Lines" colspan="4" />
                                             <field name="invoice_lines" colspan="4" nolabel="1" />
@@ -664,16 +633,8 @@
                                                 <separator string="States" colspan="4" />
                                                 <field name="state" select="2" />
                                                 <field name="invoice_status" />
-                                                <!-- <field name="invoiced" select="2"/> -->
                                             </group>
                                         </page>
-                                        <!-- <page string="Extra Info"> -->
-                                        <!-- <group> -->
-                                        <!-- <field name="product_uos_qty"/> -->
-                                        <!-- <field name="product_uos" /> -->
-                                        <!-- <field name="address_allotment_id" select="2"/> -->
-                                        <!-- </group> -->
-                                        <!-- </page> -->
                                         <page string="History">
                                             <separator string="Invoice Lines" colspan="4" />
                                             <field name="invoice_lines" colspan="4" nolabel="1" />
@@ -705,7 +666,6 @@
                         <page string="Other data">
                             <group>
                                 <field name="user_id" />
-                                <!-- <field name="order_policy" invisible="1"/> -->
                                 <field name="hotel_policy" attrs="{'readonly':[('state','not in',('draft'))]}" />
                                 <field name="client_order_ref" />
                             </group>
@@ -811,9 +771,7 @@
     <menuitem name="Generate Folio" id="menu_open_hotel_folio1_form_tree_all"
         action="open_hotel_folio1_form_tree_all" sequence="5" parent="menu_all_folio" />
 
-    <!--======================================================== Hotel Service 
-        Type ======================================================== -->
-
+    <!-- ====== Hotel Service Type ====== -->
     <!-- Form view of hotel service type -->
     <record id="view_hotel_service_type_form" model="ir.ui.view">
         <field name="name">hotel.service_type.form</field>
@@ -857,9 +815,7 @@
         action="open_hotel_service_type_form_tree" sequence="9"
         parent="hotel.menu_hotel_service" />
 
-    <!--======================================================== Hotel Service 
-        ======================================================== -->
-
+    <!-- ====== Hotel Service ====== -->
     <!-- Form view of hotel service -->
     <record id="view_hotel_services_form" model="ir.ui.view">
         <field name="name">.hotel.services.form</field>
@@ -988,7 +944,7 @@
         <field name="name">Rooms by Category</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">product.category</field>
-        <field name="domain">[('parent_id','=',False),('isroomtype','=',True)]
+        	<field name="domain">[('parent_id','=',False),('isroomtype','=',True)]
         </field>
         <field name="view_type">tree</field>
         <field name="view_id" ref="product_category_tree_view" />
@@ -1000,7 +956,7 @@
         <field name="name">Amenities by Category</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">product.category</field>
-        <field name="domain">[('parent_id','=',False),('isamenitytype','=',True)]
+        	<field name="domain">[('parent_id','=',False),('isamenitytype','=',True)]
         </field>
         <field name="view_type">tree</field>
         <field name="view_id" ref="product_category_tree_view" />
@@ -1012,7 +968,7 @@
         <field name="name">Services by Category</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">product.category</field>
-        <field name="domain">[('parent_id','=',False),('isservicetype','=',True)]
+        	<field name="domain">[('parent_id','=',False),('isservicetype','=',True)]
         </field>
         <field name="view_type">tree</field>
         <field name="view_id" ref="product_category_tree_view" />
@@ -1021,8 +977,7 @@
         action="hotel_service_category_action" sequence="10"
         parent="hotel.menu_hotel_service" />
 
-    <!--==================================================== Currency ==================================================== -->
-
+    <!-- ====== Currency ====== -->
     <!-- Form view of currency exchange -->
     <record id="view_currency_exchange_form" model="ir.ui.view">
         <field name="name">currency.exchange.form</field>
