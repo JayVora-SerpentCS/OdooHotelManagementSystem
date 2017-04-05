@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo. See LICENSE file for full copyright and licensing details.
+# See LICENSE file for full copyright and licensing details.
 
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
@@ -175,18 +175,25 @@ class restaurant_table(models.Model):
     _inherit = 'restaurant.table'
 
     capacities = fields.Integer('Capacities')
-    state = fields.Selection([('reserved', 'Reserved'), ('available', 'Available')], 'State', required=True,default='available')
-    users_ids = fields.Many2many('res.users', 'rel_table_master_users', 'table_id', 'user_id', 'User')
-    available_capacities = fields.Integer('Reserved Seat', readonly=True,default=0)
+    state = fields.Selection([('reserved', 'Reserved'), ('available',
+                                                         'Available')],
+                             'State', required=True,default='available')
+    users_ids = fields.Many2many('res.users', 'rel_table_master_users',
+                                 'table_id', 'user_id', 'User')
+    available_capacities = fields.Integer('Reserved Seat', readonly=True,
+                                          default=0)
 
     @api.model
     def remove_table_order(self, table_ids):
         for table_rec in table_ids :
             table = self.browse(table_rec['table_id'])
-            if (int(table.available_capacities) - int(table_rec['reserver_seat'])) == 0 :
-                table.write({'state': 'available', 'available_capacities':int(table.available_capacities) - int(table_rec['reserver_seat'])})
+            if (int(table.available_capacities) - int(table_rec['reserver_seat']
+                                                      )) == 0 :
+                table.write({'state': 'available', 'available_capacities':
+                             int(table.available_capacities) - int(table_rec['reserver_seat'])})
             else:
-                table.write({'state': 'available', 'available_capacities': int(table.available_capacities) - int(table_rec['reserver_seat'])})
+                table.write({'state': 'available', 'available_capacities':
+                             int(table.available_capacities) - int(table_rec['reserver_seat'])})
         return True
 
     @api.model
@@ -216,20 +223,25 @@ class restaurant_table(models.Model):
                 for table_user in table.users_ids:
                     if table_user.id not in waiter_list:
                         waiter_list.append(table_user.id)
-                        waiter_list_temp = {'id':table_user.id, 'name':table_user.name}
+                        waiter_list_temp = {'id':table_user.id, 
+                                            'name':table_user.name}
                         final_list.append(waiter_list_temp)
-            return final_list
+        return final_list
 
     @api.multi
     def action_available(self):
         if self.id:
             reserve_table_obj = self.env["table.reserverd"]
             for table in self:
-                reserve_ids = reserve_table_obj.search([('table_id', '=', table.id), ("order_id.state", "=", "draft")])
+                reserve_ids = reserve_table_obj.search([('table_id', '=',
+                                                         table.id), 
+                                                        ("order_id.state", "=",
+                                                         "draft")])
                 if reserve_ids:
                     raise UserError(_("Table is not empty!"))
                 else:
-                    self.write({'state': 'available', 'available_capacities': 0})
+                    self.write({'state': 'available',
+                                'available_capacities': 0})
         return True
 
 

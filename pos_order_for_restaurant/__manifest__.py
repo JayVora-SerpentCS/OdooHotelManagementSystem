@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo. See LICENSE file for full copyright and licensing details.
+# See LICENSE file for full copyright and licensing details.
 
 {
     'name': 'Parcel/Delivery Order For Restaurant',
@@ -7,8 +7,7 @@
     'category': 'Point Of Sale',
     'sequence': 6,
     'summary': 'Touchscreen Interface for Restaurant',
-    'author': 'Serpent Consulting Services Pvt. Ltd.,\
-    Odoo Community Association (OCA)',
+    'author': 'Serpent Consulting Services Pvt. Ltd.',
     'license': 'AGPL-3',
     'website': 'http://www.serpentcs.com',
     'installable': True,
@@ -21,7 +20,7 @@
     'demo': [
         'view/pos_order_restaurant_demo.xml',
      ],
-    'depends': ['point_of_sale', 'pos_restaurant','pos_receipt'],
+    'depends': ['point_of_sale', 'pos_restaurant', 'pos_receipt'],
     'qweb': ['static/src/xml/pos_order_for_restaurant.xml'],
     'auto_install': False,
 }

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Part of Odoo. See LICENSE file for full copyright and licensing details.
+# See LICENSE file for full copyright and licensing details.
 
 {
     'name': 'Pos Options Bar',
@@ -7,8 +7,7 @@
     'category': 'Point Of Sale',
     'sequence': 6,
     'summary': 'Touchscreen Interface for Shops',
-    'author': 'Serpent Consulting Services Pvt. Ltd.,\
-    Odoo Community Association (OCA)',
+    'author': 'Serpent Consulting Services Pvt. Ltd.',
     'license': 'AGPL-3',
     'website': 'http://www.serpentcs.com',
     'installable': True,
