@@ -4,7 +4,6 @@
     <data noupdate="1">
 
         <!-- Food Item Category -->
-
         <record id="punjabi_1" model="pos.category">
             <field name="parent_id" ref="point_of_sale.fruits_vegetables" />
             <field name="name">Punjabi</field>
@@ -36,7 +35,6 @@
             <field name="image" type="base64"
                 file="hotel_pos_restaurant/static/img/paneer_tikka.png" />
         </record>
-
         <record id="pun2" model="product.product">
             <field name="available_in_pos">True</field>
             <field name="list_price">15.00</field>
@@ -48,7 +46,6 @@
             <field name="image" type="base64"
                 file="hotel_pos_restaurant/static/img/tandoori-roti.jpg" />
         </record>
-
         <record id="pun3" model="product.product">
             <field name="list_price">150.00</field>
             <field name="name">Paneer Butter Masala</field>
@@ -60,7 +57,6 @@
             <field name="image" type="base64"
                 file="hotel_pos_restaurant/static/img/paneer_butter_masala.jpg" />
         </record>
-
         <record id="pun4" model="product.product">
             <field name="name">Cheese Masala</field>
             <field name="available_in_pos">True</field>
@@ -72,7 +68,6 @@
             <field name="image" type="base64"
                 file="hotel_pos_restaurant/static/img/chees_masala.jpg" />
         </record>
-
         <record id="pun5" model="product.product">
             <field name="name">Paneer Bhurji</field>
             <field name="available_in_pos">True</field>
@@ -84,7 +79,6 @@
             <field name="image" type="base64"
                 file="hotel_pos_restaurant/static/img/paneer_bhurji.jpg" />
         </record>
-
         <record id="pun6" model="product.product">
             <field name="name">Mutter Paneer</field>
             <field name="available_in_pos">True</field>
@@ -96,7 +90,6 @@
             <field name="image" type="base64"
                 file="hotel_pos_restaurant/static/img/muttter_paneer.png" />
         </record>
-
         <record id="pun7" model="product.product">
             <field name="name">Malai Kofta</field>
             <field name="available_in_pos">True</field>
@@ -108,7 +101,6 @@
             <field name="image" type="base64"
                 file="hotel_pos_restaurant/static/img/malai_kofta.jpg" />
         </record>
-
         <record id="pun8" model="product.product">
             <field name="name">Masala kulcha</field>
             <field name="available_in_pos">True</field>
@@ -120,7 +112,6 @@
             <field name="image" type="base64"
                 file="hotel_pos_restaurant/static/img/masala_kulcha.jpg" />
         </record>
-
         <record id="pun9" model="product.product">
             <field name="name">Paneer Makhani</field>
             <field name="available_in_pos">True</field>
@@ -134,7 +125,6 @@
         </record>
 
         <!-- Gujarati -->
-
         <record id="hotel_fooditem_21" model="product.product">
             <field name="name">Chole-Bhature</field>
             <field name="available_in_pos">True</field>
@@ -146,7 +136,6 @@
             <field name="image" type="base64"
                 file="hotel_pos_restaurant/static/img/chole.png" />
         </record>
-
         <record id="hotel_fooditem_12" model="product.product">
             <field name="name">Bahji Pav</field>
             <field name="available_in_pos">True</field>
@@ -158,7 +147,6 @@
             <field name="image" type="base64"
                 file="hotel_pos_restaurant/static/img/bhaji_paw.jpg" />
         </record>
-
         <record id="hotel_fooditem_13" model="product.product">
             <field name="name">Khandvi</field>
             <field name="available_in_pos">True</field>
@@ -170,7 +158,6 @@
             <field name="image" type="base64"
                 file="hotel_pos_restaurant/static/img/khandvi.jpg" />
         </record>
-
         <record id="hotel_fooditem_14" model="product.product">
             <field name="name">Halva</field>
             <field name="available_in_pos">True</field>
@@ -195,7 +182,6 @@
             <field name="image" type="base64"
                 file="hotel_pos_restaurant/static/img/dosa.png" />
         </record>
-
         <record id="hotel_fooditem_15" model="product.product">
             <field name="name">Idli-Sambar</field>
             <field name="available_in_pos">True</field>
@@ -207,7 +193,6 @@
             <field name="image" type="base64"
                 file="hotel_pos_restaurant/static/img/Idli_sambar.jpg" />
         </record>
-
         <record id="hotel_fooditem_16" model="product.product">
             <field name="name">Upma</field>
             <field name="available_in_pos">True</field>
@@ -219,7 +204,6 @@
             <field name="image" type="base64"
                 file="hotel_pos_restaurant/static/img/upma.jpg" />
         </record>
-
         <record id="hotel_fooditem_17" model="product.product">
             <field name="name">Vada-Sambar</field>
             <field name="available_in_pos">True</field>
@@ -231,7 +215,6 @@
             <field name="image" type="base64"
                 file="hotel_pos_restaurant/static/img/vada_sambhar.jpg" />
         </record>
-
         <record id="hotel_fooditem_18" model="product.product">
             <field name="name">Uttapam</field>
             <field name="available_in_pos">True</field>
@@ -243,7 +226,6 @@
             <field name="image" type="base64"
                 file="hotel_pos_restaurant/static/img/uttapam.jpg" />
         </record>
-
         <record id="hotel_fooditem_19" model="product.product">
             <field name="name">Appam </field>
             <field name="available_in_pos">True</field>
@@ -255,7 +237,6 @@
             <field name="image" type="base64"
                 file="hotel_pos_restaurant/static/img/appam1.jpg" />
         </record>
-
         <record id="hotel_fooditem_20" model="product.product">
             <field name="name">Pongal</field>
             <field name="available_in_pos">True</field>
@@ -267,7 +248,6 @@
             <field name="image" type="base64"
                 file="hotel_pos_restaurant/static/img/pongal.jpg" />
         </record>
-
 
         <record id="hotel.hotel_room_6" model="hotel.room">
             <field name="available_in_pos" eval="False" />
