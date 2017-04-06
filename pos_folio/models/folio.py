@@ -3,6 +3,7 @@
 
 from odoo import api, fields, models
 
+
 class PosOrder(models.Model):
     _inherit = "pos.order"
 
@@ -12,10 +13,10 @@ class PosOrder(models.Model):
     @api.model
     def _order_fields(self, ui_order):
         order_fields = super(PosOrder, self)._order_fields(ui_order)
-        order_fields['folio_id'] = ui_order.get('folio_id',False)
+        order_fields['folio_id'] = ui_order.get('folio_id', False)
         table_data = ui_order.get("table_data")
         if table_data:
-            if ui_order.get('folio_id', False) :
+            if ui_order.get('folio_id', False):
                 restaurant_table_obj = self.env['restaurant.table']
                 restaurant_table_obj.sudo().remove_table_order(table_data)
         return order_fields
