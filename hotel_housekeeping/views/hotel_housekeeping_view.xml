@@ -30,9 +30,9 @@
                     </h1>
                     <group>
                         <group>
-                            <field name="current_date" select="1" />
+                            <field name="current_date"/>
                             <field name="clean_type" />
-                            <field name="room_no" select="1" domain="[('isroom','=',True)]" />
+                            <field name="room_no" domain="[('isroom','=',True)]" />
                         </group>
                         <group>
                             <field name="inspector" />
@@ -108,7 +108,7 @@
                     <filter domain="[('state','=','cancel')]" string="Cancel" />
                     <filter domain="[('state','=','done')]" string="Done" />
                 </group>
-                <field name="inspector" select="1" />
+                <field name="inspector"/>
                 <field name="quality" />
                 <field name="state" />
                 <newline />
@@ -144,7 +144,7 @@
             <form string="Housekeeping Activity Types">
                 <sheet>
                     <group>
-                        <field name="name" select="1" string="Activity Name" />
+                        <field name="name" string="Activity Name" />
                         <field name="parent_id" domain="[('isactivitytype','=',True)]" />
                         <field name="isactivitytype" />
                     </group>
@@ -186,8 +186,8 @@
             <form string="Housekeeping Activity">
                 <sheet>
                     <group>
-                        <field name="name" select="1" string="Activity Name" />
-                        <field name="categ_id" select="1"
+                        <field name="name" string="Activity Name" />
+                        <field name="categ_id"
                             domain="[('isactivitytype','=',True)]" />
                     </group>
                 </sheet>
@@ -202,7 +202,7 @@
         <field name="arch" type="xml">
             <search string="Housekeeping Activity">
                 <field name="name" />
-                <field name="categ_id" select="1" />
+                <field name="categ_id"/>
                 <newline />
                 <group expand="0" string="Group By...">
                     <filter name="categ_id" string="Catagory" icon="terp-stock_symbol-selection"
@@ -219,7 +219,7 @@
         <field name="arch" type="xml">
             <tree string="Housekeeping Activity">
                 <field name="name" />
-                <field name="categ_id" select="1" />
+                <field name="categ_id"/>
             </tree>
         </field>
     </record>

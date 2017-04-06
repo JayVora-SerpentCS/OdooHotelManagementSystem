@@ -50,7 +50,7 @@ class HotelMenucard(models.Model):
     _description = 'Hotel Menucard'
 
     product_id = fields.Many2one('product.product', 'Product', required=True,
-                                 delegate=True, ondelete='cascade')
+                                 delegate=True, ondelete='cascade', index=True)
     image = fields.Binary("Image",
                           help="This field holds the image used as image "
                           "for the product, limited to 1024x1024px.")
@@ -62,7 +62,7 @@ class HotelRestaurantTables(models.Model):
     _name = "hotel.restaurant.tables"
     _description = "Includes Hotel Restaurant Table"
 
-    name = fields.Char('Table Number', size=64, required=True)
+    name = fields.Char('Table Number', size=64, required=True, index=True)
     capacity = fields.Integer('Capacity')
 
 
@@ -195,8 +195,10 @@ class HotelRestaurantReservation(models.Model):
     _description = "Includes Hotel Restaurant Reservation"
     _rec_name = "reservation_id"
 
-    reservation_id = fields.Char('Reservation No', size=64, readonly=True)
-    room_no = fields.Many2one('product.product', string='Room No', size=64)
+    reservation_id = fields.Char('Reservation No', size=64, readonly=True,
+                                 index=True)
+    room_no = fields.Many2one('product.product', string='Room No', size=64,
+                              index=True)
     folio_id = fields.Many2one('hotel.folio', string='Folio No')
     start_date = fields.Datetime('Start Time', required=True,
                                  default=(lambda *a:
@@ -204,17 +206,18 @@ class HotelRestaurantReservation(models.Model):
                                           (DEFAULT_SERVER_DATETIME_FORMAT)))
     end_date = fields.Datetime('End Time', required=True)
     cname = fields.Many2one('res.partner', string='Customer Name', size=64,
-                            required=True)
+                            required=True, index=True)
     partner_address_id = fields.Many2one('res.partner', string='Address')
     tableno = fields.Many2many('hotel.restaurant.tables',
                                relation='reservation_table',
+                               index=True,
                                column1='reservation_table_id',
                                column2='name', string='Table Number',
                                help="Table reservation detail. ")
     state = fields.Selection([('draft', 'Draft'), ('confirm', 'Confirmed'),
                               ('done', 'Done'), ('cancel', 'Cancelled'),
                               ('order', 'Order Created')], 'state',
-                             select=True, required=True, readonly=True,
+                             index=True, required=True, readonly=True,
                              default=lambda * a: 'draft')
     is_folio = fields.Boolean('Is a Hotel Guest??')
 
@@ -392,7 +395,7 @@ class HotelRestaurantOrder(models.Model):
                                 string='Total')
     state = fields.Selection([('draft', 'Draft'), ('order', 'Order Created'),
                               ('done', 'Done'), ('cancel', 'Cancelled')],
-                             'State', select=True, required=True,
+                             'State', index=True, required=True,
                              readonly=True, default=lambda * a: 'draft')
     is_folio = fields.Boolean('Is a Hotel Guest??', help='is customer reside'
                               'in hotel or not')
@@ -645,7 +648,7 @@ class HotelReservationOrder(models.Model):
     rest_id = fields.Many2many('hotel.restaurant.order.list', 'reserv_id',
                                'kitchen_id', 'res_kit_ids', "Rest")
     state = fields.Selection([('draft', 'Draft'), ('order', 'Order Created'),
-                              ('done', 'Done')], 'State', select=True,
+                              ('done', 'Done')], 'State', index=True,
                              required=True, readonly=True,
                              default=lambda * a: 'draft')
     folio_id = fields.Many2one('hotel.folio', string='Folio No')

@@ -68,14 +68,17 @@ class HotelReservation(models.Model):
 
     reservation_no = fields.Char('Reservation No', size=64, readonly=True)
     date_order = fields.Datetime('Date Ordered', required=True, readonly=True,
+                                 index=True,
                                  states={'draft': [('readonly', False)]},
                                  default=(lambda *a:
                                           time.strftime
                                           (DEFAULT_SERVER_DATETIME_FORMAT)))
     warehouse_id = fields.Many2one('stock.warehouse', 'Hotel', readonly=True,
+                                   index=True,
                                    required=True, default=1,
                                    states={'draft': [('readonly', False)]})
     partner_id = fields.Many2one('res.partner', 'Guest Name', readonly=True,
+                                 index=True,
                                  required=True,
                                  states={'draft': [('readonly', False)]})
     pricelist_id = fields.Many2one('product.pricelist', 'Scheme',
