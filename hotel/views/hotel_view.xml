@@ -3,6 +3,7 @@
 <odoo>
 
     <menuitem id="hotel_management_menu" name="Hotel Management" />
+    
     <menuitem id="hotel_configuration_menu" name="Configuration"
         sequence="20" parent="hotel_management_menu" />
     <menuitem id="hotel_report_menu" name="Pdf Reports" sequence="6"
@@ -19,7 +20,7 @@
         </field>
     </record>
 
-    <!-- 	 Company Configuration ====== -->
+    <!-- ########Company Configuration###### -->
     <record id="res_company_inherit_config_hotel" model="ir.ui.view">
         <field name="name">res.company.inherit.config.hotel</field>
         <field name="model">res.company</field>
@@ -31,7 +32,7 @@
         </field>
     </record>
 
-    <!-- ====== Floor ====== -->
+    <!--==================================================== Floor ==================================================== -->
     <!-- Form view of hotel floor -->
     <record id="view_hotel_floor_form" model="ir.ui.view">
         <field name="name">hotel.floor.form</field>
@@ -41,7 +42,7 @@
                 <sheet>
                     <group>
                         <field name="name" colspan="1" />
-                        <field name="sequence" select="1" />
+                        <field name="sequence"/>
                     </group>
                 </sheet>
             </form>
@@ -55,7 +56,7 @@
         <field name="arch" type="xml">
             <tree string=" Hotel Floors">
                 <field name="name" colspan="1" />
-                <field name="sequence" select="1" />
+                <field name="sequence"/>
             </tree>
         </field>
     </record>
@@ -72,7 +73,7 @@
         action="open_hotel_floor_form_tree" sequence="21"
         parent="hotel_configuration_menu" />
 
-    <!-- ====== Room Type ====== -->
+    <!--======= Room Type ======= -->
     <!-- Form view of hotel room type -->
     <record id="view_hotel_room_type_form" model="ir.ui.view">
         <field name="name">hotel.room_type.form</field>
@@ -81,9 +82,8 @@
             <form string=" Hotel Room Type">
                 <sheet>
                     <group>
-                        <field name="name" select="1" />
-                        <field name="parent_id" domain="[('isroomtype','=',True)]"
-                            select="1" />
+                        <field name="name"/>
+                        <field name="parent_id" domain="[('isroomtype','=',True)]"/>
                         <field name="isroomtype" invisible="1" />
                     </group>
                 </sheet>
@@ -116,7 +116,7 @@
         action="open_hotel_room_type_form_tree" sequence="6"
         parent="hotel.menu_hotel_room" />
 
-    <!-- ====== Amenities Type ====== -->
+    <!--==== Amenities Type ==== -->
     <!-- Form view of hotel room amenities type -->
     <record id="view_hotel_room_amenities_type_form" model="ir.ui.view">
         <field name="name">hotel.room_amenities_type_form</field>
@@ -160,7 +160,7 @@
         id="menu_action_hotel_room_amenities_type_view_form" action="action_hotel_room_amenities_type_view_form"
         sequence="3" parent="hotel.menu_amenity" />
 
-    <!-- ====== Room Amenities ====== -->
+    <!--===== Room Amenities ===== -->
     <!-- Form view of hotel room amenities -->
     <record id="view_hotel_room_amenities_form" model="ir.ui.view">
         <field name="name">hotel.room.amenities.form</field>
@@ -170,18 +170,17 @@
                 <sheet>
                     <h1>
                         <label string="Amenity" />
-                        <field name="name" select="1" />
+                        <field name="name"/>
                     </h1>
                     <group>
-                        <field name="default_code" select="1" />
+                        <field name="default_code"/>
                     </group>
                     <notebook>
                         <page string="Information">
                             <group colspan="4" col="4">
                                 <field name="type" select="2" string="Amenity Type" />
                                 <field name="product_manager" select="2" string="Amenity manager" />
-                                <field name="categ_id" select="1"
-                                    domain="[('isamenitytype','=',True)]" />
+                                <field name="categ_id" domain="[('isamenitytype','=',True)]" />
                                 <field name="uom_id" />
                                 <field name="uom_po_id" />
                             </group>
@@ -202,8 +201,6 @@
                                 <field name="sale_ok" select="2" />
                                 <field name="standard_price" />
                                 <field name="rental" select="2" />
-                                <!-- <field name="uos_id" /> -->
-                                <!-- <field name="uos_coeff" /> -->
                             </group>
                             <newline />
                             <group>
@@ -233,7 +230,7 @@
         <field name="arch" type="xml">
             <search string="Hotel Room Amenities">
                 <field name="name" />
-                <field name="categ_id" select="1" />
+                <field name="categ_id"/>
                 <field name="list_price" string="ty rate" />
                 <newline />
                 <group expand="0" string="Group By...">
@@ -251,7 +248,7 @@
         <field name="arch" type="xml">
             <tree string="Hotel Room Amenities">
                 <field name="name" />
-                <field name="categ_id" select="1" />
+                <field name="categ_id"/>
                 <field name="list_price" string="Ty rate" invisible="1" />
             </tree>
         </field>
@@ -271,7 +268,8 @@
         action="action_hotel_room_amenities_view_form" sequence="2"
         parent="hotel.menu_amenity" />
 
-    <!-- ====== Rooms ====== -->
+    <!--=================================================== Rooms =================================================== -->
+
     <!-- Form view of hotel room -->
     <record id="view_hotel_room_form" model="ir.ui.view">
         <field name="name">hotel.room.form</field>
@@ -282,7 +280,7 @@
                     <div class="oe_title">
                         <label for="name" string="Name" />
                         <h1>
-                            <field name="name" select="1" />
+                            <field name="name"/>
                         </h1>
                         <label for="status" string="Status" />
                         <h2>
@@ -321,8 +319,6 @@
                                 <field name="rental" select="2" />
                                 <field name="standard_price" />
                                 <field name="cost_method" string="Cost Method" />
-                                <!-- <field name="uos_id" /> -->
-                                <!-- <field name="uos_coeff" /> -->
                                 <newline />
                             </group>
                             <newline />
@@ -370,7 +366,7 @@
         <field name="arch" type="xml">
             <search string="Hotel Room">
                 <field name="name" />
-                <field name="categ_id" select="1" />
+                <field name="categ_id"/>
                 <field name="list_price" string="Room rate" />
                 <field name="status" string="Status" />
                 <newline />
@@ -389,7 +385,7 @@
         <field name="arch" type="xml">
             <tree string="Hotel Room">
                 <field name="name" />
-                <field name="categ_id" select="1" />
+                <field name="categ_id"/>
                 <field name="list_price" string="Room rate" />
                 <field name="status" />
                 <field name="capacity" />
@@ -493,7 +489,7 @@
     <menuitem id="menu_open_hotel_room_form" name="Rooms" action="action_hotel_room_form"
         sequence="5" parent="hotel.menu_hotel_room" />
 
-    <!-- ====== Hotel Folio ====== -->
+    <!--=== Hotel Folio ==== -->
     <!-- Form view of hotel folio -->
     <record id="view_hotel_folio1_form" model="ir.ui.view">
         <field name="name">hotel.folio.form</field>
@@ -530,10 +526,8 @@
                     <group colspan="4" col="4">
                         <field name="date_order" />
                         <field name="warehouse_id" string="Branch" />
-                        <!-- <field name="invoiced"/> -->
                         <field name="invoice_status" />
-                        <field name="hotel_invoice_id" states='progress,done,cancel'
-                            readonly="1" />
+                        <field name="hotel_invoice_id" states='sale,done,cancel' readonly="1"/>
                     </group>
                     <notebook colspan="4">
                         <page string="Folio">
@@ -566,7 +560,7 @@
                                                     invisible="1" />
                                                 <field name="product_id"
                                                     context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'uom':product_uom}"
-                                                    select="1" domain="[('isroom','=',True)]" string="Room No" />
+                                                    domain="[('isroom','=',True)]" string="Room No" />
                                                 <field name="product_uom" string="Rent(UOM)" />
                                             </group>
                                             <separator string="Manual Description" colspan="4" />
@@ -582,6 +576,7 @@
                                                 <field name="invoice_status" />
                                             </group>
                                         </page>
+                                        
                                         <page string="History">
                                             <separator string="Invoice Lines" colspan="4" />
                                             <field name="invoice_lines" colspan="4" nolabel="1" />
@@ -612,11 +607,11 @@
                                             <separator string="Automatic Declaration" col="4"
                                                 colspan="4" />
                                             <group col="4" colspan="4">
-                                                <field name="product_id" select="1"
+                                                <field name="product_id"
                                                     domain="[('isservice','=',True)]"
                                                     context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'hotel':parent.warehouse_id,'uom':product_uom}" />
                                                 <field name="product_uom" />
-                                                <field name="product_uom_qty" select="1"
+                                                <field name="product_uom_qty"
                                                     context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'hotel':parent.warehouse_id,'uom':product_uom}"
                                                     invisible="1" />
                                             </group>
@@ -635,6 +630,7 @@
                                                 <field name="invoice_status" />
                                             </group>
                                         </page>
+                                        
                                         <page string="History">
                                             <separator string="Invoice Lines" colspan="4" />
                                             <field name="invoice_lines" colspan="4" nolabel="1" />
@@ -703,8 +699,8 @@
                 <field name="checkin_date" />
                 <field name="checkout_date" />
                 <field name="name" />
-                <field name="partner_id" select="1" />
-                <field name="date_order" select="1" />
+                <field name="partner_id"/>
+                <field name="date_order"/>
                 <field name="state" />
                 <field name="amount_total" sum="Total amount" />
             </tree>
@@ -771,7 +767,9 @@
     <menuitem name="Generate Folio" id="menu_open_hotel_folio1_form_tree_all"
         action="open_hotel_folio1_form_tree_all" sequence="5" parent="menu_all_folio" />
 
-    <!-- ====== Hotel Service Type ====== -->
+    <!--======================================================== Hotel Service 
+        Type ======================================================== -->
+
     <!-- Form view of hotel service type -->
     <record id="view_hotel_service_type_form" model="ir.ui.view">
         <field name="name">hotel.service_type.form</field>
@@ -780,9 +778,8 @@
             <form string="Service Type">
                 <sheet>
                     <group>
-                        <field name="name" select="1" string="Service Name" />
-                        <field name="parent_id" domain="[('isservicetype','=',True)]"
-                            select="1" />
+                        <field name="name" string="Service Name" />
+                        <field name="parent_id" domain="[('isservicetype','=',True)]"/>
                         <field name="isservicetype" invisible="1" />
                     </group>
                 </sheet>
@@ -815,7 +812,9 @@
         action="open_hotel_service_type_form_tree" sequence="9"
         parent="hotel.menu_hotel_service" />
 
-    <!-- ====== Hotel Service ====== -->
+    <!--======================================================== Hotel Service 
+        ======================================================== -->
+
     <!-- Form view of hotel service -->
     <record id="view_hotel_services_form" model="ir.ui.view">
         <field name="name">.hotel.services.form</field>
@@ -828,15 +827,14 @@
                         <field name="name" select="1" />
                     </h1>
                     <group>
-                        <field name="default_code" select="1" />
+                        <field name="default_code"/>
                     </group>
                     <notebook>
                         <page string="Information">
                             <group>
                                 <group colspan="4" col="4">
                                     <field name="type" select="2" string="Service Type" />
-                                    <field name="categ_id" domain="[('isservicetype','=',True)]"
-                                        select="1" />
+                                    <field name="categ_id" domain="[('isservicetype','=',True)]"/>
                                     <field name="product_manager" select="2" string="Service Manager" />
                                     <field name="uom_id" />
                                     <field name="uom_po_id" />
@@ -859,8 +857,6 @@
                                 <field name="sale_ok" select="2" />
                                 <field name="standard_price" />
                                 <field name="rental" select="2" />
-                                <!-- <field name="uos_id" /> -->
-                                <!-- <field name="uos_coeff" /> -->
                             </group>
                             <newline />
                             <group>
@@ -890,7 +886,7 @@
         <field name="arch" type="xml">
             <search string="Hotel Services">
                 <field name="name" />
-                <field name="categ_id" select="1" />
+                <field name="categ_id"/>
                 <field name="list_price" string="Service rate" />
                 <newline />
                 <group expand="0" string="Group By...">
@@ -977,7 +973,8 @@
         action="hotel_service_category_action" sequence="10"
         parent="hotel.menu_hotel_service" />
 
-    <!-- ====== Currency ====== -->
+    <!--==================================================== Currency ==================================================== -->
+
     <!-- Form view of currency exchange -->
     <record id="view_currency_exchange_form" model="ir.ui.view">
         <field name="name">currency.exchange.form</field>
@@ -999,7 +996,7 @@
                     <div class="oe_title ">
                         <label for="name" string="Name" />
                         <h1>
-                            <field name="name" select="1" />
+                            <field name="name"/>
                         </h1>
                     </div>
                     <separator string="Details" />
@@ -1019,7 +1016,7 @@
                     <newline />
                     <group colspan="2" col="4">
                         <field name="input_curr" />
-                        <field name="in_amount" select="1" widget="monetary"
+                        <field name="in_amount" widget="monetary"
                             options="{'currency_field': 'input_curr'}" />
                         <field name="out_curr" />
                         <field name="rate" />

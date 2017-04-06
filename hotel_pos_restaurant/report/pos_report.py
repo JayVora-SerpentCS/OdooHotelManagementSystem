@@ -55,6 +55,7 @@ class ReportLunchorder1(models.AbstractModel):
         rm_act = self.with_context(data['form'].get('used_context', {}))
         get_data = rm_act.get_data(date_start, date_end)
         get_pos = rm_act.get_pos(date_start, date_end)
+#       gettotal = rm_act.gettotal(pos_order)
         getTotal = rm_act.getTotal()
         docargs = {
             'doc_ids': docids,

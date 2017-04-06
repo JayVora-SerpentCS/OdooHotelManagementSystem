@@ -64,8 +64,8 @@ class HotelFloor(models.Model):
     _name = "hotel.floor"
     _description = "Floor"
 
-    name = fields.Char('Floor Name', size=64, required=True, select=True)
-    sequence = fields.Integer('Sequence', size=64)
+    name = fields.Char('Floor Name', size=64, required=True, index=True)
+    sequence = fields.Integer('Sequence', size=64, index=True)
 
 
 class ProductCategory(models.Model):
@@ -83,7 +83,7 @@ class HotelRoomType(models.Model):
     _description = "Room Type"
 
     cat_id = fields.Many2one('product.category', 'category', required=True,
-                             delegate=True, select=True, ondelete='cascade')
+                             delegate=True, index=True, ondelete='cascade')
 
 
 class ProductProduct(models.Model):
@@ -324,7 +324,7 @@ class HotelFolio(models.Model):
                             "count from the check-in and check-out date. ")
     currrency_ids = fields.One2many('currency.exchange', 'folio_no',
                                     readonly=True)
-    hotel_invoice_id = fields.Many2one('account.invoice', 'Invoice')
+    hotel_invoice_id = fields.Many2one('account.invoice', 'Invoice', copy=False)
 
     @api.multi
     def go_to_currency_exchange(self):
@@ -581,20 +581,17 @@ class HotelFolio(models.Model):
         self.write({'state': 'done'})
 
     @api.multi
-    def action_invoice_create(self, grouped=False, states=None):
+    def action_invoice_create(self, grouped=False, final=False):
         '''
         @param self: object pointer
         '''
-        if states is None:
-            states = ['confirmed', 'done']
         order_ids = [folio.order_id.id for folio in self]
         room_lst = []
         sale_obj = self.env['sale.order'].browse(order_ids)
         invoice_id = (sale_obj.action_invoice_create
-                      (grouped=False, states=['confirmed', 'done']))
+                       (grouped=False, final=False))
         for line in self:
             values = {'invoiced': True,
-                      'state': 'progress' if grouped else 'progress',
                       'hotel_invoice_id': invoice_id
                       }
             line.write(values)
@@ -1102,7 +1099,7 @@ class HotelServiceType(models.Model):
     _description = "Service Type"
 
     ser_id = fields.Many2one('product.category', 'category', required=True,
-                             delegate=True, select=True, ondelete='cascade')
+                             delegate=True, index=True, ondelete='cascade')
 
 
 class HotelServices(models.Model):
@@ -1139,7 +1136,7 @@ class CurrencyExchangeRate(models.Model):
                                           (DEFAULT_SERVER_DATETIME_FORMAT)))
     input_curr = fields.Many2one('res.currency', string='Input Currency',
                                  track_visibility='always')
-    in_amount = fields.Float('Amount Taken', size=64, default=1.0)
+    in_amount = fields.Float('Amount Taken', size=64, default=1.0, index=True)
     out_curr = fields.Many2one('res.currency', string='Output Currency',
                                track_visibility='always')
     out_amount = fields.Float('Subtotal', size=64)

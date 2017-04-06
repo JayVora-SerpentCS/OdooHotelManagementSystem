@@ -16,7 +16,7 @@ class HotelFolio(models.Model):
 
     folio_pos_order_ids = fields.Many2many('pos.order', 'hotel_pos_rel',
                                            'hotel_folio_id', 'pos_id',
-                                           'Orders', readonly=True)
+                                           'Orders', readonly=True, copy=False)
 
     @api.multi
     def action_invoice_create(self, grouped=False, states=None):
@@ -38,8 +38,8 @@ class HotelFolio(models.Model):
             for rec in folio.folio_pos_order_ids:
                 rec.write({'state': 'cancel'})
         return super(HotelFolio, self).action_cancel()
-
-
+    
+    
 class account_payment(models.Model):
     _inherit = "account.payment"
 

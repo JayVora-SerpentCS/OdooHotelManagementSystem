@@ -41,6 +41,9 @@ class SaleAdvancePaymentInv(models.TransientModel):
             hotel = hotel_fol.browse(self._context.get('active_ids',
                                                        []))
             ctx.update({'active_ids': [hotel.order_id.id],
-                        'active_id': hotel.order_id.id})
-        return super(SaleAdvancePaymentInv,
-                     self.with_context(ctx)).create_invoices()
+                        'active_id': hotel.order_id.id,
+                        'folio_id': hotel.id})
+        res = super(SaleAdvancePaymentInv,
+                    self.with_context(ctx)).create_invoices()
+    
+        return res

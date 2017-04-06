@@ -3,7 +3,9 @@
 <odoo>
 
     <data noupdate="1">
+
         <!-- Floor -->
+
         <record id="hotel_floor_ground0" model="hotel.floor">
             <field eval="&quot;Ground&quot;" name="name" />
         </record>
@@ -21,6 +23,7 @@
         </record>
 
         <!-- hotel_room_amenities_type -->
+
         <record id="hotel_room_amenities_type_0" model="hotel.room.amenities.type">
             <field name="name">All Aminities</field>
             <field name="isamenitytype">1</field>
@@ -51,6 +54,7 @@
         </record>
 
         <!-- hotel_room_type -->
+
         <record id="rooms" model="hotel.room.type">
             <field name="name">All Rooms</field>
             <field name="isroomtype">1</field>
@@ -75,6 +79,7 @@
         </record>
 
         <!-- hotel_service_type -->
+
         <record id="hotel_service_type_0" model="hotel.service.type">
             <field name="name">All Services</field>
             <field name="isservicetype">1</field>
@@ -93,6 +98,7 @@
         </record>
 
         <!-- hotel_room -->
+
         <record id="hotel_room_0" model="hotel.room">
             <field name="name">Single-101</field>
             <field name="isroom">1</field>
@@ -167,6 +173,7 @@
         </record>
 
         <!-- hotel_services -->
+
         <record id="hotel_service_6" model="hotel.services">
             <field name="name">Internet</field>
             <field name="isservice">1</field>
@@ -193,6 +200,7 @@
         </record>
 
         <!--Amenities -->
+
         <record id="hotel_room_amenities_1" model="hotel.room.amenities">
             <field name="name">Toiletries</field>
             <field name="iscategid">1</field>
@@ -213,5 +221,4 @@
         </record>
 
     </data>
-
 </odoo>
