@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
 <odoo>
-    <data>
  
         <record model="ir.ui.view" id="view_pos_config_inherit">
             <field name="name">pos.config.inherit</field>
@@ -297,5 +296,4 @@
                   groups="group_kitchen_screen"
                   />
 
-    </data>
 </odoo>

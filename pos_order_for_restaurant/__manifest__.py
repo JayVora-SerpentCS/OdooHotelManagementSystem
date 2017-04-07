@@ -12,11 +12,12 @@
     'website': 'http://www.serpentcs.com',
     'installable': True,
     'application': True,
-    'data': ['security/pos_order_for_restaurant_security.xml',
-            'security/ir.model.access.csv',
-            'view/templates.xml',
-            'view/pos_order_for_restaurant_view.xml',
-           ],
+    'data': [
+             'security/pos_order_for_restaurant_security.xml',
+             'security/ir.model.access.csv',
+             'view/templates.xml',
+             'view/pos_order_for_restaurant_view.xml',
+    ],
     'demo': [
         'view/pos_order_restaurant_demo.xml',
      ],

@@ -3,6 +3,7 @@
 
 from odoo import models, fields, api
 
+
 class PosOrder(models.Model):
     _inherit = "pos.order"
 
@@ -38,8 +39,8 @@ class HotelFolio(models.Model):
             for rec in folio.folio_pos_order_ids:
                 rec.write({'state': 'cancel'})
         return super(HotelFolio, self).action_cancel()
-    
-    
+
+
 class account_payment(models.Model):
     _inherit = "account.payment"
 
@@ -48,7 +49,8 @@ class account_payment(models.Model):
         res = super(account_payment, self).post()
         for rec in self:
             invoice_id = rec._context.get('active_id', False)
-            folio = self.env['hotel.folio'].search([('hotel_invoice_id', '=', invoice_id)], limit=1)
+            folio = self.env['hotel.folio'].search([('hotel_invoice_id', '=',
+                                                     invoice_id)], limit=1)
             for order in folio.folio_pos_order_ids:
                 amount = order.amount_total - order.amount_paid
                 data = rec.read()[0]

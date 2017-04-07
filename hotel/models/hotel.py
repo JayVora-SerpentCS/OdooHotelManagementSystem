@@ -324,7 +324,8 @@ class HotelFolio(models.Model):
                             "count from the check-in and check-out date. ")
     currrency_ids = fields.One2many('currency.exchange', 'folio_no',
                                     readonly=True)
-    hotel_invoice_id = fields.Many2one('account.invoice', 'Invoice', copy=False)
+    hotel_invoice_id = fields.Many2one('account.invoice', 'Invoice',
+                                       copy=False)
 
     @api.multi
     def go_to_currency_exchange(self):

@@ -3,7 +3,7 @@
 
 import time
 import logging
-from odoo import tools
+from odoo import netsvc, tools
 from odoo.tools.translate import _
 from odoo.tools import float_is_zero
 from odoo import workflow
@@ -18,29 +18,28 @@ class pos_config(models.Model):
     _inherit = 'pos.config'
 
     display_send_to_kitchen = fields.Boolean("Display Send To Kitchen Button",
-                                             help='''If Display Send To kitchen
-                                             Button is true than pos shows a
+                                             help='''If Display SendTo kitchen/
+                                             Button is true than pos shows a/
                                              send to kitchen button.''',
                                              default=True)
     display_kitchen_receipt = fields.Boolean("Display Kitchen Receipt Button",
-                                             help='''If Display Kitchen Receipt
-                                             Button is true than pos shows a
+                                             help='''If DisplayKitchen Receipt/
+                                             Button is true than pos shows a/
                                              kitchen receipt button.''',
                                              default=True)
-    display_customer_receipt = fields.Boolean("Display Customer ReceiptButton",
-                                              help='''If Display Customer
-                                              Receipt Button is true than pos
-                                              showsCustomer receipt button.''',
-                                              default=True)
+    display_customer_receipt = fields.Boolean("Display CustomerReceipt Button",
+                                              help='''If Display Customer/
+                                              Receipt Button is true than pos/
+                                              shows a Customer receipt/
+                                              button.''', default=True)
 
     @api.model
     def check_is_pos_restaurant(self):
-        ir_module_ids = self.env['ir.module.module'].search([('state', '=',
-                                                              'installed'),
-                                                            ('name', '=',
-                                                             'pos_restaurant')
-                                                             ])
-        if ir_module_ids:
+        ir_mod_obj = self.env['ir.module.module']
+        ir_module_module_ids = ir_mod_obj.search([('state', '=', 'installed'),
+                                                  ('name', '=',
+                                                   'pos_restaurant')])
+        if ir_module_module_ids:
             return True
         else:
             return False
@@ -61,7 +60,8 @@ class PosOrderLine(models.Model):
                              string="Order Name")
     partner_id = fields.Char(related='order_id.partner_id.name',
                              string="Customer")
-    parcel = fields.Char(related='order_id.parcel_name', string="Parcel")
+    parcel = fields.Char(related='order_id.parcel_name',
+                         string="Parcel")
     table = fields.Char(related='order_id.table_name', string="Table")
     order_line_state_id = fields.Many2one('pos.order.line.state',
                                           string="Order Line State",
@@ -70,9 +70,9 @@ class PosOrderLine(models.Model):
 
     @api.model
     def orderline_state_id(self, pids, order_id):
+        pos_obj = self.env['pos.order']
         if pids != None:
-            line_ids = [line.id for line in self.env['pos.order'].
-                        browse(order_id).lines]
+            line_ids = [line.id for line in pos_obj.browse(order_id).lines]
             if pids in line_ids:
                 return self.browse(pids).order_line_state_id.id
             else:
@@ -131,21 +131,20 @@ class PosOrder(models.Model):
                 for line in order.lines:
                     cnt = cnt + 1
                     cnt1 = cnt <= 4
+                    lp_n = line.product_id.name
+                    q = line.qty
                     if ex_all_prd_ids == [] and ex_4_prd_ids == [] and cnt1:
-                        str1 = line.product_id.name + "____" + str(line.qty) +
-                        "-" + str(line.id) + '-' +
-                        str(line.order_line_state_id.id) + '-' +
-                        str(line.property_description)
+                        str1 = (lp_n + "_" + str(q) + "-" + str(line.id) + '-'
+                                + str(line.order_line_state_id.id) + '-' +
+                                str(line.property_description))
                     if [[order.id]] == ex_all_prd_ids:
-                        str1 = line.product_id.name + "____" + str(line.qty) +
-                        "-" + str(line.id) + '-' +
-                        str(line.order_line_state_id.id) + '-' +
-                        str(line.property_description)
+                        str1 = (lp_n + "_" + str(q) + "-" + str(line.id) + '-'
+                                + str(line.order_line_state_id.id) + '-' +
+                                str(line.property_description))
                     if [[order.id]] == ex_4_prd_ids and cnt <= 4:
-                        str1 = line.product_id.name + "____" + str(line.qty) +
-                        "-" + str(line.id) + '-' +
-                        str(line.order_line_state_id.id) + '-' +
-                        str(line.property_description)
+                        str1 = (lp_n + "_" + str(q) + "-" + str(line.id) + '-'
+                                + str(line.order_line_state_id.id) + '-' +
+                                (line.property_description))
                     res.append(str1)
                 cnt = 0
                 if ex_all_prd_ids:
@@ -312,19 +311,22 @@ class PosOrder(models.Model):
                     pos_obj.browse(line[2].get('line_id')).write(line[2])
                     order.get('lines').remove(line)
             self.browse(order_id).write(self._order_fields(order))
-            
         if not kitchen:
             journal_ids = set()
+            dec_pr_obj = self.env['decimal.precision']
             for pt in order['statement_ids']:
+                pf = self._payment_fields(pt[2])
                 if isinstance(order_id, int):
-                    self.browse(order_id).add_payment(self._payment_fields(pt[2]))
+                    self.browse(order_id).add_payment(pf)
                 else:
-                    order_id.add_payment(self._payment_fields(pt[2]))
+                    order_id.add_payment(pf)
                 journal_ids.add(pt[2]['journal_id'])
             if session.sequence_number <= order['sequence_number']:
-                session.write({'sequence_number': order['sequence_number'] + 1})
+                session.write({'sequence_number': order['sequence_number'] +
+                               1})
                 session.refresh()
-            if not float_is_zero(order['amount_return'], self.env['decimal.precision'].precision_get('Accnt')):
+            if not float_is_zero(order['amount_return'],
+                                 dec_pr_obj.precision_get('Accnt')):
                 cash_journal = session.cash_journal_id.id
                 if not cash_journal:
                     cash_journal_ids = self.env['accnt.journal'].search([
@@ -332,33 +334,33 @@ class PosOrder(models.Model):
                         ('id', 'in', list(journal_ids)),
                     ], limit=1).sudo().ids
                     if not cash_journal_ids:
-                        # If none, select for change one of the cash 
+                        # If none, select for change one of the cash
                         # journals of the POS. This is used for example when a
-                        # customer pays by credit card. An amount higher than 
+                        # customer pays by credit card. An amount higher than
                         # total amount of the order and gets cash back
-                        st_ids = for statement in session.statement_ids
-                        j_type = if statement.journal_id.type
-                        cash_journal_ids = [statement.journal_id.id st_ids
-                                            j_type == 'cash']
+                        cash_journal_ids = [statement.journal_id.id for
+                                            statement in session.statement_ids
+                                            if statement.journal_id.type ==
+                                            'cash']
                         if not cash_journal_ids:
-                            raise UserError(_("No cash statement found for this\
-                            session. Unable to record returned cash."))
+                            raise UserError(_('''No cash statement found for/
+                            this session. Unable to record returned cash.'''))
                     cash_journal = cash_journal_ids[0]
                 if isinstance(order_id, int):
                     self.browse(order_id).add_payment({
-                        'amount':-order['amount_return'],
+                        'amount': -order['amount_return'],
                         'payment_date': time.strftime('%Y-%m-%d %H:%M:%S'),
                         'payment_name': _('return'),
                         'journal': cash_journal,
                     })
                 else:
                     order_id.add_payment({
-                       'amount':-order['amount_return'],
+                       'amount': -order['amount_return'],
                         'payment_date': time.strftime('%Y-%m-%d %H:%M:%S'),
                         'payment_name': _('return'),
                         'journal': cash_journal,
                     })
-             return order_id
+                return order_id
 
     @api.multi
     def write(self, vals):
@@ -370,18 +372,22 @@ class PosOrder(models.Model):
     def create_from_ui(self, orders, kitchen=False):
         # Keep only new orders
         submitted_references = [o['data']['name'] for o in orders]
-        existing_order_ids = self.search([('pos_reference', 'in', submitted_references)]).sudo().ids
-        existing_orders = self.browse(existing_order_ids).read(['pos_reference'])
-        existing_references = set([o['pos_reference'] for o in existing_orders])
-        orders_to_save = [o for o in orders if o['data']['name'] not in existing_references]
+        existing_order_ids = self.search([('pos_reference', 'in',
+                                           submitted_references)]).sudo().ids
+        existing_orders = self.browse(existing_order_ids).read(['pos_reference'
+                                                                ])
+        existing_references = set([o['pos_reference'] for o in existing_orders
+                                   ])
+        orders_to_save = [o for o in orders if o['data']['name'] not in
+                          existing_references]
         kitchen_order = [o for o in orders]
         order_ids = []
-        if kitchen :
+        if kitchen:
             for tmp_order in kitchen_order:
                 order = tmp_order['data']
                 order_id = self._process_order(order, True)
                 return order_id
-        elif not orders_to_save :
+        elif not orders_to_save:
             for tmp_order in kitchen_order:
                 to_invoice = tmp_order['to_invoice']
                 order = tmp_order['data']
@@ -390,13 +396,15 @@ class PosOrder(models.Model):
                 try:
                     self.browse([order_id]).action_pos_order_paid()
                 except Exception as e:
-                    _logger.error('Could not fully process the POS Order: %s', tools.ustr(e))
+                    _logger.error('Could not fully process the POS Order: %s',
+                                  tools.ustr(e))
                 if to_invoice:
                     self.action_invoice([order_id])
-                    order_obj = self.browse(order_id)
-                    self.env['accnt.invoice'].sudo().browse([order_obj.invoice_id.id]).sudo().action_invoice_open()
+                    o_id = self.browse(order_id).invoice_id.id
+                    ac_iv = self.env['accnt.invoice']
+                    ac_iv.sudo().browse([o_id]).sudo().action_invoice_open()
             return order_id
-        else :
+        else:
             for tmp_order in orders_to_save:
                 to_invoice = tmp_order['to_invoice']
                 order = tmp_order['data']
@@ -405,11 +413,13 @@ class PosOrder(models.Model):
                 try:
                     self.browse([order_id]).action_pos_order_paid()
                 except Exception as e:
-                    _logger.error('Could not fully process the POS Order: %s', tools.ustr(e))
+                    _logger.error('Could not fully process the POS Order: %s',
+                                  tools.ustr(e))
                 if to_invoice:
                     self.action_invoice([order_id])
-                    order_obj = self.browse(order_id)
-                    self.env['accnt.invoice'].sudo().browse([order_obj.invoice_id.id]).sudo().action_invoice_open()
+                    o_id = self.browse(order_id).invoice_id.id
+                    ac_iv = self.env['accnt.invoice']
+                    ac_iv.sudo().browse([o_id]).sudo().action_invoice_open()
             return order_ids
 
 
@@ -422,14 +432,17 @@ class PosCategory(models.Model):
         ids = self.search([])
         for cat in ids:
             pcat = cat.parent_id
-            root_category_name = False;
-            root_category_id = 0;
+            root_category_name = False
+            root_category_id = 0
             category_id = cat.id
             while pcat:
                 root_category_name = pcat.name
                 root_category_id = pcat.id
                 pcat = pcat.parent_id
-            res[category_id] = {'categ_id':category_id, 'categ_name':cat.name, 'root_category_name':root_category_name, 'root_category_id':root_category_id};
+            res[category_id] = {'categ_id': category_id,
+                                'categ_name': cat.name,
+                                'root_category_name': root_category_name,
+                                'root_category_id': root_category_id}
         return res
 
 
@@ -437,19 +450,22 @@ class pos_session(models.Model):
     _inherit = "pos.session"
 
     def _confirm_orders(self):
+        pos_obj = self.env['pos.order']
         for session in self:
-            company_id = session.config_id.journal_id.company_id.id
+            c_id = session.config_id.journal_id.company_id.id
             orders = session.order_ids.filtered(lambda order: order.state ==
                                                 'paid')
-            sc_jid = session.config_id.journal_id.id
             journal_id = self.env['ir.config_parameter'].sudo().get_param(
-                'pos.closing.journal_id_%s' % company_id, default=sc_jid)
+                'pos.closing.journal_id_%s' % c_id,
+                default=session.config_id.journal_id.id)
 
-            move = self.env['pos.order'].with_context(force_company=company_id)._create_accnt_move(session.start_at, session.name, int(journal_id), company_id)
-            orders.with_context(force_company=company_id)._create_accnt_move_line(session, move)
-            for order in session.order_ids.filtered(lambda o: o.state not in ['done', 'invoiced', 'cancel']):
+            move = pos_obj.with_context(force_company=c_id)._create_accnt_move(session.start_at, session.name, int(journal_id), c_id)
+            orders.with_context(force_company=c_id)._create_accnt_move_line(session, move)
+            for order in session.order_ids.filtered(lambda o: o.state not in
+                                                    ['done', 'invoiced',
+                                                     'cancel']):
                 if order.state not in ('paid'):
-                    raise UserError(_("You cannot confirm all orders of this\
-                                       session, because they have not the\
-                                       'paid' status"))
+                    raise UserError(_('''You cannot confirm all orders of this/
+                                      session, because they have not the'paid'/
+                                      status'''))
                 order.action_pos_order_done()
