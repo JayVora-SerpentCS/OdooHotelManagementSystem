@@ -57,8 +57,7 @@ class PosOrder(models.Model):
                         t_ac = res_table.table_id.available_capacities
                         t_rs = res_table.reserver_seat
                         if(t_ac - t_rs) == 0:
-                            vals = {
-                                    'state': 'available',
+                            vals = {'state': 'available',
                                     'available_capacities': t_rs - t_ac
                             }
                             tab_obj.browse(res_table.table_id.id).write(vals)
@@ -80,8 +79,7 @@ class PosOrder(models.Model):
                         else:
                             if(t_ac - t_rs) > 0:
                                 rst_id = res_table.table_id.id
-                                val = {
-                                       'state': 'available',
+                                val = {'state': 'available',
                                        'available_capacities': t_rs - t_ac
                                 }
                                 tab_obj.browse(rst_id).write(val)
@@ -150,15 +148,13 @@ class PosOrder(models.Model):
                         res_tab_obj = self.env["restaurant.table"]
                         res_id = res_tab_obj.browse(res_table.table_id.id)
                         if(rtac - rtrs) == 0:
-                            vals = {
-                                    'state': 'available',
+                            vals = {'state': 'available',
                                     'available_capacities': rtac - rtrs
                             }
                             res_id.write(vals)
                         else:
                             if(rtac - rtrs) > 0:
-                                vals = {
-                                        'state': 'available',
+                                vals = {'state': 'available',
                                         'available_capacities': rtac - rtrs
                                         }
                                 res_id.write(vals)
@@ -179,8 +175,7 @@ class PosOrder(models.Model):
                     qty = int(booked.split('/')[1])
                     tab_id = tab_obj.browse(table_id)
                     tac_id = tab_id.available_capacities
-                    vals = {
-                            'available_capacities': tac_id - int(qty),
+                    vals = {'available_capacities': tac_id - int(qty),
                             'state': 'available'
                     }
                     tab_id.write(vals)

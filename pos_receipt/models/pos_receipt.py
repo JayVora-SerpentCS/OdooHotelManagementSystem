@@ -248,15 +248,15 @@ class PosOrder(models.Model):
                 hsl_obj = self.env['hotel.service.line']
                 for order1 in order_id.lines:
                     values = {'order_id': order_id.id,
-                                  'name': order1.product_id.name,
-                                  'product_id': order1.product_id.id,
-                                  'product_uom_qty': order1.qty,
-                                  'price_unit': order1.price_unit,
-                                  'price_subtotal': order1.price_subtotal,
+                              'name': order1.product_id.name,
+                              'product_id': order1.product_id.id,
+                              'product_uom_qty': order1.qty,
+                              'price_unit': order1.price_unit,
+                              'price_subtotal': order1.price_subtotal
                     }
                     sol_rec = so_line_obj.sudo().create(values)
                     hsl_obj.sudo().create({'folio_id': order_id.folio_id.id,
-                                        'service_line_id': sol_rec.id})
+                                           'service_line_id': sol_rec.id})
                 order_id.folio_id.sudo().write({'folio_pos_order_ids':
                                                 [(4, order_id.id)]})
             return [order_id.id, [o.id for o in order_id.lines]]
@@ -266,8 +266,8 @@ class PosOrder(models.Model):
             for line in line_data:
                 l_id = line[2].get('line_id')
                 if l_id in line_ids:
-                    o_id = order_line_state_id.id
-                    line[2]['order_line_state_id'] = pos_obj.browse(l_id).o_id
+                    pl = pos_obj.browse(l_id)
+                    line[2]['order_line_state_id'] = pl.order_line_state_id.id
                     pos_obj.browse(line[2].get('line_id')).write(line[2])
                     order.get('lines').remove(line)
             self.browse(order_id).write(self._order_fields(order))
@@ -277,11 +277,11 @@ class PosOrder(models.Model):
                     hsl_obj = self.env['hotel.service.line']
                     for order1 in order_id.lines:
                         values = {'order_id': order_id.id,
-                                      'name': order1.product_id.name,
-                                      'product_id': order1.product_id.id,
-                                      'product_uom_qty': order1.qty,
-                                      'price_unit': order1.price_unit,
-                                      'price_subtotal': order1.price_subtotal,
+                                  'name': order1.product_id.name,
+                                  'product_id': order1.product_id.id,
+                                  'product_uom_qty': order1.qty,
+                                  'price_unit': order1.price_unit,
+                                  'price_subtotal': order1.price_subtotal,
                         }
                         sol_rec = so_line_obj.sudo().create(values)
                         val = {'folio_id': order_id.folio_id.id,
@@ -298,11 +298,11 @@ class PosOrder(models.Model):
         if not kitchen and order.get('id', False):
             line_ids = [o.id for o in self.browse(order_id).lines]
             line_data = list(order.get('lines'))
-            for line in  line_data:
+            for line in line_data:
                 l_id = line[2].get('line_id')
-                if l_id  in line_ids:
-                    o_id = order_line_state_id.id
-                    line[2]['order_line_state_id'] = pos_obj.browse(l_id).o_id
+                if l_id in line_ids:
+                    pl = pos_obj.browse(l_id)
+                    line[2]['order_line_state_id'] = pl.order_line_state_id.id
                     pos_obj.browse(line[2].get('line_id')).write(line[2])
                     order.get('lines').remove(line)
             self.browse(order_id).write(self._order_fields(order))
@@ -349,11 +349,11 @@ class PosOrder(models.Model):
                         'journal': cash_journal,
                     })
                 else:
-                    order_id.add_payment({
-                       'amount': -order['amount_return'],
-                        'payment_date': time.strftime('%Y-%m-%d %H:%M:%S'),
-                        'payment_name': _('return'),
-                        'journal': cash_journal,
+                    order_id.add_payment({'amount': -order['amount_return'],
+                                          'payment_date':
+                                          time.strftime('%Y-%m-%d %H:%M:%S'),
+                                          'payment_name': _('return'),
+                                          'journal': cash_journal,
                     })
             return order_id
 
