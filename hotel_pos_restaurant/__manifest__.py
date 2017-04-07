@@ -13,8 +13,7 @@
     'data': ['views/pos_restaurent_view.xml',
              'views/hotel_pos_report.xml',
              'views/report_pos_management.xml',
-             'wizard/hotel_pos_wizard.xml',
-    ],
+             'wizard/hotel_pos_wizard.xml'],
     'qweb': ['static/src/xml/*.xml'],
     'auto_install': False,
     'installable': True

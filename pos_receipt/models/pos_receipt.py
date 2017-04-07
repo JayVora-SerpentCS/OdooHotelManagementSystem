@@ -252,7 +252,7 @@ class PosOrder(models.Model):
                               'product_id': order1.product_id.id,
                               'product_uom_qty': order1.qty,
                               'price_unit': order1.price_unit,
-                              'price_subtotal': order1.price_subtotal
+                              'price_subtotal': order1.price_subtotal,
                     }
                     sol_rec = so_line_obj.sudo().create(values)
                     hsl_obj.sudo().create({'folio_id': order_id.folio_id.id,
@@ -285,8 +285,7 @@ class PosOrder(models.Model):
                         }
                         sol_rec = so_line_obj.sudo().create(values)
                         val = {'folio_id': order_id.folio_id.id,
-                               'service_line_id': sol_rec.id,
-                        }
+                               'service_line_id': sol_rec.id}
                         hsl_obj.sudo().create(val)
                 order_id.folio_id.sudo().write({'folio_pos_order_ids':
                                                 [(4, order_id.id)]})
@@ -353,8 +352,7 @@ class PosOrder(models.Model):
                                           'payment_date':
                                           time.strftime('%Y-%m-%d %H:%M:%S'),
                                           'payment_name': _('return'),
-                                          'journal': cash_journal,
-                    })
+                                          'journal': cash_journal})
             return order_id
 
     @api.multi

@@ -16,7 +16,7 @@
              'security/ir.model.access.csv',
              'view/templates.xml',
              'view/pos_receipt_view.xml',
-             'view/kitchen_screen_data.xml'
+             'view/kitchen_screen_data.xml',
     ],
     'depends': ['point_of_sale', 'pos_options_bar'],
     'qweb': ['static/src/xml/pos_receipt.xml'],

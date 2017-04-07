@@ -58,8 +58,7 @@ class PosOrder(models.Model):
                         t_rs = res_table.reserver_seat
                         if(t_ac - t_rs) == 0:
                             vals = {'state': 'available',
-                                    'available_capacities': t_rs - t_ac
-                            }
+                                    'available_capacities': t_rs - t_ac}
                             tab_obj.browse(res_table.table_id.id).write(vals)
                         else:
                             if(t_ac - t_rs) > 0:
@@ -80,8 +79,7 @@ class PosOrder(models.Model):
                             if(t_ac - t_rs) > 0:
                                 rst_id = res_table.table_id.id
                                 val = {'state': 'available',
-                                       'available_capacities': t_rs - t_ac
-                                }
+                                       'available_capacities': t_rs - t_ac}
                                 tab_obj.browse(rst_id).write(val)
 
         return res
@@ -149,14 +147,12 @@ class PosOrder(models.Model):
                         res_id = res_tab_obj.browse(res_table.table_id.id)
                         if(rtac - rtrs) == 0:
                             vals = {'state': 'available',
-                                    'available_capacities': rtac - rtrs
-                            }
+                                    'available_capacities': rtac - rtrs}
                             res_id.write(vals)
                         else:
                             if(rtac - rtrs) > 0:
                                 vals = {'state': 'available',
-                                        'available_capacities': rtac - rtrs
-                                        }
+                                        'available_capacities': rtac - rtrs}
                                 res_id.write(vals)
             order_id = order_id[0]
             line_ids = [line.id for line in self.browse(order_id).lines]
@@ -176,8 +172,7 @@ class PosOrder(models.Model):
                     tab_id = tab_obj.browse(table_id)
                     tac_id = tab_id.available_capacities
                     vals = {'available_capacities': tac_id - int(qty),
-                            'state': 'available'
-                    }
+                            'state': 'available'}
                     tab_id.write(vals)
         return True
 
