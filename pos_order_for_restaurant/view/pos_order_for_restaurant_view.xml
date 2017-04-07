@@ -1,7 +1,6 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE xml>
 <odoo>
-    <data>
-
         <record model="ir.ui.view" id="view_pos_pos_extended_form">
             <field name="name">pos.order.extended</field>
             <field name="model">pos.order</field>
@@ -160,5 +159,4 @@
             sequence="30"
             groups="point_of_sale.group_pos_manager"/>
 
-    </data>
 </odoo>

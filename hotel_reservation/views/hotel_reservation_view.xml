@@ -236,17 +236,17 @@
                     <separator string="Room Reservation Summary" colspan="4" />
                 </header>
                 <sheet>
-	                <group colspan="4" col="4">
-	                   <div>
-                            <label for="date_from" string="Summary Period   "/>
-                             <field name="date_from" class="oe_inline"/>
+	            	<group colspan="4" col="4">
+	                	<div>
+                        	<label for="date_from" string="Summary Period"/>
+                            <field name="date_from" class="oe_inline"/>
                                         to
-                             <field name="date_to" class="oe_inline"/>
+                            <field name="date_to" class="oe_inline"/>
                         </div>
                     </group>
 	                <notebook>
-	                    <page string="Room Summary">
-	                        <field name="summary_header" colspan="4" invisible="1" />
+	                	<page string="Room Summary">
+	                    	<field name="summary_header" colspan="4" invisible="1" />
 	                        <field name="room_summary" colspan="4" invisible="1" />
 	                        <widget type="Room_Reservation"></widget>
 	                    </page>
