@@ -3,13 +3,11 @@
 
 import time
 import logging
-from odoo import netsvc, tools
+from odoo import tools
 from odoo.tools.translate import _
 from odoo.tools import float_is_zero
-from odoo import workflow
-from odoo import SUPERUSER_ID
 from odoo import api, fields, models
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -71,7 +69,7 @@ class PosOrderLine(models.Model):
     @api.model
     def orderline_state_id(self, pids, order_id):
         pos_obj = self.env['pos.order']
-        if pids != None:
+        if pids is not None:
             line_ids = [line.id for line in pos_obj.browse(order_id).lines]
             if pids in line_ids:
                 return self.browse(pids).order_line_state_id.id
@@ -134,16 +132,16 @@ class PosOrder(models.Model):
                     lp_n = line.product_id.name
                     q = line.qty
                     if ex_all_prd_ids == [] and ex_4_prd_ids == [] and cnt1:
-                        str1 = (lp_n + "_" + str(q) + "-" + str(line.id) + '-'
-                                + str(line.order_line_state_id.id) + '-' +
+                        str1 = (lp_n + "___" + str(q) + "-" + str(line.id) +
+                                '-' + str(line.order_line_state_id.id) + '-' +
                                 str(line.property_description))
                     if [[order.id]] == ex_all_prd_ids:
-                        str1 = (lp_n + "_" + str(q) + "-" + str(line.id) + '-'
-                                + str(line.order_line_state_id.id) + '-' +
+                        str1 = (lp_n + "___" + str(q) + "-" + str(line.id) +
+                                '-' + str(line.order_line_state_id.id) + '-' +
                                 str(line.property_description))
                     if [[order.id]] == ex_4_prd_ids and cnt <= 4:
-                        str1 = (lp_n + "_" + str(q) + "-" + str(line.id) + '-'
-                                + str(line.order_line_state_id.id) + '-' +
+                        str1 = (lp_n + "___" + str(q) + "-" + str(line.id) +
+                                '-' + str(line.order_line_state_id.id) + '-' +
                                 (line.property_description))
                     res.append(str1)
                 cnt = 0
@@ -219,10 +217,8 @@ class PosOrder(models.Model):
                         at_cap = res_table.table_id.available_capacities
                         rv_seat = res_table.reserver_seat
                         if(at_cap - r_seat) == 0:
-                            vals = {
-                                    'state': 'available',
-                                    'available_capacities': a_cap - rv_seat
-                            }
+                            vals = {'state': 'available',
+                                    'available_capacities': a_cap - rv_seat}
                             res_tab.browse(t_id).write(vals)
                         else:
                             if(at_cap - r_seat) > 0:
@@ -232,7 +228,7 @@ class PosOrder(models.Model):
                                 res_tab.browse(t_id).write()
             order_id = order_id[0]
             line_ids = [line.id for line in self.browse(order_id).lines]
-            self.env["pos.order.line"].browse(line_ids).write({"order_id":
+            self.env['pos.order.line'].browse(line_ids).write({"order_id":
                                                                order_id})
             self.browse(order_id).action_pos_order_cancel()
         return True
@@ -257,14 +253,13 @@ class PosOrder(models.Model):
                                   'product_uom_qty': order1.qty,
                                   'price_unit': order1.price_unit,
                                   'price_subtotal': order1.price_subtotal,
-                                  }
+                    }
                     sol_rec = so_line_obj.sudo().create(values)
                     hsl_obj.sudo().create({'folio_id': order_id.folio_id.id,
                                         'service_line_id': sol_rec.id})
                 order_id.folio_id.sudo().write({'folio_pos_order_ids':
-                                  [(4, order_id.id)]})
+                                                [(4, order_id.id)]})
             return [order_id.id, [o.id for o in order_id.lines]]
-
         if kitchen and order.get('id', False):
             line_ids = [o.id for o in self.browse(order_id).lines]
             line_data = list(order.get('lines'))
@@ -287,14 +282,14 @@ class PosOrder(models.Model):
                                       'product_uom_qty': order1.qty,
                                       'price_unit': order1.price_unit,
                                       'price_subtotal': order1.price_subtotal,
-                                      }
+                        }
                         sol_rec = so_line_obj.sudo().create(values)
                         val = {'folio_id': order_id.folio_id.id,
-                               'service_line_id': sol_rec.id
+                               'service_line_id': sol_rec.id,
                         }
                         hsl_obj.sudo().create(val)
                 order_id.folio_id.sudo().write({'folio_pos_order_ids':
-                                  [(4, order_id.id)]})
+                                                [(4, order_id.id)]})
             return [order_id, [o.id for o in self.browse(order_id).lines]]
 
         if not kitchen and not order.get('id', False):
@@ -360,7 +355,7 @@ class PosOrder(models.Model):
                         'payment_name': _('return'),
                         'journal': cash_journal,
                     })
-                return order_id
+            return order_id
 
     @api.multi
     def write(self, vals):
@@ -459,8 +454,11 @@ class pos_session(models.Model):
                 'pos.closing.journal_id_%s' % c_id,
                 default=session.config_id.journal_id.id)
 
-            move = pos_obj.with_context(force_company=c_id)._create_accnt_move(session.start_at, session.name, int(journal_id), c_id)
-            orders.with_context(force_company=c_id)._create_accnt_move_line(session, move)
+            move1 = pos_obj.with_context(force_company=c_id)
+            move = move1._create_accnt_move(session.start_at, session.name,
+                                            int(journal_id), c_id)
+            order = orders.with_context(force_company=c_id)
+            order._create_accnt_move_line(session, move)
             for order in session.order_ids.filtered(lambda o: o.state not in
                                                     ['done', 'invoiced',
                                                      'cancel']):

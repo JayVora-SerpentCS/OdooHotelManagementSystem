@@ -589,8 +589,8 @@ class HotelFolio(models.Model):
         order_ids = [folio.order_id.id for folio in self]
         room_lst = []
         sale_obj = self.env['sale.order'].browse(order_ids)
-        invoice_id = (sale_obj.action_invoice_create
-                       (grouped=False, final=False))
+        invoice_id = (sale_obj.action_invoice_create(grouped=False,
+                                                     final=False))
         for line in self:
             values = {'invoiced': True,
                       'hotel_invoice_id': invoice_id

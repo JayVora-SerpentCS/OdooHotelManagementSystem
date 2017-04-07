@@ -8,12 +8,12 @@ from odoo.exceptions import UserError
 class pos_config(models.Model):
     _inherit = 'pos.config'
 
-    display_delivery = fields.Boolean("Display Delivery Button", help='''If
-                                        Display Delivery Button is true than
-                                        pos shows a delivery button''',
-                                        default=True)
+    display_delivery = fields.Boolean("Display Delivery Button",
+                                      help='''If Display Delivery Button is
+                                      true than POS shows delivery button''',
+                                      default=True)
     display_parcel = fields.Boolean("Display Parcel Button", help='''If Display
-                                    Parcel Button is true than pos shows a
+                                    Parcel Button is true than POS shows a
                                     parcel button.''',
                                     default=True)
 
@@ -59,7 +59,8 @@ class PosOrder(models.Model):
                         if(t_ac - t_rs) == 0:
                             vals = {
                                     'state': 'available',
-                                    'available_capacities': t_rs - t_ac}
+                                    'available_capacities': t_rs - t_ac
+                            }
                             tab_obj.browse(res_table.table_id.id).write(vals)
                         else:
                             if(t_ac - t_rs) > 0:
@@ -80,9 +81,9 @@ class PosOrder(models.Model):
                             if(t_ac - t_rs) > 0:
                                 rst_id = res_table.table_id.id
                                 val = {
-                                        'state': 'available',
-                                        'available_capacities': t_rs - t_ac
-                                        }
+                                       'state': 'available',
+                                       'available_capacities': t_rs - t_ac
+                                }
                                 tab_obj.browse(rst_id).write(val)
 
         return res
@@ -105,7 +106,7 @@ class PosOrder(models.Model):
                 reserv_id = self.env["table.reserverd"].create(reserve).id
                 reserve_table_ids.append((4, reserv_id))
             order_fields['reserved_table_ids'] = reserve_table_ids
-        if not ui_order.get('id', False) and  table_data:
+        if not ui_order.get('id', False) and table_data:
             for reserve in table_data:
                 reserv_id = self.env["table.reserverd"].create(reserve).id
                 reserve_table_ids.append((4, reserv_id))
@@ -135,8 +136,8 @@ class PosOrder(models.Model):
         if is_kitchen_screen:
             for order in self.browse(order_id):
                 for line in order.lines:
-                    if (line.order_line_state_id.id == 3 or
-                        line.order_line_state_id.id != 1):
+                    if(line.order_line_state_id.id == 3 or
+                       line.order_line_state_id.id != 1):
                         line_ids.append(line.id)
             if line_ids:
                 return False
@@ -149,11 +150,11 @@ class PosOrder(models.Model):
                         res_tab_obj = self.env["restaurant.table"]
                         res_id = res_tab_obj.browse(res_table.table_id.id)
                         if(rtac - rtrs) == 0:
-                                vals = {
-                                        'state': 'available',
-                                        'available_capacities': rtac - rtrs
-                                }
-                                res_id.write(vals)
+                            vals = {
+                                    'state': 'available',
+                                    'available_capacities': rtac - rtrs
+                            }
+                            res_id.write(vals)
                         else:
                             if(rtac - rtrs) > 0:
                                 vals = {
@@ -180,7 +181,8 @@ class PosOrder(models.Model):
                     tac_id = tab_id.available_capacities
                     vals = {
                             'available_capacities': tac_id - int(qty),
-                            'state': 'available'}
+                            'state': 'available'
+                    }
                     tab_id.write(vals)
         return True
 
@@ -188,10 +190,10 @@ class PosOrder(models.Model):
     def remove_order(self, second_order_id=False):
         if self.sudo().ids and second_order_id:
             line_ids = [line.id for line in self.browse(second_order_id).lines]
-            self.env["pos.order.line"].browse(line_ids).write({"order_id":
-                                                               ids[0]})
+            self.env['pos.order.line'].browse(line_ids).write({"order_id":
+                                                               self.ids[0]})
             self.browse(second_order_id).action_pos_order_cancel()
-        if not ids and second_order_id:
+        if not self.ids and second_order_id:
             self.browse(second_order_id).action_pos_order_cancel()
         return True
 
@@ -240,8 +242,7 @@ class restaurant_table(models.Model):
         for table_rec in table_ids:
             table = self.browse(table_rec['table_id'])
             tac = table.available_capacities
-            if (int(tac) - int(table_rec['reserver_seat']
-                                                      )) == 0:
+            if (int(tac) - int(table_rec['reserver_seat'])) == 0:
                 table.write({'state': 'available', 'available_capacities':
                              int(tac) - int(table_rec['reserver_seat'])})
             else:
@@ -287,9 +288,9 @@ class restaurant_table(models.Model):
             reserve_tab_obj = self.env["table.reserverd"]
             for table in self:
                 reserve_ids = reserve_tab_obj.search([('table_id', '=',
-                                                         table.id),
-                                                        ("order_id.state", "=",
-                                                         "draft")])
+                                                       table.id),
+                                                      ('order_id.state', '=',
+                                                       'draft')])
                 if reserve_ids:
                     raise UserError(_("Table is not empty!"))
                 else:

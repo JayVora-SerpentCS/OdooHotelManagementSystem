@@ -10,8 +10,7 @@
     'depends': ['hotel'],
     'license': 'AGPL-3',
     'demo': ['views/hotel_pos_data.xml'],
-    'data': [
-             'views/pos_restaurent_view.xml',
+    'data': ['views/pos_restaurent_view.xml',
              'views/hotel_pos_report.xml',
              'views/report_pos_management.xml',
              'wizard/hotel_pos_wizard.xml'
