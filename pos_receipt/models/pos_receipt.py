@@ -119,6 +119,7 @@ class PosOrder(models.Model):
         order.table_name = table_name
         return res
 
+    @api.multi
     def product_line(self):
         res1 = {}
         cnt = 0
