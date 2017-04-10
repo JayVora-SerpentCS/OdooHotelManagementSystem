@@ -88,10 +88,9 @@ class PosOrderLine(models.Model):
 class PosOrder(models.Model):
     _inherit = 'pos.order'
 
-    property_description = fields.Text('Property Description')
-    global ex_all_prd_ids, ex_4_prd_ids, order_ids
+    global ex_all_prd_ids, ex_f_prd_ids, order_ids
     ex_all_prd_ids = []
-    ex_4_prd_ids = []
+    ex_f_prd_ids = []
     order_ids = []
 
     def get_parcel_name(self):
@@ -122,18 +121,21 @@ class PosOrder(models.Model):
 
     @api.multi
     def product_line(self):
+        print "------------method calllllllll----"
         res1 = {}
         cnt = 0
         for order in self:
+            print "SELF++++++++++++++++++++", self
             res = []
             str1 = ""
             if order.state != 'paid':
                 for line in order.lines:
+                    print ":::::::::::CALL:::::::::::::::"
                     cnt = cnt + 1
                     cnt1 = cnt <= 4
                     lp_n = line.product_id.name
                     q = line.qty
-                    if ex_all_prd_ids == [] and ex_4_prd_ids == [] and cnt1:
+                    if ex_all_prd_ids == [] and ex_f_prd_ids == [] and cnt1:
                         str1 = (lp_n + "___" + str(q) + "-" + str(line.id) +
                                 '-' + str(line.order_line_state_id.id) + '-' +
                                 str(line.property_description))
@@ -141,7 +143,7 @@ class PosOrder(models.Model):
                         str1 = (lp_n + "___" + str(q) + "-" + str(line.id) +
                                 '-' + str(line.order_line_state_id.id) + '-' +
                                 str(line.property_description))
-                    if [[order.id]] == ex_4_prd_ids and cnt <= 4:
+                    if [[order.id]] == ex_f_prd_ids and cnt <= 4:
                         str1 = (lp_n + "___" + str(q) + "-" + str(line.id) +
                                 '-' + str(line.order_line_state_id.id) + '-' +
                                 (line.property_description))
@@ -149,8 +151,8 @@ class PosOrder(models.Model):
                 cnt = 0
                 if ex_all_prd_ids:
                     ex_all_prd_ids.remove(self.sudo().ids)
-                if ex_4_prd_ids:
-                    ex_4_prd_ids.remove(self.sudo().ids)
+                if ex_f_prd_ids:
+                    ex_f_prd_ids.remove(self.sudo().ids)
                 res1[order.id] = res
                 order.product_details = res
         return res1
@@ -158,14 +160,12 @@ class PosOrder(models.Model):
     def show_all_product(self):
         if self.sudo().ids in order_ids:
             order_ids.remove(self.sudo().ids)
-            ex_4_prd_ids.append(self.sudo().ids)
+            ex_f_prd_ids.append(self.sudo().ids)
         else:
             order_ids.append(self.sudo().ids)
             ex_all_prd_ids.append(self.sudo().ids)
         return True
 
-    asset_method_time = fields.Char(_compute_='_get_asset_method_time',
-                                    string='Asset Method Time', readonly=True)
     order_line_state_id = fields.Many2one('pos.order.line.state',
                                           "Order Line State")
     parcel_name = fields.Char(_compute_='get_parcel_name',
@@ -173,7 +173,6 @@ class PosOrder(models.Model):
     table_name = fields.Char(_compute_='get_table_name', string='Table Name',
                              store=True)
     product_details = fields.One2many("pos.order.line",
-                                      _compute_='product_line',
                                       string='Product Details')
     order_line_status = fields.Char("Orderline Status", default='draft')
 
@@ -194,9 +193,9 @@ class PosOrder(models.Model):
     def close_order(self, order_id):
         ir_module_module_object = self.env['ir.module.module']
         res_tab = self.env["restaurant.table"]
-        a = ('name', '=', 'pos_order_for_restaurant')
+        posres = ('name', '=', 'pos_order_for_restaurant')
         is_restaurant = ir_module_module_object.search([('state', '=',
-                                                         'installed'), a])
+                                                         'installed'), posres])
         line_ids = []
         for order in self.browse(order_id):
             for line in order.lines:
