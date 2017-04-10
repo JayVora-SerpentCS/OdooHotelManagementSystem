@@ -160,7 +160,7 @@
                     <field name='parcel_name'/>
                     <field name="table_name"/>
                     <field name="partner_id" />
-                    <field name="product_details"/>
+                    <!-- <field name="product_details"/> -->
                     <field name="order_line_status"/>
                     <templates>
                         <t t-name="kanban-box">
@@ -196,7 +196,7 @@
                                             </t>
                                              <div> <b>Created Time : </b> <field name="create_date"/></div><br/>
                                         </a>
-                                        <t t-foreach="record.product_details.raw_value" t-as="line">
+                                        <!-- <t t-foreach="record.product_details.raw_value" t-as="line">
                                             <t t-if="line.split('____')[1].split('-')[2] == '3'"> 
                                                 <div style="background:yellowgreen;">
                                                 <a name="%(action_pos_order_line_view_extended)d" type="action"> 
@@ -222,10 +222,10 @@
                                                     <br/><br/>
                                                 </div>
                                             </t>
-                                        </t>
+                                        </t> -->
                                     </div>
                                 </div>
-                                <t t-if="record.product_details.raw_value.length gt 3">
+                                <!-- <t t-if="record.product_details.raw_value.length gt 3">
                                     <button onmouseover="change_button_color(this)" onmouseleave="button_color_change(this)" t-att-data="record.id.raw_value" t-att-id="record.id.raw_value" style="background:white;width:98%;color:cadetblue;border-color:antiquewhite;height:30px;"  name="show_all_product" type="object">
                                         Show More / Less...
                                     </button>
@@ -234,9 +234,9 @@
                                     <br/><button  onclick="clear_all_product_line(this)" t-att-data="'clear_'+record.id.raw_value" t-att-id="record.id.raw_value" name="%(action_pos_pos_kanban)d" type="action" style="background:white;width:98%;color:cadetblue;border-color:antiquewhite;height:30px;">
                                         Clear All...
                                     </button>
-                                </t>
+                                </t> -->
                             </div>
-                            <script>
+                            <!-- <script>
                                 function clear_all_product_line(str1){
                                     var self = this;
                                     self.pos_order_dataset = new self.openerp.web.DataSetSearch(self, 'pos.order', {}, [] );
@@ -276,7 +276,7 @@
                                     $("#"+str.id).css("background","white");
                                 }
                            </script>
-                        </t>
+ -->                        </t>
                     </templates>
                 </kanban>
             </field>
