@@ -119,44 +119,6 @@ class PosOrder(models.Model):
         order.table_name = table_name
         return res
 
-    @api.multi
-    def product_line(self):
-        print "------------method calllllllll----"
-        res1 = {}
-        cnt = 0
-        for order in self:
-            print "SELF++++++++++++++++++++", self
-            res = []
-            str1 = ""
-            if order.state != 'paid':
-                for line in order.lines:
-                    print ":::::::::::CALL:::::::::::::::"
-                    cnt = cnt + 1
-                    cnt1 = cnt <= 4
-                    lp_n = line.product_id.name
-                    q = line.qty
-                    if ex_all_prd_ids == [] and ex_f_prd_ids == [] and cnt1:
-                        str1 = (lp_n + "___" + str(q) + "-" + str(line.id) +
-                                '-' + str(line.order_line_state_id.id) + '-' +
-                                str(line.property_description))
-                    if [[order.id]] == ex_all_prd_ids:
-                        str1 = (lp_n + "___" + str(q) + "-" + str(line.id) +
-                                '-' + str(line.order_line_state_id.id) + '-' +
-                                str(line.property_description))
-                    if [[order.id]] == ex_f_prd_ids and cnt <= 4:
-                        str1 = (lp_n + "___" + str(q) + "-" + str(line.id) +
-                                '-' + str(line.order_line_state_id.id) + '-' +
-                                (line.property_description))
-                    res.append(str1)
-                cnt = 0
-                if ex_all_prd_ids:
-                    ex_all_prd_ids.remove(self.sudo().ids)
-                if ex_f_prd_ids:
-                    ex_f_prd_ids.remove(self.sudo().ids)
-                res1[order.id] = res
-                order.product_details = res
-        return res1
-
     def show_all_product(self):
         if self.sudo().ids in order_ids:
             order_ids.remove(self.sudo().ids)
@@ -172,8 +134,6 @@ class PosOrder(models.Model):
                               string='Parcel Name', store=True)
     table_name = fields.Char(_compute_='get_table_name', string='Table Name',
                              store=True)
-    product_details = fields.One2many("pos.order.line",
-                                      string='Product Details')
     order_line_status = fields.Char("Orderline Status", default='draft')
 
     @api.model
