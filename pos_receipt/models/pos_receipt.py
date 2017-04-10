@@ -134,6 +134,8 @@ class PosOrder(models.Model):
                               string='Parcel Name', store=True)
     table_name = fields.Char(_compute_='get_table_name', string='Table Name',
                              store=True)
+    product_details = fields.One2many('pos.order.line',
+                                      string='Product Details')
     order_line_status = fields.Char("Orderline Status", default='draft')
 
     @api.model
