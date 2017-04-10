@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- vim:fdn=3:
+-->
+<odoo>
+    <data>
+        <template id="assets" inherit_id="point_of_sale.assets">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/pos_options_bar/static/src/js/jquery.js"></script>
+                <script type="text/javascript" src="/pos_options_bar/static/src/js/pos_options.js"></script>
+            </xpath>
+            <xpath expr="//link[@id='pos-stylesheet']" position="after"> 
+                <link rel="stylesheet" href="/pos_options_bar/static/src/css/pos_options.css" />
+          </xpath>
+        </template>
+    </data>
+</odoo>

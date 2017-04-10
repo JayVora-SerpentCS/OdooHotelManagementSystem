@@ -3,7 +3,6 @@
 <odoo>
 
     <!--Template for hotel restaurant -->
-
     <template id="report_hotel_order_kot">
         <t t-call="report.html_container">
             <t t-foreach="docs" t-as="o">

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE xml>
+<odoo>
+        <record model="ir.ui.view" id="view_pos_pos_extended_form">
+            <field name="name">pos.order.extended</field>
+            <field name="model">pos.order</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_pos_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="pflag" invisible="1"/>
+                    <field name="phone" />
+                    <field name="parcel" attrs="{'invisible': [('pflag','=', False)]}"/>
+                </xpath>
+                <xpath expr="/form/sheet/notebook/page[@name='extra']/group/field[@name='pos_reference']" position="before">
+                    <field name='driver_name' />
+                </xpath>
+                <xpath expr="//notebook/page[@name='extra']" position="before">
+                    <page string="Tables">
+                        <field name="reserved_table_ids">
+                            <tree editable="bottum">
+                                <field name="table_id"/>
+                                <field name="order_id"/>
+                                <field name="reserver_seat"/>
+                            </tree> 
+                        </field>
+                    </page>
+                </xpath>
+                <xpath expr="//field[@name='lines']/tree/field[@name='product_id']" position="after">
+                    <field name="note"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_pos_order_tree_extended">
+            <field name="name">pos.order.tree.extended</field>
+            <field name="model">pos.order</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_order_tree" />
+            <field name="arch" type="xml">
+                <field name="pos_reference" position="after">
+                    <field name="table_name"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_pos_config_inherit">
+            <field name="name">pos.config.inherit</field>
+            <field name="model">pos.config</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="point_of_sale.view_pos_config_form" />
+            <field name="arch" type="xml">
+                <group name="features" position="before">
+                    <group string="Button Configuration" col="4">
+                        <field name="display_delivery"/>
+                        <field name="display_parcel"/>
+                    </group>
+                </group>
+                <field name="floor_ids" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+            </field>
+        </record>
+
+       <record model="ir.ui.view" id="view_restaurant_floor_form_inherit">
+            <field name="name">Restaurant Floors</field>
+            <field name="model">restaurant.floor</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="pos_restaurant.view_restaurant_floor_form" />
+            <field name="arch" type="xml">
+                <field name="pos_config_id" position="replace"/>
+            </field>
+        </record>
+
+       <record model="ir.ui.view" id="view_restaurant_floor_tree_inherit">
+            <field name="name">Restaurant Floors</field>
+            <field name="model">restaurant.floor</field>
+            <field name="inherit_id" ref="pos_restaurant.view_restaurant_floor_tree" />
+            <field name="arch" type="xml">
+                <field name="pos_config_id" position="replace"/>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="pos_restaurant.view_restaurant_table_form">
+            <field name="name">Restaurant Table</field>
+            <field name="model">restaurant.table</field>
+            <field name="arch" type="xml">
+                <form string="Restaurant Table">
+                    <header>
+                        <button name="action_available" string="Available" type="object" states="reserved" class="oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_visible="available,reserved" statusbar_colors='{"reserved":"red"}'/>
+                    </header>
+                    <sheet> 
+                        <div class="oe_edit_only">
+                        <label for="name" string="Table Name"/>
+                        </div>
+                        <div class='oe_title'>
+                           <group colspan = "4">
+                               <h1><field name="name"/></h1>
+                           </group>
+                        </div>
+                        <group col="4" string="Appearance">
+                            <field name="capacities"/>
+                            <field name="available_capacities"/>
+                            <field name="floor_id"/>
+                             <field name="shape"/>
+                             <field name="position_h"/>
+                             <field name="position_v"/>
+                             <field name="width"/>
+                             <field name="height"/>
+                             <field name="color"/>
+                             <field name="active"/>
+                        </group>
+                        <group cols="4" string="Users">
+                            <field name="users_ids" widgets="many2many" nolabel="1"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="restaurant_table_tree_view" model="ir.ui.view">
+            <field name="name">Restaurant Table Tree</field>
+            <field name="model">restaurant.table</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Restaurant Table Tree">
+                    <field name="name" />
+                    <field name="capacities"/>
+                    <field name="state"/>
+                    <button name="action_available" icon="gtk-apply" string="Available" type="object" states="reserved" class="oe_highlight"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="restaurant_table_action" model="ir.actions.act_window">
+            <field name="name">Restaurant Table</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">restaurant.table</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" eval="False" />
+        </record>
+
+        <menuitem 
+            name="Floor Planning" 
+            parent="point_of_sale.menu_point_root"
+            id="restaurant_main_menu" sequence="99"/>
+        <menuitem
+            parent="restaurant_main_menu"
+            action="pos_restaurant.action_restaurant_floor_form"
+            id="pos_restaurant.menu_restaurant_floor_all"
+            sequence="30"
+            groups="point_of_sale.group_pos_manager"/>
+        <menuitem
+            parent="restaurant_main_menu"
+            action="restaurant_table_action"
+            id="menu_restaurant_table"
+            sequence="30"
+            groups="point_of_sale.group_pos_manager"/>
+
+</odoo>

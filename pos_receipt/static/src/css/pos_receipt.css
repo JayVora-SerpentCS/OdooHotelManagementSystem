@@ -1,0 +1,216 @@
+/*.......ui-dialog style.......*/
+.pos .modal-dialog {
+    z-index: 0 !important;
+}
+.alert_dialog_button{
+    width: 110px; 
+    height: 40px;
+    text-align: center;
+    border-radius: 2px;
+    margin: 3px;
+    margin-top: 10px; 
+    margin-right: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid #cacaca;
+    background: #e2e2e2;
+    color: #555555;
+}
+.alert_dialog{
+    float: right;
+    width: 110px;
+    height: 52px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 2px;
+    margin: 3px;
+    margin-top: 10px;
+    margin-right: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 1px solid #cacaca;
+    background: #e2e2e2;
+}
+.alert_dialog_warning{
+    font-size: 20px !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    background: #F0EEEE !important;
+    background-color: #F0EEEE !important;
+    height:185px !important;
+    color: #555555;
+}
+.pincode_dialog_warning{
+    font-size: 20px !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    background: #F0EEEE !important;
+    background-color: #F0EEEE !important;
+    height : 140px !important;
+    color: #555555;
+}
+.alert_header{
+    border-bottom: 1px solid;
+    padding: 4px;
+    color: white;
+    background: slategray !important; 
+    position: relative;
+}
+.ui-dialog{
+    z-index: 1002;
+    top: 96.5px;
+    left: 395.5px;
+    background-color: #F0EEEE !important; 
+}
+.ui-widget-overlay{
+  /* height: 1311px;*/
+   background: black;
+   filter: alpha(opacity=30);
+   opacity: 0.3;
+   margin: -8px;
+   margin-top: -25px;
+}
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+    float: right;
+}
+.ui-dialog .ui-dialog-buttonpane {
+    height: 40px;
+    margin-top : 5px;
+}
+.ui-dialog{
+    background: white;
+    padding: 10px;
+    border-radius: 3px;
+    font-family: sans-serif;
+    box-shadow: 0px 10px 40px rgba(0,0,0,0.4);
+}
+.ui-dialog button{
+    padding: 8px;
+    min-width: 48px;
+}
+.ui-dialog .ui-icon-closethick{
+    float: right;
+}
+.ui-dialog .ui-dialog-content .ui-widget-content{
+    overflow-y: auto;
+}
+.ui-dialog .ui-dialog-titlebar {
+   font-size: 18px;
+   padding: 7px 15px;
+   font-weight: bold;
+   color: gray;
+   border-bottom: 1px solid #cacaca;
+   -moz-border-radius: 2px 2px 0 0;
+   -webkit-border-radius: 2px 2px 0 0;
+   border-radius: 2px 2px 0 0;
+}
+.ui-dialog .ui-dialog-buttonpane{
+   border-top: 1px solid #ddd;
+   height : 45px;
+}
+.ui-dialog .ui-dialog-buttonpane button {
+ margin: 6px 4px 0 0;
+}
+.ui-dialog .ui-dialog-titlebar-close {
+   padding: 0;
+   float:right;
+   text-indent:1px;
+}
+.ui-icon-closethick{
+   background-position: -96px -128px;
+}
+.ui-dialog-titlebar-close:before {
+   content: "×";
+   font-size: 18px;
+   font-weight: bold;
+   line-height: 16px;
+   color: black;
+   text-shadow: 0 1px 0 white;
+   padding: 0;
+   cursor: pointer;
+   background: transparent;
+   border: 0;
+}
+.ui-dialog .ui-dialog-titlebar-close .ui-icon-closethick {
+   display: none;
+}
+.ui-dialog .client-detail {
+    line-height: 45px;    
+}
+.ui-dialog .client-detail input {
+    height: 30px;
+    width: 225px;
+    font-size: 18px;
+}
+.ui-dialog .client-details-box{
+    position: relative;
+    font-size: 18px;
+}
+.ui-dialog .client-details-box .client-detail > .label{
+    font-weight: bold;
+    display: inline-block;
+    width: 64px;
+    text-align: right;
+    margin-right: 23px;
+}
+
+/*.......sequence popup style.......*/
+.sequence_popup{
+   height: 570px !important;
+   width: 90% !important;
+   font-size: 16px !important;
+}
+.sequence_popup .container{
+    max-height:445px;
+    overflow:hidden;
+    overflow-y:auto;
+}
+.row {
+    margin-right: -15px;
+    margin-left: -15px;
+}
+.col-sm-5, .col-xs-6{
+    position: relative;
+    min-height: 1px;
+}
+.col-xs-6 {
+    float: left;
+}
+.col-xs-6 {
+    width: 50%;
+}
+@media (min-width: 768px) {
+    .col-sm-5, .col-sm-6
+        float: left;
+    }
+    .col-sm-6 {
+        width: 50%;
+    }
+    .col-sm-5 {
+        width: 41.66666667%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .table-bordered {
+       border: 1px solid #ddd;
+    }
+    .table-bordered > thead > tr > th,
+    .table-bordered > tbody > tr > th,
+    .table-bordered > tfoot > tr > th,
+    .table-bordered > thead > tr > td,
+    .table-bordered > tbody > tr > td,
+    .table-bordered > tfoot > tr > td {
+       border: 1px solid #ddd;
+    }
+    .table-bordered > thead > tr > th,
+    .table-bordered > thead > tr > td {
+         border-bottom-width: 2px;
+    }
+}
+
+.text-info{
+    color:blue !important;
+}

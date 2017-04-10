@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+
+        <record id="pos_restaurant.table_01" model="restaurant.table">
+            <field name="name">Table1</field>
+            <field name="capacities">6</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_02" model="restaurant.table">
+            <field name="name">Table2</field>
+            <field name="capacities">5</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_03" model="restaurant.table">
+           <field name="name">Table3</field>
+            <field name="capacities">7</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_04" model="restaurant.table">
+            <field name="name">Table4</field>
+            <field name="capacities">4</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_05" model="restaurant.table">
+            <field name="name">Table5</field>
+            <field name="capacities">8</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_06" model="restaurant.table">
+            <field name="name">Table6</field>
+            <field name="capacities">6</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_07" model="restaurant.table">
+            <field name="name">Table7</field>
+            <field name="capacities">7</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_08" model="restaurant.table">
+            <field name="name">Table8</field>
+            <field name="capacities">8</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_09" model="restaurant.table">
+            <field name="name">Table9</field>
+            <field name="capacities">8</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_10" model="restaurant.table">
+            <field name="name">Table10</field>
+            <field name="capacities">5</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_11" model="restaurant.table">
+           <field name="name">Table11</field>
+            <field name="capacities">8</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_21" model="restaurant.table">
+            <field name="name">Table12</field>
+            <field name="capacities">5</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+         <record id="pos_restaurant.table_22" model="restaurant.table">
+            <field name="name">Table13</field>
+            <field name="capacities">7</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_23" model="restaurant.table">
+            <field name="name">Table14</field>
+            <field name="capacities">8</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_24" model="restaurant.table">
+            <field name="name">Table15</field>
+            <field name="capacities">5</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+             <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_25" model="restaurant.table">
+            <field name="name">Table16</field>
+            <field name="capacities">4</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_26" model="restaurant.table">
+            <field name="name">Table17</field>
+            <field name="capacities">7</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_27" model="restaurant.table">
+            <field name="name">Table18</field>
+            <field name="capacities">4</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_28" model="restaurant.table">
+            <field name="name">Table19</field>
+            <field name="capacities">10</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_29" model="restaurant.table">
+            <field name="name">Table20</field>
+            <field name="capacities">4</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+        </record>
+
+        <record id="pos_restaurant.table_30" model="restaurant.table">
+            <field name="name">Table21</field>
+            <field name="capacities">6</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_31" model="restaurant.table">
+            <field name="name">Table22</field>
+            <field name="capacities">5</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+        <record id="pos_restaurant.table_32" model="restaurant.table">
+            <field name="name">Table23</field>
+            <field name="capacities">7</field>
+            <field name="active">1</field>
+            <field name="users_ids" eval="[(6,0,[ref('base.user_root')])]"/>
+            <field name="color"></field>
+        </record>
+
+    </data>
+</odoo>

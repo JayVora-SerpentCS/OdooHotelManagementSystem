@@ -3,8 +3,7 @@
 <odoo>
 
     <menuitem id="hotel_management_menu" name="Hotel Management" />
-    <!-- web_icon="data/hotel-grey.png" -->
-    <!-- web_icon_hover="data/hotel-color.png" -->
+    
     <menuitem id="hotel_configuration_menu" name="Configuration"
         sequence="20" parent="hotel_management_menu" />
     <menuitem id="hotel_report_menu" name="Pdf Reports" sequence="6"
@@ -43,7 +42,7 @@
                 <sheet>
                     <group>
                         <field name="name" colspan="1" />
-                        <field name="sequence" select="1" />
+                        <field name="sequence"/>
                     </group>
                 </sheet>
             </form>
@@ -57,7 +56,7 @@
         <field name="arch" type="xml">
             <tree string=" Hotel Floors">
                 <field name="name" colspan="1" />
-                <field name="sequence" select="1" />
+                <field name="sequence"/>
             </tree>
         </field>
     </record>
@@ -83,9 +82,8 @@
             <form string=" Hotel Room Type">
                 <sheet>
                     <group>
-                        <field name="name" select="1" />
-                        <field name="parent_id" domain="[('isroomtype','=',True)]"
-                            select="1" />
+                        <field name="name"/>
+                        <field name="parent_id" domain="[('isroomtype','=',True)]"/>
                         <field name="isroomtype" invisible="1" />
                     </group>
                 </sheet>
@@ -172,18 +170,17 @@
                 <sheet>
                     <h1>
                         <label string="Amenity" />
-                        <field name="name" select="1" />
+                        <field name="name"/>
                     </h1>
                     <group>
-                        <field name="default_code" select="1" />
+                        <field name="default_code"/>
                     </group>
                     <notebook>
                         <page string="Information">
                             <group colspan="4" col="4">
                                 <field name="type" select="2" string="Amenity Type" />
                                 <field name="product_manager" select="2" string="Amenity manager" />
-                                <field name="categ_id" select="1"
-                                    domain="[('isamenitytype','=',True)]" />
+                                <field name="categ_id" domain="[('isamenitytype','=',True)]" />
                                 <field name="uom_id" />
                                 <field name="uom_po_id" />
                             </group>
@@ -204,8 +201,6 @@
                                 <field name="sale_ok" select="2" />
                                 <field name="standard_price" />
                                 <field name="rental" select="2" />
-                                <!-- <field name="uos_id" /> -->
-                                <!-- <field name="uos_coeff" /> -->
                             </group>
                             <newline />
                             <group>
@@ -235,7 +230,7 @@
         <field name="arch" type="xml">
             <search string="Hotel Room Amenities">
                 <field name="name" />
-                <field name="categ_id" select="1" />
+                <field name="categ_id"/>
                 <field name="list_price" string="ty rate" />
                 <newline />
                 <group expand="0" string="Group By...">
@@ -253,7 +248,7 @@
         <field name="arch" type="xml">
             <tree string="Hotel Room Amenities">
                 <field name="name" />
-                <field name="categ_id" select="1" />
+                <field name="categ_id"/>
                 <field name="list_price" string="Ty rate" invisible="1" />
             </tree>
         </field>
@@ -285,7 +280,7 @@
                     <div class="oe_title">
                         <label for="name" string="Name" />
                         <h1>
-                            <field name="name" select="1" />
+                            <field name="name"/>
                         </h1>
                         <label for="status" string="Status" />
                         <h2>
@@ -324,8 +319,6 @@
                                 <field name="rental" select="2" />
                                 <field name="standard_price" />
                                 <field name="cost_method" string="Cost Method" />
-                                <!-- <field name="uos_id" /> -->
-                                <!-- <field name="uos_coeff" /> -->
                                 <newline />
                             </group>
                             <newline />
@@ -373,7 +366,7 @@
         <field name="arch" type="xml">
             <search string="Hotel Room">
                 <field name="name" />
-                <field name="categ_id" select="1" />
+                <field name="categ_id"/>
                 <field name="list_price" string="Room rate" />
                 <field name="status" string="Status" />
                 <newline />
@@ -392,7 +385,7 @@
         <field name="arch" type="xml">
             <tree string="Hotel Room">
                 <field name="name" />
-                <field name="categ_id" select="1" />
+                <field name="categ_id"/>
                 <field name="list_price" string="Room rate" />
                 <field name="status" />
                 <field name="capacity" />
@@ -506,35 +499,15 @@
                 <header>
                     <button name="action_confirm" states="draft" string="Confirm Sale"
                         class="btn-primary" type="object" />
-                    <!-- <button name="order_confirm" string="Confirm Folio" states="draft" 
-                        icon="gtk-apply" class="oe_highlight"/> -->
-                    <!-- <button name="invoice_recreate" string="Recreate Invoice" states="invoice_except" 
-                        icon="gtk-redo" class="oe_highlight"/> -->
-                    <!-- <button name="invoice_corrected" string="Invoice Corrected" states="invoice_except" 
-                        icon="gtk-paste-v" class="oe_highlight"/> -->
-                    <!-- <button name="ship_recreate" string="Recreate Procurement" states="shipping_except" 
-                        icon="gtk-redo" class="oe_highlight"/> -->
-                    <!-- <button name="ship_corrected" string="Procurement Corrected" states="shipping_except" 
-                        icon="gtk-paste-v" class="oe_highlight"/> -->
-                    <!-- <button name="manual_invoice" states="manual" string="Create Invoice" 
-                        icon="gtk-new" class="oe_highlight"/> -->
                     <button name="%(sale.action_view_sale_advance_payment_inv)d"
-                        string="Create Invoice" type="action" class="btn-primary" states="sale"
-                        attrs="{'invisible': [('invoice_status', '!=', 'to invoice')]}" />
-                    <!-- <button name="ship_cancel" string="Cancel Folio" states="shipping_except" 
-                        icon="gtk-cancel" class="oe_highlight oe_highlight" /> -->
+                        string="Create Invoice" type="action" class="btn-primary"
+                        attrs="{'invisible': [('invoice_status', '!=', 'to_invoice'), ('hotel_invoice_id', '!=', False)]}" />
                     <button name="action_cancel_draft" states="cancel" string="Set to Draft"
                         type="object" icon="fa-check-square-o" class="oe_highlight" />
                     <button name="action_cancel" string="Cancel Folio" states="sale"
                         type="object" icon="fa-close" class="oe_highlight" />
                     <button name="action_cancel" string="Cancel Folio" states="draft"
                         icon="fa-close" type="object" class="oe_highlight" />
-                    <!-- <button name="action_cancel" string="Cancel Folio" states="manual,progress" 
-                        type="object" icon="gtk-cancel" class="oe_highlight"/> -->
-                    <!-- <button name="cancel" string="Cancel Folio" states="draft" icon="gtk-cancel" 
-                        class="oe_highlight"/> -->
-                    <!-- <button name="invoice_cancel" string="Cancel Folio" states="invoice_except" 
-                        icon="gtk-cancel" class="oe_highlight"/> -->
                     <button name="action_done" type="object" string="Set to Done"
                         states="sale" attrs="{'invisible': [('invoice_status', '!=', 'invoiced')]}"
                         help="If a Hotel Folio is done, you cannot modify it manually anymore. However, you will still be able to invoice or deliver. This is used to freeze the Hotel Folio." />
@@ -553,10 +526,8 @@
                     <group colspan="4" col="4">
                         <field name="date_order" />
                         <field name="warehouse_id" string="Branch" />
-                        <!-- <field name="invoiced"/> -->
                         <field name="invoice_status" />
-                        <field name="hotel_invoice_id" states='progress,done,cancel'
-                            readonly="1" />
+                        <field name="hotel_invoice_id" states='sale,done,cancel' readonly="1"/>
                     </group>
                     <notebook colspan="4">
                         <page string="Folio">
@@ -589,7 +560,7 @@
                                                     invisible="1" />
                                                 <field name="product_id"
                                                     context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'uom':product_uom}"
-                                                    select="1" domain="[('isroom','=',True)]" string="Room No" />
+                                                    domain="[('isroom','=',True)]" string="Room No" />
                                                 <field name="product_uom" string="Rent(UOM)" />
                                             </group>
                                             <separator string="Manual Description" colspan="4" />
@@ -603,16 +574,9 @@
                                                 <separator string="States" colspan="4" />
                                                 <field name="state" select="2" />
                                                 <field name="invoice_status" />
-                                                <!-- <field name="invoiced" select="2"/> -->
                                             </group>
                                         </page>
-                                        <!-- <page string="Extra Info"> -->
-                                        <!-- <group> -->
-                                        <!-- <field name="product_uos_qty"/> -->
-                                        <!-- <field name="product_uos" /> -->
-                                        <!-- <field name="address_allotment_id" select="2"/> -->
-                                        <!-- </group> -->
-                                        <!-- </page> -->
+                                        
                                         <page string="History">
                                             <separator string="Invoice Lines" colspan="4" />
                                             <field name="invoice_lines" colspan="4" nolabel="1" />
@@ -643,11 +607,11 @@
                                             <separator string="Automatic Declaration" col="4"
                                                 colspan="4" />
                                             <group col="4" colspan="4">
-                                                <field name="product_id" select="1"
+                                                <field name="product_id"
                                                     domain="[('isservice','=',True)]"
                                                     context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'hotel':parent.warehouse_id,'uom':product_uom}" />
                                                 <field name="product_uom" />
-                                                <field name="product_uom_qty" select="1"
+                                                <field name="product_uom_qty"
                                                     context="{'partner_id':parent.partner_id,'quantity':product_uom_qty,'pricelist':parent.pricelist_id,'hotel':parent.warehouse_id,'uom':product_uom}"
                                                     invisible="1" />
                                             </group>
@@ -664,16 +628,9 @@
                                                 <separator string="States" colspan="4" />
                                                 <field name="state" select="2" />
                                                 <field name="invoice_status" />
-                                                <!-- <field name="invoiced" select="2"/> -->
                                             </group>
                                         </page>
-                                        <!-- <page string="Extra Info"> -->
-                                        <!-- <group> -->
-                                        <!-- <field name="product_uos_qty"/> -->
-                                        <!-- <field name="product_uos" /> -->
-                                        <!-- <field name="address_allotment_id" select="2"/> -->
-                                        <!-- </group> -->
-                                        <!-- </page> -->
+                                        
                                         <page string="History">
                                             <separator string="Invoice Lines" colspan="4" />
                                             <field name="invoice_lines" colspan="4" nolabel="1" />
@@ -705,7 +662,6 @@
                         <page string="Other data">
                             <group>
                                 <field name="user_id" />
-                                <!-- <field name="order_policy" invisible="1"/> -->
                                 <field name="hotel_policy" attrs="{'readonly':[('state','not in',('draft'))]}" />
                                 <field name="client_order_ref" />
                             </group>
@@ -743,8 +699,8 @@
                 <field name="checkin_date" />
                 <field name="checkout_date" />
                 <field name="name" />
-                <field name="partner_id" select="1" />
-                <field name="date_order" select="1" />
+                <field name="partner_id"/>
+                <field name="date_order"/>
                 <field name="state" />
                 <field name="amount_total" sum="Total amount" />
             </tree>
@@ -822,9 +778,8 @@
             <form string="Service Type">
                 <sheet>
                     <group>
-                        <field name="name" select="1" string="Service Name" />
-                        <field name="parent_id" domain="[('isservicetype','=',True)]"
-                            select="1" />
+                        <field name="name" string="Service Name" />
+                        <field name="parent_id" domain="[('isservicetype','=',True)]"/>
                         <field name="isservicetype" invisible="1" />
                     </group>
                 </sheet>
@@ -872,15 +827,14 @@
                         <field name="name" select="1" />
                     </h1>
                     <group>
-                        <field name="default_code" select="1" />
+                        <field name="default_code"/>
                     </group>
                     <notebook>
                         <page string="Information">
                             <group>
                                 <group colspan="4" col="4">
                                     <field name="type" select="2" string="Service Type" />
-                                    <field name="categ_id" domain="[('isservicetype','=',True)]"
-                                        select="1" />
+                                    <field name="categ_id" domain="[('isservicetype','=',True)]"/>
                                     <field name="product_manager" select="2" string="Service Manager" />
                                     <field name="uom_id" />
                                     <field name="uom_po_id" />
@@ -903,8 +857,6 @@
                                 <field name="sale_ok" select="2" />
                                 <field name="standard_price" />
                                 <field name="rental" select="2" />
-                                <!-- <field name="uos_id" /> -->
-                                <!-- <field name="uos_coeff" /> -->
                             </group>
                             <newline />
                             <group>
@@ -934,7 +886,7 @@
         <field name="arch" type="xml">
             <search string="Hotel Services">
                 <field name="name" />
-                <field name="categ_id" select="1" />
+                <field name="categ_id"/>
                 <field name="list_price" string="Service rate" />
                 <newline />
                 <group expand="0" string="Group By...">
@@ -1044,7 +996,7 @@
                     <div class="oe_title ">
                         <label for="name" string="Name" />
                         <h1>
-                            <field name="name" select="1" />
+                            <field name="name"/>
                         </h1>
                     </div>
                     <separator string="Details" />
@@ -1064,7 +1016,7 @@
                     <newline />
                     <group colspan="2" col="4">
                         <field name="input_curr" />
-                        <field name="in_amount" select="1" widget="monetary"
+                        <field name="in_amount" widget="monetary"
                             options="{'currency_field': 'input_curr'}" />
                         <field name="out_curr" />
                         <field name="rate" />

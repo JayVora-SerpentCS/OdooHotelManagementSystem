@@ -1,24 +1,5 @@
 # -*- coding: utf-8 -*-
-# --------------------------------------------------------------------------
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services PVT. LTD.
-#    (<http://www.serpentcs.com>)
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>
-#
-# ---------------------------------------------------------------------------
+# See LICENSE file for full copyright and licensing details.
 
 import time
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
@@ -41,7 +22,7 @@ class HotelHousekeepingActivityType(models.Model):
 
     activity_id = fields.Many2one('product.category', 'Category',
                                   required=True, delegate=True,
-                                  ondelete='cascade')
+                                  ondelete='cascade', index=True)
 
 
 class HotelActivity(models.Model):
@@ -50,7 +31,7 @@ class HotelActivity(models.Model):
     _description = 'Housekeeping Activity'
 
     h_id = fields.Many2one('product.product', 'Product', required=True,
-                           delegate=True, ondelete='cascade')
+                           delegate=True, ondelete='cascade', index=True)
 
 
 class HotelHousekeeping(models.Model):
@@ -59,6 +40,7 @@ class HotelHousekeeping(models.Model):
     _description = "Reservation"
 
     current_date = fields.Date("Today's Date", required=True,
+                               index=True,
                                default=(lambda *a:
                                         time.strftime
                                         (DEFAULT_SERVER_DATE_FORMAT)))
@@ -66,11 +48,13 @@ class HotelHousekeeping(models.Model):
                                    ('checkin', 'Check-In'),
                                    ('checkout', 'Check-Out')],
                                   'Clean Type', required=True)
-    room_no = fields.Many2one('hotel.room', 'Room No', required=True)
+    room_no = fields.Many2one('hotel.room', 'Room No', required=True,
+                              index=True)
     activity_lines = fields.One2many('hotel.housekeeping.activities',
                                      'a_list', 'Activities',
                                      help='Detail of housekeeping activities')
-    inspector = fields.Many2one('res.users', 'Inspector', required=True)
+    inspector = fields.Many2one('res.users', 'Inspector', required=True,
+                                index=True)
     inspect_date_time = fields.Datetime('Inspect Date Time', required=True)
     quality = fields.Selection([('bad', 'Bad'), ('good', 'Good'),
                                 ('ok', 'Ok')], 'Quality', required=True,
@@ -78,7 +62,7 @@ class HotelHousekeeping(models.Model):
 as Bad, Good or Ok. ")
     state = fields.Selection([('dirty', 'Dirty'), ('clean', 'Clean'),
                               ('inspect', 'Inspect'), ('done', 'Done'),
-                              ('cancel', 'Cancelled')], 'State', select=True,
+                              ('cancel', 'Cancelled')], 'State', index=True,
                              required=True, readonly=True,
                              default=lambda *a: 'dirty')
 
@@ -144,7 +128,6 @@ class HotelHousekeepingActivities(models.Model):
     _description = "Housekeeping Activities "
 
     a_list = fields.Many2one('hotel.housekeeping', string='Reservation')
-#   room_id = fields.Many2one('hotel.room', string='Room No')
     today_date = fields.Date('Today Date')
     activity_name = fields.Many2one('hotel.activity',
                                     string='Housekeeping Activity')

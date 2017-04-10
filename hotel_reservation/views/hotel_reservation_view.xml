@@ -2,9 +2,7 @@
 <!DOCTYPE xml>
 <odoo>
 
-    <!--============================================================ Reservation 
-        ============================================================ -->
-
+    <!-- ======== Reservation ======== -->
     <!-- Form view of hotel reservation -->
     <record id="view_hotel_reservation_form" model="ir.ui.view">
         <field name="name">hotel.reservation.form</field>
@@ -31,12 +29,12 @@
                     </h1>
                     <group>
                         <group colspan="4" col="4">
-                            <field name="date_order" select="1" />
-                            <field name="warehouse_id" select="1" />
+                            <field name="date_order"/>
+                            <field name="warehouse_id"/>
                         </group>
                         <separator />
                         <group colspan="4" col="4">
-                            <field name="partner_id" select="1" domain="[('customer','=',True)]" />
+                            <field name="partner_id" domain="[('customer','=',True)]" />
                             <field name="pricelist_id" col="2" />
                             <field name="partner_order_id" domain="[('parent_id','=',partner_id)]" />
                             <newline />
@@ -58,7 +56,7 @@
                                 <form string="Reservation Line">
                                     <separator string="Room Type" />
                                     <field name="name" invisible="1" />
-                                    <field name="categ_id" select="1" colspan="4" nolabel="1" />
+                                    <field name="categ_id" colspan="4" nolabel="1" />
                                     <newline />
                                     <separator string="Select Room" />
                                     <field name="reserve" colspan="4" string="Room Number"
@@ -86,7 +84,7 @@
             <tree string="Reservation"
                 colors="blue:state == 'draft';gray:state == 'done';lightgray:state == 'cancel';">
                 <field name="reservation_no" />
-                <field name="partner_id" select="1" />
+                <field name="partner_id"/>
                 <field name="checkin" />
                 <field name="checkout" />
                 <field name="state" />
@@ -107,7 +105,7 @@
                 <filter domain="[('state','=','confirm')]" string="Confirm" />
                 <filter domain="[('state','=','cancel')]" string="Cancel" />
                 <filter domain="[('state','=','done')]" string="Done" />
-                <field name="partner_id" select="1" />
+                <field name="partner_id"/>
                 <field name="reservation_no" />
                 <field name="checkin" />
                 <field name="checkout" />
@@ -228,7 +226,6 @@
         </field>
     </record>
 
-
     <!-- Form view of room reservation summary -->
     <record id="room_reservation_summary_form_view" model="ir.ui.view">
         <field name="name">room.reservation.summary.form</field>
@@ -239,17 +236,17 @@
                     <separator string="Room Reservation Summary" colspan="4" />
                 </header>
                 <sheet>
-	                <group colspan="4" col="4">
-	                   <div>
-                            <label for="date_from" string="Summary Period   "/>
-                             <field name="date_from" class="oe_inline"/>
+	            	<group colspan="4" col="4">
+	                	<div>
+                        	<label for="date_from" string="Summary Period"/>
+                            <field name="date_from" class="oe_inline"/>
                                         to
-                             <field name="date_to" class="oe_inline"/>
+                            <field name="date_to" class="oe_inline"/>
                         </div>
                     </group>
 	                <notebook>
-	                    <page string="Room Summary">
-	                        <field name="summary_header" colspan="4" invisible="1" />
+	                	<page string="Room Summary">
+	                    	<field name="summary_header" colspan="4" invisible="1" />
 	                        <field name="room_summary" colspan="4" invisible="1" />
 	                        <widget type="Room_Reservation"></widget>
 	                    </page>
@@ -257,7 +254,6 @@
                 </sheet>
             </form>
         </field>
-
     </record>
 
     <!-- Form view of quick room reservation -->

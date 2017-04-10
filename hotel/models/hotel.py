@@ -1,24 +1,5 @@
 # -*- coding: utf-8 -*-
-# --------------------------------------------------------------------------
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services PVT. LTD.
-#    (<http://www.serpentcs.com>)
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>
-#
-# ---------------------------------------------------------------------------
+# See LICENSE file for full copyright and licensing details.
 
 import time
 import datetime
@@ -83,8 +64,8 @@ class HotelFloor(models.Model):
     _name = "hotel.floor"
     _description = "Floor"
 
-    name = fields.Char('Floor Name', size=64, required=True, select=True)
-    sequence = fields.Integer('Sequence', size=64)
+    name = fields.Char('Floor Name', size=64, required=True, index=True)
+    sequence = fields.Integer('Sequence', size=64, index=True)
 
 
 class ProductCategory(models.Model):
@@ -102,7 +83,7 @@ class HotelRoomType(models.Model):
     _description = "Room Type"
 
     cat_id = fields.Many2one('product.category', 'category', required=True,
-                             delegate=True, select=True, ondelete='cascade')
+                             delegate=True, index=True, ondelete='cascade')
 
 
 class ProductProduct(models.Model):
@@ -343,7 +324,8 @@ class HotelFolio(models.Model):
                             "count from the check-in and check-out date. ")
     currrency_ids = fields.One2many('currency.exchange', 'folio_no',
                                     readonly=True)
-    hotel_invoice_id = fields.Many2one('account.invoice', 'Invoice')
+    hotel_invoice_id = fields.Many2one('account.invoice', 'Invoice',
+                                       copy=False)
 
     @api.multi
     def go_to_currency_exchange(self):
@@ -600,20 +582,17 @@ class HotelFolio(models.Model):
         self.write({'state': 'done'})
 
     @api.multi
-    def action_invoice_create(self, grouped=False, states=None):
+    def action_invoice_create(self, grouped=False, final=False):
         '''
         @param self: object pointer
         '''
-        if states is None:
-            states = ['confirmed', 'done']
         order_ids = [folio.order_id.id for folio in self]
         room_lst = []
         sale_obj = self.env['sale.order'].browse(order_ids)
-        invoice_id = (sale_obj.action_invoice_create
-                      (grouped=False, states=['confirmed', 'done']))
+        invoice_id = (sale_obj.action_invoice_create(grouped=False,
+                                                     final=False))
         for line in self:
             values = {'invoiced': True,
-                      'state': 'progress' if grouped else 'progress',
                       'hotel_invoice_id': invoice_id
                       }
             line.write(values)
@@ -772,15 +751,6 @@ class HotelFolioLine(models.Model):
             return self._context['checkout']
         return time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
-#   def _get_uom_id(self):
-#       try:
-#           proxy = self.pool.get('ir.model.data')
-#           result = proxy.get_object_reference(self._cr, self._uid,
-#              'product','product_uom_unit')
-#           return result[1]
-#       except Exception:
-#           return False
-
     _name = 'hotel.folio.line'
     _description = 'hotel folio1 room line'
 
@@ -796,8 +766,6 @@ class HotelFolioLine(models.Model):
     is_reserved = fields.Boolean('Is Reserved',
                                  help='True when folio line created from \
                                  Reservation')
-#   product_uom = fields.Many2one('product.uom',string='Unit of Measure',
-#                                  required=True, default=_get_uom_id)
 
     @api.model
     def create(self, vals, check=True):
@@ -854,17 +822,6 @@ class HotelFolioLine(models.Model):
                                             'status': 'available'})
                 sale_unlink_obj.unlink()
         return super(HotelFolioLine, self).unlink()
-
-#    @api.multi
-#    def uos_change(self, product_uos, product_uos_qty=0, product_id=None):
-#         '''
-#             @param self: object pointer
-#         '''
-#         for folio in self:
-#             line = folio.order_line_id
-#             line.uos_change(product_uos, product_uos_qty=0,
-#                             product_id=None)
-#         return True
 
     @api.onchange('product_id')
     def product_id_change(self):
@@ -1143,7 +1100,7 @@ class HotelServiceType(models.Model):
     _description = "Service Type"
 
     ser_id = fields.Many2one('product.category', 'category', required=True,
-                             delegate=True, select=True, ondelete='cascade')
+                             delegate=True, index=True, ondelete='cascade')
 
 
 class HotelServices(models.Model):
@@ -1180,7 +1137,7 @@ class CurrencyExchangeRate(models.Model):
                                           (DEFAULT_SERVER_DATETIME_FORMAT)))
     input_curr = fields.Many2one('res.currency', string='Input Currency',
                                  track_visibility='always')
-    in_amount = fields.Float('Amount Taken', size=64, default=1.0)
+    in_amount = fields.Float('Amount Taken', size=64, default=1.0, index=True)
     out_curr = fields.Many2one('res.currency', string='Output Currency',
                                track_visibility='always')
     out_amount = fields.Float('Subtotal', size=64)
@@ -1314,16 +1271,11 @@ class AccountInvoice(models.Model):
 
     _inherit = 'account.invoice'
 
-    @api.multi
-    def confirm_paid(self):
-        '''
-        This method change pos orders states to done when folio invoice
-        is in done.
-        ----------------------------------------------------------
-        @param self: object pointer
-        '''
-        pos_order_obj = self.env['pos.order']
-        res = super(AccountInvoice, self).confirm_paid()
-        pos_odr_rec = pos_order_obj.search([('invoice_id', 'in', self._ids)])
-        pos_odr_rec and pos_odr_rec.write({'state': 'done'})
+    @api.model
+    def create(self, vals):
+        res = super(AccountInvoice, self).create(vals)
+        if self._context.get('folio_id'):
+            folio = self.env['hotel.folio'].browse(self._context['folio_id'])
+            folio.write({'hotel_invoice_id': res.id,
+                         'invoice_status': 'invoiced'})
         return res

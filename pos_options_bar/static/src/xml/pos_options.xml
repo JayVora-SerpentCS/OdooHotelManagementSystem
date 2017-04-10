@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- vim:fdl=1:
+-->
+<templates xml:space="preserve">
+
+    <t t-extend="ProductScreenWidget">
+        <t t-jquery=".content-row" t-operation="replace">
+            <tr class="content-row product_content_row" style="height:100%;">
+                <td class="content-cell" style="height:auto;">
+                    <div class="content-container">
+                        <span class="placeholder-ProductListWidget" />
+                    </div>
+                </td>
+            </tr>
+            <tr class="content-row content_row_custom">
+                <td class="content-cell">
+                    <div class="content-container">
+                        <span class="placeholder-OptionsListWidget">
+                             <div class='options-details-container'>
+                                <div class="options-details-container-scroller touch-scrollable" >
+                                    <div class="options-list">
+                                        <div class='col-md-12' id="options_list_header" style="background:black;" >
+                                            <div class='options_list_container_min_max' style="text-align:left;">
+                                                <i class="fa fa-plus-square set_min_max_button fa-3x" style="margin-bottom: 8px;color: mintcream;" ></i>
+                                                <span style="margin-left: 50%;font-size: 32px;color: mintcream;">Options</span>
+                                            </div>
+                                        </div>
+                                        <div class='option_list_box' style="height: 200px;text-align: left;margin-top: 3%;">
+                                            <div class="col-md-12 option_list_box_container" >
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </t>
+    </t>
+
+</templates>

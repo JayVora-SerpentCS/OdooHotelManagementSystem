@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE xml>
+<odoo>
+    <template id="assets" inherit_id="point_of_sale.assets">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="/pos_receipt/static/src/js/pos_receipt.js"></script>
+        </xpath>
+        <xpath expr="//link[@id='pos-stylesheet']" position="after"> 
+            <link rel="stylesheet" href="/pos_receipt/static/src/css/pos_receipt.css" />
+      </xpath>
+    </template>
+     <template id="assets_backend" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" href="/pos_receipt/static/src/css/tree_color.css" />
+        </xpath>
+    </template>
+</odoo>

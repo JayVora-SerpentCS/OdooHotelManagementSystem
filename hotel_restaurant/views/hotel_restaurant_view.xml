@@ -57,7 +57,7 @@
             <form string="Tables Detail">
                 <sheet>
                     <group>
-                        <field name="name" colspan="1" select="1" />
+                        <field name="name" colspan="1"/>
                         <newline />
                         <field name="capacity" />
                     </group>
@@ -130,7 +130,7 @@
                 <sheet>
                     <h1>
                         <label string="Table Booking" colspan="4" />
-                        <field name="reservation_id" colspan="4" select="1" />
+                        <field name="reservation_id" colspan="4"/>
                     </h1>
                     <group>
                         <group colspan="2" col="4">
@@ -200,10 +200,10 @@
                     <filter domain="[('state','=','cancel')]" string="Cancel" />
                     <filter domain="[('state','=','done')]" string="Done" />
                 </group>
-                <field name="room_no" select="1" />
+                <field name="room_no"/>
                 <field name="start_date" />
                 <field name="end_date" />
-                <field name="cname" select="1" />
+                <field name="cname"/>
                 <newline />
                 <group expand="0" string="Group By">
                     <filter name="room_no" string="Room Number" icon="terp-personal"
@@ -509,7 +509,7 @@
                         </group>
                         <newline />
                         <separator colspan='4' string='Table List' />
-                        <field name="tableno" select="1" colspan="4" nolabel='1' />
+                        <field name="tableno" colspan="4" nolabel='1' />
                         <newline />
                         <separator colspan='4' string='Order List' />
                         <field name="kot_list" colspan="4" nolabel='1'>
@@ -636,11 +636,11 @@
                             <label for="name" string="Food Item" />
                         </div>
                         <h1>
-                            <field name="name" select="1" />
+                            <field name="name"/>
                         </h1>
                         <label for="categ_id" class="oe_edit_only" />
                         <h2>
-                            <field name="categ_id" select="1" domain="[('ismenutype','=',True)]" />
+                            <field name="categ_id" domain="[('ismenutype','=',True)]" />
                         </h2>
                     </div>
                     <notebook>

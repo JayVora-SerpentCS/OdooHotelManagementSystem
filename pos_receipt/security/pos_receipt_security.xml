@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="group_order_screen" model="res.groups">
+            <field name="name">Order Screen</field>
+            <field name="category_id" ref="base.module_category_point_of_sale"/>
+        </record>
+
+        <record id="group_kitchen_screen" model="res.groups">
+            <field name="name">Kitchen Screen</field>
+            <field name="category_id" ref="base.module_category_point_of_sale"/>
+        </record>
+
+        <record id="point_of_sale.group_pos_manager" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('group_kitchen_screen')),(4, ref('group_order_screen'))]"/>
+        </record>
+
+    </data>
+</odoo>

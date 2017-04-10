@@ -1,25 +1,5 @@
 # -*- coding: utf-8 -*-
-#############################################################################
-#
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2012-Today Serpent Consulting Services Pvt. Ltd.
-#    (<http://www.serpentcs.com>)
-#    Copyright (C) 2004 OpenERP SA (<http://www.openerp.com>)
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
-#
-#    You should have received a copy of the GNU General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>
-#
-#############################################################################
+# See LICENSE file for full copyright and licensing details.
 
 import time
 import datetime
@@ -88,14 +68,17 @@ class HotelReservation(models.Model):
 
     reservation_no = fields.Char('Reservation No', size=64, readonly=True)
     date_order = fields.Datetime('Date Ordered', required=True, readonly=True,
+                                 index=True,
                                  states={'draft': [('readonly', False)]},
                                  default=(lambda *a:
                                           time.strftime
                                           (DEFAULT_SERVER_DATETIME_FORMAT)))
     warehouse_id = fields.Many2one('stock.warehouse', 'Hotel', readonly=True,
+                                   index=True,
                                    required=True, default=1,
                                    states={'draft': [('readonly', False)]})
     partner_id = fields.Many2one('res.partner', 'Guest Name', readonly=True,
+                                 index=True,
                                  required=True,
                                  states={'draft': [('readonly', False)]})
     pricelist_id = fields.Many2one('product.pricelist', 'Scheme',
@@ -360,34 +343,6 @@ class HotelReservation(models.Model):
             'context': ctx,
             'force_send': True
         }
-
-#    @api.model
-#    def reservation_reminder_24hrs(self):
-#        """
-#        This method is for scheduler
-#        every 1day scheduler will call this method to
-#        find all tomorrow's reservations.
-#        ----------------------------------------------
-#        @param self: The object pointer
-#        @return: send a mail
-#        """
-#        now_str = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
-#        now_date = datetime.datetime.strptime(now_str,
-#                                              DEFAULT_SERVER_DATETIME_FORMAT)
-#        ir_model_data = self.env['ir.model.data']
-#        template_id = (ir_model_data.get_object_reference
-#                       ('hotel_reservation',
-#                        'email_template_reservation_reminder_24hrs')[1])
-#        template_rec = self.env['email.template'].browse(template_id)
-#        for travel_rec in self.search([]):
-#            checkin_date = (datetime.datetime.strptime
-#                            (travel_rec.checkin,
-#                             DEFAULT_SERVER_DATETIME_FORMAT))
-#            difference = relativedelta(now_date, checkin_date)
-#            if(difference.days == -1 and travel_rec.partner_id.email and
-#               travel_rec.state == 'confirm'):
-#                template_rec.send_mail(travel_rec.id, force_send=True)
-#        return True
 
     @api.multi
     def _create_folio(self):
