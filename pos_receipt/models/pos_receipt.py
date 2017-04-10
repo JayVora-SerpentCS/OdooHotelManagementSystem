@@ -165,7 +165,6 @@ class PosOrder(models.Model):
     asset_method_time = fields.Char(_compute_='_get_asset_method_time',
                                     string='Asset Method Time', readonly=True)
     pricelist_ids = fields.One2many('product.pricelist',
-                                    _compute_="_compute_pricelist_ids",
                                     string='Price list available for this\
                                     Ecommerce/Website')
     order_line_state_id = fields.Many2one('pos.order.line.state',
@@ -178,12 +177,6 @@ class PosOrder(models.Model):
                                       _compute_='product_line',
                                       string='Product Details')
     order_line_status = fields.Char("Orderline Status", default='draft')
-
-    @api.one
-    def _compute_pricelist_ids(self):
-        pricelist_obj = self.env["product.pricelist"]
-        self.pricelist_ids = pricelist_obj.search([("website_id", "=",
-                                                    self.id)])
 
     @api.model
     def get_done_orderline(self, order_ids):
