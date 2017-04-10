@@ -164,9 +164,6 @@ class PosOrder(models.Model):
 
     asset_method_time = fields.Char(_compute_='_get_asset_method_time',
                                     string='Asset Method Time', readonly=True)
-    pricelist_ids = fields.One2many('product.pricelist',
-                                    string='Price list available for this\
-                                    Ecommerce/Website')
     order_line_state_id = fields.Many2one('pos.order.line.state',
                                           "Order Line State")
     parcel_name = fields.Char(_compute_='get_parcel_name',
