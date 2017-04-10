@@ -263,7 +263,7 @@ odoo.define('pos_options_bar.jquery', function(require){
     			that._trigger( "focus" );
     		});
 
-    		// Track the dialog immediately upon openening in case a focus event
+    		// Track the dialog immediately upon opening in case a focus event
     		// somehow occurs outside of the dialog before an element inside the
     		// dialog is focused (#10152)
     		this._makeFocusTarget();

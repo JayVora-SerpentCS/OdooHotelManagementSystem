@@ -88,6 +88,7 @@ class PosOrderLine(models.Model):
 class PosOrder(models.Model):
     _inherit = 'pos.order'
 
+    property_description = fields.Text('Property Description')
     global ex_all_prd_ids, ex_4_prd_ids, order_ids
     ex_all_prd_ids = []
     ex_4_prd_ids = []
