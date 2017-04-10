@@ -121,16 +121,13 @@ class PosOrder(models.Model):
 
     @api.multi
     def product_line(self):
-        print "------------method calllllllll----"
         res1 = {}
         cnt = 0
         for order in self:
-            print "SELF++++++++++++++++++++", self
             res = []
             str1 = ""
             if order.state != 'paid':
                 for line in order.lines:
-                    print ":::::::::::CALL:::::::::::::::"
                     cnt = cnt + 1
                     cnt1 = cnt <= 4
                     lp_n = line.product_id.name
