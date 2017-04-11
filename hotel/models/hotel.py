@@ -888,8 +888,6 @@ class HotelFolioLine(models.Model):
                 if additional_hours <= abs(configured_addition_hours * 60):
                     myduration -= 1
         self.product_uom_qty = myduration
-        ''' Below code is used to render available room to select based on
-        selected check in and check out date.'''
         hotel_room_obj = self.env['hotel.room']
         hotel_room_ids = hotel_room_obj.search([])
         avail_prod_ids = []
