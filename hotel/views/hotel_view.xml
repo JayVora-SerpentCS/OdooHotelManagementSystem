@@ -32,7 +32,7 @@
         </field>
     </record>
 
-    <!--==================================================== Floor ==================================================== -->
+    <!--======== Floor ======== -->
     <!-- Form view of hotel floor -->
     <record id="view_hotel_floor_form" model="ir.ui.view">
         <field name="name">hotel.floor.form</field>
@@ -651,11 +651,12 @@
                                 <field name="amount_tax" widget='monetary' />
                                 <div class="oe_subtotal_footer_separator oe_inline">
                                     <label for="amount_total" />
-                                    <button name="button_dummy" string="Compute" states="draft"
-                                        type="object" icon="terp-sale" class="oe_highlight" />
                                 </div>
                                 <field name="amount_total" nolabel="1" sum="Total amount"
                                     widget='monetary' />
+                                 <button name="button_dummy" string="Compute" states="draft"
+                                     type="object" class="fa fa-calculator" aria-hidden="true"
+                                     style="background-color:#7c7bad;"/>
                             </group>
                             <div class="oe_clear" />
                         </page>
@@ -767,8 +768,8 @@
     <menuitem name="Generate Folio" id="menu_open_hotel_folio1_form_tree_all"
         action="open_hotel_folio1_form_tree_all" sequence="5" parent="menu_all_folio" />
 
-    <!--======================================================== Hotel Service 
-        Type ======================================================== -->
+    <!--============ Hotel Service 
+        Type ============ -->
 
     <!-- Form view of hotel service type -->
     <record id="view_hotel_service_type_form" model="ir.ui.view">
@@ -812,8 +813,8 @@
         action="open_hotel_service_type_form_tree" sequence="9"
         parent="hotel.menu_hotel_service" />
 
-    <!--======================================================== Hotel Service 
-        ======================================================== -->
+    <!--============ Hotel Service 
+        ============ -->
 
     <!-- Form view of hotel service -->
     <record id="view_hotel_services_form" model="ir.ui.view">
@@ -973,8 +974,7 @@
         action="hotel_service_category_action" sequence="10"
         parent="hotel.menu_hotel_service" />
 
-    <!--==================================================== Currency ==================================================== -->
-
+    <!--======== Currency ======== -->
     <!-- Form view of currency exchange -->
     <record id="view_currency_exchange_form" model="ir.ui.view">
         <field name="name">currency.exchange.form</field>

@@ -390,7 +390,7 @@ class HotelFolio(models.Model):
     @api.onchange('checkout_date', 'checkin_date')
     def onchange_dates(self):
         '''
-        This mathod gives the duration between check in and checkout
+        This method gives the duration between check in and checkout
         if customer will leave only for some hour it would be considers
         as a whole day.If customer will check in checkout for more or equal
         hours, which configured in company as additional hours than it would
@@ -399,11 +399,10 @@ class HotelFolio(models.Model):
         @param self: object pointer
         @return: Duration and checkout_date
         '''
-        company_obj = self.env['res.company']
         configured_addition_hours = 0
-        company_ids = company_obj.search([])
-        if company_ids.ids:
-            configured_addition_hours = company_ids[0].additional_hours
+        whouse_com_id = self.warehouse_id.company_id
+        if self.warehouse_id and whouse_com_id:
+            configured_addition_hours = whouse_com_id.additional_hours
         myduration = 0
         chckin = self.checkin_date
         chckout = self.checkout_date
@@ -418,9 +417,9 @@ class HotelFolio(models.Model):
             else:
                 myduration = dur.days + 1
             if configured_addition_hours > 0:
-                additional_hours = abs((dur.seconds / 60) / 60)
-                if additional_hours >= configured_addition_hours:
-                    myduration += 1
+                additional_hours = abs((dur.seconds / 60))
+                if additional_hours <= abs(configured_addition_hours * 60):
+                    myduration -= 1
         self.duration = myduration
 
     @api.model
@@ -863,6 +862,11 @@ class HotelFolioLine(models.Model):
         -----------------------------------------------------------------
         @param self: object pointer
         '''
+        configured_addition_hours = 0
+        fwc_id = self.folio_id.warehouse_id.company_id
+        if self.folio_id.warehouse_id and fwc_id:
+            configured_addition_hours = fwc_id.additional_hours
+        myduration = 0
         if not self.checkin_date:
             self.checkin_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         if not self.checkout_date:
@@ -879,7 +883,46 @@ class HotelFolioLine(models.Model):
                 myduration = dur.days
             else:
                 myduration = dur.days + 1
+            if configured_addition_hours > 0:
+                additional_hours = abs((dur.seconds / 60))
+                if additional_hours <= abs(configured_addition_hours * 60):
+                    myduration -= 1
         self.product_uom_qty = myduration
+        ''' Below code is used to render available room to select based on
+        selected check in and check out date.'''
+        hotel_room_obj = self.env['hotel.room']
+        hotel_room_ids = hotel_room_obj.search([])
+        avail_prod_ids = []
+        for room in hotel_room_ids:
+            assigned = False
+            for line in room.room_reservation_line_ids:
+                if line.status != 'cancel':
+                    if(self.checkin_date <= line.check_in <=
+                        self.checkout_date) or (self.checkin_date <=
+                                                line.check_out <=
+                                                self.checkout_date):
+                        assigned = True
+                    elif(line.check_in <= self.checkin_date <=
+                         line.check_out) or (line.check_in <=
+                                             self.checkout_date <=
+                                             line.check_out):
+                        assigned = True
+            for rm_line in room.room_line_ids:
+                if rm_line.status != 'cancel':
+                    if(self.checkin_date <= rm_line.check_in <=
+                       self.checkout_date) or (self.checkin_date <=
+                                               rm_line.check_out <=
+                                               self.checkout_date):
+                        assigned = True
+                    elif (rm_line.check_in <= self.checkin_date <=
+                          rm_line.check_out) or (rm_line.check_in <=
+                                                 self.checkout_date <=
+                                                 rm_line.check_out):
+                        assigned = True
+            if not assigned:
+                avail_prod_ids.append(room.product_id.id)
+        domain = {'product_id': [('id', 'in', avail_prod_ids)]}
+        return {'domain': domain}
 
     @api.multi
     def button_confirm(self):
