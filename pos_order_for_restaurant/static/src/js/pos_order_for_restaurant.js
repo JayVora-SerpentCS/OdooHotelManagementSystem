@@ -83,7 +83,6 @@ odoo.define("pos_order_for_restaurant.pos_order_for_restaurant",function (requir
         },
     },{
         model:  'res.partner',
-//        fields: ['name','street','city','state_id','country_id','vat','phone','zip','mobile','email','barcode','write_date'],
         fields: ['name','street','city','state_id','country_id','vat','phone','zip','mobile','email','barcode','write_date','property_account_position_id'],
         domain: [['customer','=',true]], 
         loaded: function(self,partners){
