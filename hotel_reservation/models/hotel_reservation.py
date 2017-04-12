@@ -766,16 +766,19 @@ class RoomReservationSummary(models.Model):
                                         amin = 0.0
                                         if c_id:
                                             con_add = c_id.additional_hours
-                                        ''' When configured_addition_hours is\
-                                        greater than zero then we calculate\
-                                        additional minutes '''
+                                        '''
+                                        When configured_addition_hours is
+                                        greater than zero then we calculate
+                                        additional minutes
+                                        '''
                                         if con_add > 0:
                                             amin = abs(con_add * 60)
                                         hr_dur = abs((dur.seconds / 60))
-                                        '''When additional minutes is greater\
-                                        than zero then check duration with\
-                                        extra minutes and give the room\
-                                        reservation status is reserved or \
+                                        '''
+                                        When additional minutes is greater
+                                        than zero then check duration with
+                                        extra minutes and give the room
+                                        reservation status is reserved or
                                         free'''
                                         if amin > 0:
                                             if hr_dur >= amin:
