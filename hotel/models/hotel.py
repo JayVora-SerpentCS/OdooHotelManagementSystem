@@ -417,9 +417,7 @@ class HotelFolio(models.Model):
                 myduration = dur.days
             else:
                 myduration = dur.days + 1
-            '''
-            To calculate additional hours in hotel room as per minutes
-            '''
+#            To calculate additional hours in hotel room as per minutes
             if configured_addition_hours > 0:
                 additional_hours = abs((dur.seconds / 60))
                 if additional_hours <= abs(configured_addition_hours * 60):
@@ -888,9 +886,7 @@ class HotelFolioLine(models.Model):
                 myduration = dur.days
             else:
                 myduration = dur.days + 1
-            '''
-            To calculate additional hours in hotel room as per minutes
-            '''
+#            To calculate additional hours in hotel room as per minutes
             if configured_addition_hours > 0:
                 additional_hours = abs((dur.seconds / 60))
                 if additional_hours <= abs(configured_addition_hours * 60):
