@@ -400,9 +400,10 @@ class HotelFolio(models.Model):
         @return: Duration and checkout_date
         '''
         configured_addition_hours = 0
-        whouse_com_id = self.warehouse_id.company_id
-        if self.warehouse_id and whouse_com_id:
-            configured_addition_hours = whouse_com_id.additional_hours
+        wid = self.warehouse_id
+        whouse_com_id = wid or wid.company_id
+        if whouse_com_id:
+            configured_addition_hours = wid.company_id.additional_hours
         myduration = 0
         chckin = self.checkin_date
         chckout = self.checkout_date
@@ -416,6 +417,7 @@ class HotelFolio(models.Model):
                 myduration = dur.days
             else:
                 myduration = dur.days + 1
+            '''To calculate additional hours in hotel room as per minutes'''
             if configured_addition_hours > 0:
                 additional_hours = abs((dur.seconds / 60))
                 if additional_hours <= abs(configured_addition_hours * 60):
@@ -863,9 +865,10 @@ class HotelFolioLine(models.Model):
         @param self: object pointer
         '''
         configured_addition_hours = 0
-        fwc_id = self.folio_id.warehouse_id.company_id
-        if self.folio_id.warehouse_id and fwc_id:
-            configured_addition_hours = fwc_id.additional_hours
+        fwhouse_id = self.folio_id.warehouse_id
+        fwc_id = fwhouse_id or fwhouse_id.company_id
+        if fwc_id:
+            configured_addition_hours = fwhouse_id.company_id.additional_hours
         myduration = 0
         if not self.checkin_date:
             self.checkin_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
@@ -883,6 +886,7 @@ class HotelFolioLine(models.Model):
                 myduration = dur.days
             else:
                 myduration = dur.days + 1
+            '''To calculate additional hours in hotel room as per minutes'''
             if configured_addition_hours > 0:
                 additional_hours = abs((dur.seconds / 60))
                 if additional_hours <= abs(configured_addition_hours * 60):

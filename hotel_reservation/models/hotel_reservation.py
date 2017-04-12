@@ -417,9 +417,10 @@ class HotelReservation(models.Model):
         '''
         value = {}
         configured_addition_hours = 0
-        wh_comp_id = self.warehouse_id.company_id
-        if self.warehouse_id and wh_comp_id:
-            configured_addition_hours = wh_comp_id.additional_hours
+        wc_id = self.warehouse_id
+        whcomp_id = wc_id or wc_id.company_id
+        if whcomp_id:
+            configured_addition_hours = wc_id.company_id.additional_hours
         duration = 0
         if checkin_date and checkout_date:
             chkin_dt = (datetime.datetime.strptime
@@ -678,17 +679,16 @@ class RoomReservationSummary(models.Model):
         date_range_list = []
         main_header = []
         summary_header_list = ['Rooms']
-        tzinfo = pytz.timezone('UTC')
         if self.date_from and self.date_to:
             if self.date_from > self.date_to:
                 raise except_orm(_('User Error!'),
                                  _('Please Check Time period Date \
                                  From can\'t be greater than Date To !'))
-            timezone = pytz.timezone(self._context.get('tz', False) or 'UTC')
-            d_frm_obj = dtime.strptime(self.date_from,
-                                       dt).replace(tzinfo).astimezone(timezone)
-            d_to_obj = dtime.strptime(self.date_to,
-                                      dt).replace(tzinfo).astimezone(timezone)
+            timezone = pytz.timezone(self._context.get('tz', False))
+            d_frm_obj = dtime.strptime(self.date_from, dt)\
+                .replace(tzinfo=pytz.timezone('UTC')).astimezone(timezone)
+            d_to_obj = dtime.strptime(self.date_to, dt)\
+                .replace(tzinfo=pytz.timezone('UTC')).astimezone(timezone)
             temp_date = d_frm_obj
             while(temp_date <= d_to_obj):
                 val = ''
@@ -714,10 +714,10 @@ class RoomReservationSummary(models.Model):
                                                 'room_id': room.id})
                 else:
                     for chk_date in date_range_list:
-                        tz = pytz.timezone('UTC')
                         ch_dt = chk_date[:10] + ' 23:59:59'
-                        c = dtime.strptime(ch_dt,
-                                           dt).replace(timezone).astimezone(tz)
+                        ttime = dtime.strptime(ch_dt, dt)
+                        c = ttime.replace(tzinfo=timezone).\
+                            astimezone(pytz.timezone('UTC'))
                         chk_date = c.strftime(dt)
                         reserline_ids = room.room_reservation_line_ids.ids
                         reservline_ids = (reservation_line_obj.search
@@ -727,18 +727,19 @@ class RoomReservationSummary(models.Model):
                                             ('state', '=', 'assigned')
                                             ]))
                         if not reservline_ids:
-                            ddays = datetime.timedelta(days=1)
-                            rl = ('id', 'in', reserline_ids)
-                            dummy1 = datetime.datetime.strptime(chk_date, dt)
-                            dummy2 = datetime.datetime.strftime(dummy1 - ddays,
-                                                                dt)
-                            chi = ('check_in', '<=', dummy1)
-                            cho = ('check_out', '>=', dummy2)
-                            st = ('state', '=', 'assigned')
-                            rline_ids = (reservation_line_obj.search([rl, chi,
-                                                                      cho, st])
-                                         )
-                            for res_room in rline_ids:
+                            sdt = dt
+                            chk_date = datetime.datetime.strptime(chk_date,
+                                                                  sdt)
+                            chk_date = datetime.datetime\
+                                .strftime(chk_date - datetime
+                                          .timedelta(days=1),
+                                          sdt)
+                            reservline_ids = (reservation_line_obj.search
+                                              ([('id', 'in', reserline_ids),
+                                                ('check_in', '<=', chk_date),
+                                                ('check_out', '>=', chk_date),
+                                                ('state', '=', 'assigned')]))
+                            for res_room in reservline_ids:
                                 rrci = res_room.check_in
                                 rrco = res_room.check_out
                                 cid = datetime.datetime.strptime(rrci, dt)
@@ -765,9 +766,17 @@ class RoomReservationSummary(models.Model):
                                         amin = 0.0
                                         if c_id:
                                             con_add = c_id.additional_hours
+                                        ''' When configured_addition_hours is\
+                                        greater than zero then we calculate\
+                                        additional minutes '''
                                         if con_add > 0:
                                             amin = abs(con_add * 60)
-                                            hr_dur = abs((dur.seconds / 60))
+                                        hr_dur = abs((dur.seconds / 60))
+                                        '''When additional minutes is greater\
+                                        than zero then check duration with\
+                                        extra minutes and give the room\
+                                        reservation status is reserved or \
+                                        free'''
                                         if amin > 0:
                                             if hr_dur >= amin:
                                                 reservline_ids = True
