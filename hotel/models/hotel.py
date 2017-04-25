@@ -833,7 +833,7 @@ class HotelFolioLine(models.Model):
         if not self.product_id:
             return {'domain': {'product_uom': []}}
         vals = {}
-        product = self.product_id.with_context(
+        prd = self.product_id.with_context(
             lang=self.folio_id.partner_id.lang,
             partner=self.folio_id.partner_id.id,
             quantity=vals.get('product_uom_qty') or self.product_uom_qty,
@@ -841,9 +841,13 @@ class HotelFolioLine(models.Model):
             pricelist=self.folio_id.pricelist_id.id,
             uom=self.product_uom.id
         )
-        l_price = product.with_context(pricelist=self.order_id.pricelist_id.id).price
+        l_price = prd.with_context(pricelist=self.order_id.pricelist_id.id)\
+                    .price
         if self.folio_id.pricelist_id and self.folio_id.partner_id:
-            vals['price_unit'] = self.env['account.tax']._fix_tax_included_price(l_price, product.taxes_id, self.tax_id)
+            acc_obj = self.env['account.tax']
+            vals['price_unit'] = acc_obj._fix_tax_included_price(l_price,
+                                                                 prd.taxes_id,
+                                                                 self.tax_id)
         self.update(vals)
 
     @api.onchange('product_uom')
