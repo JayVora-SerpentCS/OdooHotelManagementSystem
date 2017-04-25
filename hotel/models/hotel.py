@@ -824,24 +824,34 @@ class HotelFolioLine(models.Model):
                 sale_unlink_obj.unlink()
         return super(HotelFolioLine, self).unlink()
 
+    @api.multi
     @api.onchange('product_id')
     def product_id_change(self):
-        if self.product_id and self.folio_id.partner_id:
-            self.name = self.product_id.name
-            self.price_unit = self.product_id.lst_price
-            self.product_uom = self.product_id.uom_id
-            tax_obj = self.env['account.tax']
-            prod = self.product_id
-            self.price_unit = tax_obj._fix_tax_included_price(prod.price,
-                                                              prod.taxes_id,
-                                                              self.tax_id)
+        '''
+        @param self: object pointer
+        '''
+        if not self.product_id:
+            return {'domain': {'product_uom': []}}
+        vals = {}
+        product = self.product_id.with_context(
+            lang=self.folio_id.partner_id.lang,
+            partner=self.folio_id.partner_id.id,
+            quantity=vals.get('product_uom_qty') or self.product_uom_qty,
+            date=self.folio_id.date_order,
+            pricelist=self.folio_id.pricelist_id.id,
+            uom=self.product_uom.id
+        )
+        l_price = product.with_context(pricelist=self.order_id.pricelist_id.id).price
+        if self.folio_id.pricelist_id and self.folio_id.partner_id:
+            vals['price_unit'] = self.env['account.tax']._fix_tax_included_price(l_price, product.taxes_id, self.tax_id)
+        self.update(vals)
 
     @api.onchange('product_uom')
     def product_uom_change(self):
         if not self.product_uom:
             self.price_unit = 0.0
             return
-        self.price_unit = self.product_id.lst_price
+        self.price_unit = self.product_id.list_price
         if self.folio_id.partner_id:
             prod = self.product_id.with_context(
                 lang=self.folio_id.partner_id.lang,

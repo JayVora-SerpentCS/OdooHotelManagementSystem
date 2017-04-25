@@ -372,6 +372,7 @@ class HotelReservation(models.Model):
                 'date_order': reservation.date_order,
                 'warehouse_id': reservation.warehouse_id.id,
                 'partner_id': reservation.partner_id.id,
+                'pricelist_id': reservation.pricelist_id.id,
                 'partner_invoice_id': reservation.partner_invoice_id.id,
                 'partner_shipping_id': reservation.partner_shipping_id.id,
                 'checkin_date': reservation.checkin,
@@ -387,6 +388,7 @@ class HotelReservation(models.Model):
                         'checkout_date': checkout_date,
                         'product_id': r.product_id and r.product_id.id,
                         'name': reservation['reservation_no'],
+                        'price_unit': r.list_price,
                         'product_uom_qty': duration,
                         'is_reserved': True}))
                     res_obj = room_obj.browse([r.id])
