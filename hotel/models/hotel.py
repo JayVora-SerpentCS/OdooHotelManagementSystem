@@ -841,11 +841,10 @@ class HotelFolioLine(models.Model):
             pricelist=self.folio_id.pricelist_id.id,
             uom=self.product_uom.id
         )
-        l_price = prd.with_context(pricelist=self.order_id.pricelist_id.id)\
-                    .price
+        prce = prd.with_context(pricelist=self.order_id.pricelist_id.id).price
         if self.folio_id.pricelist_id and self.folio_id.partner_id:
             acc_obj = self.env['account.tax']
-            vals['price_unit'] = acc_obj._fix_tax_included_price(l_price,
+            vals['price_unit'] = acc_obj._fix_tax_included_price(prce,
                                                                  prd.taxes_id,
                                                                  self.tax_id)
         self.update(vals)
