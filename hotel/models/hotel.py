@@ -483,7 +483,6 @@ class HotelFolio(models.Model):
         @param vals: dictionary of fields value.
         """
         folio_room_line_obj = self.env['folio.room.line']
-        reservation_line_obj = self.env['hotel.room.reservation.line']
         product_obj = self.env['product.product']
         h_room_obj = self.env['hotel.room']
         room_lst1 = []
@@ -520,22 +519,6 @@ class HotelFolio(models.Model):
                     folio_romline_rec = (folio_room_line_obj.search
                                          ([('folio_id', '=', folio_obj.id)]))
                     folio_romline_rec.write(room_vals)
-            if folio_obj.reservation_id:
-                for reservation in folio_obj.reservation_id:
-                    reservation_obj = (reservation_line_obj.search
-                                       ([('reservation_id', '=',
-                                          reservation.id)]))
-                    if len(reservation_obj) == 1:
-                        for line_id in reservation.reservation_line:
-                            line_id = line_id.reserve
-                            for room_id in line_id:
-                                vals = {'room_id': room_id.id,
-                                        'check_in': folio_obj.checkin_date,
-                                        'check_out': folio_obj.checkout_date,
-                                        'state': 'assigned',
-                                        'reservation_id': reservation.id,
-                                        }
-                                reservation_obj.write(vals)
         return folio_write
 
     @api.onchange('warehouse_id')
@@ -910,18 +893,6 @@ class HotelFolioLine(models.Model):
         avail_prod_ids = []
         for room in hotel_room_ids:
             assigned = False
-            for line in room.room_reservation_line_ids:
-                if line.status != 'cancel':
-                    if(self.checkin_date <= line.check_in <=
-                        self.checkout_date) or (self.checkin_date <=
-                                                line.check_out <=
-                                                self.checkout_date):
-                        assigned = True
-                    elif(line.check_in <= self.checkin_date <=
-                         line.check_out) or (line.check_in <=
-                                             self.checkout_date <=
-                                             line.check_out):
-                        assigned = True
             for rm_line in room.room_line_ids:
                 if rm_line.status != 'cancel':
                     if(self.checkin_date <= rm_line.check_in <=
