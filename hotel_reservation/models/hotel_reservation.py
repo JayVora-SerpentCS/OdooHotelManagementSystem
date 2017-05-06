@@ -55,6 +55,7 @@ class HotelFolioLineExt(models.Model):
     def on_change_checkout(self):
         res = super(HotelFolioLineExt, self).on_change_checkout()
         hotel_room_obj = self.env['hotel.room']
+        avail_prod_ids = []
         hotel_room_ids = hotel_room_obj.search([])
         for room in hotel_room_ids:
             assigned = False
@@ -70,6 +71,8 @@ class HotelFolioLineExt(models.Model):
                                              self.checkout_date <=
                                              line.check_out):
                         assigned = True
+            if not assigned:
+                avail_prod_ids.append(room.product_id.id)
         return res
 
     @api.multi
