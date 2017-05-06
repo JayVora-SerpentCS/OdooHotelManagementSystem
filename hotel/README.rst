@@ -15,7 +15,7 @@ Installation
 
 To install this module, you need to:
 
-install 'product_uos', 'sale_stock', 'point_of_sale', 'report' modules
+install 'sale_stock', 'point_of_sale', 'report' modules
 
 Configuration
 
@@ -50,4 +50,4 @@ Serpent Consulting Services PVT. LTD.
 
 This module is maintained by the SerpentCS.
 
-To contribute to this module, please visit https://github.com/JayVora-SerpentCS/hotelmgmt_v8.
+To contribute to this module, please visit https://github.com/JayVora-SerpentCS/OdooHotelManagementSystem.

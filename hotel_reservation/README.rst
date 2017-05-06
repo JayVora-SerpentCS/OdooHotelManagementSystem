@@ -46,4 +46,4 @@ Serpent Consulting Services PVT. LTD.
 
 This module is maintained by the SerpentCS.
 
-To contribute to this module, please visit https://github.com/JayVora-SerpentCS/hotelmgmt_v8.
+To contribute to this module, please visit https://github.com/JayVora-SerpentCS/OdooHotelManagementSystem.

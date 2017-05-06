@@ -24,7 +24,7 @@ class HotelFolio(models.Model):
         context = dict(self._context)
         if not context:
             context = {}
-        context.update({'from_reservation':True})
+        context.update({'from_reservation': True})
         res = super(HotelFolio, self).write(vals)
         reservation_line_obj = self.env['hotel.room.reservation.line']
         for folio_obj in self:
@@ -56,7 +56,6 @@ class HotelFolioLineExt(models.Model):
         res = super(HotelFolioLineExt, self).on_change_checkout()
         hotel_room_obj = self.env['hotel.room']
         hotel_room_ids = hotel_room_obj.search([])
-        avail_prod_ids = []
         for room in hotel_room_ids:
             assigned = False
             for line in room.room_reservation_line_ids:
