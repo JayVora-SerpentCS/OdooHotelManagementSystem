@@ -237,8 +237,8 @@ class HotelFolio(models.Model):
         else:
             to_zone = 'UTC'
         return _offset_format_timestamp1(time.strftime("%Y-%m-%d 12:00:00"),
-                                         '%Y-%m-%d %H:%M:%S',
-                                         '%Y-%m-%d %H:%M:%S',
+                                         DEFAULT_SERVER_DATETIME_FORMAT,
+                                         DEFAULT_SERVER_DATETIME_FORMAT,
                                          ignore_unparsable_time=True,
                                          context={'tz': to_zone})
 
@@ -251,8 +251,8 @@ class HotelFolio(models.Model):
         tm_delta = datetime.timedelta(days=1)
         return datetime.datetime.strptime(_offset_format_timestamp1
                                           (time.strftime("%Y-%m-%d 12:00:00"),
-                                           '%Y-%m-%d %H:%M:%S',
-                                           '%Y-%m-%d %H:%M:%S',
+                                           DEFAULT_SERVER_DATETIME_FORMAT,
+                                           DEFAULT_SERVER_DATETIME_FORMAT,
                                            ignore_unparsable_time=True,
                                            context={'tz': to_zone}),
                                           '%Y-%m-%d %H:%M:%S') + tm_delta
@@ -264,24 +264,6 @@ class HotelFolio(models.Model):
         @param default: dict of default values to be set
         '''
         return super(HotelFolio, self).copy(default=default)
-
-    @api.multi
-    def _invoiced(self, name, arg):
-        '''
-        @param self: object pointer
-        @param name: Names of fields.
-        @param arg: User defined arguments
-        '''
-        return self.env['sale.order']._invoiced(name, arg)
-
-    @api.multi
-    def _invoiced_search(self, obj, name, args):
-        '''
-        @param self: object pointer
-        @param name: Names of fields.
-        @param arg: User defined arguments
-        '''
-        return self.env['sale.order']._invoiced_search(obj, name, args)
 
     _name = 'hotel.folio'
     _description = 'hotel folio new'
@@ -334,14 +316,13 @@ class HotelFolio(models.Model):
         -------------------------------------------------------------------
         @param self: object pointer
         '''
-        cr, uid, context = self.env.args
-        context = dict(context)
+        ctx = dict(self._context)
         for rec in self:
             if rec.partner_id.id and len(rec.room_lines) != 0:
-                context.update({'folioid': rec.id, 'guest': rec.partner_id.id,
+                ctx.update({'folioid': rec.id, 'guest': rec.partner_id.id,
                                 'room_no': rec.room_lines[0].product_id.name,
                                 'hotel': rec.warehouse_id.id})
-                self.env.args = cr, uid, misc.frozendict(context)
+                self.env.args = misc.frozendict(ctx)
             else:
                 raise except_orm(_('Warning'), _('Please Reserve Any Room.'))
         return {'name': _('Currency Exchange'),
@@ -350,10 +331,10 @@ class HotelFolio(models.Model):
                 'view_id': False,
                 'view_mode': 'form,tree',
                 'view_type': 'form',
-                'context': {'default_folio_no': context.get('folioid'),
-                            'default_hotel_id': context.get('hotel'),
-                            'default_guest_name': context.get('guest'),
-                            'default_room_number': context.get('room_no')
+                'context': {'default_folio_no': ctx.get('folioid'),
+                            'default_hotel_id': ctx.get('hotel'),
+                            'default_guest_name': ctx.get('guest'),
+                            'default_room_number': ctx.get('room_no')
                             },
                 }
 
@@ -570,10 +551,8 @@ class HotelFolio(models.Model):
         '''
         @param self: object pointer
         '''
-        order_ids = [folio.order_id.id for folio in self]
         room_lst = []
-        sale_obj = self.env['sale.order'].browse(order_ids)
-        invoice_id = (sale_obj.action_invoice_create(grouped=False,
+        invoice_id = (self.order_id.action_invoice_create(grouped=False,
                                                      final=False))
         for line in self:
             values = {'invoiced': True,
@@ -593,27 +572,25 @@ class HotelFolio(models.Model):
         '''
         @param self: object pointer
         '''
-        order_ids = [folio.order_id.id for folio in self]
-        sale_obj = self.env['sale.order'].browse(order_ids)
-        res = sale_obj.action_invoice_cancel()
+        if not self.order_id:
+            raise except_orm(_('Warning'), _('Order id is not available'))
         for sale in self:
             for line in sale.order_line:
                 line.write({'invoiced': 'invoiced'})
-        sale.write({'state': 'invoice_except'})
-        return res
+        self.state = 'invoice_except'
+        return self.order_id.action_invoice_cancel
 
     @api.multi
     def action_cancel(self):
         '''
         @param self: object pointer
         '''
-        order_ids = [folio.order_id.id for folio in self]
-        sale_obj = self.env['sale.order'].browse(order_ids)
-        sale_fun = sale_obj.action_cancel()
+        if not self.order_id:
+            raise except_orm(_('Warning'), _('Order id is not available'))
         for sale in self:
             for invoice in sale.invoice_ids:
                 invoice.state = 'cancel'
-        return sale_fun
+        return self.order_id.action_cancel()
 
     @api.multi
     def action_confirm(self):

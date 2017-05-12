@@ -20,7 +20,7 @@
         </field>
     </record>
 
-    <!-- ########Company Configuration###### -->
+    <!-- ====== Company Configuration ====== -->
     <record id="res_company_inherit_config_hotel" model="ir.ui.view">
         <field name="name">res.company.inherit.config.hotel</field>
         <field name="model">res.company</field>
@@ -268,7 +268,7 @@
         action="action_hotel_room_amenities_view_form" sequence="2"
         parent="hotel.menu_amenity" />
 
-    <!--=================================================== Rooms =================================================== -->
+    <!-- ====== Rooms ====== -->
 
     <!-- Form view of hotel room -->
     <record id="view_hotel_room_form" model="ir.ui.view">
@@ -542,7 +542,7 @@
                             <group colspan="4" col="4">
                                 <field name="checkin_date" />
                                 <field name="checkout_date" />
-                                <field name="duration" />
+                                <field name="duration" readonly="1"/>
                             </group>
                             <separator string="Room Lines" colspan="4" />
                             <field name="room_lines" colspan="4" string="Room Line"
