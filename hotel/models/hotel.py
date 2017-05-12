@@ -609,17 +609,11 @@ class HotelFolio(models.Model):
         '''
         order_ids = [folio.order_id.id for folio in self]
         sale_obj = self.env['sale.order'].browse(order_ids)
-        rv = sale_obj.action_cancel()
+        sale_fun = sale_obj.action_cancel()
         for sale in self:
-            for pick in sale.picking_ids:
-                workflow.trg_validate(self._uid, 'stock.picking', pick.id,
-                                      'button_cancel', self._cr)
             for invoice in sale.invoice_ids:
-                workflow.trg_validate(self._uid, 'account.invoice',
-                                      invoice.id, 'invoice_cancel',
-                                      self._cr)
-                sale.write({'state': 'cancel'})
-        return rv
+                invoice.state = 'cancel'
+        return sale_fun
 
     @api.multi
     def action_confirm(self):
@@ -1222,7 +1216,7 @@ class CurrencyExchangeRate(models.Model):
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'done'})
+        self.state = 'done'
         return True
 
     @api.multi
@@ -1233,7 +1227,7 @@ class CurrencyExchangeRate(models.Model):
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'cancel'})
+        self.state = 'cancel'
         return True
 
     @api.multi
@@ -1244,7 +1238,7 @@ class CurrencyExchangeRate(models.Model):
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'draft'})
+        self.state = 'draft'
         return True
 
     @api.model

@@ -980,12 +980,12 @@
         <field name="arch" type="xml">
             <form string=" Currency Exchange">
                 <header>
-                    <button name="cur_confirm" string="Done" states='draft'
-                        icon="fa-check" />
-                    <button name="cur_cancel" string="Cancel" states='draft'
-                        icon="fa-close" />
-                    <button name="cur_cancel_draft" string="do_draft" states='cancel'
-                        icon="fa-check" />
+                    <button name="act_cur_done" string="Done" states='draft'
+                        icon="fa-check" type="object"/>
+                    <button name="act_cur_cancel" string="Cancel" states='draft'
+                        icon="fa-close" type="object"/>
+                    <button name="act_cur_cancel_draft" string="Set To Draft" states='cancel'
+                        icon="fa-check" type="object"/>
                     <button name="%(report_hotel_currency)d" states='done' type="action"
                         string="Print" class="oe_highlight" />
                     <field name="state" widget="statusbar" statusbar_visible="draft,done" />
