@@ -320,8 +320,8 @@ class HotelFolio(models.Model):
         for rec in self:
             if rec.partner_id.id and len(rec.room_lines) != 0:
                 ctx.update({'folioid': rec.id, 'guest': rec.partner_id.id,
-                                'room_no': rec.room_lines[0].product_id.name,
-                                'hotel': rec.warehouse_id.id})
+                            'room_no': rec.room_lines[0].product_id.name,
+                            'hotel': rec.warehouse_id.id})
                 self.env.args = misc.frozendict(ctx)
             else:
                 raise except_orm(_('Warning'), _('Please Reserve Any Room.'))
@@ -553,7 +553,7 @@ class HotelFolio(models.Model):
         '''
         room_lst = []
         invoice_id = (self.order_id.action_invoice_create(grouped=False,
-                                                     final=False))
+                                                          final=False))
         for line in self:
             values = {'invoiced': True,
                       'hotel_invoice_id': invoice_id
