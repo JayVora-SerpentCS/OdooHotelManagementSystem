@@ -222,7 +222,6 @@
                             <br />
                             <span t-field="o.hotel_id.partner_id.country_id.name"></span>
                             <br />
-                            <br />
                             <span t-field="o.hotel_id.partner_id.website"></span>
                             <br />
                         </div>

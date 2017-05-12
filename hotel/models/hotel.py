@@ -622,32 +622,6 @@ class HotelFolio(models.Model):
             test_obj.write({'state': 'cancel'})
 
     @api.multi
-    def action_ship_create(self):
-        '''
-        @param self: object pointer
-        '''
-        for folio in self:
-            folio.order_id.action_ship_create()
-        return True
-
-    @api.multi
-    def action_ship_end(self):
-        '''
-        @param self: object pointer
-        '''
-        for order in self:
-            order.write({'shipped': True})
-
-    @api.multi
-    def has_stockable_products(self):
-        '''
-        @param self: object pointer
-        '''
-        for folio in self:
-            folio.order_id.has_stockable_products()
-        return True
-
-    @api.multi
     def action_cancel_draft(self):
         '''
         @param self: object pointer
@@ -675,24 +649,6 @@ class HotelFolioLine(models.Model):
         @param default: dict of default values to be set
         '''
         return super(HotelFolioLine, self).copy(default=default)
-
-    @api.multi
-    def _amount_line(self, field_name, arg):
-        '''
-        @param self: object pointer
-        @param field_name: Names of fields.
-        @param arg: User defined arguments
-        '''
-        return self.env['sale.order.line']._amount_line(field_name, arg)
-
-    @api.multi
-    def _number_packages(self, field_name, arg):
-        '''
-        @param self: object pointer
-        @param field_name: Names of fields.
-        @param arg: User defined arguments
-        '''
-        return self.env['sale.order.line']._number_packages(field_name, arg)
 
     @api.model
     def _get_checkin_date(self):
@@ -925,30 +881,6 @@ class HotelServiceLine(models.Model):
         @param default: dict of default values to be set
         '''
         return super(HotelServiceLine, self).copy(default=default)
-
-    @api.multi
-    def _amount_line(self, field_name, arg):
-        '''
-        @param self: object pointer
-        @param field_name: Names of fields.
-        @param arg: User defined arguments
-        '''
-        for folio in self:
-            line = folio.service_line_id
-            x = line._amount_line(field_name, arg)
-        return x
-
-    @api.multi
-    def _number_packages(self, field_name, arg):
-        '''
-        @param self: object pointer
-        @param field_name: Names of fields.
-        @param arg: User defined arguments
-        '''
-        for folio in self:
-            line = folio.service_line_id
-            x = line._number_packages(field_name, arg)
-        return x
 
     @api.model
     def _service_checkin_date(self):
