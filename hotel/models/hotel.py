@@ -841,11 +841,7 @@ class HotelFolioLine(models.Model):
         '''
         lines = [folio_line.order_line_id for folio_line in self]
         lines.button_done()
-        self.write({'state': 'done'})
-        for folio_line in self:
-            workflow.trg_write(self._uid, 'sale.order',
-                               folio_line.order_line_id.order_id.id,
-                               self._cr)
+        self.state = 'done'
         return True
 
     @api.multi

@@ -16,7 +16,7 @@ class HotelFolio(models.Model):
     _inherit = 'hotel.folio'
     _order = 'reservation_id desc'
 
-    reservation_id = fields.Many2one(comodel_name='hotel.reservation',
+    reservation_id = fields.Many2one('hotel.reservation',
                                      string='Reservation Id')
 
     @api.multi
@@ -251,8 +251,7 @@ class HotelReservation(models.Model):
         if not (checkout_date and checkin_date):
             return {'value': {}}
         delta = datetime.timedelta(days=1)
-        dat_a = time.strptime(checkout_date,
-                              dt)[:5]
+        dat_a = time.strptime(checkout_date, dt)[:5]
         addDays = datetime.datetime(*dat_a) + delta
         self.dummy = addDays.strftime(dt)
 
@@ -312,7 +311,7 @@ class HotelReservation(models.Model):
                 reservation with room those already reserved in this \
                 reservation period'))
             else:
-                self.write({'state': 'confirm'})
+                self.state = 'confirm'
                 for line_id in reservation.reservation_line:
                     line_id = line_id.reserve
                     for room_id in line_id:
@@ -337,7 +336,7 @@ class HotelReservation(models.Model):
         """
         room_res_line_obj = self.env['hotel.room.reservation.line']
         hotel_res_line_obj = self.env['hotel_reservation.line']
-        self.write({'state': 'cancel'})
+        self.state = 'cancel'
         room_reservation_line = room_res_line_obj.search([('reservation_id',
                                                            'in', self.ids)])
         room_reservation_line.write({'state': 'unassigned'})
@@ -350,8 +349,7 @@ class HotelReservation(models.Model):
 
     @api.multi
     def set_to_draft_reservation(self):
-        for reservation in self:
-            reservation.write({'state': 'draft'})
+        self.state = 'draft'
         return True
 
     @api.multi
@@ -398,7 +396,7 @@ class HotelReservation(models.Model):
         }
 
     @api.multi
-    def _create_folio(self):
+    def create_folio(self):
         """
         This method is for create new hotel folio.
         -----------------------------------------
@@ -452,7 +450,7 @@ class HotelReservation(models.Model):
             self._cr.execute('insert into hotel_folio_reservation_rel'
                              '(order_id, invoice_id) values (%s,%s)',
                              (reservation.id, folio.id))
-            reservation.write({'state': 'done'})
+            self.state = 'done'
         return True
 
     @api.multi
@@ -594,7 +592,7 @@ class HotelRoomReservationLine(models.Model):
     _description = 'Hotel Room Reservation'
     _rec_name = 'room_id'
 
-    room_id = fields.Many2one(comodel_name='hotel.room', string='Room id')
+    room_id = fields.Many2one('hotel.room', string='Room id')
     check_in = fields.Datetime('Check In Date', required=True)
     check_out = fields.Datetime('Check Out Date', required=True)
     state = fields.Selection([('assigned', 'Assigned'),
