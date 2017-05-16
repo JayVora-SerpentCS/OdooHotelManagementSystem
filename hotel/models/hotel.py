@@ -433,7 +433,8 @@ class HotelFolio(models.Model):
                     if not rec.reservation_id:
                         for room_rec in rec.room_lines:
                             prod = room_rec.product_id.name
-                            room_obj = h_room_obj.search([('name', '=', prod)])
+                            room_obj = h_room_obj.search([('name', '=',
+                                                           prod)])
                             room_obj.write({'isroom': False})
                             vals = {'room_id': room_obj.id,
                                     'check_in': rec.checkin_date,
@@ -735,15 +736,40 @@ class HotelFolioLine(models.Model):
 
     @api.onchange('product_id')
     def product_id_change(self):
-        if self.product_id and self.folio_id.partner_id:
-            self.name = self.product_id.name
-            self.price_unit = self.product_id.list_price
-            self.product_uom = self.product_id.uom_id
-            tax_obj = self.env['account.tax']
-            prod = self.product_id
-            self.price_unit = tax_obj._fix_tax_included_price(prod.price,
-                                                              prod.taxes_id,
-                                                              self.tax_id)
+        '''
+ -        @param self: object pointer
+ -        '''
+        context = dict(self._context)
+        if not context:
+            context = {}
+        if context.get('folio', False):
+            if self.product_id and self.folio_id.partner_id:
+                self.name = self.product_id.name
+                self.price_unit = self.product_id.list_price
+                self.product_uom = self.product_id.uom_id
+                tax_obj = self.env['account.tax']
+                pr = self.product_id
+                self.price_unit = tax_obj._fix_tax_included_price(pr.price,
+                                                                  pr.taxes_id,
+                                                                  self.tax_id)
+        else:
+            if not self.product_id:
+                return {'domain': {'product_uom': []}}
+            val = {}
+            pr = self.product_id.with_context(
+                lang=self.folio_id.partner_id.lang,
+                partner=self.folio_id.partner_id.id,
+                quantity=val.get('product_uom_qty') or self.product_uom_qty,
+                date=self.folio_id.date_order,
+                pricelist=self.folio_id.pricelist_id.id,
+                uom=self.product_uom.id
+            )
+            p = pr.with_context(pricelist=self.order_id.pricelist_id.id).price
+            if self.folio_id.pricelist_id and self.folio_id.partner_id:
+                obj = self.env['account.tax']
+                val['price_unit'] = obj._fix_tax_included_price(p,
+                                                                pr.taxes_id,
+                                                                self.tax_id)
 
     @api.onchange('product_uom')
     def product_uom_change(self):

@@ -546,7 +546,7 @@
                             </group>
                             <separator string="Room Lines" colspan="4" />
                             <field name="room_lines" colspan="4" string="Room Line"
-                                nolabel="1" context="{'checkin':checkin_date,'checkout':checkout_date}">
+                                nolabel="1" context="{'checkin':checkin_date,'checkout':checkout_date,'folio':context.get('folio')}">
                                 <form string="Room Line">
                                     <notebook>
                                         <page string="Folio Line">
@@ -761,6 +761,7 @@
         <field name="res_model">hotel.folio</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form,calendar,graph</field>
+        <field name="context">{'folio': True}</field>
     </record>
 
     <menuitem id="menu_all_folio" name="Folio"
