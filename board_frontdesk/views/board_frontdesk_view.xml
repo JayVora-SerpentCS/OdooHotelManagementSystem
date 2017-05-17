@@ -2,8 +2,8 @@
 <!DOCTYPE xml>
 <odoo>
 
-    <menuitem id="menu_hotel_reporting" name="Reports" parent="hotel.hotel_management_menu" sequence="7" />
-    
+    <menuitem id="menu_hotel_reporting" name="Reports" parent="hotel.hotel_management_menu" sequence="7"/>
+
     <!-- Action of hotel reservation -->
     <record id="action_view_frontdesk_cal" model="ir.actions.act_window">
         <field name="name">FrontDesk</field>
@@ -31,7 +31,7 @@
         <field name="view_type">form</field>
         <field name="view_mode">form</field>
     </record>
-    
+
     <!-- Tree view of Current Table Reservation -->
     <record id="view_board_hotel_restaurant_reservation_tree" model="ir.ui.view">
         <field name="name">view.board.hotel.restaurant.reservation.tree</field>

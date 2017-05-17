@@ -277,6 +277,7 @@
         <field name="arch" type="xml">
             <form string="Hotel Room">
                 <sheet>
+                    <field name="image_medium" widget="image" class="oe_avatar"/>
                     <div class="oe_title">
                         <label for="name" string="Name" />
                         <h1>
@@ -284,7 +285,7 @@
                         </h1>
                         <label for="status" string="Status" />
                         <h2>
-                            <field name="status" />
+                            <field name="status" readonly="1"/>
                         </h2>
                         <h2>
                             <field name="isroom" />
@@ -431,6 +432,7 @@
                                     <div class="oe_kanban_project_list">
                                         <H3>
                                             <a type="open">
+                                                <img t-att-src="kanban_image('hotel.room', 'image_medium', record.id.value)" style="height:70px;width:70px" class="oe_avatar oe_kanban_avatar_smallbox"/>
                                                 <t t-if="record.code.raw_value" style="margin-right: 10px">
                                                     [
                                                     <field name="code" />
@@ -964,10 +966,9 @@
         <field name="name">Services by Category</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">product.category</field>
-        <field name="domain">[('parent_id','=',False),('isservicetype','=',True)]
-        </field>
+        <field name="domain">[('parent_id','=',False),('isservicetype','=',True)]</field>
         <field name="view_type">tree</field>
-        <field name="view_id" ref="product_category_tree_view" />
+        <field name="view_id" ref="product_category_tree_view"/>
     </record>
     <menuitem name="Services by Type" id="menu_hotel_service_category_action"
         action="hotel_service_category_action" sequence="10"
@@ -993,7 +994,7 @@
                 </header>
                 <sheet>
                     <div class="oe_title ">
-                        <label for="name" string="Name" />
+                        <label for="name" string="Reg Number"/>
                         <h1>
                             <field name="name"/>
                         </h1>
