@@ -90,7 +90,7 @@ class HotelRestaurantReservation(models.Model):
                 'is_folio': record.is_folio,
             }
             proxy.create(values)
-        self.write({'state': 'order'})
+        self.state = 'order'
         return True
 
     @api.onchange('cname')
@@ -319,7 +319,7 @@ class HotelRestaurantOrder(models.Model):
         ----------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'cancel'})
+        self.state = 'cancel'
         return True
 
     @api.multi
@@ -551,7 +551,7 @@ class HotelReservationOrder(models.Model):
                 rest_order_list_obj.create(o_line)
                 res.append(order_line.id)
             self.rest_id = [(6, 0, res)]
-            self.write({'state': 'order'})
+            self.state = 'order'
         return res
 
     @api.multi
@@ -619,7 +619,7 @@ class HotelReservationOrder(models.Model):
                                       [(4, order_obj.id)]})
                 if order_obj.reservationno:
                     order_obj.reservationno.write({'state': 'done'})
-        self.write({'state': 'done'})
+        self.state = 'done'
         return True
 
     _name = "hotel.reservation.order"
