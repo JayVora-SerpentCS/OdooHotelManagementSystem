@@ -511,8 +511,7 @@
                     <button name="action_cancel" string="Cancel Folio" states="draft"
                         icon="fa-close" type="object" class="oe_highlight" />
                     <button name="action_done" type="object" string="Set to Done"
-                        states="sale" attrs="{'invisible': [('invoice_status', '!=', 'invoiced')]}"
-                        class="oe_highlight"
+                        states="sale" class="oe_highlight"
                         help="If a Hotel Folio is done, you cannot modify it manually anymore. However, you will still be able to invoice or deliver. This is used to freeze the Hotel Folio." />
                     <field name="state" select="2" widget="statusbar"
                         statusbar_visible="draft,sent,sale,done" />

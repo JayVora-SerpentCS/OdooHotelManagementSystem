@@ -26,6 +26,7 @@
                             states="cancel" type="object" icon="fa-pencil-square-o"
                             class="btn btn-primary"/>
                     </h1>
+                    <h1>Housekeeping</h1>
                     <group>
                         <group>
                             <field name="current_date"/>
