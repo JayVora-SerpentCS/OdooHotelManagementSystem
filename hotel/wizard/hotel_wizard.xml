@@ -13,9 +13,8 @@
                     <field name="date_end" required="1" />
                 </group>
                 <footer>
-                    <button name="print_report" string="Print Folio" type="object" class="oe_highlight" />
-                    or
-                    <button string="Cancel" class="oe_link" special="cancel" />
+                    <button name="print_report" string="Print Folio" icon="fa-print" type="object" class="oe_highlight" />
+                    <button string="Cancel" icon="fa-close" class="btn btn-primary" special="cancel" />
                 </footer>
             </form>
         </field>

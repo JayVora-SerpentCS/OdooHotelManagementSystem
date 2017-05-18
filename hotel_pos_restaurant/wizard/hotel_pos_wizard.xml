@@ -18,8 +18,7 @@
                 <footer>
                     <button name="print_pos_report" string="Print Pos Order"
                         type="object" class="oe_highlight" />
-                    or
-                    <button string="Cancel" class="oe_link" special="cancel" />
+                    <button string="Cancel" icon="fa-close" class="btn btn-primary" special="cancel" />
                 </footer>
             </form>
         </field>

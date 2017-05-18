@@ -15,18 +15,16 @@
                 <sheet>
                     <h1 align="right">
                         <button string="Clean" name="room_clean" states="dirty"
-                            type="object" icon="fa-paint-brush" />
+                            type="object" icon="fa-paint-brush" class="btn btn-primary"/>
                         <button string="Inspect" name="room_inspect" states="clean"
-                            type="object" icon="fa-search" />
+                            type="object" icon="fa-search" class="btn btn-primary"/>
                         <button string="Done" name="room_done" states="inspect"
-                            type="object" icon="fa-check" />
+                            type="object" icon="fa-check" class="btn btn-primary"/>
                         <button string="Cancel" name="room_cancel" states="clean,inspect"
-                            type="object" icon="fa-times-circle" />
+                            type="object" icon="fa-times-circle" class="btn btn-primary"/>
                         <button string="Set to Dirty" name="action_set_to_dirty"
-                            states="cancel" type="object" icon="fa-pencil-square-o" />
-                    </h1>
-                    <h1>
-                        <label string="Housekeeping" />
+                            states="cancel" type="object" icon="fa-pencil-square-o"
+                            class="btn btn-primary"/>
                     </h1>
                     <group>
                         <group>
@@ -42,35 +40,34 @@
                     </group>
                     <newline />
                     <newline />
-                    <separator string="Activity Lines" colspan="4" />
+                    <separator string="Activity Lines" colspan="4"/>
                     <field name="activity_lines" context="{'room_id':room_no, 'today_date':current_date}"
                         colspan="4" nolabel="1">
                         <form string="Activity Lines">
                             <group colspan="4" col="4">
-                                <field name="today_date" />
-                                <field name="activity_name" />
-                                <field name="housekeeper" />
-                                <field name="clean_start_time" />
-                                <field name="clean_end_time" />
+                                <field name="today_date"/>
+                                <field name="activity_name"/>
+                                <field name="housekeeper"/>
+                                <field name="clean_start_time"/>
+                                <field name="clean_end_time"/>
                             </group>
                             <div class="oe_title">
                                 <div class="oe_edit_only">
                                     <field name="dirty" />
-                                    <label for="dirty" string="Is Dirty?" />
-                                    <field name="clean" />
-                                    <label for="clean" string="Is Clean?" />
+                                    <label for="dirty" string="Is Dirty?"/>
+                                    <field name="clean"/>
+                                    <label for="clean" string="Is Clean?"/>
                                 </div>
                             </div>
                         </form>
                         <tree string="Activity Lines" editable="buttom">
                             <field name="activity_name" />
                             <field name="housekeeper" />
-                            <!-- <field name="room_id"/> -->
                             <field name="today_date" />
                             <field name="clean_start_time" />
                             <field name="clean_end_time" />
-                            <field name="dirty" />
-                            <field name="clean" />
+                            <field name="dirty" readonly="1"/>
+                            <field name="clean" readonly="1"/>
                         </tree>
                     </field>
                     <newline />
@@ -135,7 +132,6 @@
         sequence="4" />
 
     <!-- ================ Activity Category================= -->
-
     <!-- Form view of hotel housekeeping activity type -->
     <record id="view_hotel_housekeeping_activity_type_form" model="ir.ui.view">
         <field name="name">hotel_housekeeping_activity_type_form</field>

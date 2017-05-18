@@ -512,6 +512,7 @@
                         icon="fa-close" type="object" class="oe_highlight" />
                     <button name="action_done" type="object" string="Set to Done"
                         states="sale" attrs="{'invisible': [('invoice_status', '!=', 'invoiced')]}"
+                        class="oe_highlight"
                         help="If a Hotel Folio is done, you cannot modify it manually anymore. However, you will still be able to invoice or deliver. This is used to freeze the Hotel Folio." />
                     <field name="state" select="2" widget="statusbar"
                         statusbar_visible="draft,sent,sale,done" />
@@ -983,13 +984,13 @@
             <form string=" Currency Exchange">
                 <header>
                     <button name="act_cur_done" string="Done" states='draft'
-                        icon="fa-check" type="object"/>
+                        icon="fa-check" type="object" class="oe_highlight"/>
                     <button name="act_cur_cancel" string="Cancel" states='draft'
-                        icon="fa-close" type="object"/>
+                        icon="fa-close" type="object" class="oe_highlight"/>
                     <button name="act_cur_cancel_draft" string="Set To Draft" states='cancel'
-                        icon="fa-check" type="object"/>
+                        icon="fa-check" type="object" class="oe_highlight"/>
                     <button name="%(report_hotel_currency)d" states='done' type="action"
-                        string="Print" class="oe_highlight" />
+                        string="Print" class="oe_highlight"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,done" />
                 </header>
                 <sheet>

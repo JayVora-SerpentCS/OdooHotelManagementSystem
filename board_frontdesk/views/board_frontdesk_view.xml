@@ -123,15 +123,4 @@
 
     <menuitem name="States By Restaurant" action="action_report_hotel_restaurant_board" id="menu_action_report_hotel_restaurant_board" sequence="35" parent="menu_hotel_reporting" />
 
-    <!-- Action for currency exchange -->
-    <record id="action_desk_currency_exchange" model="ir.actions.act_window">
-        <field name="name">action.desk.currency.exchange</field>
-        <field name="type">ir.actions.act_window</field>
-        <field name="res_model">currency.exchange</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
-    </record>
-
-    <menuitem name="Currency Exchange" id="menu_action_desk_currency_exchange" action="action_desk_currency_exchange" parent="menu_hotel_reporting" />
-
 </odoo>
