@@ -25,7 +25,6 @@
     'version': '0.07',
     'author': 'Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA)',
-    'images': [],
     'category': 'Generic Modules/Hotel Management',
     'website': 'http://www.serpentcs.com',
     'depends': ['product_uos', 'sale_stock', 'point_of_sale', 'report'],
@@ -42,6 +41,7 @@
             'wizard/hotel_wizard.xml',
     ],
     'css': ['static/src/css/room_kanban.css'],
+    'images': ['static/description/Hotel.png'],
     'auto_install': False,
     'installable': True
 }

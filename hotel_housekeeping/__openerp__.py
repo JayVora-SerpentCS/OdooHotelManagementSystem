@@ -41,6 +41,7 @@
         "views/hotel_housekeeping_workflow.xml",
         "views/hotel_housekeeping_view.xml",
     ],
+    'images': ['static/description/HouseKeeping.png'],
     'installable': True,
     'auto_install': False,
 }

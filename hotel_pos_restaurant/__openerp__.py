@@ -36,6 +36,7 @@
              "views/hotel_pos_report.xml",
              "views/report_pos_management.xml",
              "wizard/hotel_pos_wizard.xml"],
+    'images': ['static/description/HotelPOSRestaurant.png'],
     "auto_install": False,
     "installable": True
 }
