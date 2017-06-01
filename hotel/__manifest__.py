@@ -3,9 +3,8 @@
 
 {
     'name': 'Hotel Management',
-    "version": "10.0.1.0.0",
+    'version': '10.0.1.0.0',
     'author': 'Serpent Consulting Services Pvt. Ltd., OpenERP SA',
-    'images': [],
     'category': 'Generic Modules/Hotel Management',
     'website': 'http://www.serpentcs.com',
     'depends': ['sale_stock', 'point_of_sale', 'report'],
@@ -21,6 +20,7 @@
             'wizard/hotel_wizard.xml',
     ],
     'css': ['static/src/css/room_kanban.css'],
+    'images': ['static/description/Hotel.png'],
     'auto_install': False,
     'installable': True,
     'application': True

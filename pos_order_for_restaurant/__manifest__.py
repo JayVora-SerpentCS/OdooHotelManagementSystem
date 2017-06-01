@@ -19,5 +19,6 @@
     'demo': ['view/pos_order_restaurant_demo.xml'],
     'depends': ['point_of_sale', 'pos_restaurant', 'pos_receipt'],
     'qweb': ['static/src/xml/pos_order_for_restaurant.xml'],
+    'images': ['static/description/HotelPOSRestaurant.png'],
     'auto_install': False,
 }

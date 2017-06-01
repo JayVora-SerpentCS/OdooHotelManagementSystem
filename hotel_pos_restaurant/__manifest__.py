@@ -15,6 +15,7 @@
              'views/report_pos_management.xml',
              'wizard/hotel_pos_wizard.xml'],
     'qweb': ['static/src/xml/*.xml'],
+    'images': ['static/description/HotelPOSRestaurant.png'],
     'auto_install': False,
     'installable': True
 }
