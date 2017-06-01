@@ -53,6 +53,7 @@
     'js': ["static/src/js/hotel_room_summary.js", ],
     'qweb': ['static/src/xml/hotel_room_summary.xml'],
     'css': ["static/src/css/room_summary.css"],
+    'images': ['static/description/HotelReservation.png'],
     'installable': True,
     'auto_install': False,
 }

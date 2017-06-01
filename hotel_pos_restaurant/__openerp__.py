@@ -26,7 +26,6 @@
     "version": "0.10",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA)",
-    "images": [],
     "license": "",
     "category": "Generic Modules/Hotel Restaurant Management",
     "website": "http://www.serpentcs.com",
@@ -37,6 +36,7 @@
              "views/hotel_pos_report.xml",
              "views/report_pos_management.xml",
              "wizard/hotel_pos_wizard.xml"],
+    'images': ['static/description/HotelPOSRestaurant.png'],
     "auto_install": False,
     "installable": True
 }

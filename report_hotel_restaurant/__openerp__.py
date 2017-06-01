@@ -35,6 +35,7 @@
         "security/ir.model.access.csv",
         "views/report_hotel_restaurant_view.xml",
     ],
+    'images': ['static/description/RestaurantReporting.png'],
     'installable': True,
     'auto_install': False,
 }
