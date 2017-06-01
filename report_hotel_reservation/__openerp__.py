@@ -34,6 +34,7 @@
         "security/ir.model.access.csv",
         "views/report_hotel_reservation_view.xml",
     ],
+    'images': ['static/description/HotelReservationReporting.png'],
     'installable': True,
     'auto_install': False,
 }
