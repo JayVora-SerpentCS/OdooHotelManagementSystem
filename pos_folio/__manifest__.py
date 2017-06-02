@@ -16,5 +16,6 @@
     'data': ['view/pos_folio_view.xml',
              'view/templates.xml'],
     'qweb': ['static/src/xml/*.xml'],
+    'images': ['static/description/pos_folio.png'],
     'auto_install': False,
 }

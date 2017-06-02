@@ -16,5 +16,6 @@
              'view/templates.xml'],
     'depends': ['point_of_sale'],
     'qweb': ['static/src/xml/pos_options.xml'],
+    'images': ['static/description/pos_optionbar.png'],
     'auto_install': False,
 }
