@@ -26,7 +26,6 @@
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA)",
     "category": "Generic Modules/Hotel Reservation",
-    "images": [],
     "website": "http://www.serpentcs.com",
     "depends": ["hotel", "stock", 'mail'],
     "license": "",

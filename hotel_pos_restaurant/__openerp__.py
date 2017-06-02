@@ -27,7 +27,6 @@
     Odoo Community Association (OCA)",
     "category": "Generic Modules/Hotel Restaurant Management",
     "website": "http://www.serpentcs.com",
-    "images": [],
     "depends": ["pos_restaurant", "hotel"],
     "license": "",
     "demo": ["views/hotel_pos_data.xml"],
