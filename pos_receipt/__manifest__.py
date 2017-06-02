@@ -19,5 +19,6 @@
              'view/kitchen_screen_data.xml'],
     'depends': ['point_of_sale', 'pos_options_bar'],
     'qweb': ['static/src/xml/pos_receipt.xml'],
+    'images': ['static/description/pos_receipt.png'],
     'auto_install': False,
 }
