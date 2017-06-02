@@ -25,7 +25,6 @@
     "version": "0.03",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA)",
-    "images": [],
     "website": "http://www.serpentcs.com",
     "depends": ["hotel_reservation"],
     "license": "",
