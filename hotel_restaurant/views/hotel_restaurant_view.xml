@@ -3,7 +3,7 @@
 <odoo>
 
     <menuitem id="hotel_restaurant_menu" name="Restaurant"
-        parent="hotel.hotel_management_menu" sequence="3" />
+        parent="hotel.hotel_management_menu" sequence="3"/>
 
     <record id="view_hotelfolio1_form1_inherited" model="ir.ui.view">
         <field name="name">hotel.folio1.form1.inherited</field>
@@ -46,9 +46,7 @@
         </field>
     </record>
 
-
-    <!-- ============================== Table Master ============================== -->
-
+    <!-- ======= Table Master ======= -->
     <!-- Form view of hotel restaurant tables -->
     <record id="view_hotel_restaurant_tables_form" model="ir.ui.view">
         <field name="name">hotel_restaurant_tables.form</field>
@@ -63,6 +61,18 @@
                     </group>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <!-- Tree view of hotel restaurant tables -->
+    <record id="view_hotel_restaurant_tables_tree" model="ir.ui.view">
+        <field name="name">hotel_restaurant_tables.tree</field>
+        <field name="model">hotel.restaurant.tables</field>
+        <field name="arch" type="xml">
+            <tree string="Tables Detail">
+                <field name="name" />
+                <field name="capacity" />
+            </tree>
         </field>
     </record>
 
@@ -83,18 +93,6 @@
         </field>
     </record>
 
-    <!-- Tree view of hotel restaurant tables -->
-    <record id="view_hotel_restaurant_tables_tree" model="ir.ui.view">
-        <field name="name">hotel_restaurant_tables.tree</field>
-        <field name="model">hotel.restaurant.tables</field>
-        <field name="arch" type="xml">
-            <tree string="Tables Detail">
-                <field name="name" />
-                <field name="capacity" />
-            </tree>
-        </field>
-    </record>
-
     <!-- Action of hotel restaurant tables -->
     <record id="open_view_hotel_restaurant_tables_form_tree" model="ir.actions.act_window">
         <field name="name">Tables Details</field>
@@ -102,12 +100,12 @@
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
     </record>
+
     <menuitem name="Tables" id="menu_open_view_hotel_restaurant_tables_form_tree"
         action="open_view_hotel_restaurant_tables_form_tree"
         parent="hotel.hotel_configuration_menu" />
 
-    <!-- ============================== Table Reservation ============================== -->
-
+    <!-- ======= Table Reservation ======= -->
     <!-- Form view of hotel restaurant reservation -->
     <record id="view_hotel_restaurant_reservation_form" model="ir.ui.view">
         <field name="name">hotel_restaurant_reservation.form</field>
@@ -116,15 +114,15 @@
             <form string="Table Reservation">
                 <header>
                     <button string="Confirm" name="table_reserved" states="draft"
-                        type="object" icon="fa-check" />
+                        type="object" icon="fa-check" class="oe_highlight"/>
                     <button string="Done" name="table_done" states="confirm"
-                        type="object" icon="fa-check-square-o" />
+                        type="object" icon="fa-check-square-o" class="oe_highlight"/>
                     <button string="Cancel" name="table_cancel" states="confirm"
-                        type="object" icon="fa-close" />
+                        type="object" icon="fa-close" class="oe_highlight"/>
                     <button string="Set to Draft" name="action_set_to_draft"
-                        states="cancel" type="object" icon="fa-files-o" />
+                        states="cancel" type="object" icon="fa-files-o" class="oe_highlight"/>
                     <button string="Create Order" name="create_order" type="object"
-                        states="done" icon="fa-file-text-o" />
+                        states="done" icon="fa-file-text-o" class="oe_highlight"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,confirm,done" />
                 </header>
                 <sheet>
@@ -223,12 +221,12 @@
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_hotel_restaurant_reservation_tree" />
     </record>
+
     <menuitem name="Table Booking" id="menu_open_view_hotel_restaurant_reservation_form_tree"
         action="open_view_hotel_restaurant_reservation_form_tree"
         parent="hotel_restaurant_menu" />
 
-    <!-- ====================== Orders for Reservation ====================== -->
-
+    <!-- ======= Orders for Reservation ======= -->
     <!-- Form view of hotel reservation order -->
     <record id="view_hotel_reservation_order_form" model="ir.ui.view">
         <field name="name">hotel_reservation_order.form</field>
@@ -237,11 +235,11 @@
             <form string="Order">
                 <header>
                     <button string="Generate KOT" name="reservation_generate_kot"
-                        type="object" states="draft" icon="fa-arrow-right" />
+                        type="object" states="draft" icon="fa-arrow-right" class="oe_highlight"/>
                     <button string="Generate KOT" name="reservation_update_kot"
-                        type="object" states="order" icon="fa-arrow-right" />
+                        type="object" states="order" icon="fa-arrow-right" class="oe_highlight"/>
                     <button string="Done" name="done_kot" type="object" states="order"
-                        icon="fa-check" />
+                        icon="fa-check" class="oe_highlight"/>
                     <button name="%(report_hotel_reservation_order_bill)d"
                         attrs="{'invisible' : ['|', ('folio_id','!=',False), ('state','in',('draft','order'))]}"
                         type="action" string="generate Bill" class="oe_highlight" />
@@ -347,12 +345,12 @@
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
     </record>
+
     <menuitem id="menu_open_view_hotel_reservation_order_form_tree" name="Orders"
         action="open_view_hotel_reservation_order_form_tree"
         parent="hotel_restaurant_menu" />
 
-    <!-- ============================== Table Order ============================== -->
-
+    <!-- ======= Table Order ======= -->
     <!-- Form view of hotel restaurant order -->
     <record id="view_hotel_restaurant_order_form" model="ir.ui.view">
         <field name="name">hotel_restaurant_order.form</field>
@@ -361,15 +359,15 @@
             <form string="Order">
                 <header>
                     <button string="Generate KOT" name="generate_kot" type="object"
-                        states="draft" icon="fa-arrow-right" />
+                        states="draft" icon="fa-arrow-right" class="oe_highlight"/>
                     <button string="Generate KOT" name="generate_kot_update"
-                        type="object" states="order" icon="fa-arrow-right" />
+                        type="object" states="order" icon="fa-arrow-right" class="oe_highlight"/>
                     <button string="Done" name="done_order_kot" type="object"
-                        states="order" icon="fa-check" />
+                        states="order" icon="fa-check" class="oe_highlight"/>
                     <button string="Cancel" name="done_cancel" states="draft,order"
-                        type="object" icon="fa-close" />
+                        type="object" icon="fa-close" class="oe_highlight"/>
                     <button string="Set to Draft" name="set_to_draft" states="cancel"
-                        type="object" icon="fa-file-o" />
+                        type="object" icon="fa-file-o" class="oe_highlight"/>
                     <button name="%(report_hotel_res_order_bill)d"
                         attrs="{'invisible' : ['|', ('folio_id','!=',False), ('state','in',('draft','order','cancel'))]}"
                         type="action" string="generate Bill" class="oe_highlight" />
@@ -481,13 +479,13 @@
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
     </record>
+
     <menuitem id="menu_open_view_hotel_restaurant_order_form_tree" name="Table Order"
         action="open_view_hotel_restaurant_order_form_tree"
         sequence="11" parent="hotel_restaurant_menu" />
 
 
-    <!-- ============================== Kitchen Order List ============================== -->
-
+    <!-- ======= Kitchen Order List ======= -->
     <!-- Form view of hotel restaurant kitchen order tickets -->
     <record id="view_hotel_restaurant_kitchen_order_tickets_form" model="ir.ui.view">
         <field name="name">hotel_restaurant_kitchen_order_tickets.form</field>
@@ -576,12 +574,13 @@
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
     </record>
+
     <menuitem name="Kitchen Order Ticket"
         id="menu_open_view_hotel_restaurant_kitchen_order_tickets_form_tree"
         action="open_view_hotel_restaurant_kitchen_order_tickets_form_tree"
         sequence="12" parent="hotel_restaurant_menu" />
 
-    <!-- Menucard Category -->
+    <!-- ======= Menucard Category ======= -->
     <!-- Form view of hotel menucard type -->
     <record id="view_hotel_menucard_type_form" model="ir.ui.view">
         <field name="name">hotel_menucard_type_form</field>
@@ -617,6 +616,7 @@
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
     </record>
+
     <menuitem id="menu_hotel_food_item" name="Food Item"
         parent="hotel.hotel_configuration_menu" sequence="2" />
     <menuitem id="menu_action_hotel_menucard_type_view_form" name="Food Item Types"
@@ -690,6 +690,19 @@
         </field>
     </record>
 
+    <!-- Tree view of hotel menucard -->
+    <record id="view_hotel_menucard_tree" model="ir.ui.view">
+        <field name="name">hotel.menucard.tree</field>
+        <field name="model">hotel.menucard</field>
+        <field name="arch" type="xml">
+            <tree string="Hotel Menucard">
+                <field name="name" />
+                <field name="categ_id" />
+                <field name="list_price" string="Item Rate" />
+            </tree>
+        </field>
+    </record>
+
     <!-- Search view of hotel menucard -->
     <record id="view_hotel_menucard_search_new" model="ir.ui.view">
         <field name="name">hotel.menucard.search</field>
@@ -704,19 +717,6 @@
                     <filter string="Categoty" domain="[]" context="{'group_by':'categ_id'}" />
                 </group>
             </search>
-        </field>
-    </record>
-
-    <!-- Tree view of hotel menucard -->
-    <record id="view_hotel_menucard_tree" model="ir.ui.view">
-        <field name="name">hotel.menucard.tree</field>
-        <field name="model">hotel.menucard</field>
-        <field name="arch" type="xml">
-            <tree string="Hotel Menucard">
-                <field name="name" />
-                <field name="categ_id" />
-                <field name="list_price" string="Item Rate" />
-            </tree>
         </field>
     </record>
 
@@ -785,8 +785,7 @@
         <field name="name">Foods by Category</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">product.category</field>
-        <field name="domain">[('parent_id','=',False),('ismenutype','=',True)]
-        </field>
+        <field name="domain">[('parent_id','=',False),('ismenutype','=',True)]</field>
         <field name="view_type">tree</field>
         <field name="view_id" ref="hotel.product_category_tree_view" />
     </record>

@@ -12,14 +12,14 @@
                 <header>
                     <button name="send_reservation_maill" type="object"
                         string="Send Reservation Email" states="confirm" class="oe_highlight" />
-                    <button name="confirm" string="Confirm" states="draft"
-                        class="oe_highlight" />
-                    <button name="done" string="Create Folio" states="confirm"
-                        class="oe_highlight" />
-                    <button name="cancel" string="Cancel Reservation" states="draft,confirm"
-                        class="oe_highlight" />
-                    <button name="draft" string="Set to Draft" states="cancel"
-                        class="oe_highlight" />
+                    <button name="confirmed_reservation" string="Confirm" states="draft"
+                        class="oe_highlight" type="object"/>
+                    <button name="create_folio" string="Create Folio" states="confirm"
+                        class="oe_highlight" type="object"/>
+                    <button name="cancel_reservation" string="Cancel Reservation" states="draft,confirm"
+                        class="oe_highlight" type="object"/>
+                    <button name="set_to_draft_reservation" string="Set to Draft" states="cancel"
+                        class="oe_highlight" type="object"/>
                     <field name="state" widget="statusbar" />
                 </header>
                 <sheet>
@@ -268,7 +268,7 @@
                 <sheet>
                     <group colspan="4" col="4">
                         <field name="partner_id" />
-                        <field name="room_id" />
+                        <field name="room_id" readonly="1"/>
                         <field name="check_in" />
                         <field name="check_out" />
                         <field name="warehouse_id" />

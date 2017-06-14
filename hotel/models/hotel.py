@@ -7,7 +7,6 @@ import urllib2
 from odoo.exceptions import except_orm, ValidationError
 from odoo.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
 from odoo import models, fields, api, _
-from odoo import workflow
 from decimal import Decimal
 
 
@@ -237,8 +236,8 @@ class HotelFolio(models.Model):
         else:
             to_zone = 'UTC'
         return _offset_format_timestamp1(time.strftime("%Y-%m-%d 12:00:00"),
-                                         '%Y-%m-%d %H:%M:%S',
-                                         '%Y-%m-%d %H:%M:%S',
+                                         DEFAULT_SERVER_DATETIME_FORMAT,
+                                         DEFAULT_SERVER_DATETIME_FORMAT,
                                          ignore_unparsable_time=True,
                                          context={'tz': to_zone})
 
@@ -251,8 +250,8 @@ class HotelFolio(models.Model):
         tm_delta = datetime.timedelta(days=1)
         return datetime.datetime.strptime(_offset_format_timestamp1
                                           (time.strftime("%Y-%m-%d 12:00:00"),
-                                           '%Y-%m-%d %H:%M:%S',
-                                           '%Y-%m-%d %H:%M:%S',
+                                           DEFAULT_SERVER_DATETIME_FORMAT,
+                                           DEFAULT_SERVER_DATETIME_FORMAT,
                                            ignore_unparsable_time=True,
                                            context={'tz': to_zone}),
                                           '%Y-%m-%d %H:%M:%S') + tm_delta
@@ -264,24 +263,6 @@ class HotelFolio(models.Model):
         @param default: dict of default values to be set
         '''
         return super(HotelFolio, self).copy(default=default)
-
-    @api.multi
-    def _invoiced(self, name, arg):
-        '''
-        @param self: object pointer
-        @param name: Names of fields.
-        @param arg: User defined arguments
-        '''
-        return self.env['sale.order']._invoiced(name, arg)
-
-    @api.multi
-    def _invoiced_search(self, obj, name, args):
-        '''
-        @param self: object pointer
-        @param name: Names of fields.
-        @param arg: User defined arguments
-        '''
-        return self.env['sale.order']._invoiced_search(obj, name, args)
 
     _name = 'hotel.folio'
     _description = 'hotel folio new'
@@ -334,14 +315,13 @@ class HotelFolio(models.Model):
         -------------------------------------------------------------------
         @param self: object pointer
         '''
-        cr, uid, context = self.env.args
-        context = dict(context)
+        ctx = dict(self._context)
         for rec in self:
             if rec.partner_id.id and len(rec.room_lines) != 0:
-                context.update({'folioid': rec.id, 'guest': rec.partner_id.id,
-                                'room_no': rec.room_lines[0].product_id.name,
-                                'hotel': rec.warehouse_id.id})
-                self.env.args = cr, uid, misc.frozendict(context)
+                ctx.update({'folioid': rec.id, 'guest': rec.partner_id.id,
+                            'room_no': rec.room_lines[0].product_id.name,
+                            'hotel': rec.warehouse_id.id})
+                self.env.args = misc.frozendict(ctx)
             else:
                 raise except_orm(_('Warning'), _('Please Reserve Any Room.'))
         return {'name': _('Currency Exchange'),
@@ -350,10 +330,10 @@ class HotelFolio(models.Model):
                 'view_id': False,
                 'view_mode': 'form,tree',
                 'view_type': 'form',
-                'context': {'default_folio_no': context.get('folioid'),
-                            'default_hotel_id': context.get('hotel'),
-                            'default_guest_name': context.get('guest'),
-                            'default_room_number': context.get('room_no')
+                'context': {'default_folio_no': ctx.get('folioid'),
+                            'default_hotel_id': ctx.get('hotel'),
+                            'default_guest_name': ctx.get('guest'),
+                            'default_room_number': ctx.get('room_no')
                             },
                 }
 
@@ -390,7 +370,7 @@ class HotelFolio(models.Model):
     @api.onchange('checkout_date', 'checkin_date')
     def onchange_dates(self):
         '''
-        This mathod gives the duration between check in and checkout
+        This method gives the duration between check in and checkout
         if customer will leave only for some hour it would be considers
         as a whole day.If customer will check in checkout for more or equal
         hours, which configured in company as additional hours than it would
@@ -399,11 +379,11 @@ class HotelFolio(models.Model):
         @param self: object pointer
         @return: Duration and checkout_date
         '''
-        company_obj = self.env['res.company']
         configured_addition_hours = 0
-        company_ids = company_obj.search([])
-        if company_ids.ids:
-            configured_addition_hours = company_ids[0].additional_hours
+        wid = self.warehouse_id
+        whouse_com_id = wid or wid.company_id
+        if whouse_com_id:
+            configured_addition_hours = wid.company_id.additional_hours
         myduration = 0
         chckin = self.checkin_date
         chckout = self.checkout_date
@@ -417,10 +397,11 @@ class HotelFolio(models.Model):
                 myduration = dur.days
             else:
                 myduration = dur.days + 1
+#            To calculate additional hours in hotel room as per minutes
             if configured_addition_hours > 0:
-                additional_hours = abs((dur.seconds / 60) / 60)
-                if additional_hours >= configured_addition_hours:
-                    myduration += 1
+                additional_hours = abs((dur.seconds / 60))
+                if additional_hours <= abs(configured_addition_hours * 60):
+                    myduration -= 1
         self.duration = myduration
 
     @api.model
@@ -452,7 +433,8 @@ class HotelFolio(models.Model):
                     if not rec.reservation_id:
                         for room_rec in rec.room_lines:
                             prod = room_rec.product_id.name
-                            room_obj = h_room_obj.search([('name', '=', prod)])
+                            room_obj = h_room_obj.search([('name', '=',
+                                                           prod)])
                             room_obj.write({'isroom': False})
                             vals = {'room_id': room_obj.id,
                                     'check_in': rec.checkin_date,
@@ -482,7 +464,6 @@ class HotelFolio(models.Model):
         @param vals: dictionary of fields value.
         """
         folio_room_line_obj = self.env['folio.room.line']
-        reservation_line_obj = self.env['hotel.room.reservation.line']
         product_obj = self.env['product.product']
         h_room_obj = self.env['hotel.room']
         room_lst1 = []
@@ -519,22 +500,6 @@ class HotelFolio(models.Model):
                     folio_romline_rec = (folio_room_line_obj.search
                                          ([('folio_id', '=', folio_obj.id)]))
                     folio_romline_rec.write(room_vals)
-            if folio_obj.reservation_id:
-                for reservation in folio_obj.reservation_id:
-                    reservation_obj = (reservation_line_obj.search
-                                       ([('reservation_id', '=',
-                                          reservation.id)]))
-                    if len(reservation_obj) == 1:
-                        for line_id in reservation.reservation_line:
-                            line_id = line_id.reserve
-                            for room_id in line_id:
-                                vals = {'room_id': room_id.id,
-                                        'check_in': folio_obj.checkin_date,
-                                        'check_out': folio_obj.checkout_date,
-                                        'state': 'assigned',
-                                        'reservation_id': reservation.id,
-                                        }
-                                reservation_obj.write(vals)
         return folio_write
 
     @api.onchange('warehouse_id')
@@ -579,18 +544,16 @@ class HotelFolio(models.Model):
 
     @api.multi
     def action_done(self):
-        self.write({'state': 'done'})
+        self.state = 'done'
 
     @api.multi
     def action_invoice_create(self, grouped=False, final=False):
         '''
         @param self: object pointer
         '''
-        order_ids = [folio.order_id.id for folio in self]
         room_lst = []
-        sale_obj = self.env['sale.order'].browse(order_ids)
-        invoice_id = (sale_obj.action_invoice_create(grouped=False,
-                                                     final=False))
+        invoice_id = (self.order_id.action_invoice_create(grouped=False,
+                                                          final=False))
         for line in self:
             values = {'invoiced': True,
                       'hotel_invoice_id': invoice_id
@@ -609,33 +572,25 @@ class HotelFolio(models.Model):
         '''
         @param self: object pointer
         '''
-        order_ids = [folio.order_id.id for folio in self]
-        sale_obj = self.env['sale.order'].browse(order_ids)
-        res = sale_obj.action_invoice_cancel()
+        if not self.order_id:
+            raise except_orm(_('Warning'), _('Order id is not available'))
         for sale in self:
             for line in sale.order_line:
                 line.write({'invoiced': 'invoiced'})
-        sale.write({'state': 'invoice_except'})
-        return res
+        self.state = 'invoice_except'
+        return self.order_id.action_invoice_cancel
 
     @api.multi
     def action_cancel(self):
         '''
         @param self: object pointer
         '''
-        order_ids = [folio.order_id.id for folio in self]
-        sale_obj = self.env['sale.order'].browse(order_ids)
-        rv = sale_obj.action_cancel()
+        if not self.order_id:
+            raise except_orm(_('Warning'), _('Order id is not available'))
         for sale in self:
-            for pick in sale.picking_ids:
-                workflow.trg_validate(self._uid, 'stock.picking', pick.id,
-                                      'button_cancel', self._cr)
             for invoice in sale.invoice_ids:
-                workflow.trg_validate(self._uid, 'account.invoice',
-                                      invoice.id, 'invoice_cancel',
-                                      self._cr)
-                sale.write({'state': 'cancel'})
-        return rv
+                invoice.state = 'cancel'
+        return self.order_id.action_cancel()
 
     @api.multi
     def action_confirm(self):
@@ -667,32 +622,6 @@ class HotelFolio(models.Model):
             test_obj.write({'state': 'cancel'})
 
     @api.multi
-    def action_ship_create(self):
-        '''
-        @param self: object pointer
-        '''
-        for folio in self:
-            folio.order_id.action_ship_create()
-        return True
-
-    @api.multi
-    def action_ship_end(self):
-        '''
-        @param self: object pointer
-        '''
-        for order in self:
-            order.write({'shipped': True})
-
-    @api.multi
-    def has_stockable_products(self):
-        '''
-        @param self: object pointer
-        '''
-        for folio in self:
-            folio.order_id.has_stockable_products()
-        return True
-
-    @api.multi
     def action_cancel_draft(self):
         '''
         @param self: object pointer
@@ -720,24 +649,6 @@ class HotelFolioLine(models.Model):
         @param default: dict of default values to be set
         '''
         return super(HotelFolioLine, self).copy(default=default)
-
-    @api.multi
-    def _amount_line(self, field_name, arg):
-        '''
-        @param self: object pointer
-        @param field_name: Names of fields.
-        @param arg: User defined arguments
-        '''
-        return self.env['sale.order.line']._amount_line(field_name, arg)
-
-    @api.multi
-    def _number_packages(self, field_name, arg):
-        '''
-        @param self: object pointer
-        @param field_name: Names of fields.
-        @param arg: User defined arguments
-        '''
-        return self.env['sale.order.line']._number_packages(field_name, arg)
 
     @api.model
     def _get_checkin_date(self):
@@ -825,22 +736,47 @@ class HotelFolioLine(models.Model):
 
     @api.onchange('product_id')
     def product_id_change(self):
-        if self.product_id and self.folio_id.partner_id:
-            self.name = self.product_id.name
-            self.price_unit = self.product_id.lst_price
-            self.product_uom = self.product_id.uom_id
-            tax_obj = self.env['account.tax']
-            prod = self.product_id
-            self.price_unit = tax_obj._fix_tax_included_price(prod.price,
-                                                              prod.taxes_id,
-                                                              self.tax_id)
+        '''
+ -        @param self: object pointer
+ -        '''
+        context = dict(self._context)
+        if not context:
+            context = {}
+        if context.get('folio', False):
+            if self.product_id and self.folio_id.partner_id:
+                self.name = self.product_id.name
+                self.price_unit = self.product_id.list_price
+                self.product_uom = self.product_id.uom_id
+                tax_obj = self.env['account.tax']
+                pr = self.product_id
+                self.price_unit = tax_obj._fix_tax_included_price(pr.price,
+                                                                  pr.taxes_id,
+                                                                  self.tax_id)
+        else:
+            if not self.product_id:
+                return {'domain': {'product_uom': []}}
+            val = {}
+            pr = self.product_id.with_context(
+                lang=self.folio_id.partner_id.lang,
+                partner=self.folio_id.partner_id.id,
+                quantity=val.get('product_uom_qty') or self.product_uom_qty,
+                date=self.folio_id.date_order,
+                pricelist=self.folio_id.pricelist_id.id,
+                uom=self.product_uom.id
+            )
+            p = pr.with_context(pricelist=self.order_id.pricelist_id.id).price
+            if self.folio_id.pricelist_id and self.folio_id.partner_id:
+                obj = self.env['account.tax']
+                val['price_unit'] = obj._fix_tax_included_price(p,
+                                                                pr.taxes_id,
+                                                                self.tax_id)
 
     @api.onchange('product_uom')
     def product_uom_change(self):
         if not self.product_uom:
             self.price_unit = 0.0
             return
-        self.price_unit = self.product_id.lst_price
+        self.price_unit = self.product_id.list_price
         if self.folio_id.partner_id:
             prod = self.product_id.with_context(
                 lang=self.folio_id.partner_id.lang,
@@ -863,6 +799,12 @@ class HotelFolioLine(models.Model):
         -----------------------------------------------------------------
         @param self: object pointer
         '''
+        configured_addition_hours = 0
+        fwhouse_id = self.folio_id.warehouse_id
+        fwc_id = fwhouse_id or fwhouse_id.company_id
+        if fwc_id:
+            configured_addition_hours = fwhouse_id.company_id.additional_hours
+        myduration = 0
         if not self.checkin_date:
             self.checkin_date = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         if not self.checkout_date:
@@ -879,7 +821,33 @@ class HotelFolioLine(models.Model):
                 myduration = dur.days
             else:
                 myduration = dur.days + 1
+#            To calculate additional hours in hotel room as per minutes
+            if configured_addition_hours > 0:
+                additional_hours = abs((dur.seconds / 60))
+                if additional_hours <= abs(configured_addition_hours * 60):
+                    myduration -= 1
         self.product_uom_qty = myduration
+        hotel_room_obj = self.env['hotel.room']
+        hotel_room_ids = hotel_room_obj.search([])
+        avail_prod_ids = []
+        for room in hotel_room_ids:
+            assigned = False
+            for rm_line in room.room_line_ids:
+                if rm_line.status != 'cancel':
+                    if(self.checkin_date <= rm_line.check_in <=
+                       self.checkout_date) or (self.checkin_date <=
+                                               rm_line.check_out <=
+                                               self.checkout_date):
+                        assigned = True
+                    elif (rm_line.check_in <= self.checkin_date <=
+                          rm_line.check_out) or (rm_line.check_in <=
+                                                 self.checkout_date <=
+                                                 rm_line.check_out):
+                        assigned = True
+            if not assigned:
+                avail_prod_ids.append(room.product_id.id)
+        domain = {'product_id': [('id', 'in', avail_prod_ids)]}
+        return {'domain': domain}
 
     @api.multi
     def button_confirm(self):
@@ -898,11 +866,7 @@ class HotelFolioLine(models.Model):
         '''
         lines = [folio_line.order_line_id for folio_line in self]
         lines.button_done()
-        self.write({'state': 'done'})
-        for folio_line in self:
-            workflow.trg_write(self._uid, 'sale.order',
-                               folio_line.order_line_id.order_id.id,
-                               self._cr)
+        self.state = 'done'
         return True
 
     @api.multi
@@ -925,30 +889,6 @@ class HotelServiceLine(models.Model):
         @param default: dict of default values to be set
         '''
         return super(HotelServiceLine, self).copy(default=default)
-
-    @api.multi
-    def _amount_line(self, field_name, arg):
-        '''
-        @param self: object pointer
-        @param field_name: Names of fields.
-        @param arg: User defined arguments
-        '''
-        for folio in self:
-            line = folio.service_line_id
-            x = line._amount_line(field_name, arg)
-        return x
-
-    @api.multi
-    def _number_packages(self, field_name, arg):
-        '''
-        @param self: object pointer
-        @param field_name: Names of fields.
-        @param arg: User defined arguments
-        '''
-        for folio in self:
-            line = folio.service_line_id
-            x = line._number_packages(field_name, arg)
-        return x
 
     @api.model
     def _service_checkin_date(self):
@@ -1008,7 +948,7 @@ class HotelServiceLine(models.Model):
         '''
         if self.product_id and self.folio_id.partner_id:
             self.name = self.product_id.name
-            self.price_unit = self.product_id.lst_price
+            self.price_unit = self.product_id.list_price
             self.product_uom = self.product_id.uom_id
             tax_obj = self.env['account.tax']
             prod = self.product_id
@@ -1024,7 +964,7 @@ class HotelServiceLine(models.Model):
         if not self.product_uom:
             self.price_unit = 0.0
             return
-        self.price_unit = self.product_id.lst_price
+        self.price_unit = self.product_id.list_price
         if self.folio_id.partner_id:
             prod = self.product_id.with_context(
                 lang=self.folio_id.partner_id.lang,
@@ -1193,7 +1133,7 @@ class CurrencyExchangeRate(models.Model):
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'done'})
+        self.state = 'done'
         return True
 
     @api.multi
@@ -1204,7 +1144,7 @@ class CurrencyExchangeRate(models.Model):
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'cancel'})
+        self.state = 'cancel'
         return True
 
     @api.multi
@@ -1215,7 +1155,7 @@ class CurrencyExchangeRate(models.Model):
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'draft'})
+        self.state = 'draft'
         return True
 
     @api.model

@@ -90,7 +90,7 @@ class HotelRestaurantReservation(models.Model):
                 'is_folio': record.is_folio,
             }
             proxy.create(values)
-        self.write({'state': 'order'})
+        self.state = 'order'
         return True
 
     @api.onchange('cname')
@@ -319,7 +319,7 @@ class HotelRestaurantOrder(models.Model):
         ----------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'cancel'})
+        self.state = 'cancel'
         return True
 
     @api.multi
@@ -389,9 +389,9 @@ class HotelRestaurantOrder(models.Model):
     order_list = fields.One2many('hotel.restaurant.order.list', 'o_list',
                                  'Order List')
     tax = fields.Float('Tax (%) ')
-    amount_subtotal = fields.Float(_compute_='_sub_total', method=True,
+    amount_subtotal = fields.Float(compute='_sub_total', method=True,
                                    string='Subtotal')
-    amount_total = fields.Float(_compute_='_total', method=True,
+    amount_total = fields.Float(compute='_total', method=True,
                                 string='Total')
     state = fields.Selection([('draft', 'Draft'), ('order', 'Order Created'),
                               ('done', 'Done'), ('cancel', 'Cancelled')],
@@ -551,7 +551,7 @@ class HotelReservationOrder(models.Model):
                 rest_order_list_obj.create(o_line)
                 res.append(order_line.id)
             self.rest_id = [(6, 0, res)]
-            self.write({'state': 'order'})
+            self.state = 'order'
         return res
 
     @api.multi
@@ -619,7 +619,7 @@ class HotelReservationOrder(models.Model):
                                       [(4, order_obj.id)]})
                 if order_obj.reservationno:
                     order_obj.reservationno.write({'state': 'done'})
-        self.write({'state': 'done'})
+        self.state = 'done'
         return True
 
     _name = "hotel.reservation.order"
@@ -640,9 +640,9 @@ class HotelReservationOrder(models.Model):
     order_list = fields.One2many('hotel.restaurant.order.list', 'o_l',
                                  'Order List')
     tax = fields.Float('Tax (%) ', size=64)
-    amount_subtotal = fields.Float(_compute_='_sub_total', method=True,
+    amount_subtotal = fields.Float(compute='_sub_total', method=True,
                                    string='Subtotal')
-    amount_total = fields.Float(_compute_='_total', method=True,
+    amount_total = fields.Float(compute='_total', method=True,
                                 string='Total')
     kitchen_id = fields.Integer('Kitchen id')
     rest_id = fields.Many2many('hotel.restaurant.order.list', 'reserv_id',
@@ -705,5 +705,5 @@ class HotelRestaurantOrderList(models.Model):
     name = fields.Many2one('hotel.menucard', 'Item Name', required=True)
     item_qty = fields.Char('Qty', size=64, required=True)
     item_rate = fields.Float('Rate', size=64)
-    price_subtotal = fields.Float(_compute_='_sub_total', method=True,
+    price_subtotal = fields.Float(compute='_sub_total', method=True,
                                   string='Subtotal')

@@ -3,6 +3,7 @@
 
 import time
 from datetime import datetime
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 from dateutil.relativedelta import relativedelta
 from dateutil import parser
 from odoo import api, fields, models
@@ -22,9 +23,9 @@ class FolioReport(models.AbstractModel):
             data_folio.append({'name': data.name,
                                'partner': data.partner_id.name,
                                'checkin': parser.parse(data.checkin_date).
-                               strftime('%m/%d/%Y %H:%M:%S'),
-                               'checkout': parser.parse(data.checkin_date).
-                               strftime('%m/%d/%Y %H:%M:%S'),
+                               strftime(DEFAULT_SERVER_DATETIME_FORMAT),
+                               'checkout': parser.parse(data.checkout_date).
+                               strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                                'amount': data.amount_total})
             total_amount += data.amount_total
         data_folio.append({'total_amount': total_amount})

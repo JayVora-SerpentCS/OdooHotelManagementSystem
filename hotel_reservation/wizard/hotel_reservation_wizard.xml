@@ -13,15 +13,15 @@
                     <field name="date_end" />
                 </group>
                 <footer>
-                    <button special="cancel" string="Cancel" icon="fa-close" />
                     <button name='report_checkin_detail' string="CheckIn List"
-                        type="object" icon="fa-level-down" />
+                        type="object" icon="fa-level-down" class="btn btn-primary"/>
                     <button name='report_checkout_detail' string="CheckOut List"
-                        type="object" icon="fa-level-up" />
+                        type="object" icon="fa-level-up" class="btn btn-primary"/>
                     <button name='report_reservation_detail' type='object'
-                        string='Reservation List' icon="fa-bars" />
+                        string='Reservation List' icon="fa-bars" class="btn btn-primary"/>
                     <button name='report_maxroom_detail' string="Room Used Maximum"
-                        type="object" icon="fa-minus-square-o" />
+                        type="object" icon="fa-minus-square-o" class="btn btn-primary"/>
+                    <button special="cancel" string="Cancel" icon="fa-close" class="btn btn-primary"/>
                 </footer>
             </form>
         </field>
@@ -49,8 +49,7 @@
                 <footer>
                     <button name="makeFolios" string="Create Folio" type="object"
                         icon="fa-files-o" class="oe_highlight" />
-                    or
-                    <button string="Cancel" class="oe_link" special="cancel" />
+                    <button string="Cancel" icon="fa-close" class="btn btn-primary" special="cancel" />
                 </footer>
             </form>
         </field>

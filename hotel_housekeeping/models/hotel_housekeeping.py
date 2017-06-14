@@ -41,29 +41,36 @@ class HotelHousekeeping(models.Model):
 
     current_date = fields.Date("Today's Date", required=True,
                                index=True,
+                               states={'done': [('readonly', True)]},
                                default=(lambda *a:
                                         time.strftime
                                         (DEFAULT_SERVER_DATE_FORMAT)))
     clean_type = fields.Selection([('daily', 'Daily'),
                                    ('checkin', 'Check-In'),
                                    ('checkout', 'Check-Out')],
-                                  'Clean Type', required=True)
+                                  'Clean Type', required=True,
+                                  states={'done': [('readonly', True)]},)
     room_no = fields.Many2one('hotel.room', 'Room No', required=True,
+                              states={'done': [('readonly', True)]},
                               index=True)
     activity_lines = fields.One2many('hotel.housekeeping.activities',
                                      'a_list', 'Activities',
                                      help='Detail of housekeeping activities')
     inspector = fields.Many2one('res.users', 'Inspector', required=True,
                                 index=True)
-    inspect_date_time = fields.Datetime('Inspect Date Time', required=True)
-    quality = fields.Selection([('bad', 'Bad'), ('good', 'Good'),
+    inspect_date_time = fields.Datetime('Inspect Date Time', required=True,
+                                        states={'done': [('readonly', True)]})
+    quality = fields.Selection([('excellent', 'Excellent'), ('good', 'Good'),
+                                ('average', 'Average'), ('bad', 'Bad'),
                                 ('ok', 'Ok')], 'Quality', required=True,
+                               states={'done': [('readonly', True)]},
                                help="Inspector inspect the room and mark \
-as Bad, Good or Ok. ")
+                                as Excellent, Average, Bad, Good or Ok. ")
     state = fields.Selection([('dirty', 'Dirty'), ('clean', 'Clean'),
                               ('inspect', 'Inspect'), ('done', 'Done'),
-                              ('cancel', 'Cancelled')], 'State', index=True,
-                             required=True, readonly=True,
+                              ('cancel', 'Cancelled')], 'State',
+                             states={'done': [('readonly', True)]},
+                             index=True, required=True, readonly=True,
                              default=lambda *a: 'dirty')
 
     @api.multi
@@ -75,6 +82,10 @@ as Bad, Good or Ok. ")
         @param self: object pointer
         """
         self.state = 'dirty'
+        for line in self:
+            for activity_line in line.activity_lines:
+                self.activity_lines.write({'clean': False})
+                self.activity_lines.write({'dirty': True})
         return True
 
     @api.multi
@@ -119,6 +130,10 @@ as Bad, Good or Ok. ")
         @param self: object pointer
         """
         self.state = 'clean'
+        for line in self:
+            for activity_line in line.activity_lines:
+                    self.activity_lines.write({'clean': True})
+                    self.activity_lines.write({'dirty': False})
         return True
 
 

@@ -3,11 +3,6 @@
 
 from odoo import fields, models
 
-AVAILABLE_STATES = [
-    ('draft', 'Draft'),
-    ('confirm', 'Confirm'),
-    ('done', 'Done')]
-
 
 class ReportHotelReservationStatus(models.Model):
 
@@ -17,18 +12,17 @@ class ReportHotelReservationStatus(models.Model):
 
     reservation_no = fields.Char('Reservation No', size=64, readonly=True)
     nbr = fields.Integer('Reservation', readonly=True)
-    state = fields.Selection(AVAILABLE_STATES, 'State', size=16,
+    state = fields.Selection([('draft', 'Draft'), ('confirm', 'Confirm'),
+                              ('done', 'Done')], 'State', size=16,
                              readonly=True)
 
     def init(self):
-
         """
         This method is for initialization for report hotel reservation
         status Module.
         @param self: The object pointer
         @param cr: database cursor
         """
-
         self.env.cr.execute("""
             create or replace view report_hotel_reservation_status as (
                 select

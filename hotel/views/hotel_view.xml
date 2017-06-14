@@ -20,7 +20,7 @@
         </field>
     </record>
 
-    <!-- ########Company Configuration###### -->
+    <!-- ====== Company Configuration ====== -->
     <record id="res_company_inherit_config_hotel" model="ir.ui.view">
         <field name="name">res.company.inherit.config.hotel</field>
         <field name="model">res.company</field>
@@ -32,7 +32,7 @@
         </field>
     </record>
 
-    <!--==================================================== Floor ==================================================== -->
+    <!--======== Floor ======== -->
     <!-- Form view of hotel floor -->
     <record id="view_hotel_floor_form" model="ir.ui.view">
         <field name="name">hotel.floor.form</field>
@@ -268,7 +268,7 @@
         action="action_hotel_room_amenities_view_form" sequence="2"
         parent="hotel.menu_amenity" />
 
-    <!--=================================================== Rooms =================================================== -->
+    <!-- ====== Rooms ====== -->
 
     <!-- Form view of hotel room -->
     <record id="view_hotel_room_form" model="ir.ui.view">
@@ -277,6 +277,7 @@
         <field name="arch" type="xml">
             <form string="Hotel Room">
                 <sheet>
+                    <field name="image_medium" widget="image" class="oe_avatar"/>
                     <div class="oe_title">
                         <label for="name" string="Name" />
                         <h1>
@@ -284,7 +285,7 @@
                         </h1>
                         <label for="status" string="Status" />
                         <h2>
-                            <field name="status" />
+                            <field name="status" readonly="1"/>
                         </h2>
                         <h2>
                             <field name="isroom" />
@@ -431,6 +432,7 @@
                                     <div class="oe_kanban_project_list">
                                         <H3>
                                             <a type="open">
+                                                <img t-att-src="kanban_image('hotel.room', 'image_medium', record.id.value)" style="height:70px;width:70px" class="oe_avatar oe_kanban_avatar_smallbox"/>
                                                 <t t-if="record.code.raw_value" style="margin-right: 10px">
                                                     [
                                                     <field name="code" />
@@ -509,7 +511,7 @@
                     <button name="action_cancel" string="Cancel Folio" states="draft"
                         icon="fa-close" type="object" class="oe_highlight" />
                     <button name="action_done" type="object" string="Set to Done"
-                        states="sale" attrs="{'invisible': [('invoice_status', '!=', 'invoiced')]}"
+                        states="sale" class="oe_highlight"
                         help="If a Hotel Folio is done, you cannot modify it manually anymore. However, you will still be able to invoice or deliver. This is used to freeze the Hotel Folio." />
                     <field name="state" select="2" widget="statusbar"
                         statusbar_visible="draft,sent,sale,done" />
@@ -542,11 +544,11 @@
                             <group colspan="4" col="4">
                                 <field name="checkin_date" />
                                 <field name="checkout_date" />
-                                <field name="duration" />
+                                <field name="duration" readonly="1"/>
                             </group>
                             <separator string="Room Lines" colspan="4" />
                             <field name="room_lines" colspan="4" string="Room Line"
-                                nolabel="1" context="{'checkin':checkin_date,'checkout':checkout_date}">
+                                nolabel="1" context="{'checkin':checkin_date,'checkout':checkout_date,'folio':context.get('folio')}">
                                 <form string="Room Line">
                                     <notebook>
                                         <page string="Folio Line">
@@ -651,11 +653,12 @@
                                 <field name="amount_tax" widget='monetary' />
                                 <div class="oe_subtotal_footer_separator oe_inline">
                                     <label for="amount_total" />
-                                    <button name="button_dummy" string="Compute" states="draft"
-                                        type="object" icon="terp-sale" class="oe_highlight" />
                                 </div>
                                 <field name="amount_total" nolabel="1" sum="Total amount"
                                     widget='monetary' />
+                                 <button name="button_dummy" string="Compute" states="draft"
+                                     type="object" class="fa fa-calculator" aria-hidden="true"
+                                     style="background-color:#7c7bad;"/>
                             </group>
                             <div class="oe_clear" />
                         </page>
@@ -760,6 +763,7 @@
         <field name="res_model">hotel.folio</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form,calendar,graph</field>
+        <field name="context">{'folio': True}</field>
     </record>
 
     <menuitem id="menu_all_folio" name="Folio"
@@ -767,8 +771,7 @@
     <menuitem name="Generate Folio" id="menu_open_hotel_folio1_form_tree_all"
         action="open_hotel_folio1_form_tree_all" sequence="5" parent="menu_all_folio" />
 
-    <!--======================================================== Hotel Service 
-        Type ======================================================== -->
+    <!--============ Hotel Service Type ============ -->
 
     <!-- Form view of hotel service type -->
     <record id="view_hotel_service_type_form" model="ir.ui.view">
@@ -812,8 +815,7 @@
         action="open_hotel_service_type_form_tree" sequence="9"
         parent="hotel.menu_hotel_service" />
 
-    <!--======================================================== Hotel Service 
-        ======================================================== -->
+    <!--============ Hotel Service ============ -->
 
     <!-- Form view of hotel service -->
     <record id="view_hotel_services_form" model="ir.ui.view">
@@ -964,17 +966,15 @@
         <field name="name">Services by Category</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">product.category</field>
-        <field name="domain">[('parent_id','=',False),('isservicetype','=',True)]
-        </field>
+        <field name="domain">[('parent_id','=',False),('isservicetype','=',True)]</field>
         <field name="view_type">tree</field>
-        <field name="view_id" ref="product_category_tree_view" />
+        <field name="view_id" ref="product_category_tree_view"/>
     </record>
     <menuitem name="Services by Type" id="menu_hotel_service_category_action"
         action="hotel_service_category_action" sequence="10"
         parent="hotel.menu_hotel_service" />
 
-    <!--==================================================== Currency ==================================================== -->
-
+    <!--======== Currency ======== -->
     <!-- Form view of currency exchange -->
     <record id="view_currency_exchange_form" model="ir.ui.view">
         <field name="name">currency.exchange.form</field>
@@ -982,19 +982,19 @@
         <field name="arch" type="xml">
             <form string=" Currency Exchange">
                 <header>
-                    <button name="cur_confirm" string="Done" states='draft'
-                        icon="fa-check" />
-                    <button name="cur_cancel" string="Cancel" states='draft'
-                        icon="fa-close" />
-                    <button name="cur_cancel_draft" string="do_draft" states='cancel'
-                        icon="fa-check" />
+                    <button name="act_cur_done" string="Done" states='draft'
+                        icon="fa-check" type="object" class="oe_highlight"/>
+                    <button name="act_cur_cancel" string="Cancel" states='draft'
+                        icon="fa-close" type="object" class="oe_highlight"/>
+                    <button name="act_cur_cancel_draft" string="Set To Draft" states='cancel'
+                        icon="fa-check" type="object" class="oe_highlight"/>
                     <button name="%(report_hotel_currency)d" states='done' type="action"
-                        string="Print" class="oe_highlight" />
+                        string="Print" class="oe_highlight"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,done" />
                 </header>
                 <sheet>
                     <div class="oe_title ">
-                        <label for="name" string="Name" />
+                        <label for="name" string="Reg Number"/>
                         <h1>
                             <field name="name"/>
                         </h1>

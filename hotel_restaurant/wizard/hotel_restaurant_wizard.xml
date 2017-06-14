@@ -14,9 +14,8 @@
                 </group>
                 <footer>
                     <button name="print_report" string="Table Reservation List"
-                        type="object" class="oe_highlight" />
-                    or
-                    <button string="Cancel" class="oe_link" special="cancel" />
+                        type="object" icon="fa-print" class="oe_highlight" />
+                    <button string="Cancel" icon="fa-close" class="btn btn-primary" special="cancel" />
                 </footer>
             </form>
         </field>
@@ -50,11 +49,10 @@
                 </group>
                 <footer>
                     <button name="print_rest_report" string="Restaurant Reserved Order"
-                        type="object" class="oe_highlight" />
+                        type="object" class="oe_highlight" icon="fa-print"/>
                     <button name="print_reserv_report" string="Restaurant Orders"
-                        type="object" class="oe_highlight" />
-                    or
-                    <button string="Cancel" class="oe_link" special="cancel" />
+                        type="object" class="oe_highlight" icon="fa-print"/>
+                    <button string="Cancel" class="btn btn-primary" icon="fa-close" special="cancel" />
                 </footer>
             </form>
         </field>
