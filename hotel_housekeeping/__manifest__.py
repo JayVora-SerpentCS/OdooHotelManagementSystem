@@ -5,7 +5,6 @@
     'name': 'Hotel Housekeeping Management',
     'version': '10.0.1.0.0',
     'author': 'Serpent Consulting Services Pvt. Ltd., OpenERP SA',
-    'images': [],
     'category': 'Generic Modules/Hotel Housekeeping',
     'website': 'http://www.serpentcs.com',
     'depends': ['hotel'],
@@ -20,6 +19,7 @@
         'wizard/hotel_housekeeping_wizard.xml',
         'views/hotel_housekeeping_view.xml',
     ],
+    'images': ['static/description/HouseKeeping.png'],
     'installable': True,
     'auto_install': False,
 }
