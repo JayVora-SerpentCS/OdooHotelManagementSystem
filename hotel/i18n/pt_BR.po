@@ -121,7 +121,7 @@ msgstr "Nome do cliente"
 #. module: hotel
 #: field:product.product,isroom:0
 msgid "Is Room"
-msgstr "É uma Sala?"
+msgstr "É uma Quarto?"
 
 #. module: hotel
 #: model:product.category,name:hotel.hotel_service_type_1_product_category
@@ -174,7 +174,7 @@ msgstr "Informação extra"
 #. module: hotel
 #: model:ir.actions.act_window,name:hotel.hotel_room_category_action
 msgid "Rooms by Category"
-msgstr "Salas por categoria"
+msgstr "Quartos por categoria"
 
 #. module: hotel
 #: model:product.category,name:hotel.hotel_room_amenities_type_3_product_category
@@ -226,7 +226,8 @@ msgstr "Entradas"
 #: model:ir.actions.act_window,name:hotel.hotel_amenity_category_action
 #: model:ir.ui.menu,name:hotel.menu_hotel_amenity_category_action
 msgid "Amenities by Category"
-msgstr "Comodidades por categoria"
+msgstr "Tipos de Comodidade"
+
 
 #. module: hotel
 #: field:hotel.services,service_id:0
@@ -276,7 +277,7 @@ msgstr "Todos os serviços"
 #: model:ir.actions.act_window,name:hotel.action_hotel_room_form
 #: model:ir.model,name:hotel.model_hotel_room
 msgid "Hotel Room"
-msgstr "Quarto de hotel"
+msgstr "Quartos"
 
 #. module: hotel
 #: rml:folio.total:0
@@ -292,6 +293,11 @@ msgstr "Movimentos de inventário"
 #: model:ir.ui.menu,name:hotel.hotel_configuration_menu
 msgid "Configuration"
 msgstr "Configuração"
+
+#. module: hotel
+#: model:ir.ui.menu,hotel.menu_amenity
+msgid "Amenity"
+msgstr "Comodidades"
 
 #. module: hotel
 #: view:hotel.folio:0
@@ -614,7 +620,9 @@ msgstr "Total de detalhe de serviços oferecidos"
 #: model:ir.actions.act_window,name:hotel.open_hotel_room_type_form_tree
 #: model:ir.model,name:hotel.model_hotel_room_type
 msgid "Room Type"
-msgstr "Tipo de quarto"
+msgstr "Tipos de Quartos"
+
+
 
 #. module: hotel
 #: view:hotel.room:0
@@ -663,6 +671,9 @@ msgstr "Serviços por categoria"
 
 #. module: hotel
 #: model:ir.ui.menu,name:hotel.menu_open_hotel_room_form
+msgid ""
+msgstr ""
+
 
 #. module: hotel
 #: view:hotel.room:0
