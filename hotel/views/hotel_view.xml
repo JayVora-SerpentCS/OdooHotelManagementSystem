@@ -569,7 +569,7 @@
                                 <group colspan="4" col="4">
                                     <field name="partner_id" string="Guest Name" required="1" />
                                     <field name="partner_invoice_id" domain="[('parent_id','=',partner_id)]" />
-                                    <field name="pricelist_id" domain="[('type','=','sale')]" />
+                                    <field name="pricelist_id" />
                                     <field name="project_id" />
                                     <field name="partner_shipping_id" domain="[('parent_id','=',partner_id)]" />
                                 </group>
@@ -1069,12 +1069,12 @@
             <field name="arch" type="xml">
                 <form string=" Currency Exchange">
                     <header>
-                        <button name="cur_confirm" string="Done" states='draft'
-                            icon="gtk-ok" />
-                        <button name="cur_cancel" string="Cancel" states='draft'
-                            icon="gtk-cancel" />
-                        <button name="cur_cancel_draft" string="do_draft" states='cancel'
-                            icon="gtk-ok" />
+                        <button name="act_cur_done" string="Done" states='draft'
+                            icon="gtk-ok" type="object" />
+                        <button name="act_cur_cancel" string="Cancel" states='draft'
+                            icon="gtk-cancel" type="object"/>
+                        <button name="act_cur_cancel_draft" string="do_draft" states='cancel'
+                            icon="gtk-ok" type="object"/>
                         <button name="%(report_hotel_currency)d" states='done'
                             type="action" string="Print" class="oe_highlight" />
                         <field name="state" widget="statusbar" statusbar_visible="draft,done" />

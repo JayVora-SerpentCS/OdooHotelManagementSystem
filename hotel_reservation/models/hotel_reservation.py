@@ -394,13 +394,21 @@ class HotelReservation(models.Model):
                                       DEFAULT_SERVER_DATETIME_FORMAT)[:5]))
             for line in reservation.reservation_line:
                 for r in line.reserve:
+                    prod = r.with_context(
+                                          partner=reservation.partner_id.id,
+                                          quantity=1,
+                                          date_order=reservation.checkin,
+                                          pricelist=reservation.\
+                                          pricelist_id.id,
+                                          uom=r['uom_id'].id
+                                          )
                     folio_lines.append((0, 0, {
                         'checkin_date': checkin_date,
                         'checkout_date': checkout_date,
                         'product_id': r.product_id and r.product_id.id,
                         'name': reservation['reservation_no'],
                         'product_uom': r['uom_id'].id,
-                        'price_unit': r['lst_price'],
+                        'price_unit': prod.price,
                         'product_uom_qty': ((date_a - date_b).days) + 1
                     }))
                     res_obj = room_obj.browse([r.id])

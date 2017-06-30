@@ -1232,7 +1232,7 @@ class CurrencyExchangeRate(models.Model):
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'done'})
+        self.state = 'done'
         return True
 
     @api.multi
@@ -1243,7 +1243,7 @@ class CurrencyExchangeRate(models.Model):
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'cancel'})
+        self.state = 'done'
         return True
 
     @api.multi
@@ -1254,7 +1254,7 @@ class CurrencyExchangeRate(models.Model):
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'draft'})
+        self.state = 'draft'
         return True
 
     @api.model
