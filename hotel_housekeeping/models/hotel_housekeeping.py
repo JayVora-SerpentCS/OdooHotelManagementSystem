@@ -38,6 +38,7 @@ class HotelHousekeeping(models.Model):
 
     _name = "hotel.housekeeping"
     _description = "Reservation"
+    _rec_name = 'room_no'
 
     current_date = fields.Date("Today's Date", required=True,
                                index=True,
