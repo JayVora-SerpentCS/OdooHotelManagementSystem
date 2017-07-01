@@ -281,6 +281,27 @@ class HotelReservation(models.Model):
         return True
 
     @api.multi
+    def cancel_reservation(self):
+        """
+        This method cancel recordset for hotel room reservation line
+        ------------------------------------------------------------------
+        @param self: The object pointer
+        @return: cancel record set for hotel room reservation line.
+        """
+        room_res_line_obj = self.env['hotel.room.reservation.line']
+        hotel_res_line_obj = self.env['hotel_reservation.line']
+        self.state = 'cancel'
+        room_reservation_line = room_res_line_obj.search([('reservation_id',
+                                                           'in', self.ids)])
+        room_reservation_line.write({'state': 'unassigned'})
+        reservation_lines = hotel_res_line_obj.search([('line_id',
+                                                        'in', self.ids)])
+        for reservation_line in reservation_lines:
+            reservation_line.reserve.write({'isroom': True,
+                                            'status': 'available'})
+        return True
+
+    @api.multi
     def send_reservation_maill(self):
         '''
         This function opens a window to compose an email,
@@ -349,6 +370,11 @@ class HotelReservation(models.Model):
             if(difference.days == -1 and travel_rec.partner_id.email and
                travel_rec.state == 'confirm'):
                 template_rec.send_mail(travel_rec.id, force_send=True)
+        return True
+
+    @api.multi
+    def set_to_draft_reservation(self):
+        self.state = 'draft'
         return True
 
     @api.multi
