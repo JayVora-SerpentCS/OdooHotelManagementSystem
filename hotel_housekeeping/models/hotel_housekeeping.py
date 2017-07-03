@@ -24,7 +24,6 @@ from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 from openerp import models, fields, api, _
 from openerp.exceptions import ValidationError
 import time
-#from openerp import workflow
 
 
 class ProductCategory(models.Model):

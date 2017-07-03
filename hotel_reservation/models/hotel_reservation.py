@@ -420,11 +420,10 @@ class HotelReservation(models.Model):
                                       DEFAULT_SERVER_DATETIME_FORMAT)[:5]))
             for line in reservation.reservation_line:
                 for r in line.reserve:
-                    prod = r.with_context(
-                                          partner=reservation.partner_id.id,
+                    prod = r.with_context(partner=reservation.partner_id.id,
                                           quantity=1,
                                           date_order=reservation.checkin,
-                                          pricelist=reservation.\
+                                          pricelist=reservation.
                                           pricelist_id.id,
                                           uom=r['uom_id'].id
                                           )
