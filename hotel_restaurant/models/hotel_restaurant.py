@@ -691,7 +691,6 @@ class HotelReservationOrder(models.Model):
 
 class HotelRestaurantOrderList(models.Model):
 
-    @api.one
     @api.depends('item_qty', 'item_rate')
     def _sub_total(self):
         '''
