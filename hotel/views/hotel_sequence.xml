@@ -13,7 +13,7 @@
 <!--             <field name="name">Hotel Folio</field> -->
 <!--             <field name="code">hotel.folio</field> -->
 <!--         </record> -->
-        
+
         <!-- Sequences for curency exchange -->
         <record model="ir.sequence" id="seq_currency_exchange">
             <field name="name">Currency Exchange</field>

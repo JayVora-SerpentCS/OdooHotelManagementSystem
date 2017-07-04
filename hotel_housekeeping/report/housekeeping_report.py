@@ -21,7 +21,7 @@
 # ---------------------------------------------------------------------------
 
 import time
-from openerp import models,api
+from openerp import models, api
 from openerp.report import report_sxw
 from datetime import datetime
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT

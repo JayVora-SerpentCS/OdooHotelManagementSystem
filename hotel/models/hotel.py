@@ -280,7 +280,7 @@ class HotelFolio(models.Model):
         @param self: object pointer
         @param default: dict of default values to be set
         '''
-        return self.env['sale.order'].copy(default=default)
+        return super(HotelFolio, self).copy(default=default)
 
     @api.multi
     def _invoiced(self, name, arg):
@@ -578,7 +578,8 @@ class HotelFolio(models.Model):
                 self.partner_invoice_id = partner_rec.id
                 self.partner_shipping_id = partner_rec.id
                 self.pricelist_id = partner_rec.property_product_pricelist.id
-                raise UserError('Not Any Order For  %s ' % (partner_rec.name))
+                raise UserError(_('Not Any Order \
+                    For  %s ' % (partner_rec.name)))
             else:
                 self.partner_invoice_id = partner_rec.id
                 self.partner_shipping_id = partner_rec.id

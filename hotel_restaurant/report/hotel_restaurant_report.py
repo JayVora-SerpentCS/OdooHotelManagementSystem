@@ -21,7 +21,7 @@
 # ---------------------------------------------------------------------------
 
 import time
-from openerp import models,api
+from openerp import models, api
 from openerp.report import report_sxw
 
 

@@ -25,6 +25,7 @@ from openerp.report import report_sxw
 
 
 class ReservationDetailReport(report_sxw.rml_parse):
+
     @api.v7
     def __init__(self, cr, uid, name, context):
         super(ReservationDetailReport, self).__init__(cr, uid, name,

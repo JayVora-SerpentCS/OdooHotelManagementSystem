@@ -279,6 +279,5 @@
 <record id="hotel.hotel_room_amenities_2" model="hotel.room.amenities"> <field name="available_in_pos" eval="False"/> </record>
 <record id="hotel.hotel_room_amenities_3" model="hotel.room.amenities"> <field name="available_in_pos" eval="False"/> </record>
 
-
     </data>
 </openerp>

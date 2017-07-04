@@ -35,7 +35,6 @@
             'security/hotel_security.xml',
             'security/ir.model.access.csv',
             'views/hotel_sequence.xml',
-            # 'views/hotel_folio_workflow.xml',
             'views/hotel_report.xml',
             'views/report_hotel_management.xml',
             'views/hotel_view.xml',
