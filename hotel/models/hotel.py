@@ -280,7 +280,7 @@ class HotelFolio(models.Model):
         @param self: object pointer
         @param default: dict of default values to be set
         '''
-        return self.env['sale.order'].copy(default=default)
+        return super(HotelFolio, self).copy(default=default)
 
     @api.multi
     def _invoiced(self, name, arg):
@@ -578,7 +578,8 @@ class HotelFolio(models.Model):
                 self.partner_invoice_id = partner_rec.id
                 self.partner_shipping_id = partner_rec.id
                 self.pricelist_id = partner_rec.property_product_pricelist.id
-                raise UserError('Not Any Order For  %s ' % (partner_rec.name))
+                raise UserError(_('Not Any Order \
+                    For  %s ' % (partner_rec.name)))
             else:
                 self.partner_invoice_id = partner_rec.id
                 self.partner_shipping_id = partner_rec.id
@@ -732,13 +733,13 @@ class HotelFolio(models.Model):
 
 class HotelFolioLine(models.Model):
 
-    @api.one
+    @api.multi
     def copy(self, default=None):
         '''
         @param self: object pointer
         @param default: dict of default values to be set
         '''
-        return self.env['sale.order.line'].copy(default=default)
+        return super(HotelFolioLine, self).copy(default=default)
 
     @api.multi
     def _amount_line(self, field_name, arg):
@@ -943,7 +944,7 @@ class HotelFolioLine(models.Model):
                                self._cr)
         return True
 
-    @api.one
+    @api.multi
     def copy_data(self, default=None):
         '''
         @param self: object pointer
@@ -956,15 +957,13 @@ class HotelFolioLine(models.Model):
 
 class HotelServiceLine(models.Model):
 
-    @api.one
+    @api.multi
     def copy(self, default=None):
         '''
         @param self: object pointer
         @param default: dict of default values to be set
         '''
-        line_id = self.service_line_id.id
-        sale_line_obj = self.env['sale.order.line'].browse(line_id)
-        return sale_line_obj.copy(default=default)
+        return super(HotelServiceLine, self).copy(default=default)
 
     @api.multi
     def _amount_line(self, field_name, arg):
@@ -1093,7 +1092,8 @@ class HotelServiceLine(models.Model):
         if not self.ser_checkout_date:
             self.ser_checkout_date = time_a
         if self.ser_checkout_date < self.ser_checkin_date:
-            raise UserError('Checkout must be greater or equal checkin date')
+            raise UserError(_('Checkout must be\
+             greater or equal checkin date'))
         if self.ser_checkin_date and self.ser_checkout_date:
             date_a = time.strptime(self.ser_checkout_date,
                                    DEFAULT_SERVER_DATETIME_FORMAT)[:5]
@@ -1123,7 +1123,7 @@ class HotelServiceLine(models.Model):
             x = line.button_done()
         return x
 
-    @api.one
+    @api.multi
     def copy_data(self, default=None):
         '''
         @param self: object pointer
@@ -1232,7 +1232,7 @@ class CurrencyExchangeRate(models.Model):
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'done'})
+        self.state = 'done'
         return True
 
     @api.multi
@@ -1243,7 +1243,7 @@ class CurrencyExchangeRate(models.Model):
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'cancel'})
+        self.state = 'done'
         return True
 
     @api.multi
@@ -1254,7 +1254,7 @@ class CurrencyExchangeRate(models.Model):
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'draft'})
+        self.state = 'draft'
         return True
 
     @api.model

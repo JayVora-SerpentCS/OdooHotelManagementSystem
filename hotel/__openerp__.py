@@ -22,7 +22,7 @@
 
 {
     'name': 'Hotel Management',
-    'version': '0.07',
+    'version': '9.0.7.0.0',
     'author': 'Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA)',
     'category': 'Generic Modules/Hotel Management',
@@ -34,7 +34,6 @@
             'security/hotel_security.xml',
             'security/ir.model.access.csv',
             'views/hotel_sequence.xml',
-            # 'views/hotel_folio_workflow.xml',
             'views/hotel_report.xml',
             'views/report_hotel_management.xml',
             'views/hotel_view.xml',

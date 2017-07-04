@@ -22,7 +22,7 @@
 
 {
     "name": "Hotel Housekeeping Management",
-    "version": "0.02",
+    "version": "9.0.2.0.0",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA)",
     "category": "Generic Modules/Hotel Housekeeping",

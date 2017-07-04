@@ -24,7 +24,6 @@ from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 from openerp import models, fields, api, _
 from openerp.exceptions import ValidationError
 import time
-from openerp import workflow
 
 
 class ProductCategory(models.Model):
@@ -83,6 +82,19 @@ as Bad, Good or Ok. ")
                              required=True, readonly=True,
                              default=lambda *a: 'dirty')
 
+#    @api.multi
+#    def action_set_to_dirty(self):
+#        """
+#        This method is used to change the state
+#        to dirty of the hotel housekeeping
+#        ---------------------------------------
+#        @param self: object pointer
+#        """
+#        self.write({'state': 'dirty'})
+#        for housekeep_id in self.ids:
+#            workflow.trg_create(self._uid, self._name, housekeep_id, self._cr)
+#        return True
+
     @api.multi
     def action_set_to_dirty(self):
         """
@@ -91,9 +103,11 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'dirty'})
-        for housekeep_id in self.ids:
-            workflow.trg_create(self._uid, self._name, housekeep_id, self._cr)
+        self.state = 'dirty'
+        for line in self:
+            for activity_line in line.activity_lines:
+                activity_line.write({'clean': False})
+                activity_line.write({'dirty': True})
         return True
 
     @api.multi
@@ -129,6 +143,17 @@ as Bad, Good or Ok. ")
         self.write({'state': 'inspect'})
         return True
 
+#    @api.multi
+#    def room_clean(self):
+#        """
+#        This method is used to change the state
+#        to clean of the hotel housekeeping
+#        ---------------------------------------
+#        @param self: object pointer
+#        """
+#        self.write({'state': 'clean'})
+#        return True
+
     @api.multi
     def room_clean(self):
         """
@@ -137,7 +162,11 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'clean'})
+        self.state = 'clean'
+        for line in self:
+            for activity_line in line.activity_lines:
+                    activity_line.write({'clean': True})
+                    activity_line.write({'dirty': False})
         return True
 
 

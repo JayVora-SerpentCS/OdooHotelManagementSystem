@@ -281,6 +281,27 @@ class HotelReservation(models.Model):
         return True
 
     @api.multi
+    def cancel_reservation(self):
+        """
+        This method cancel recordset for hotel room reservation line
+        ------------------------------------------------------------------
+        @param self: The object pointer
+        @return: cancel record set for hotel room reservation line.
+        """
+        room_res_line_obj = self.env['hotel.room.reservation.line']
+        hotel_res_line_obj = self.env['hotel_reservation.line']
+        self.state = 'cancel'
+        room_reservation_line = room_res_line_obj.search([('reservation_id',
+                                                           'in', self.ids)])
+        room_reservation_line.write({'state': 'unassigned'})
+        reservation_lines = hotel_res_line_obj.search([('line_id',
+                                                        'in', self.ids)])
+        for reservation_line in reservation_lines:
+            reservation_line.reserve.write({'isroom': True,
+                                            'status': 'available'})
+        return True
+
+    @api.multi
     def send_reservation_maill(self):
         '''
         This function opens a window to compose an email,
@@ -352,6 +373,11 @@ class HotelReservation(models.Model):
         return True
 
     @api.multi
+    def set_to_draft_reservation(self):
+        self.state = 'draft'
+        return True
+
+    @api.multi
     def _create_folio(self):
         """
         This method is for create new hotel folio.
@@ -394,13 +420,20 @@ class HotelReservation(models.Model):
                                       DEFAULT_SERVER_DATETIME_FORMAT)[:5]))
             for line in reservation.reservation_line:
                 for r in line.reserve:
+                    prod = r.with_context(partner=reservation.partner_id.id,
+                                          quantity=1,
+                                          date_order=reservation.checkin,
+                                          pricelist=reservation.
+                                          pricelist_id.id,
+                                          uom=r['uom_id'].id
+                                          )
                     folio_lines.append((0, 0, {
                         'checkin_date': checkin_date,
                         'checkout_date': checkout_date,
                         'product_id': r.product_id and r.product_id.id,
                         'name': reservation['reservation_no'],
                         'product_uom': r['uom_id'].id,
-                        'price_unit': r['lst_price'],
+                        'price_unit': prod.price,
                         'product_uom_qty': ((date_a - date_b).days) + 1
                     }))
                     res_obj = room_obj.browse([r.id])
