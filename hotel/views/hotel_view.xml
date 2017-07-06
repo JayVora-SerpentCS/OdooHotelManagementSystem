@@ -545,7 +545,7 @@
                                 <field name="checkin_date" />
                                 <field name="checkout_date" />
                                 <field name="duration" readonly="1"/>
-                                <field name="dummy" invisible="1"/>
+                                <field name="duration_dummy" invisible="1"/>
                             </group>
                             <separator string="Room Lines" colspan="4" />
                             <field name="room_lines" colspan="4" string="Room Line"

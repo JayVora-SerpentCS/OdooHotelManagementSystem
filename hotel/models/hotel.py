@@ -307,7 +307,7 @@ class HotelFolio(models.Model):
                                     readonly=True)
     hotel_invoice_id = fields.Many2one('account.invoice', 'Invoice',
                                        copy=False)
-    dummy = fields.Float('Dummy')
+    duration_dummy = fields.Float('Duration Dummy')
 
     @api.multi
     def go_to_currency_exchange(self):
@@ -403,7 +403,8 @@ class HotelFolio(models.Model):
                 additional_hours = abs((dur.seconds / 60))
                 if additional_hours <= abs(configured_addition_hours * 60):
                     myduration -= 1
-        self.dummy = myduration
+        self.duration = myduration
+        self.duration_dummy = self.duration
 
     @api.model
     def create(self, vals, check=True):
@@ -426,7 +427,7 @@ class HotelFolio(models.Model):
             if not vals:
                 vals = {}
             vals['name'] = self.env['ir.sequence'].next_by_code('hotel.folio')
-            vals['duration'] = vals['dummy']
+            vals['duration'] = vals.get('duration_dummy', 0.0)
             folio_id = super(HotelFolio, self).create(vals)
             folio_room_line_obj = self.env['folio.room.line']
             h_room_obj = self.env['hotel.room']
@@ -465,6 +466,7 @@ class HotelFolio(models.Model):
         @param self: The object pointer
         @param vals: dictionary of fields value.
         """
+        vals['duration'] = vals.get('duration_dummy', 0.0)
         folio_room_line_obj = self.env['folio.room.line']
         product_obj = self.env['product.product']
         h_room_obj = self.env['hotel.room']
