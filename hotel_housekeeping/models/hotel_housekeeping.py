@@ -72,8 +72,9 @@ class HotelHousekeeping(models.Model):
                                      help='Detail of housekeeping activities')
     inspector = fields.Many2one('res.users', 'Inspector', required=True)
     inspect_date_time = fields.Datetime('Inspect Date Time', required=True)
-    quality = fields.Selection([('bad', 'Bad'), ('good', 'Good'),
-                                ('ok', 'Ok')], 'Quality', required=True,
+    quality = fields.Selection([('excellent', 'Excellent'), ('good', 'Good'),
+                                ('average', 'Average'), ('bad', 'Bad'),
+                                ('ok', 'Ok')],'Quality', required=True,
                                help="Inspector inspect the room and mark \
 as Bad, Good or Ok. ")
     state = fields.Selection([('dirty', 'Dirty'), ('clean', 'Clean'),
@@ -81,19 +82,6 @@ as Bad, Good or Ok. ")
                               ('cancel', 'Cancelled')], 'State', select=True,
                              required=True, readonly=True,
                              default=lambda *a: 'dirty')
-
-#    @api.multi
-#    def action_set_to_dirty(self):
-#        """
-#        This method is used to change the state
-#        to dirty of the hotel housekeeping
-#        ---------------------------------------
-#        @param self: object pointer
-#        """
-#        self.write({'state': 'dirty'})
-#        for housekeep_id in self.ids:
-#            workflow.trg_create(self._uid, self._name, housekeep_id, self._cr)
-#        return True
 
     @api.multi
     def action_set_to_dirty(self):
@@ -142,17 +130,6 @@ as Bad, Good or Ok. ")
         """
         self.write({'state': 'inspect'})
         return True
-
-#    @api.multi
-#    def room_clean(self):
-#        """
-#        This method is used to change the state
-#        to clean of the hotel housekeeping
-#        ---------------------------------------
-#        @param self: object pointer
-#        """
-#        self.write({'state': 'clean'})
-#        return True
 
     @api.multi
     def room_clean(self):

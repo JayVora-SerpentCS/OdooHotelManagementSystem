@@ -38,7 +38,7 @@
         "report/hotel_housekeeping_report.xml",
         "views/activity_detail.xml",
         "wizard/hotel_housekeeping_wizard.xml",
-        "views/hotel_housekeeping_workflow.xml",
+#        "views/hotel_housekeeping_workflow.xml",
         "views/hotel_housekeeping_view.xml",
     ],
     'installable': True,
