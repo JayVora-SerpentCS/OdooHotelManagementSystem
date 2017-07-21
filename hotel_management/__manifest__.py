@@ -4,7 +4,7 @@
 {
     'name': 'Hotel Management',
     'version': '10.0.1.0.0',
-    'author': 'Serpent Consulting Services Pvt. Ltd., OpenERP SA',
+    'author': 'Serpent Consulting Services Pvt. Ltd.',
     'category': 'Generic Modules/Hotel Management',
     'website': 'http://www.serpentcs.com',
     'depends': ['board_frontdesk', 'hotel_housekeeping'],
