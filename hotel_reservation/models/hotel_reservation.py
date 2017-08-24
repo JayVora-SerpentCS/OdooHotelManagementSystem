@@ -735,7 +735,10 @@ class RoomReservationSummary(models.Model):
                 raise except_orm(_('User Error!'),
                                  _('Please Check Time period Date \
                                  From can\'t be greater than Date To !'))
-            timezone = pytz.timezone(self._context.get('tz', False))
+            if self._context.get('tz', False):
+                timezone = pytz.timezone(self._context.get('tz', False))
+            else:
+                timezone = pytz.timezone('UTC')
             d_frm_obj = dtime.strptime(self.date_from, dt)\
                 .replace(tzinfo=pytz.timezone('UTC')).astimezone(timezone)
             d_to_obj = dtime.strptime(self.date_to, dt)\
