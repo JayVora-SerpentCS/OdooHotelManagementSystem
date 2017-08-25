@@ -474,10 +474,8 @@ class HotelReservation(models.Model):
             configured_addition_hours = wc_id.company_id.additional_hours
         duration = 0
         if checkin_date and checkout_date:
-            chkin_dt = (datetime.datetime.strptime
-                        (checkin_date, dt))
-            chkout_dt = (datetime.datetime.strptime
-                         (checkout_date, dt))
+            chkin_dt = datetime.datetime.strptime(checkin_date, dt)
+            chkout_dt = datetime.datetime.strptime(checkout_date, dt)
             dur = chkout_dt - chkin_dt
             duration = dur.days + 1
             if configured_addition_hours > 0:

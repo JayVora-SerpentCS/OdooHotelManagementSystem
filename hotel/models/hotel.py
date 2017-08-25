@@ -400,9 +400,9 @@ class HotelFolio(models.Model):
                 myduration = dur.days + 1
 #            To calculate additional hours in hotel room as per minutes
             if configured_addition_hours > 0:
-                additional_hours = abs((dur.seconds / 60))
-                if additional_hours <= abs(configured_addition_hours * 60):
-                    myduration -= 1
+                additional_hours = abs((dur.seconds / 60) / 60)
+                if additional_hours >= configured_addition_hours:
+                    myduration += 1
         self.duration = myduration
         self.duration_dummy = self.duration
 
@@ -427,7 +427,9 @@ class HotelFolio(models.Model):
             if not vals:
                 vals = {}
             vals['name'] = self.env['ir.sequence'].next_by_code('hotel.folio')
-            vals['duration'] = vals.get('duration_dummy', 0.0)
+            vals['duration'] = vals.get('duration',
+                                        0.0) or vals.get('duration_dummy',
+                                                         0.0)
             folio_id = super(HotelFolio, self).create(vals)
             folio_room_line_obj = self.env['folio.room.line']
             h_room_obj = self.env['hotel.room']
@@ -466,17 +468,19 @@ class HotelFolio(models.Model):
         @param self: The object pointer
         @param vals: dictionary of fields value.
         """
-        vals['duration'] = vals.get('duration_dummy', 0.0)
-        folio_room_line_obj = self.env['folio.room.line']
         product_obj = self.env['product.product']
         h_room_obj = self.env['hotel.room']
+        folio_room_line_obj = self.env['folio.room.line']
         room_lst1 = []
         for rec in self:
             for res in rec.room_lines:
                 room_lst1.append(res.product_id.id)
-        folio_write = super(HotelFolio, self).write(vals)
         room_lst = []
         for folio_obj in self:
+            if vals and vals.get('duration_dummy', False):
+                vals['duration'] = vals.get('duration_dummy', 0.0)
+            else:
+                vals['duration'] = folio_obj.duration
             for folio_rec in folio_obj.room_lines:
                 room_lst.append(folio_rec.product_id.id)
             new_rooms = set(room_lst).difference(set(room_lst1))
@@ -504,7 +508,7 @@ class HotelFolio(models.Model):
                     folio_romline_rec = (folio_room_line_obj.search
                                          ([('folio_id', '=', folio_obj.id)]))
                     folio_romline_rec.write(room_vals)
-        return folio_write
+        return super(HotelFolio, self).write(vals)
 
     @api.onchange('warehouse_id')
     def onchange_warehouse_id(self):
@@ -827,9 +831,9 @@ class HotelFolioLine(models.Model):
                 myduration = dur.days + 1
 #            To calculate additional hours in hotel room as per minutes
             if configured_addition_hours > 0:
-                additional_hours = abs((dur.seconds / 60))
-                if additional_hours <= abs(configured_addition_hours * 60):
-                    myduration -= 1
+                additional_hours = abs((dur.seconds / 60) / 60)
+                if additional_hours >= configured_addition_hours:
+                    myduration += 1
         self.product_uom_qty = myduration
         hotel_room_obj = self.env['hotel.room']
         hotel_room_ids = hotel_room_obj.search([])
