@@ -427,7 +427,9 @@ class HotelFolio(models.Model):
             if not vals:
                 vals = {}
             vals['name'] = self.env['ir.sequence'].next_by_code('hotel.folio')
-            vals['duration'] = vals.get('duration', 0.0) or vals.get('duration_dummy', 0.0)
+            vals['duration'] = vals.get('duration',
+                                        0.0) or vals.get('duration_dummy',
+                                                         0.0)
             folio_id = super(HotelFolio, self).create(vals)
             folio_room_line_obj = self.env['folio.room.line']
             h_room_obj = self.env['hotel.room']
