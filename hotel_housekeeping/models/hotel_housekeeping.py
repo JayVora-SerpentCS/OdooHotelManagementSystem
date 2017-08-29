@@ -74,7 +74,7 @@ class HotelHousekeeping(models.Model):
     inspect_date_time = fields.Datetime('Inspect Date Time', required=True)
     quality = fields.Selection([('excellent', 'Excellent'), ('good', 'Good'),
                                 ('average', 'Average'), ('bad', 'Bad'),
-                                ('ok', 'Ok')],'Quality', required=True,
+                                ('ok', 'Ok')], 'Quality', required=True,
                                help="Inspector inspect the room and mark \
 as Bad, Good or Ok. ")
     state = fields.Selection([('dirty', 'Dirty'), ('clean', 'Clean'),
