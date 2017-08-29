@@ -336,7 +336,7 @@ class HotelFolio(models.Model):
                                     "either the guest has to payment at "
                                     "booking time or check-in "
                                     "check-out time.")
-    duration = fields.Float('Duration in Days',
+    duration = fields.Float('Duration in Days', readonly=True,
                             help="Number of days which will automatically "
                             "count from the check-in and check-out date. ")
     currrency_ids = fields.One2many('currency.exchange', 'folio_no',
@@ -468,7 +468,8 @@ class HotelFolio(models.Model):
                     if not rec.reservation_id:
                         for room_rec in rec.room_lines:
                             prod = room_rec.product_id.name
-                            room_obj = h_room_obj.search([('name', '=', prod)])
+                            room_obj = h_room_obj.search([('name', '=',
+                                                            prod)])
                             room_obj.write({'isroom': False})
                             vals = {'room_id': room_obj.id,
                                     'check_in': rec.checkin_date,

@@ -9,10 +9,9 @@
                     <t t-call="report.external_layout">
                         <div class="page">
                             <div class="row">
+                            <br/>
                                 <h2>
-                                    <span>
-                                        <center>Room Activities Report</center>
-                                    </span>
+                                    <span><center>Room Activities Report</center></span>
                                 </h2>
                             </div>
                             <div class="row mt32 mb32">

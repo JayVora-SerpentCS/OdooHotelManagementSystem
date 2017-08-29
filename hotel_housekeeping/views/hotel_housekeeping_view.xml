@@ -15,14 +15,14 @@
                     </header>
                     <sheet>
                         <h1 align="right">
-                            <button string="Clean" name="clean" states="dirty" type="workflow"
+                            <button string="Clean" name="room_clean" states="dirty" type="object"
                                 icon="gtk-clear" />
-                            <button string="Inspect" name="inspect" states="clean"
-                                type="workflow" icon="gtk-find" />
-                            <button string="Done" name="done" states="inspect" type="workflow"
+                            <button string="Inspect" name="room_inspect" states="clean"
+                                type="object" icon="gtk-find" />
+                            <button string="Done" name="room_done" states="inspect" type="object"
                                 icon="terp-camera_test" />
-                            <button string="Cancel" name="cancel" states="clean,inspect"
-                                type="workflow" icon="gtk-cancel" />
+                            <button string="Cancel" name="room_cancel" states="clean,inspect"
+                                type="object" icon="gtk-cancel" />
                             <button string="Set to Dirty" name="action_set_to_dirty"
                                 states="cancel" type="object" icon="gtk-index" />
                         </h1>
