@@ -492,6 +492,7 @@
                      <button name="action_cancel_draft" states="cancel" string="Set to Draft" type="object" icon="gtk-file" class="oe_highlight"/>
                      <button name="action_cancel" string="Cancel Folio" states="draft,manual,progress" type="object" icon="gtk-cancel" class="oe_highlight"/>
                      <button name="invoice_cancel" string="Cancel Folio" states="invoice_except" icon="gtk-cancel" class="oe_highlight"/>
+                     <button name="action_done" string="Set to Done" states="progress" type="object" icon="gtk-apply" class="oe_highlight"/>
                      <field name="state" select="2" widget="statusbar" statusbar_visible="draft,sent,invoiced,done"/>
                  </header>
                   <sheet>

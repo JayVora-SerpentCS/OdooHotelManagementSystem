@@ -601,12 +601,8 @@ class HotelFolio(models.Model):
         '''
         @param self: object pointer
         '''
-        sale_order_obj = self.env['sale.order']
-        res = False
-        for o in self:
-            sale_obj = sale_order_obj.browse([o.order_id.id])
-            res = sale_obj.action_done()
-        return res
+        for sale in self:
+            sale.write({'state': 'done'})
 
     @api.multi
     def action_cancel(self):
