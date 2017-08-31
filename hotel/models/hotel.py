@@ -104,8 +104,8 @@ class HotelRoomType(models.Model):
     _name = "hotel.room.type"
     _description = "Room Type"
 
-    cat_id = fields.Many2one('product.category', 'category', required=True,
-                             delegate=True, select=True, ondelete='cascade')
+    name = fields.Char('Name', size=64, required=True)
+    categ_id = fields.Many2one('hotel.room.type', 'Category')
 
 
 class ProductProduct(models.Model):
@@ -163,6 +163,7 @@ class HotelRoom(models.Model):
                                help='At which floor the room is located.')
     max_adult = fields.Integer('Max Adult')
     max_child = fields.Integer('Max Child')
+    categ_id = fields.Many2one('hotel.room.type', string='Room Category')
     room_amenities = fields.Many2many('hotel.room.amenities', 'temp_tab',
                                       'room_amenities', 'rcateg_id',
                                       string='Room Amenities',
@@ -601,11 +602,7 @@ class HotelFolio(models.Model):
         '''
         @param self: object pointer
         '''
-        sale_order_obj = self.env['sale.order']
-        res = False
-        sale_obj = sale_order_obj.browse([self.order_id.id])
-        res = sale_obj.action_done()
-        return res
+        return self.order_id.action_done()
 
     @api.multi
     def action_cancel(self):

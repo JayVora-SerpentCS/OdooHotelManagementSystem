@@ -527,9 +527,7 @@ class HotelReservationLine(models.Model):
                                'hotel_reservation_line_id', 'room_id',
                                domain="[('isroom','=',True),\
                                ('categ_id','=',categ_id)]")
-    categ_id = fields.Many2one('product.category', 'Room Type',
-                               domain="[('isroomtype','=',True)]",
-                               change_default=True)
+    categ_id = fields.Many2one('hotel.room.type', 'Room Type')
 
     @api.onchange('categ_id')
     def on_change_categ(self):
