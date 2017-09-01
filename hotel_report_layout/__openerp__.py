@@ -23,12 +23,13 @@
 
 {
     'name': 'Report Extended',
+    'version': '8.0.0.1.0.0',
     'category': 'Base',
     'summary': ''' Report Extended Which Insert The Header Of Company Full Address
                    In Qweb Report''',
-    'version': '8.0',
-    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
-    "website": "http://www.serpentcs.com",
+    'license': '',
+    'author': 'Serpent Consulting Services Pvt. Ltd., OpenERP SA',
+    'website': 'http://www.serpentcs.com',
     'depends': ['report'],
     'data': [
         'views/layouts.xml',

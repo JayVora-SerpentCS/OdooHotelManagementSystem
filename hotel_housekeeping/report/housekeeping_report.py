@@ -22,7 +22,7 @@
 #############################################################################
 
 import time
-from openerp import models
+from openerp import models, api
 from openerp.report import report_sxw
 from datetime import datetime
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
@@ -30,6 +30,7 @@ from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 class ActivityReport(report_sxw.rml_parse):
 
+    @api.v7
     def __init__(self, cr, uid, name, context):
         super(ActivityReport, self).__init__(cr, uid, name, context)
         self.localcontext.update({
@@ -38,6 +39,7 @@ class ActivityReport(report_sxw.rml_parse):
             'get_room_activity_detail': self._get_room_activity_detail,
         })
 
+    @api.v7
     def _get_room_activity_detail(self, date_start, date_end, room_data):
         activity_detail = []
         house_keep_act_obj = self.pool.get('hotel.housekeeping.activities')
@@ -66,6 +68,7 @@ class ActivityReport(report_sxw.rml_parse):
                 activity_detail.append(act_val)
         return activity_detail
 
+    @api.v7
     def get_room_no(self, room_no):
         return self.pool.get('hotel.room').browse(self.cr, self.uid,
                                                   room_no).name
