@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 #############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -23,15 +23,14 @@
 
 {
     'name': 'Report Extended',
+    'version': '8.0.0.1.0.0',
     'category': 'Base',
-    'summary': 'Report',
-    'version': '0.01',
-    'description': """
-        Report Extended Which Insert The Header Of Company's Full Address
-        In Qweb Report
-            """,
-    "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA",
-    "website": "http://www.serpentcs.com",
+    'summary': ''' Report Extended Which Insert The Header Of Company Full Address
+                   In Qweb Report''',
+    'license': '',
+    'author': 'Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
+               Odoo Community Association (OCA)',
+    'website': 'http://www.serpentcs.com',
     'depends': ['report'],
     'data': [
         'views/layouts.xml',
@@ -39,5 +38,3 @@
     'installable': True,
     'auto_install': True,
 }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

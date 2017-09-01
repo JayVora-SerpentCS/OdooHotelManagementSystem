@@ -23,10 +23,9 @@
 
 {
     "name": "Restaurant Management - Reporting",
-    "version": "0.03",
+    "version": "8.0.0.1.0.0",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA)",
-    "images": [],
     "license": "",
     "website": "http://www.serpentcs.com, http://www.openerp.com",
     "depends": ["hotel_restaurant", "report_hotel_reservation"],

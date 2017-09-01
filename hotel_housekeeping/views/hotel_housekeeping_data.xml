@@ -1,22 +1,23 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <openerp>
-	<data noupdate="1">
+    <data noupdate="1">
 
-    <!--Demo data for hotel housekeeping activity type-->
+        <!--Demo data for hotel housekeeping activity type -->
+        <record id="hotel_housekeeping_activity_type_0" model="hotel.housekeeping.activity.type">
+            <field name="name">All Activities</field>
+        </record>
 
-		<record id="hotel_housekeeping_activity_type_0" model="hotel.housekeeping.activity.type">
-			<field name="name">All Activities</field>
-		</record>
+        <record id="hotel_housekeeping_activity_type_1" model="hotel.housekeeping.activity.type">
+            <field name="parent_id"
+                search="[('isactivitytype','=',True), ('name', '=', 'All Activities')]" />
+            <field name="name">Room Activity</field>
+        </record>
 
-		<record id="hotel_housekeeping_activity_type_1" model="hotel.housekeeping.activity.type">
-			<field name="parent_id" search="[('isactivitytype','=',True), ('name', '=', 'All Activities')]" />
-			<field name="name">Room Activity</field>
-		</record>
+        <record id="hotel_housekeeping_activity_type_2" model="hotel.housekeeping.activity.type">
+            <field name="parent_id"
+                search="[('isactivitytype','=',True), ('name', '=', 'All Activities')]" />
+            <field name="name">Bed Activity</field>
+        </record>
 
-		<record id="hotel_housekeeping_activity_type_2" model="hotel.housekeeping.activity.type">
-			<field name="parent_id" search="[('isactivitytype','=',True), ('name', '=', 'All Activities')]"/>
-			<field name="name">Bed Activity</field>
-		</record>
-
-	</data>
+    </data>
 </openerp>

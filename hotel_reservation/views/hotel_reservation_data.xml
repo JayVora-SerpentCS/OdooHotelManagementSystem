@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data noupdate="1">
 
@@ -31,7 +31,6 @@
             <field name="partner_id" ref="base.res_partner_5"/>
             <field name="partner_invoice_id" ref="base.res_partner_5"/>
             <field name="partner_shipping_id" ref="base.res_partner_5"/>
-            <field eval="&quot;2013-05-02&quot;" name="date_order"/>
             <field eval="&quot;R/00003&quot;" name="reservation_no"/>
         </record>
 
@@ -45,7 +44,6 @@
             <field eval="&quot;2013-05-02 10:00:00&quot;" name="date_order"/>
             <field eval="&quot;2013-05-05 12:21:00&quot;" name="checkout"/>
             <field eval="&quot;2013-05-02 12:20:00&quot;" name="checkin"/>
-            <field eval="&quot;2013-05-02&quot;" name="date_order"/>
             <field name="partner_id" ref="base.res_partner_9"/>
             <field name="warehouse_id" ref="stock.warehouse0"/> 
             <field name="pricelist_id" ref="product.list0"/>

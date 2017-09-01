@@ -1,29 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-	<data>
+    <data>
 
-		<!--Report for hotel folio -->
+        <!--Report for hotel folio -->
 
-        <report 
-            id="report_hotel_management"
-            string="Hotel Folio"
-            model="hotel.folio" 
-            report_type="qweb-pdf"
-            file="hotel.report_hotel_folio" 
-            name="hotel.report_hotel_folio" 
-            menu="False"
-        />
+        <report id="report_hotel_management" string="Hotel Folio"
+            model="hotel.folio" report_type="qweb-pdf" file="hotel.report_hotel_folio"
+            name="hotel.report_hotel_folio" menu="False" />
 
         <!--Report for currency exchange -->
-        <report 
-            id="report_hotel_currency"
-            string="Encashment Certificate"
-            model="currency.exchange" 
-            report_type="qweb-pdf"
-            file="hotel.report_currency_exchange" 
-            name="hotel.report_currency_exchange"
-            menu="False" 
-        />
+        <report id="report_hotel_currency" string="Encashment Certificate"
+            model="currency.exchange" report_type="qweb-pdf"
+            file="hotel.report_currency_exchange" name="hotel.report_currency_exchange"
+            menu="False" />
 
-	</data>
+    </data>
 </openerp>

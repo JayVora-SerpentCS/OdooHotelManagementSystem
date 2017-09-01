@@ -1,41 +1,45 @@
-<openerp> 
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
     <data>
-       <!-- pos order view Inherited -->
-       <record id ="hotel_folio_pos_inh" model="ir.ui.view">
+        <!-- pos order view Inherited -->
+        <record id="hotel_folio_pos_inh" model="ir.ui.view">
             <field name="name">hotel.folio.pos.inh</field>
             <field name="model">pos.order</field>
-            <field name ="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
-            <field name="arch" type ="xml">
-                <xpath expr ="//form/sheet/group/field[@name='partner_id']"  position ="after">
-                    <field name ="folio_id" />
-                    <field name="room_no"/>
+            <field name="inherit_id" ref="point_of_sale.view_pos_pos_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/group/field[@name='partner_id']"
+                    position="after">
+                    <field name="folio_id" />
+                    <field name="room_no" />
                 </xpath>
             </field>
-       </record>
+        </record>
 
         <record model="ir.ui.view" id="view_hotelfolio2_form2_inherited">
             <field name="name">hotel.folio2.form2.inherited</field>
             <field name="model">hotel.folio</field>
-            <field name="inherit_id" ref="hotel.view_hotel_folio1_form"/>
+            <field name="inherit_id" ref="hotel.view_hotel_folio1_form" />
             <field name="arch" type="xml">
-                <xpath expr ="//form/sheet/notebook/page[@string='Foreign Exchange']"  position ="after">
+                <xpath expr="//form/sheet/notebook/page[@string='Foreign Exchange']"
+                    position="after">
                     <page string="POS Restaurant">
-	                    <separator string="POS Orders Details" colspan="4"/>
-	                    <field name="folio_pos_order_ids" colspan="4" nolabel="1"> 
-	                        <tree colors="blue:state == 'draft';gray:state in ('done','cancel');black:state not in('done','cancel')">
-	                            <field name="date_order"/>
-	                            <field name="name"/>
-	                            <field name="session_id"/>
-	                            <field name="invoice_id"/>
-	                            <field name="user_id"/>
-	                            <field name="state"/>
-	                            <field name="amount_total" sum="Amount total"/>
-	                        </tree>
-	                    </field>
+                        <separator string="POS Orders Details" colspan="4" />
+                        <field name="folio_pos_order_ids" colspan="4" nolabel="1">
+                            <tree
+                                colors="blue:state == 'draft';gray:state in ('done','cancel');black:state not in('done','cancel')">
+                                <field name="date_order" />
+                                <field name="name" />
+                                <field name="session_id" />
+                                <field name="invoice_id" />
+                                <field name="user_id" />
+                                <field name="state" />
+                                <field name="amount_total" sum="Amount total" />
+                            </tree>
+                        </field>
                     </page>
                 </xpath>
             </field>
         </record>
 
-</data>
+    </data>
 </openerp>

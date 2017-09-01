@@ -20,15 +20,16 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 #############################################################################
-from openerp import models
+from openerp import models, api
 import time
 from openerp.report import report_sxw
 
 
 class ReservationDetailReport(report_sxw.rml_parse):
-    def __init__(self, cr, uid, name, context):
-        super(ReservationDetailReport, self).__init__(cr, uid, name,
-                                                      context)
+
+    @api.multi
+    def __init__(self):
+        super(ReservationDetailReport, self).__init__()
         self.localcontext.update({
             'time': time,
             'get_data': self.get_data,
@@ -38,17 +39,17 @@ class ReservationDetailReport(report_sxw.rml_parse):
             'get_room_nos': self._get_room_nos,
             'get_room_used_detail': self._get_room_used_detail,
         })
-        self.context = context
 
+    @api.multi
     def _get_room_type(self, reservation_line):
         room_types = ''
         for line in reservation_line:
             if line.categ_id:
                 room_types += line.categ_id.name
                 room_types += ' '
-
         return room_types
 
+    @api.multi
     def _get_room_nos(self, reservation_line):
         room_nos = ''
         for line in reservation_line:
@@ -57,6 +58,7 @@ class ReservationDetailReport(report_sxw.rml_parse):
                 room_nos += ' '
         return room_nos
 
+    @api.multi
     def get_data(self, date_start, date_end):
         reservation_obj = self.pool.get('hotel.reservation')
         tids = reservation_obj.search(self.cr, self.uid,
@@ -65,6 +67,7 @@ class ReservationDetailReport(report_sxw.rml_parse):
         res = reservation_obj.browse(self.cr, self.uid, tids)
         return res
 
+    @api.multi
     def get_checkin(self, date_start, date_end):
         reservation_obj = self.pool.get('hotel.reservation')
         tids = reservation_obj.search(self.cr, self.uid,
@@ -73,6 +76,7 @@ class ReservationDetailReport(report_sxw.rml_parse):
         res = reservation_obj.browse(self.cr, self.uid, tids)
         return res
 
+    @api.multi
     def get_checkout(self, date_start, date_end):
         reservation_obj = self.pool.get('hotel.reservation')
         tids = reservation_obj.search(self.cr, self.uid,
@@ -81,8 +85,8 @@ class ReservationDetailReport(report_sxw.rml_parse):
         res = reservation_obj.browse(self.cr, self.uid, tids)
         return res
 
+    @api.multi
     def _get_room_used_detail(self, date_start, date_end):
-
         room_used_details = []
         hotel_room_obj = self.pool.get('hotel.room')
         room_ids = hotel_room_obj.search(self.cr, self.uid, [])
