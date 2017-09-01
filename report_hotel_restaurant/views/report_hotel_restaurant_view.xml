@@ -1,69 +1,71 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <openerp>
-	<data>
+    <data>
 
-		<!-- State By restaurant -->
-		<record model="ir.ui.view" id="view_hotel_restaurant_status_tree">
-			<field name="name">report.hotel.restaurant.status.tree</field>
-			<field name="model">report.hotel.restaurant.status</field>
-			<field name="arch" type="xml">
-				<tree string="States By Restaurant">
-					<field name="reservation_id" />
-					<field name="state" />
-				</tree>
-			</field>
-		</record>
+        <!-- State By restaurant -->
+        <record model="ir.ui.view" id="view_hotel_restaurant_status_tree">
+            <field name="name">report.hotel.restaurant.status.tree</field>
+            <field name="model">report.hotel.restaurant.status</field>
+            <field name="arch" type="xml">
+                <tree string="States By Restaurant">
+                    <field name="reservation_id" />
+                    <field name="state" />
+                </tree>
+            </field>
+        </record>
 
-        <!-- Form view of report hotel restaurant status-->
-		<record model="ir.ui.view" id="view_hotel_restaurant_status_form">
-			<field name="name">report.hotel.restaurant.status.form</field>
-			<field name="model">report.hotel.restaurant.status</field>
-			<field name="arch" type="xml">
-				<form string="States By Restaurant">
-					<field name="reservation_id" />
-					<field name="state" />
-				</form>
-			</field>
-		</record>
+        <!-- Form view of report hotel restaurant status -->
+        <record model="ir.ui.view" id="view_hotel_restaurant_status_form">
+            <field name="name">report.hotel.restaurant.status.form</field>
+            <field name="model">report.hotel.restaurant.status</field>
+            <field name="arch" type="xml">
+                <form string="States By Restaurant">
+                    <field name="reservation_id" />
+                    <field name="state" />
+                </form>
+            </field>
+        </record>
 
-        <!-- Search view of report hotel restaurant status  -->
+        <!-- Search view of report hotel restaurant status -->
         <record model="ir.ui.view" id="report_hotel_restaurant_status_search">
             <field name="name">report.hotel.restaurant.status.search</field>
             <field name="model">report.hotel.restaurant.status</field>
             <field name="arch" type="xml">
-                <search string="Hotel Restaurant Status" >
-                    <filter string="Draft" domain="[('state','=', 'draft')]" help="Rooms in draft state" />
-                    <filter string="Confirm" domain="[('state','=', 'confirm')]" help="Rooms in confirm state" />
+                <search string="Hotel Restaurant Status">
+                    <filter string="Draft" domain="[('state','=', 'draft')]"
+                        help="Rooms in draft state" />
+                    <filter string="Confirm" domain="[('state','=', 'confirm')]"
+                        help="Rooms in confirm state" />
                     <filter string="done" domain="[('state','=', 'done')]" help="Rooms in done state" />
                 </search>
             </field>
         </record>
 
-        <!-- Graph view of report hotel restaurant status-->
-		<record model="ir.ui.view" id="view_hotel_restaurant_status_graph">
-			<field name="name">report.hotel.restaurant.status.graph</field>
-			<field name="model">report.hotel.restaurant.status</field>
-			<field name="arch" type="xml">
-				<graph string="States By Restaurant" type="pie">
-					<field name="state" />
-					<field name="nbr" operator="+" />
-				</graph>
-			</field>
-		</record>
+        <!-- Graph view of report hotel restaurant status -->
+        <record model="ir.ui.view" id="view_hotel_restaurant_status_graph">
+            <field name="name">report.hotel.restaurant.status.graph</field>
+            <field name="model">report.hotel.restaurant.status</field>
+            <field name="arch" type="xml">
+                <graph string="States By Restaurant" type="pie">
+                    <field name="state" />
+                    <field name="nbr" operator="+" />
+                </graph>
+            </field>
+        </record>
 
-        <!-- Graph view of report hotel restaurant status-->
-		<record model="ir.ui.view" id="view_hotel_restaurant_status_graph_bar">
-			<field name="name">report.hotel.restaurant.status.graph</field>
-			<field name="model">report.hotel.restaurant.status</field>
-			<field name="arch" type="xml">
-				<graph string="States By Restaurant" type="bar" orientation="verticle">
-					<field name="state" />
-					<field name="nbr" operator="+" />
-				</graph>
-			</field>
-		</record>
+        <!-- Graph view of report hotel restaurant status -->
+        <record model="ir.ui.view" id="view_hotel_restaurant_status_graph_bar">
+            <field name="name">report.hotel.restaurant.status.graph</field>
+            <field name="model">report.hotel.restaurant.status</field>
+            <field name="arch" type="xml">
+                <graph string="States By Restaurant" type="bar" orientation="verticle">
+                    <field name="state" />
+                    <field name="nbr" operator="+" />
+                </graph>
+            </field>
+        </record>
 
-        <!-- Action of report hotel restaurant status-->
+        <!-- Action of report hotel restaurant status -->
         <record model="ir.actions.act_window"
             id="action_report_hotel_restaurant_status_tree_graph">
             <field name="name">States By Restaurant</field>

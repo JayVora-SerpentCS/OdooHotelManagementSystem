@@ -1,17 +1,10 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <openerp>
-	<data>
-
-      <!--Report for hotel housekeeping -->
-      <report 
-            id="report_housekeeping_activity_detail"
-            string="Activity Detail"
-            model="hotel.housekeeping" 
-            report_type="qweb-pdf"
-            file="hotel_housekeeping.report_housekeeping"
-            name="hotel_housekeeping.report_housekeeping"
-            menu="False"
-        />
-
-	</data>
+    <data>
+        <!--Report for hotel housekeeping -->
+        <report id="report_housekeeping_activity_detail" string="Activity Detail"
+            model="hotel.housekeeping" report_type="qweb-pdf"
+            file="hotel_housekeeping.report_housekeeping" name="hotel_housekeeping.report_housekeeping"
+            menu="False" />
+    </data>
 </openerp>

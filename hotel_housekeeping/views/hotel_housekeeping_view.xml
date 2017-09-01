@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-        <!--============================================================ 
-                                Housekeeping
-        ============================================================ -->
-
+        <!-- ===== Hotel Housekeeping ===== -->
         <!-- Form view of hotel housekeeping -->
         <record model="ir.ui.view" id="view_hotel_housekeeping_form">
             <field name="name">hotel.housekeeping.form</field>
             <field name="model">hotel.housekeeping</field>
             <field name="arch" type="xml">
-                <form string="Housekeeping" >
+                <form string="Housekeeping">
                     <header>
                         <field name="state" widget="statusbar" />
                     </header>
                     <sheet>
                         <h1 align="right">
-                            <button string="Clean" name="clean" states="dirty" type="workflow" icon="gtk-clear" />
-                            <button string="Inspect" name="inspect" states="clean" type="workflow" icon="gtk-find" />
-                            <button string="Done" name="done" states="inspect" type="workflow" icon="terp-camera_test" />
-                            <button string="Cancel" name="cancel" states="clean,inspect" type="workflow" icon="gtk-cancel" />
-                            <button string="Set to Dirty" name="action_set_to_dirty" states="cancel" type="object" icon="gtk-index" />
+                            <button string="Clean" name="clean" states="dirty" type="workflow"
+                                icon="gtk-clear" />
+                            <button string="Inspect" name="inspect" states="clean"
+                                type="workflow" icon="gtk-find" />
+                            <button string="Done" name="done" states="inspect" type="workflow"
+                                icon="terp-camera_test" />
+                            <button string="Cancel" name="cancel" states="clean,inspect"
+                                type="workflow" icon="gtk-cancel" />
+                            <button string="Set to Dirty" name="action_set_to_dirty"
+                                states="cancel" type="object" icon="gtk-index" />
                         </h1>
                         <h1>
                             <label string="Housekeeping" />
@@ -41,7 +43,7 @@
                         <newline />
                         <separator string="Activity Lines" colspan="4" />
                         <field name="activity_lines" context="{'room_id':room_no, 'today_date':current_date}"
-                        colspan="4" nolabel="1">
+                            colspan="4" nolabel="1">
                             <form string="Activity Lines">
                                 <group colspan="4" col="4">
                                     <field name="room_id" />
@@ -63,7 +65,7 @@
                             <tree string="Activity Lines" editable="buttom">
                                 <field name="activity_name" />
                                 <field name="housekeeper" />
-                                <field name="room_id"/>
+                                <field name="room_id" />
                                 <field name="today_date" />
                                 <field name="clean_start_time" />
                                 <field name="clean_end_time" />
@@ -100,18 +102,19 @@
             <field name="arch" type="xml">
                 <search string="Housekeeping">
                     <group string='Filters'>
-                        <filter domain="[('state','=','dirty')]" string="Dirty"/>
-                        <filter domain="[('state','=','clean')]" string="Clean"/>
-                        <filter domain="[('state','=','inspect')]" string="Inspect"/>
-                        <filter domain="[('state','=','cancel')]" string="Cancel"/>
-                        <filter domain="[('state','=','done')]" string="Done"/>
+                        <filter domain="[('state','=','dirty')]" string="Dirty" />
+                        <filter domain="[('state','=','clean')]" string="Clean" />
+                        <filter domain="[('state','=','inspect')]" string="Inspect" />
+                        <filter domain="[('state','=','cancel')]" string="Cancel" />
+                        <filter domain="[('state','=','done')]" string="Done" />
                     </group>
-                    <field name="inspector" select="1"/>
-                    <field name="quality"/>
-                    <field name="state"/>
-                    <newline/>
+                    <field name="inspector" select="1" />
+                    <field name="quality" />
+                    <field name="state" />
+                    <newline />
                     <group expand="0" string="Group By">
-                        <filter name="inspector" string="Inspector Name" icon="terp-personal" domain="[]" context="{'group_by':'inspector'}"/>
+                        <filter name="inspector" string="Inspector Name" icon="terp-personal"
+                            domain="[]" context="{'group_by':'inspector'}" />
                     </group>
                 </search>
             </field>
@@ -126,24 +129,23 @@
             <field name="view_id" ref="view_hotel_housekeeping_tree" />
         </record>
         <menuitem id="menu_housekeeping" name="Housekeeping Services"
-        parent="hotel.hotel_management_menu" sequence="2" />
+            parent="hotel.hotel_management_menu" sequence="2" />
         <menuitem name="Housekeeping Services" id="menu_open_hotel_housekeeping_form_tree"
-        action="open_hotel_housekeeping_form_tree" parent="menu_housekeeping"
-        sequence="4" />
+            action="open_hotel_housekeeping_form_tree" parent="menu_housekeeping"
+            sequence="4" />
 
         <!-- ================ Activity Category================= -->
-
         <!-- Form view of hotel housekeeping activity type -->
         <record model="ir.ui.view" id="view_hotel_housekeeping_activity_type_form">
             <field name="name">hotel_housekeeping_activity_type_form</field>
             <field name="model">hotel.housekeeping.activity.type</field>
             <field name="arch" type="xml">
-                <form string="Housekeeping Activity Types" >
+                <form string="Housekeeping Activity Types">
                     <sheet>
                         <group>
-                            <field name="name" select="1" string="Activity Name"/>
+                            <field name="name" select="1" string="Activity Name" />
                             <field name="parent_id" domain="[('isactivitytype','=',True)]" />
-                            <field name="isactivitytype"/>
+                            <field name="isactivitytype" />
                         </group>
                     </sheet>
                 </form>
@@ -162,17 +164,18 @@
         </record>
 
         <!-- Action of hotel housekeeping activity type -->
-        <record model="ir.actions.act_window" id="action_hotel_housekeeping_activity_type_view_form">
+        <record model="ir.actions.act_window"
+            id="action_hotel_housekeeping_activity_type_view_form">
             <field name="name">Housekeeping Activity Types</field>
             <field name="res_model">hotel.housekeeping.activity.type</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
         </record>
         <menuitem id="menu_hotel_activity" name="Activity"
-        parent="hotel.hotel_configuration_menu" sequence="2" />
+            parent="hotel.hotel_configuration_menu" sequence="2" />
         <menuitem name="Activity Types"
-        id="menu_action_hotel_housekeeping_activity_type_view_form" action="action_hotel_housekeeping_activity_type_view_form"
-        parent="menu_hotel_activity" sequence="12" />
+            id="menu_action_hotel_housekeeping_activity_type_view_form" action="action_hotel_housekeeping_activity_type_view_form"
+            parent="menu_hotel_activity" sequence="12" />
 
         <!-- activity -->
         <!-- Form view of hotel activity -->
@@ -180,11 +183,12 @@
             <field name="name">hotel.activity.form</field>
             <field name="model">hotel.activity</field>
             <field name="arch" type="xml">
-                <form string="Housekeeping Activity" >
+                <form string="Housekeeping Activity">
                     <sheet>
                         <group>
-                            <field name="name" select="1" string="Activity Name"/>
-                            <field name="categ_id" select="1" domain="[('isactivitytype','=',True)]" />
+                            <field name="name" select="1" string="Activity Name" />
+                            <field name="categ_id" select="1"
+                                domain="[('isactivitytype','=',True)]" />
                         </group>
                     </sheet>
                 </form>
@@ -197,13 +201,13 @@
             <field name="model">hotel.activity</field>
             <field name="arch" type="xml">
                 <search string="Housekeeping Activity">
-                    <field name="name"/>
+                    <field name="name" />
                     <field name="categ_id" select="1" />
                     <newline />
                     <group expand="0" string="Group By...">
                         <filter name="categ_id" string="Catagory"
-                        icon="terp-stock_symbol-selection" domain="[]"
-                        context="{'group_by':'categ_id'}" />
+                            icon="terp-stock_symbol-selection" domain="[]"
+                            context="{'group_by':'categ_id'}" />
                     </group>
                 </search>
             </field>
@@ -230,6 +234,6 @@
             <field name="context">{'default_available_in_pos':0}</field>
         </record>
         <menuitem name="Activities" id="menu_open_h_activity_form"
-        action="action_h_activity_form" parent="menu_hotel_activity" />
+            action="action_h_activity_form" parent="menu_hotel_activity" />
     </data>
 </openerp>

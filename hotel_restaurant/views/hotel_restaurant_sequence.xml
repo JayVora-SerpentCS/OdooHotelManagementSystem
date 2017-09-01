@@ -1,7 +1,7 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data noupdate="1">
-        <!--Sequences for hotel foodorder-->
+        <!--Sequences for hotel foodorder -->
         <record model="ir.sequence.type" id="seq_type_hotel_rest_order">
             <field name="name">Hotel Order</field>
             <field name="code">hotel.restaurant.order</field>

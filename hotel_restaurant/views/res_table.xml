@@ -1,72 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-<data>
+    <data>
 
-<!--Template for hotel restaurant -->
-
-<template id="report_res_table">
-    <t t-call="report.html_container">
-        <t t-foreach="docs" t-as="o">
-            <t t-call="report.external_layout">
-                <div class="page">
-                    <t t-name="report.external_layout_header">
-                        <div class="header">
+        <!--Template for hotel restaurant -->
+        <template id="report_res_table">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
+                            <t t-name="report.external_layout_header">
+                                <div class="header">
+                                    <div class="row">
+                                        <div class="col-xs-3">
+                                            <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo"
+                                                style="max-height: 75px;max-width: 75px;" />
+                                        </div>
+                                        <div class="col-xs-9 text-right" style="margin-top:20px;"
+                                            t-field="company.name" />
+                                    </div>
+                                    <div class="row zero_min_height">
+                                        <div class="col-xs-12">
+                                            <div style="border-bottom: 1px solid black;" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
                             <div class="row">
-                                <div class="col-xs-3">
-                                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 75px;max-width: 75px;"/>
-                                </div>
-                                <div class="col-xs-9 text-right" style="margin-top:20px;" t-field="company.name"/>
+                                <h2>
+                                    <span>
+                                        <strong>
+                                            <center>Table Reservation List</center>
+                                        </strong>
+                                    </span>
+                                </h2>
                             </div>
-                            <div class="row zero_min_height">
-                                <div class="col-xs-12">
-                                    <div style="border-bottom: 1px solid black;"/>
+                            <div class="row mt32 mb32">
+                                <div class="text-center">
+                                    <strong>From:</strong>
+                                    <span t-esc="formatLang(data['form']['date_start'],date=True)" />
+                                    <strong>To:</strong>
+                                    <span t-esc="formatLang(data['form']['date_end'],date=True)" />
                                 </div>
                             </div>
+                            <table class="table table-condensed container">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <strong>Reservation No</strong>
+                                        </th>
+                                        <th>
+                                            <strong>Customer Name</strong>
+                                        </th>
+                                        <th>
+                                            <strong>Start Date</strong>
+                                        </th>
+                                        <th>
+                                            <strong>End Date</strong>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        t-foreach="get_res_data(data['form']['date_start'],data['form']['date_end'])"
+                                        t-as="o">
+                                        <td style="white-space: nowrap;">
+                                            <span t-esc="o.reservation_id" />
+                                        </td>
+                                        <td style="white-space: nowrap;">
+                                            <span t-att-style="style" t-esc="o.cname.name" />
+                                        </td>
+                                        <td style="white-space: nowrap;">
+                                            <span t-att-style="style" t-esc="formatLang(o.start_date, date=True)" />
+                                        </td>
+                                        <td style="white-space: nowrap;">
+                                            <span t-att-style="style" t-esc="formatLang(o.end_date, date=True)" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </t>
-                        <div class="row">
-                            <h2>
-                                <span><strong><center>Table Reservation List</center></strong></span>
-                            </h2>
-                        </div>
-                        <div class="row mt32 mb32">
-                            <div class="text-center">
-                                <strong>From:</strong>
-                                <span t-esc="formatLang(data['form']['date_start'],date=True)"/>
-                                <strong>To:</strong>
-                                <span t-esc="formatLang(data['form']['date_end'],date=True)"/>
-                            </div>
-                        </div>
-                    <table class="table table-condensed container">
-                        <thead>
-                            <tr>
-                                <th><strong>Reservation No</strong></th>
-                                <th><strong>Customer Name</strong></th>
-                                <th><strong>Start Date</strong></th>
-                                <th><strong>End Date</strong></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr t-foreach="get_res_data(data['form']['date_start'],data['form']['date_end'])" t-as="o">
-                                <td style="white-space: nowrap;">
-                                    <span t-esc="o.reservation_id"/>
-                                </td>
-                                <td style="white-space: nowrap;">
-                                    <span t-att-style="style" t-esc="o.cname.name"/>
-                                </td>
-                                <td style="white-space: nowrap;">
-                                    <span t-att-style="style" t-esc="formatLang(o.start_date, date=True)"/>
-                                </td>
-                                <td style="white-space: nowrap;">
-                                    <span t-att-style="style" t-esc="formatLang(o.end_date, date=True)"/>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                </t>
             </t>
-            </t>
-        </t>
-</template>
-</data>
+        </template>
+    </data>
 </openerp>
