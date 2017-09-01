@@ -49,7 +49,7 @@ class HotelFolioLineExt(models.Model):
         @param self: The object pointer
         @param vals: dictionary of fields value.
         """
-        """update Hotel Room Reservation line history"""
+        # Update Hotel Room Reservation line history
         reservation_line_obj = self.env['hotel.room.reservation.line']
         room_obj = self.env['hotel.room']
         prod_id = vals.get('product_id') or self.product_id.id
@@ -316,7 +316,7 @@ class HotelReservation(models.Model):
     @api.multi
     def set_to_draft_reservation(self):
         for reservation in self:
-            reservation.write({'state':'draft'})
+            reservation.write({'state': 'draft'})
         return True
 
     @api.multi
@@ -559,8 +559,8 @@ class HotelReservationLine(models.Model):
                 if rm_line.status != 'cancel':
                     if (rm_line.check_in <= self.line_id.checkin <=
                         rm_line.check_out) or (rm_line.check_in <=
-                                            self.line_id.checkout <=
-                                            rm_line.check_out):
+                                               self.line_id.checkout <=
+                                               rm_line.check_out):
                         assigned = True
             if not assigned:
                 room_ids.append(room.id)

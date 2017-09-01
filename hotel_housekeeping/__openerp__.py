@@ -26,7 +26,6 @@
     "version": "0.05",
     "author": "Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
     Odoo Community Association (OCA)",
-    "images": [],
     "license": "",
     "category": "Generic Modules/Hotel Housekeeping",
     "website": "http://www.serpentcs.com",
