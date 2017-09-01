@@ -28,7 +28,7 @@
     'summary': ''' Report Extended Which Insert The Header Of Company Full Address
                    In Qweb Report''',
     'license': '',
-    'author': 'Serpent Consulting Services Pvt. Ltd., OpenERP SA\
+    'author': 'Serpent Consulting Services Pvt. Ltd., OpenERP SA,\
                Odoo Community Association (OCA)',
     'website': 'http://www.serpentcs.com',
     'depends': ['report'],
