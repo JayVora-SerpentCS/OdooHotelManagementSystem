@@ -28,16 +28,15 @@ from openerp.report import report_sxw
 
 class HotelRestaurantReport(report_sxw.rml_parse):
 
-    @api.v7
-    def __init__(self, cr, uid, name, context):
-        super(HotelRestaurantReport, self).__init__(cr, uid, name, context)
+    @api.multi
+    def __init__(self):
+        super(HotelRestaurantReport, self).__init__()
         self.localcontext.update({
             'time': time,
             'get_res_data': self.get_res_data,
         })
-        self.context = context
 
-    @api.v7
+    @api.multi
     def get_res_data(self, date_start, date_end):
         rest_reservation_obj = self.pool.get('hotel.restaurant.reservation')
         tids = rest_reservation_obj.search(self.cr, self.uid,
@@ -70,9 +69,9 @@ class ReportBill(models.AbstractModel):
 
 class FolioRestReport(report_sxw.rml_parse):
 
-    @api.v7
-    def __init__(self, cr, uid, name, context):
-        super(FolioRestReport, self).__init__(cr, uid, name, context)
+    @api.multi
+    def __init__(self):
+        super(FolioRestReport, self).__init__()
         self.localcontext.update({'get_data': self.get_data,
                                   'gettotal': self.gettotal,
                                   'getTotal': self.getTotal,
@@ -80,7 +79,7 @@ class FolioRestReport(report_sxw.rml_parse):
                                   })
         self.temp = 0.0
 
-    @api.v7
+    @api.multi
     def get_data(self, date_start, date_end):
         folio_obj = self.pool.get('hotel.folio')
         tids = folio_obj.search(self.cr, self.uid,
@@ -93,7 +92,7 @@ class FolioRestReport(report_sxw.rml_parse):
                 folio_ids.append(rec)
         return folio_ids
 
-    @api.v7
+    @api.multi
     def get_rest(self, date_start, date_end):
         folio_obj = self.pool.get('hotel.folio')
         tids = folio_obj.search(self.cr, self.uid,
@@ -106,7 +105,7 @@ class FolioRestReport(report_sxw.rml_parse):
                 posorder_ids.append(rec.hotel_reservation_order_ids)
         return posorder_ids
 
-    @api.v7
+    @api.multi
     def gettotal(self, pos_order):
         amount = 0.0
         for x in pos_order:
@@ -114,7 +113,7 @@ class FolioRestReport(report_sxw.rml_parse):
         self.temp = self.temp + amount
         return amount
 
-    @api.v7
+    @api.multi
     def getTotal(self):
         return self.temp
 
@@ -128,9 +127,9 @@ class ReportRestOrder(models.AbstractModel):
 
 class FolioReservReport(report_sxw.rml_parse):
 
-    @api.v7
-    def __init__(self, cr, uid, name, context):
-        super(FolioReservReport, self).__init__(cr, uid, name, context)
+    @api.multi
+    def __init__(self):
+        super(FolioReservReport, self).__init__()
         self.localcontext.update({'get_data': self.get_data,
                                   'gettotal': self.gettotal,
                                   'getTotal': self.getTotal,
@@ -138,7 +137,7 @@ class FolioReservReport(report_sxw.rml_parse):
                                   })
         self.temp = 0.0
 
-    @api.v7
+    @api.multi
     def get_data(self, date_start, date_end):
         folio_obj = self.pool.get('hotel.folio')
         tids = folio_obj.search(self.cr, self.uid,
@@ -151,7 +150,7 @@ class FolioReservReport(report_sxw.rml_parse):
                 folio_ids.append(rec)
         return folio_ids
 
-    @api.v7
+    @api.multi
     def get_reserv(self, date_start, date_end):
         folio_obj = self.pool.get('hotel.folio')
         tids = folio_obj.search(self.cr, self.uid,
@@ -164,7 +163,7 @@ class FolioReservReport(report_sxw.rml_parse):
                 posorder_ids.append(rec.hotel_restaurant_order_ids)
         return posorder_ids
 
-    @api.v7
+    @api.multi
     def gettotal(self, pos_order):
         amount = 0.0
         for x in pos_order:
@@ -172,7 +171,7 @@ class FolioReservReport(report_sxw.rml_parse):
         self.temp = self.temp + amount
         return amount
 
-    @api.v7
+    @api.multi
     def getTotal(self):
         return self.temp
 
