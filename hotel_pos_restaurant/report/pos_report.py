@@ -22,15 +22,13 @@
 #############################################################################
 
 import time
-from openerp import models, api
+from openerp import models
 from openerp.report import report_sxw
 
 
 class FolioReport1(report_sxw.rml_parse):
-
-    @api.multi
-    def __init__(self):
-        super(FolioReport1, self).__init__()
+    def __init__(self, cr, uid, name, context):
+        super(FolioReport1, self).__init__(cr, uid, name, context)
         self.localcontext.update({'time': time,
                                   'get_data': self.get_data,
                                   'gettotal': self.gettotal,
@@ -39,7 +37,6 @@ class FolioReport1(report_sxw.rml_parse):
                                   })
         self.temp = 0.0
 
-    @api.multi
     def get_data(self, date_start, date_end):
         folio_obj = self.pool.get('hotel.folio')
         tids = folio_obj.search(self.cr, self.uid,
@@ -52,7 +49,6 @@ class FolioReport1(report_sxw.rml_parse):
                 folio_ids.append(rec)
         return folio_ids
 
-    @api.multi
     def get_pos(self, date_start, date_end):
         folio_obj = self.pool.get('hotel.folio')
         tids = folio_obj.search(self.cr, self.uid,
@@ -65,7 +61,6 @@ class FolioReport1(report_sxw.rml_parse):
                 posorder_ids.append(rec.folio_pos_order_ids)
         return posorder_ids
 
-    @api.multi
     def gettotal(self, pos_order):
         amount = 0.0
         for x in pos_order:
@@ -73,7 +68,6 @@ class FolioReport1(report_sxw.rml_parse):
         self.temp = self.temp + amount
         return amount
 
-    @api.multi
     def getTotal(self):
         return self.temp
 

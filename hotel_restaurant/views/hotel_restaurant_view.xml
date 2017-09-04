@@ -243,7 +243,7 @@
                             icon="gtk-apply" />
                         <button name="%(report_hotel_reservation_order_bill)d"
                             attrs="{'invisible' : ['|', ('folio_id','!=',False), ('state','in',('draft','order'))]}"
-                            type="action" string="generate Bill" class="oe_highlight" />
+                            type="action" string="Generate Bill" class="oe_highlight" />
                         <field name="state" widget="statusbar" />
                     </header>
                     <sheet>
@@ -371,7 +371,7 @@
                             type="object" icon="gtk-file" />
                         <button name="%(report_hotel_res_order_bill)d"
                             attrs="{'invisible' : ['|', ('folio_id','!=',False), ('state','in',('draft','order','cancel'))]}"
-                            type="action" string="generate Bill" class="oe_highlight" />
+                            type="action" string="Generate Bill" class="oe_highlight" />
                         <field name="state" widget="statusbar" statusbar_visible="draft,done,cancel" />
                     </header>
                     <sheet>
