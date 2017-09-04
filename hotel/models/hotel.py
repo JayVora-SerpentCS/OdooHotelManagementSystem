@@ -71,7 +71,6 @@ class ProductCategory(models.Model):
 
     _inherit = "product.category"
 
-    isroomtype = fields.Boolean('Is Room Type')
     isamenitytype = fields.Boolean('Is Amenities Type')
     isservicetype = fields.Boolean('Is Service Type')
 
@@ -81,8 +80,8 @@ class HotelRoomType(models.Model):
     _name = "hotel.room.type"
     _description = "Room Type"
 
-    cat_id = fields.Many2one('product.category', 'category', required=True,
-                             delegate=True, index=True, ondelete='cascade')
+    name = fields.Char('Name', size=64, required=True)
+    categ_id = fields.Many2one('hotel.room.type', 'Category')
 
 
 class ProductProduct(models.Model):
@@ -142,6 +141,7 @@ class HotelRoom(models.Model):
                                help='At which floor the room is located.')
     max_adult = fields.Integer('Max Adult')
     max_child = fields.Integer('Max Child')
+    categ_id = fields.Many2one('hotel.room.type', string='Room Category')
     room_amenities = fields.Many2many('hotel.room.amenities', 'temp_tab',
                                       'room_amenities', 'rcateg_id',
                                       string='Room Amenities',
