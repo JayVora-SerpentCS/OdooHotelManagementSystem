@@ -23,7 +23,7 @@
 
 {
     'name': 'Report Extended',
-    'version': '8.0.0.1.0.0',
+    'version': '8.0.1.0.0',
     'category': 'Base',
     'summary': ''' Report Extended Which Insert The Header Of Company Full Address
                    In Qweb Report''',
