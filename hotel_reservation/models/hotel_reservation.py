@@ -435,8 +435,6 @@ class HotelReservation(models.Model):
                 for r in line.reserve:
                     product_uom = r.uos_id.id
                     price_unit = r.list_price
-                    partner = reservation.partner_id.id
-                    price_list = reservation.pricelist_id.id
                     folio_lines.append((0, 0, {
                         'checkin_date': checkin_date,
                         'checkout_date': checkout_date,
