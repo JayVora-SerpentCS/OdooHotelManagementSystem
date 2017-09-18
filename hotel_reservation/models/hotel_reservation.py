@@ -433,24 +433,14 @@ class HotelReservation(models.Model):
                                       DEFAULT_SERVER_DATETIME_FORMAT)[:5]))
             for line in reservation.reservation_line:
                 for r in line.reserve:
-                    prod = r.product_id.id
-                    partner = reservation.partner_id.id
-                    price_list = reservation.pricelist_id.id
-                    folio_line_obj = self.env['hotel.folio.line']
-                    prod_val = folio_line_obj.product_id_change(
-                        pricelist=price_list, product=prod,
-                        qty=0, uom=False, qty_uos=0, uos=False,
-                        name='', partner_id=partner, lang=False,
-                        update_tax=True, date_order=False
-                    )
-                    prod_uom = prod_val['value'].get('product_uom', False)
-                    price_unit = prod_val['value'].get('price_unit', False)
+                    product_uom = r.uos_id.id
+                    price_unit = r.list_price
                     folio_lines.append((0, 0, {
                         'checkin_date': checkin_date,
                         'checkout_date': checkout_date,
-                        'product_id': r.product_id and r.product_id.id,
+                        'room_no': r.id,
                         'name': reservation['reservation_no'],
-                        'product_uom': prod_uom,
+                        'product_uom': product_uom,
                         'price_unit': price_unit,
                         'product_uom_qty': ((date_a - date_b).days) + 1,
                         'is_reserved': True}))

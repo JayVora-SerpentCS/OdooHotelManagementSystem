@@ -8,23 +8,6 @@
                 <t t-foreach="docs" t-as="o">
                     <t t-call="report.external_layout">
                         <div class="page">
-                            <t t-name="report.external_layout_header">
-                                <div class="header">
-                                    <div class="row">
-                                        <div class="col-xs-3">
-                                            <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo"
-                                                style="max-height: 75px;max-width: 75px;" />
-                                        </div>
-                                        <div class="col-xs-9 text-right" style="margin-top:20px;"
-                                            t-field="company.name" />
-                                    </div>
-                                    <div class="row zero_min_height">
-                                        <div class="col-xs-12">
-                                            <div style="border-bottom: 1px solid black;" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </t>
                             <div class="row">
                                 <h2>
                                     <span>
@@ -93,7 +76,6 @@
             </t>
         </template>
 
-
         <!--Template for currency exchange -->
         <template id="report_currency_exchange">
             <t t-call="report.html_container">
@@ -101,16 +83,6 @@
                     <t t-call="report.external_layout">
                         <div class="page">
                             <div class="row">
-                                <h1>
-                                    <u>
-                                        <center>
-                                            Hotel&#160;
-                                            <span t-field="o.hotel_id.name"></span>
-                                        </center>
-                                    </u>
-                                </h1>
-                                <br />
-                                <br />
                                 <br />
                                 <h3>
                                     <span>
@@ -129,10 +101,6 @@
                                         <strong>Date :</strong>
                                         <span t-field="o.today_date" />
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td>&#160;</td>
-                                    <td>&#160;</td>
                                 </tr>
                                 <tr>
                                     <td width="50%" style="text-align:left;">
@@ -208,51 +176,35 @@
                             <br />
                             <table width="100%">
                                 <tr>
-                                    <td width="80%"></td>
-                                    <td width="10%" style="text-align:left;">
+                                    <td width="60%"></td>
+                                    <td width="20%" style="text-align:left;">
                                         <strong>Subtotal :</strong>
                                     </td>
-                                    <td width="10%" style="text-align:right;">
+                                    <td width="20%" style="text-align:right;">
                                         <span t-field="o.out_amount" />
-                                        &#160;
                                         <span t-field="o.out_curr.name" />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td width="80%">&#160;</td>
-                                    <td width="10%">&#160;</td>
-                                    <td width="10%">&#160;</td>
-                                </tr>
-                                <tr>
-                                    <td width="80%"></td>
-                                    <td width="10%" style="text-align:left;">
+                                    <td width="60%"></td>
+                                    <td width="20%" style="text-align:left;">
                                         <strong style="margin-left:40px">Tax :</strong>
                                     </td>
-                                    <td width="10%" style="text-align:right;">
+                                    <td width="20%" style="text-align:right;">
                                         <span t-field="o.tax" />
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td width="80%">&#160;</td>
-                                    <td width="10%">&#160;</td>
-                                    <td width="10%">&#160;</td>
-                                </tr>
-                                <tr>
-                                    <td width="80%"></td>
-                                    <td width="10%" style="text-align:left;">
+                                    <td width="60%"></td>
+                                    <td width="20%" style="text-align:left;">
                                         <strong style="margin-left:28px">Total :</strong>
                                     </td>
-                                    <td width="10%" style="text-align:right;">
+                                    <td width="20%" style="text-align:right;">
                                         <span t-field="o.total" />
-                                        &#160;
                                         <span t-field="o.out_curr.name" />
                                     </td>
                                 </tr>
                             </table>
-                            <br />
-                            <br />
-                            <br />
-                            <br />
                             <br />
                             <br />
                             <table width="100%">
@@ -294,15 +246,12 @@
                                 <br />
                                 <span t-field="o.hotel_id.partner_id.country_id.name"></span>
                                 <br />
-                                <br />
                                 <span t-field="o.hotel_id.partner_id.website"></span>
                                 <br />
                             </div>
-                            <br />
-                            <br />
                             <p align="center">
-                                * Valid for three months from the date of purchase of foreign
-                                currency *
+                                * Valid for three months from the date of purchase of
+                                foreign currency *
                             </p>
                         </div>
                     </t>

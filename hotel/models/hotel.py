@@ -399,9 +399,9 @@ class HotelFolio(models.Model):
         '''
         folio_rooms = []
         for room in self[0].room_lines:
-            if room.product_id.id in folio_rooms:
+            if room.room_no.id in folio_rooms:
                 raise ValidationError(_('You Cannot Take Same Room Twice'))
-            folio_rooms.append(room.product_id.id)
+            folio_rooms.append(room.room_no.id)
 
     @api.constrains('checkin_date', 'checkout_date')
     def check_dates(self):
@@ -551,7 +551,7 @@ class HotelFolio(models.Model):
     #                line2.write({'invoice_id': invoice_id})
     #                line2.action_invoice_state()
                 for rec in line.room_lines:
-                    room_lst.append(rec.product_id)
+                    room_lst.append(rec.room_no)
                 for room in room_lst:
                     room_obj = self.env['hotel.room'
                                         ].search([('name', '=', room.name)])
@@ -782,6 +782,7 @@ class HotelFolioLine(models.Model):
     order_line_id = fields.Many2one('sale.order.line', string='Order Line',
                                     required=True, delegate=True,
                                     ondelete='cascade')
+    room_no = fields.Many2one('hotel.room', string='Room No.', required=True)
     folio_id = fields.Many2one('hotel.folio', string='Folio',
                                ondelete='cascade')
     checkin_date = fields.Datetime('Check In', required=True,
@@ -791,6 +792,13 @@ class HotelFolioLine(models.Model):
     is_reserved = fields.Boolean('Is Reserved',
                                  help='True when folio line created from \
                                  Reservation')
+
+    @api.onchange('room_no')
+    def onchange_room_no(self):
+        for room in self:
+            room.folio_id.room_lines.product_uom = room.room_no.uos_id
+            room.folio_id.room_lines.name = room.room_no.name
+            room.folio_id.room_lines.price_unit = room.room_no.list_price
 
     @api.model
     def create(self, vals, check=True):
@@ -913,8 +921,8 @@ class HotelFolioLine(models.Model):
         if product:
             sale_line_obj = self.env['sale.order.line'].browse(line_ids)
             return sale_line_obj.product_id_change(pricelist, product, qty=0,
-                                                   uom=False, qty_uos=0,
-                                                   uos=False, name='',
+                                                   uom=uom, qty_uos=0,
+                                                   uos=uos, name='',
                                                    partner_id=partner_id,
                                                    lang=False,
                                                    update_tax=True,
@@ -930,7 +938,7 @@ class HotelFolioLine(models.Model):
         '''
         if product:
             return self.product_id_change(pricelist, product, qty=0,
-                                          uom=False, qty_uos=0, uos=False,
+                                          uom=uom, qty_uos=0, uos=uos,
                                           name='', partner_id=partner_id,
                                           lang=False, update_tax=True,
                                           date_order=False)
@@ -1102,8 +1110,8 @@ class HotelServiceLine(models.Model):
         if product:
             sale_line_obj = self.env['sale.order.line'].browse(line_ids)
             return sale_line_obj.product_id_change(pricelist, product, qty=0,
-                                                   uom=False, qty_uos=0,
-                                                   uos=False, name='',
+                                                   uom=uom, qty_uos=0,
+                                                   uos=uos, name='',
                                                    partner_id=partner_id,
                                                    lang=False,
                                                    update_tax=True,
@@ -1119,7 +1127,7 @@ class HotelServiceLine(models.Model):
         '''
         if product:
             return self.product_id_change(pricelist, product, qty=0,
-                                          uom=False, qty_uos=0, uos=False,
+                                          uom=uom, qty_uos=0, uos=uos,
                                           name='', partner_id=partner_id,
                                           lang=False, update_tax=True,
                                           date_order=False)

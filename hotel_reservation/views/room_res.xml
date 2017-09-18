@@ -1,71 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-
-<!--Template for hotel reservation -->
-<template id="report_roomres_qweb">
-    <t t-call="report.html_container">
-        <t t-foreach="docs" t-as="o">
-            <t t-call="report.external_layout">
-                <div class="page">
-                    <t t-name="report.external_layout_header">
-                        <div class="header">
+        <!--Template for hotel reservation -->
+        <template id="report_roomres_qweb">
+            <t t-call="report.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="report.external_layout">
+                        <div class="page">
                             <div class="row">
-                                <div class="col-xs-3">
-                                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % company.logo" style="max-height: 75px;max-width: 75px;"/>
-                                </div>
-                                <div class="col-xs-9 text-right" style="margin-top:20px;" t-field="company.name"/>
+                                <h2>
+                                    <span>
+                                        <center>Reservation List</center>
+                                    </span>
+                                </h2>
                             </div>
-                            <div class="row zero_min_height">
-                                <div class="col-xs-12">
-                                    <div style="border-bottom: 1px solid black;"/>
+                            <div class="row mt32 mb32">
+                                <div class="text-center">
+                                    <strong>From:</strong>
+                                    <span t-esc="formatLang(data['form']['date_start'],date_time=True)" />
+                                    <strong>To:</strong>
+                                    <span t-esc="formatLang(data['form']['date_end'],date_time=True)" />
                                 </div>
                             </div>
+                            <table class="table table-condensed">
+                                <tr>
+                                    <td>
+                                        <strong>#No</strong>
+                                    </td>
+                                    <td>
+                                        <strong>Guest Name</strong>
+                                    </td>
+                                    <td>
+                                        <strong>Check-In Date</strong>
+                                    </td>
+                                    <td>
+                                        <strong>Check-Out Date</strong>
+                                    </td>
+                                    <td>
+                                        <strong>Room Details</strong>
+                                    </td>
+                                </tr>
+                                <tr
+                                    t-foreach="get_data(data['form']['date_start'],data['form']['date_end'])"
+                                    t-as="info">
+                                    <td>
+                                        <span t-field="info.reservation_no" />
+                                    </td>
+                                    <td>
+                                        <span t-field="info.partner_id.name" />
+                                    </td>
+                                    <td>
+                                        <span t-field="info.checkin" />
+                                    </td>
+                                    <td>
+                                        <span t-field="info.checkout" />
+                                    </td>
+                                    <td>
+                                        <table t-foreach="info.reservation_line" t-as="line">
+                                            <tr>
+                                                <td>
+                                                    <span t-field="line.categ_id.name" />
+                                                </td>
+                                            </tr>
+                                            <tr t-foreach="line.reserve" t-as="o">
+                                                <td>
+                                                    <span t-field="o.name" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
                         </div>
                     </t>
-                    <div class="row"> 
-                        <h2>
-                            <span><center>Reservation List</center></span>
-                        </h2>
-                    </div>
-                    <div class="row mt32 mb32">
-                        <div class="text-center">
-                            <strong>From:</strong>
-                            <span t-esc="formatLang(data['form']['date_start'],date_time=True)"/>
-                            <strong>To:</strong>
-                            <span t-esc="formatLang(data['form']['date_end'],date_time=True)"/>
-                        </div>
-                    </div>
-                    <table class="table table-condensed">
-                        <tr>
-                            <td><strong>#No</strong></td>
-                                <td><strong>Guest Name</strong></td>
-                                <td><strong>Check-In Date</strong></td>
-                                <td><strong>Check-Out Date</strong></td>
-                                <td><strong>Room Details</strong></td>
-                        </tr>
-                        <tr t-foreach="get_data(data['form']['date_start'],data['form']['date_end'])" t-as="info">
-                            <td><span t-field="info.reservation_no"/></td>
-                            <td><span t-field="info.partner_id.name"/></td>
-                            <td><span t-field="info.checkin"/></td>
-                            <td><span t-field="info.checkout"/></td>
-                            <td>
-                                <table   t-foreach="info.reservation_line" t-as="line" >
-                                    <tr>
-                                        <td><span t-field="line.categ_id.name"/></td>
-                                    </tr>
-                                    <tr t-foreach="line.reserve" t-as="o">
-                                        <td><span t-field="o.name"/></td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                     </table>
-                </div>
+                </t>
             </t>
-        </t>
-       </t> 
-    </template>
+        </template>
     </data>
 </openerp>
-

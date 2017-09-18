@@ -243,7 +243,7 @@
                             icon="gtk-apply" />
                         <button name="%(report_hotel_reservation_order_bill)d"
                             attrs="{'invisible' : ['|', ('folio_id','!=',False), ('state','in',('draft','order'))]}"
-                            type="action" string="generate Bill" class="oe_highlight" />
+                            type="action" string="Generate Bill" class="oe_highlight" />
                         <field name="state" widget="statusbar" />
                     </header>
                     <sheet>
@@ -310,6 +310,7 @@
                     toolbar="1">
                     <field name="order_number" />
                     <field name="reservationno" />
+                    <field name="folio_id" />
                     <field name="date1" />
                     <field name="waitername" />
                     <field name="table_no" />
@@ -329,11 +330,13 @@
                         domain="[('date1','&gt;=',datetime.datetime.now().replace(hour=0, minute=0, second=0)),('date1','&lt;=',datetime.datetime.now().replace(hour=23, minute=59, second=59))]"
                         string="Today's Orders" />
                     <field name="reservationno" />
+                    <field name="folio_id" />
                     <group expand="0" string="Group By">
                         <filter name="waitername" string="Waiter Name" icon="terp-personal"
                             domain="[]" context="{'group_by':'waitername'}" />
                         <filter name="date1" string="Date" domain="[]"
                             context="{'group_by':'date1'}" />
+                        <filter name="grp_folio" string="Folio" context="{'group_by':'folio_id'}" />
                     </group>
                 </search>
             </field>
@@ -371,7 +374,7 @@
                             type="object" icon="gtk-file" />
                         <button name="%(report_hotel_res_order_bill)d"
                             attrs="{'invisible' : ['|', ('folio_id','!=',False), ('state','in',('draft','order','cancel'))]}"
-                            type="action" string="generate Bill" class="oe_highlight" />
+                            type="action" string="Generate Bill" class="oe_highlight" />
                         <field name="state" widget="statusbar" statusbar_visible="draft,done,cancel" />
                     </header>
                     <sheet>

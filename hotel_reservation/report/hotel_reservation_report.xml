@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
 <openerp>
     <data>
-
         <!--Report for hotel roomres details -->
         <report id="hotel_roomres_details"
             string="Room Reservation Detail"
