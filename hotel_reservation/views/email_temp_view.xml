@@ -1,30 +1,31 @@
 <openerp>
 
-<!--     <data> -->
-        <!-- EDI related Email Templates menu -->
-<!--         <record model="ir.actions.act_window" id="action_hotel_reservation_template"> -->
-<!--             <field name="name">Email Templates</field> -->
-<!--             <field name="res_model">mail.template</field> -->
-<!--             <field name="view_type">form</field> -->
-<!--             <field name="view_mode">form,tree</field> -->
-<!--             <field name="view_id" ref="mail_template.mail_template_tree" /> -->
-<!--             <field name="search_view_id" ref="mail_template.view_mail_template_search"/> -->
-<!--             <field name="context" eval="{'search_default_model_id': ref('hotel_reservation.model_hotel_reservation')}"/> -->
-<!--         </record> -->
-<!--     </data> -->
+    <!-- <data> -->
+    <!-- EDI related Email Templates menu -->
+    <!-- <record model="ir.actions.act_window" id="action_hotel_reservation_template"> -->
+    <!-- <field name="name">Email Templates</field> -->
+    <!-- <field name="res_model">mail.template</field> -->
+    <!-- <field name="view_type">form</field> -->
+    <!-- <field name="view_mode">form,tree</field> -->
+    <!-- <field name="view_id" ref="mail_template.mail_template_tree" /> -->
+    <!-- <field name="search_view_id" ref="mail_template.view_mail_template_search"/> -->
+    <!-- <field name="context" eval="{'search_default_model_id': ref('hotel_reservation.model_hotel_reservation')}"/> -->
+    <!-- </record> -->
+    <!-- </data> -->
 
     <data noupdate="1">
 
-        <!--Email template for hotel reservation-->
+        <!--Email template for hotel reservation -->
         <record id="mail_template_hotel_reservation" model="mail.template">
             <field name="name">Reservation-Send by Email</field>
-            <field name="email_from">${(object.warehouse_id.partner_id.email or '')}</field>
+            <field name="email_from">${(object.warehouse_id.partner_id.email or '')}
+            </field>
             <field name="subject">Hotel Reservation Detail</field>
             <field name="partner_to">${(object.partner_id.id or '')}</field>
-            <field name="model_id" ref="hotel_reservation.model_hotel_reservation"/>
-            <field name="auto_delete" eval="True"/>
+            <field name="model_id" ref="hotel_reservation.model_hotel_reservation" />
+            <field name="auto_delete" eval="True" />
             <field name="body_html"><![CDATA[
-	            <p>Hello <strong>${object.partner_id.name}</strong>,</p>
+                <p>Hello <strong>${object.partner_id.name}</strong>,</p>
                 <p>This is to confirm your booking for a room at the <strong>${object.warehouse_id.name} Hotel</strong>,&nbsp;
                    % if object.warehouse_id.partner_id.city: 
                    <strong>${object.warehouse_id.partner_id.city}</strong>,&nbsp;
@@ -85,18 +86,19 @@ We look forward to providing you quality services at our hotel.
 % if object.warehouse_id.partner_id.website:
 <strong>${object.warehouse_id.partner_id.website}</strong> <br />
 % endif
-    		 ]]></field>
-</record>
+             ]]></field>
+        </record>
 
 
-        <!--Email template for hotel reservation reminder before 24hrs-->
+        <!--Email template for hotel reservation reminder before 24hrs -->
         <record id="mail_template_reservation_reminder_24hrs" model="mail.template">
             <field name="name">Reservation Reminder Before 24hrs</field>
-            <field name="email_from">${(object.warehouse_id.partner_id.email or '')}</field>
+            <field name="email_from">${(object.warehouse_id.partner_id.email or '')}
+            </field>
             <field name="subject">Hotel Reservation Reminder</field>
             <field name="partner_to">${(object.partner_id.id or '')}</field>
-            <field name="model_id" ref="hotel_reservation.model_hotel_reservation"/>
-            <field name="auto_delete" eval="True"/>
+            <field name="model_id" ref="hotel_reservation.model_hotel_reservation" />
+            <field name="auto_delete" eval="True" />
             <field name="body_html"><![CDATA[
                 <p><left>Hello <strong>${object.partner_id.name}</strong>.</left></p>
                 <p><left>Greetings from <strong>${object.warehouse_id.name} Hotel</strong>.</left></p> 
@@ -162,6 +164,6 @@ We are sure that you will find our services satisfactory. We look forward to pro
              ]]></field>
 
 
-  		</record>
-	</data>
+        </record>
+    </data>
 </openerp>

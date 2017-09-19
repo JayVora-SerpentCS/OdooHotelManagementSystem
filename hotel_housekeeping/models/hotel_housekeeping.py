@@ -24,7 +24,6 @@ from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 from openerp import models, fields, api, _
 from openerp.exceptions import ValidationError
 import time
-from openerp import workflow
 
 
 class ProductCategory(models.Model):
@@ -73,8 +72,11 @@ class HotelHousekeeping(models.Model):
                                      help='Detail of housekeeping activities')
     inspector = fields.Many2one('res.users', 'Inspector', required=True)
     inspect_date_time = fields.Datetime('Inspect Date Time', required=True)
-    quality = fields.Selection([('bad', 'Bad'), ('good', 'Good'),
-                                ('ok', 'Ok')], 'Quality', required=True,
+    quality = fields.Selection([('excellent', 'Excellent'), ('good', 'Good'),
+                                ('average', 'Average'), ('bad', 'Bad'),
+                                ('ok', 'Ok')],
+                               'Quality',
+                               required=True,
                                help="Inspector inspect the room and mark \
 as Bad, Good or Ok. ")
     state = fields.Selection([('dirty', 'Dirty'), ('clean', 'Clean'),
@@ -91,9 +93,11 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'dirty'})
-        for housekeep_id in self.ids:
-            workflow.trg_create(self._uid, self._name, housekeep_id, self._cr)
+        self.state = 'dirty'
+        for line in self:
+            for activity_line in line.activity_lines:
+                activity_line.write({'clean': False})
+                activity_line.write({'dirty': True})
         return True
 
     @api.multi
@@ -137,7 +141,11 @@ as Bad, Good or Ok. ")
         ---------------------------------------
         @param self: object pointer
         """
-        self.write({'state': 'clean'})
+        self.state = 'clean'
+        for line in self:
+            for activity_line in line.activity_lines:
+                    activity_line.write({'clean': True})
+                    activity_line.write({'dirty': False})
         return True
 
 

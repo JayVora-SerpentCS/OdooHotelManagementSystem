@@ -22,11 +22,10 @@
 
 {
     "name": "Hotel Restaurant Management",
-    "version": "0.02",
+    "version": "9.0.2.0.0",
     "author": "Serpent Consulting Services Pvt. Ltd.,\
     Odoo Community Association (OCA)",
     "category": "Generic Modules/Hotel Restaurant",
-    "images": [],
     "website": "http://www.serpentcs.com",
     "depends": ["hotel"],
     "license": "",
@@ -45,5 +44,6 @@
         "views/hotel_restaurant_sequence.xml",
         "views/hotel_restaurant_view.xml",
     ],
+    'images': ['static/description/HotelRestaurant.png'],
     "installable": True
 }

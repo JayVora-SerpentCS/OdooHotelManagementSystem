@@ -1,28 +1,28 @@
 <?xml version="1.0"?>
 <openerp>
-	<data>
-		
-		<report 
-			id="report_hotel_res_order_kot"
-			string="Kitchen Order Tickets"
-			model="hotel.restaurant.order" 
-			report_type="qweb-pdf"
-			file="hotel_restaurant.report_hotel_order_kot"
-			name="hotel_restaurant.report_hotel_order_kot"
-			menu="True"
-		/>
-		
-		<report 
-			id="report_hotel_res_order_bill"
-			string="Customer Bill"
-			model="hotel.restaurant.order" 
-			report_type="qweb-pdf"
-			file="hotel_restaurant.report_order_bill"
-			name="hotel_restaurant.report_order_bill"
-			menu="True"
-		    multi="True"
-		/>
-			
+    <data>
+        
+        <report 
+            id="report_hotel_res_order_kot"
+            string="Kitchen Order Tickets"
+            model="hotel.restaurant.order" 
+            report_type="qweb-pdf"
+            file="hotel_restaurant.report_hotel_order_kot"
+            name="hotel_restaurant.report_hotel_order_kot"
+            menu="True"
+        />
+        
+        <report 
+            id="report_hotel_res_order_bill"
+            string="Customer Bill"
+            model="hotel.restaurant.order" 
+            report_type="qweb-pdf"
+            file="hotel_restaurant.report_order_bill"
+            name="hotel_restaurant.report_order_bill"
+            menu="True"
+            multi="True"
+        />
+            
         <report
             id="report_hotel_reservation_order_bill"
             string="Customer Bill"
@@ -34,15 +34,15 @@
             multi="True"
         />
     
-		<report 
-			id="report_hotel_table_res"
-			string="Table Reservation List"
-			model="hotel.restaurant.reservation" 
-			report_type="qweb-pdf"
-			file="hotel_restaurant.report_res_table"
-			name="hotel_restaurant.report_res_table"
-			menu="False"
-		/>
+        <report 
+            id="report_hotel_table_res"
+            string="Table Reservation List"
+            model="hotel.restaurant.reservation" 
+            report_type="qweb-pdf"
+            file="hotel_restaurant.report_res_table"
+            name="hotel_restaurant.report_res_table"
+            menu="False"
+        />
 
         <report 
             id="report_hotel_res_folio"
@@ -64,6 +64,6 @@
             menu="False"
         />
 
-		
-	</data>
+        
+    </data>
 </openerp>
