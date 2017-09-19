@@ -8,4 +8,7 @@ Serpent Consulting services Pvt. Ltd. provide an efficient OpenERP/ODOO Hotel Ma
 “Our OpenERP HMS is capable of ensuring constant control over all of the activities and processes of your hotel”
  
 
-Choosing our integrated OpenERP/ODOO Hotel Management Software optimizes your hotel’s costs whilst improving your overall productivity. Furthermore, our OpenERP/Odoo software solutions are equipped with tools that aid you to carry out scrupulous checks any sort of expenses made by the hotel. With this the management can easily detect and eliminate any additional waste cost expenses. We have integrated these solutions seamlessly with our PMS and thus, these are capable of ensuring constant control over all the activities and processes of the hotel.
+Choosing our integrated OpenERP/ODOO Hotel Management Software optimizes your hotel’s costs whilst improving your overall productivity. Furthermore, our OpenERP/Odoo software solutions are equipped with tools that aid you to carry out scrupulous checks any sort of expenses made by the hotel. With this the management can easily detect and eliminate any additional waste cost expenses. We have integrated these solutions seamlessly with our PMS and thus, these are capable of ensuring constant control over all the activities and processes of the hotel. 
+
+Help us do better by donating to us and motivating us : http://www.serpentcs.com/page/donate-to-serpentcs
+Thanks.
