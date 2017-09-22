@@ -491,7 +491,7 @@
         <field name="name">hotel_restaurant_kitchen_order_tickets.form</field>
         <field name="model">hotel.restaurant.kitchen.order.tickets</field>
         <field name="arch" type="xml">
-            <form string="KOT List">
+            <form string="KOT List" create="0" edit="0">
                 <sheet>
                     <group>
                         <group colspan="4">
@@ -534,7 +534,7 @@
         <field name="name">hotel_restaurant_kitchen_order_tickets.tree</field>
         <field name="model">hotel.restaurant.kitchen.order.tickets</field>
         <field name="arch" type="xml">
-            <tree string="KOT List">
+            <tree string="KOT List" create="0">
                 <field name="orderno" />
                 <field name="resno" />
                 <field name="kot_date" />

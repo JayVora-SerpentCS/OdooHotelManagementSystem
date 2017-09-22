@@ -1211,8 +1211,8 @@ class CurrencyExchangeRate(models.Model):
     def check_out_curr(self):
         for cur in self:
             if cur.out_curr == cur.input_curr:
-                raise ValidationError('Input currency and output currency must\
-                    not be same')
+                raise ValidationError('Input currency and output currency must'
+                                      ' not be same')
 
     @api.model
     def create(self, vals):

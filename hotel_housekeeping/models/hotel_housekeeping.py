@@ -4,6 +4,7 @@
 import time
 from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 from odoo import models, fields, api, _
+from odoo.osv import expression
 from odoo.exceptions import ValidationError
 
 
@@ -124,8 +125,8 @@ class HotelHousekeeping(models.Model):
         self.state = 'dirty'
         for line in self:
             for activity_line in line.activity_lines:
-                self.activity_lines.write({'clean': False})
-                self.activity_lines.write({'dirty': True})
+                activity_line.write({'clean': False})
+                activity_line.write({'dirty': True})
         return True
 
     @api.multi
@@ -172,8 +173,8 @@ class HotelHousekeeping(models.Model):
         self.state = 'clean'
         for line in self:
             for activity_line in line.activity_lines:
-                    self.activity_lines.write({'clean': True})
-                    self.activity_lines.write({'dirty': False})
+                activity_line.write({'clean': True})
+                activity_line.write({'dirty': False})
         return True
 
 

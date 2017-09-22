@@ -41,12 +41,12 @@ class HotelFolio(models.Model):
         return super(HotelFolio, self).action_cancel()
 
 
-class account_payment(models.Model):
+class AccountPayment(models.Model):
     _inherit = "account.payment"
 
     @api.multi
     def post(self):
-        res = super(account_payment, self).post()
+        res = super(AccountPayment, self).post()
         for rec in self:
             invoice_id = rec._context.get('active_id', False)
             folio = self.env['hotel.folio'].search([('hotel_invoice_id', '=',
