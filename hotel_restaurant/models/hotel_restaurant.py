@@ -254,6 +254,7 @@ class HotelRestaurantKitchenOrderTickets(models.Model):
 
     _name = "hotel.restaurant.kitchen.order.tickets"
     _description = "Includes Hotel Restaurant Order"
+    _rec_name = 'orderno'
 
     orderno = fields.Char('Order Number', size=64, readonly=True)
     resno = fields.Char('Reservation Number', size=64)
@@ -703,7 +704,7 @@ class HotelRestaurantOrderList(models.Model):
     kot_order_list = fields.Many2one('hotel.restaurant.kitchen.order.tickets',
                                      'Kitchen Order Tickets')
     name = fields.Many2one('hotel.menucard', 'Item Name', required=True)
-    item_qty = fields.Char('Qty', size=64, required=True)
+    item_qty = fields.Integer('Qty', size=64, required=True)
     item_rate = fields.Float('Rate', size=64)
     price_subtotal = fields.Float(compute='_compute_price_subtotal',
                                   method=True, string='Subtotal')

@@ -120,12 +120,9 @@ class HotelReservation(models.Model):
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
     reservation_no = fields.Char('Reservation No', size=64, readonly=True)
-    date_order = fields.Datetime('Date Ordered', required=True, readonly=True,
+    date_order = fields.Datetime('Date Ordered', readonly=True, required=True,
                                  index=True,
-                                 states={'draft': [('readonly', False)]},
-                                 default=(lambda *a:
-                                          time.strftime
-                                          (dt)))
+                                 default=(lambda *a: time.strftime(dt)))
     warehouse_id = fields.Many2one('stock.warehouse', 'Hotel', readonly=True,
                                    index=True,
                                    required=True, default=1,
@@ -202,9 +199,6 @@ class HotelReservation(models.Model):
         @return: raise a warning depending on the validation
         '''
         for reservation in self:
-            if len(reservation.reservation_line) == 0:
-                raise ValidationError(_('Please Select Rooms \
-                For Reservation.'))
             for rec in reservation.reservation_line:
                 if len(rec.reserve) == 0:
                     raise ValidationError(_('Please Select Rooms \
