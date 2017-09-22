@@ -56,23 +56,26 @@ class HotelHousekeeping(models.Model):
                               index=True)
     activity_lines = fields.One2many('hotel.housekeeping.activities',
                                      'a_list', 'Activities',
-                                     help='Detail of housekeeping activities')
+                                     states={'done': [('readonly', True)]},
+                                     help='Detail of housekeeping activities',)
     inspector = fields.Many2one('res.users', 'Inspector', required=True,
-                                index=True)
+                                index=True,
+                                states={'done': [('readonly', True)]})
     inspect_date_time = fields.Datetime('Inspect Date Time', required=True,
                                         states={'done': [('readonly', True)]})
     quality = fields.Selection([('excellent', 'Excellent'), ('good', 'Good'),
                                 ('average', 'Average'), ('bad', 'Bad'),
-                                ('ok', 'Ok')], 'Quality', required=True,
+                                ('ok', 'Ok')], 'Quality',
                                states={'done': [('readonly', True)]},
                                help="Inspector inspect the room and mark \
                                 as Excellent, Average, Bad, Good or Ok. ")
-    state = fields.Selection([('dirty', 'Dirty'), ('clean', 'Clean'),
-                              ('inspect', 'Inspect'), ('done', 'Done'),
+    state = fields.Selection([('inspect', 'Inspect'), ('dirty', 'Dirty'),
+                              ('clean', 'Clean'),
+                              ('done', 'Done'),
                               ('cancel', 'Cancelled')], 'State',
                              states={'done': [('readonly', True)]},
                              index=True, required=True, readonly=True,
-                             default=lambda *a: 'dirty')
+                             default=lambda *a: 'inspect')
 
     @api.multi
     def action_set_to_dirty(self):
@@ -84,6 +87,7 @@ class HotelHousekeeping(models.Model):
         """
         self.state = 'dirty'
         for line in self:
+            line.quality = False
             for activity_line in line.activity_lines:
                 self.activity_lines.write({'clean': False})
                 self.activity_lines.write({'dirty': True})
@@ -98,6 +102,7 @@ class HotelHousekeeping(models.Model):
         @param self: object pointer
         """
         self.state = 'cancel'
+        self.quality = False
         return True
 
     @api.multi
@@ -109,6 +114,8 @@ class HotelHousekeeping(models.Model):
         @param self: object pointer
         """
         self.state = 'done'
+        if not self.quality:
+                raise ValidationError(_('Please update quality of work!'))
         return True
 
     @api.multi
@@ -120,6 +127,7 @@ class HotelHousekeeping(models.Model):
         @param self: object pointer
         """
         self.state = 'inspect'
+        self.quality = False
         return True
 
     @api.multi
@@ -132,6 +140,7 @@ class HotelHousekeeping(models.Model):
         """
         self.state = 'clean'
         for line in self:
+            line.quality = False
             for activity_line in line.activity_lines:
                     self.activity_lines.write({'clean': True})
                     self.activity_lines.write({'dirty': False})
