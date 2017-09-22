@@ -24,7 +24,7 @@
 
     <!--Action for hotel housekeeping wizard -->
     <record id="action_hotel_housekeeping_wizard" model="ir.actions.act_window">
-        <field name="name">Activity List</field>
+        <field name="name">Activity Report</field>
         <field name="res_model">hotel.housekeeping.wizard</field>
         <field name="view_type">form</field>
         <field name="view_mode">form</field>
