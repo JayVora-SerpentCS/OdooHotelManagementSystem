@@ -5,6 +5,7 @@ import time
 import datetime
 import urllib2
 from odoo.exceptions import except_orm, ValidationError
+from odoo.osv import expression
 from odoo.tools import misc, DEFAULT_SERVER_DATETIME_FORMAT
 from odoo import models, fields, api, _
 from decimal import Decimal
@@ -82,6 +83,53 @@ class HotelRoomType(models.Model):
 
     name = fields.Char('Name', size=64, required=True)
     categ_id = fields.Many2one('hotel.room.type', 'Category')
+    child_id = fields.One2many('hotel.room.type', 'categ_id',
+                               'Child Categories')
+
+    @api.multi
+    def name_get(self):
+        def get_names(cat):
+            """ Return the list [cat.name, cat.categ_id.name, ...] """
+            res = []
+            while cat:
+                res.append(cat.name)
+                cat = cat.categ_id
+            return res
+        return [(cat.id, " / ".join(reversed(get_names(cat)))) for cat in self]
+
+    @api.model
+    def name_search(self, name, args=None, operator='ilike', limit=100):
+        if not args:
+            args = []
+        if name:
+            # Be sure name_search is symetric to name_get
+            category_names = name.split(' / ')
+            parents = list(category_names)
+            child = parents.pop()
+            domain = [('name', operator, child)]
+            if parents:
+                names_ids = self.name_search(' / '.join(parents), args=args,
+                                             operator='ilike', limit=limit)
+                category_ids = [name_id[0] for name_id in names_ids]
+                if operator in expression.NEGATIVE_TERM_OPERATORS:
+                    categories = self.search([('id', 'not in', category_ids)])
+                    domain = expression.OR([[('categ_id', 'in',
+                                              categories.ids)], domain])
+                else:
+                    domain = expression.AND([[('categ_id', 'in',
+                                               category_ids)], domain])
+                for i in range(1, len(category_names)):
+                    domain = [[('name', operator,
+                                ' / '.join(category_names[-1 - i:]))], domain]
+                    if operator in expression.NEGATIVE_TERM_OPERATORS:
+                        domain = expression.AND(domain)
+                    else:
+                        domain = expression.OR(domain)
+            categories = self.search(expression.AND([domain, args]),
+                                     limit=limit)
+        else:
+            categories = self.search(args, limit=limit)
+        return categories.name_get()
 
 
 class ProductProduct(models.Model):
@@ -141,7 +189,8 @@ class HotelRoom(models.Model):
                                help='At which floor the room is located.')
     max_adult = fields.Integer('Max Adult')
     max_child = fields.Integer('Max Child')
-    categ_id = fields.Many2one('hotel.room.type', string='Room Category')
+    categ_id = fields.Many2one('hotel.room.type', string='Room Category',
+                               required=True)
     room_amenities = fields.Many2many('hotel.room.amenities', 'temp_tab',
                                       'room_amenities', 'rcateg_id',
                                       string='Room Amenities',
@@ -149,10 +198,16 @@ class HotelRoom(models.Model):
     status = fields.Selection([('available', 'Available'),
                                ('occupied', 'Occupied')],
                               'Status', default='available')
-    capacity = fields.Integer('Capacity')
+    capacity = fields.Integer('Capacity', required=True)
     room_line_ids = fields.One2many('folio.room.line', 'room_id',
                                     string='Room Reservation Line')
     product_manager = fields.Many2one('res.users', string='Product Manager')
+
+    @api.constrains('capacity')
+    def check_capacity(self):
+        for room in self:
+            if room.capacity <= 0:
+                raise ValidationError(_('Room capacity must be more than 0'))
 
     @api.onchange('isroom')
     def isroom_change(self):
@@ -1077,6 +1132,55 @@ class CurrencyExchangeRate(models.Model):
     _name = "currency.exchange"
     _description = "currency"
 
+    @api.depends('input_curr', 'out_curr', 'in_amount')
+    def _compute_get_currency(self):
+        '''
+        When you change input_curr, out_curr or in_amount
+        it will update the out_amount of the currency exchange
+        ------------------------------------------------------
+        @param self: object pointer
+        '''
+        for rec in self:
+            rec.out_amount = 0.0
+            if rec.input_curr:
+                result = rec.get_rate(rec.input_curr.name,
+                                      rec.out_curr.name)
+                if rec.out_curr:
+                    rec.rate = result
+                    if rec.rate == Decimal('-1.00'):
+                        raise except_orm(_('Warning'),
+                                         _('Please Check Your \
+                                         Network Connectivity.'))
+                    rec.out_amount = (float(result) * float(rec.in_amount))
+
+    @api.depends('out_amount', 'tax')
+    def _compute_tax_change(self):
+        '''
+        When you change out_amount or tax
+        it will update the total of the currency exchange
+        -------------------------------------------------
+        @param self: object pointer
+        '''
+        for rec in self:
+            if rec.out_amount:
+                ser_tax = ((rec.out_amount) * (float(rec.tax))) / 100
+                rec.total = rec.out_amount + ser_tax
+
+    @api.model
+    def get_rate(self, a, b):
+        '''
+        Calculate rate between two currency
+        -----------------------------------
+        @param self: object pointer
+        '''
+        try:
+            url = 'http://finance.yahoo.com/d/quotes.csv?s=%s%s=X&f=l1' % (a,
+                                                                           b)
+            rate = urllib2.urlopen(url).read().rstrip()
+            return Decimal(rate)
+        except:
+            return Decimal('-1.00')
+
     name = fields.Char('Reg Number', readonly=True, default='New')
     today_date = fields.Datetime('Date Ordered',
                                  required=True,
@@ -1088,18 +1192,27 @@ class CurrencyExchangeRate(models.Model):
     in_amount = fields.Float('Amount Taken', size=64, default=1.0, index=True)
     out_curr = fields.Many2one('res.currency', string='Output Currency',
                                track_visibility='always')
-    out_amount = fields.Float('Subtotal', size=64)
+    out_amount = fields.Float(compute="_compute_get_currency",
+                              string='Subtotal', size=64)
     folio_no = fields.Many2one('hotel.folio', 'Folio Number')
     guest_name = fields.Many2one('res.partner', string='Guest Name')
     room_number = fields.Char(string='Room Number')
     state = fields.Selection([('draft', 'Draft'), ('done', 'Done'),
                               ('cancel', 'Cancel')], 'State', default='draft')
-    rate = fields.Float('Rate(per unit)', size=64)
+    rate = fields.Float(compute="_compute_get_currency",
+                        string='Rate (Per Unit)', size=64, readonly=True)
     hotel_id = fields.Many2one('stock.warehouse', 'Hotel Name')
     type = fields.Selection([('cash', 'Cash')], 'Type', default='cash')
     tax = fields.Selection([('2', '2%'), ('5', '5%'), ('10', '10%')],
                            'Service Tax', default='2')
-    total = fields.Float('Amount Given')
+    total = fields.Float(compute="_compute_tax_change", string='Amount Given')
+
+    @api.constrains('out_curr')
+    def check_out_curr(self):
+        for cur in self:
+            if cur.out_curr == cur.input_curr:
+                raise ValidationError(_('Input currency and output currency '
+                                        'must not be same'))
 
     @api.model
     def create(self, vals):
@@ -1165,54 +1278,6 @@ class CurrencyExchangeRate(models.Model):
         """
         self.state = 'draft'
         return True
-
-    @api.model
-    def get_rate(self, a, b):
-        '''
-        Calculate rate between two currency
-        -----------------------------------
-        @param self: object pointer
-        '''
-        try:
-            url = 'http://finance.yahoo.com/d/quotes.csv?s=%s%s=X&f=l1' % (a,
-                                                                           b)
-            rate = urllib2.urlopen(url).read().rstrip()
-            return Decimal(rate)
-        except:
-            return Decimal('-1.00')
-
-    @api.onchange('input_curr', 'out_curr', 'in_amount')
-    def get_currency(self):
-        '''
-        When you change input_curr, out_curr or in_amount
-        it will update the out_amount of the currency exchange
-        ------------------------------------------------------
-        @param self: object pointer
-        '''
-        self.out_amount = 0.0
-        if self.input_curr:
-            for rec in self:
-                result = rec.get_rate(self.input_curr.name,
-                                      self.out_curr.name)
-                if self.out_curr:
-                    self.rate = result
-                    if self.rate == Decimal('-1.00'):
-                        raise except_orm(_('Warning'),
-                                         _('Please Check Your \
-                                         Network Connectivity.'))
-                    self.out_amount = (float(result) * float(self.in_amount))
-
-    @api.onchange('out_amount', 'tax')
-    def tax_change(self):
-        '''
-        When you change out_amount or tax
-        it will update the total of the currency exchange
-        -------------------------------------------------
-        @param self: object pointer
-        '''
-        if self.out_amount:
-            ser_tax = ((self.out_amount) * (float(self.tax))) / 100
-            self.total = self.out_amount - ser_tax
 
 
 class AccountInvoice(models.Model):
