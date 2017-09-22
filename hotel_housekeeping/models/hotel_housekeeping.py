@@ -115,7 +115,7 @@ class HotelHousekeeping(models.Model):
         """
         self.state = 'done'
         if not self.quality:
-                raise ValidationError(_('Please update quality of work!'))
+            raise ValidationError(_('Please update quality of work!'))
         return True
 
     @api.multi
@@ -142,8 +142,8 @@ class HotelHousekeeping(models.Model):
         for line in self:
             line.quality = False
             for activity_line in line.activity_lines:
-                    self.activity_lines.write({'clean': True})
-                    self.activity_lines.write({'dirty': False})
+                self.activity_lines.write({'clean': True})
+                self.activity_lines.write({'dirty': False})
         return True
 
 
