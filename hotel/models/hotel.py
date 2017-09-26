@@ -68,14 +68,6 @@ class HotelFloor(models.Model):
     sequence = fields.Integer('Sequence', size=64, index=True)
 
 
-class ProductCategory(models.Model):
-
-    _inherit = "product.category"
-
-    isamenitytype = fields.Boolean('Is Amenities Type')
-    isservicetype = fields.Boolean('Is Service Type')
-
-
 class HotelRoomType(models.Model):
 
     _name = "hotel.room.type"
@@ -146,8 +138,55 @@ class HotelRoomAmenitiesType(models.Model):
     _name = 'hotel.room.amenities.type'
     _description = 'amenities Type'
 
-    cat_id = fields.Many2one('product.category', 'category', required=True,
-                             delegate=True, ondelete='cascade')
+    name = fields.Char('Name', size=64, required=True)
+    amenity_id = fields.Many2one('hotel.room.amenities.type', 'Category')
+    child_id = fields.One2many('hotel.room.amenities.type', 'amenity_id',
+                               'Child Categories')
+
+    @api.multi
+    def name_get(self):
+        def get_names(cat):
+            """ Return the list [cat.name, cat.amenity_id.name, ...] """
+            res = []
+            while cat:
+                res.append(cat.name)
+                cat = cat.amenity_id
+            return res
+        return [(cat.id, " / ".join(reversed(get_names(cat)))) for cat in self]
+
+    @api.model
+    def name_search(self, name, args=None, operator='ilike', limit=100):
+        if not args:
+            args = []
+        if name:
+            # Be sure name_search is symetric to name_get
+            category_names = name.split(' / ')
+            parents = list(category_names)
+            child = parents.pop()
+            domain = [('name', operator, child)]
+            if parents:
+                names_ids = self.name_search(' / '.join(parents), args=args,
+                                             operator='ilike', limit=limit)
+                category_ids = [name_id[0] for name_id in names_ids]
+                if operator in expression.NEGATIVE_TERM_OPERATORS:
+                    categories = self.search([('id', 'not in', category_ids)])
+                    domain = expression.OR([[('amenity_id', 'in',
+                                              categories.ids)], domain])
+                else:
+                    domain = expression.AND([[('amenity_id', 'in',
+                                               category_ids)], domain])
+                for i in range(1, len(category_names)):
+                    domain = [[('name', operator,
+                                ' / '.join(category_names[-1 - i:]))], domain]
+                    if operator in expression.NEGATIVE_TERM_OPERATORS:
+                        domain = expression.AND(domain)
+                    else:
+                        domain = expression.OR(domain)
+            categories = self.search(expression.AND([domain, args]),
+                                     limit=limit)
+        else:
+            categories = self.search(args, limit=limit)
+        return categories.name_get()
 
 
 class HotelRoomAmenities(models.Model):
@@ -155,12 +194,11 @@ class HotelRoomAmenities(models.Model):
     _name = 'hotel.room.amenities'
     _description = 'Room amenities'
 
-    room_categ_id = fields.Many2one('product.product', 'Product Category',
-                                    required=True, delegate=True,
-                                    ondelete='cascade')
-    rcateg_id = fields.Many2one('hotel.room.amenities.type',
-                                'Amenity Catagory')
-
+    product_id = fields.Many2one('product.product', 'Product Category',
+                                 required=True, delegate=True,
+                                 ondelete='cascade')
+    categ_id = fields.Many2one('hotel.room.amenities.type',
+                               string='Amenities Category')
     product_manager = fields.Many2one('res.users', string='Product Manager')
 
 
@@ -1102,8 +1140,55 @@ class HotelServiceType(models.Model):
     _name = "hotel.service.type"
     _description = "Service Type"
 
-    ser_id = fields.Many2one('product.category', 'category', required=True,
-                             delegate=True, index=True, ondelete='cascade')
+    name = fields.Char('Service Name', size=64, required=True)
+    service_id = fields.Many2one('hotel.service.type', 'Service Category')
+    child_id = fields.One2many('hotel.service.type', 'service_id',
+                               'Child Categories')
+
+    @api.multi
+    def name_get(self):
+        def get_names(cat):
+            """ Return the list [cat.name, cat.service_id.name, ...] """
+            res = []
+            while cat:
+                res.append(cat.name)
+                cat = cat.service_id
+            return res
+        return [(cat.id, " / ".join(reversed(get_names(cat)))) for cat in self]
+
+    @api.model
+    def name_search(self, name, args=None, operator='ilike', limit=100):
+        if not args:
+            args = []
+        if name:
+            # Be sure name_search is symetric to name_get
+            category_names = name.split(' / ')
+            parents = list(category_names)
+            child = parents.pop()
+            domain = [('name', operator, child)]
+            if parents:
+                names_ids = self.name_search(' / '.join(parents), args=args,
+                                             operator='ilike', limit=limit)
+                category_ids = [name_id[0] for name_id in names_ids]
+                if operator in expression.NEGATIVE_TERM_OPERATORS:
+                    categories = self.search([('id', 'not in', category_ids)])
+                    domain = expression.OR([[('service_id', 'in',
+                                              categories.ids)], domain])
+                else:
+                    domain = expression.AND([[('service_id', 'in',
+                                               category_ids)], domain])
+                for i in range(1, len(category_names)):
+                    domain = [[('name', operator,
+                                ' / '.join(category_names[-1 - i:]))], domain]
+                    if operator in expression.NEGATIVE_TERM_OPERATORS:
+                        domain = expression.AND(domain)
+                    else:
+                        domain = expression.OR(domain)
+            categories = self.search(expression.AND([domain, args]),
+                                     limit=limit)
+        else:
+            categories = self.search(args, limit=limit)
+        return categories.name_get()
 
 
 class HotelServices(models.Model):
@@ -1111,9 +1196,10 @@ class HotelServices(models.Model):
     _name = 'hotel.services'
     _description = 'Hotel Services and its charges'
 
-    service_id = fields.Many2one('product.product', 'Service_id',
+    product_id = fields.Many2one('product.product', 'Service_id',
                                  required=True, ondelete='cascade',
                                  delegate=True)
+    categ_id = fields.Many2one('hotel.service.type', string='Service Category')
     product_manager = fields.Many2one('res.users', string='Product Manager')
 
 
@@ -1205,7 +1291,7 @@ class CurrencyExchangeRate(models.Model):
     type = fields.Selection([('cash', 'Cash')], 'Type', default='cash')
     tax = fields.Selection([('2', '2%'), ('5', '5%'), ('10', '10%')],
                            'Service Tax', default='2')
-    total = fields.Float(compute="_compute_tax_change", string='Amount Given')
+    total = fields.Float(compute="_compute_tax_change", string='Total Amount')
 
     @api.constrains('out_curr')
     def check_out_curr(self):

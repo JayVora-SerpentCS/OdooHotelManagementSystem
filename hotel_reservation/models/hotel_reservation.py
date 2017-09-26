@@ -3,6 +3,7 @@
 
 import time
 import datetime
+from datetime import timedelta
 from datetime import datetime as dtime
 from dateutil.relativedelta import relativedelta
 from odoo import models, fields, api, _
@@ -206,10 +207,12 @@ class HotelReservation(models.Model):
                 cap = 0
                 for room in rec.reserve:
                     cap += room.capacity
-                if (self.adults + self.children) > cap:
+                if (reservation.adults + reservation.children) > cap:
                         raise ValidationError(_('Room Capacity \
                         Exceeded \n Please Select Rooms According to \
                         Members Accomodation.'))
+            if reservation.adults <= 0:
+                raise ValidationError(_('Adults must be more than 0'))
 
     @api.constrains('checkin', 'checkout')
     def check_in_out_dates(self):
@@ -270,6 +273,11 @@ class HotelReservation(models.Model):
             self.pricelist_id = self.partner_id.property_product_pricelist.id
 
     @api.multi
+    def check_overlap(self, date1, date2):
+        delta = date2 - date1
+        return set([date1 + timedelta(days=i) for i in range(delta.days + 1)])
+
+    @api.multi
     def confirmed_reservation(self):
         """
         This method create a new recordset for hotel room reservation line
@@ -279,45 +287,91 @@ class HotelReservation(models.Model):
         """
         reservation_line_obj = self.env['hotel.room.reservation.line']
         for reservation in self:
-            self._cr.execute("select count(*) from hotel_reservation as hr "
-                             "inner join hotel_reservation_line as hrl on \
-                             hrl.line_id = hr.id "
-                             "inner join hotel_reservation_line_room_rel as \
-                             hrlrr on hrlrr.room_id = hrl.id "
-                             "where (checkin,checkout) overlaps \
-                             ( timestamp %s, timestamp %s ) "
-                             "and hr.id <> cast(%s as integer) "
-                             "and hr.state = 'confirm' "
-                             "and hrlrr.hotel_reservation_line_id in ("
-                             "select hrlrr.hotel_reservation_line_id \
-                             from hotel_reservation as hr "
-                             "inner join hotel_reservation_line as \
-                             hrl on hrl.line_id = hr.id "
-                             "inner join hotel_reservation_line_room_rel \
-                             as hrlrr on hrlrr.room_id = hrl.id "
-                             "where hr.id = cast(%s as integer) )",
-                             (reservation.checkin, reservation.checkout,
-                              str(reservation.id), str(reservation.id)))
-            res = self._cr.fetchone()
-            roomcount = res and res[0] or 0.0
-            if roomcount:
-                raise except_orm(_('Warning'), _('You tried to confirm \
-                reservation with room those already reserved in this \
-                reservation period'))
-            else:
-                self.state = 'confirm'
-                for line_id in reservation.reservation_line:
-                    line_id = line_id.reserve
-                    for room_id in line_id:
-                        vals = {
-                            'room_id': room_id.id,
-                            'check_in': reservation.checkin,
-                            'check_out': reservation.checkout,
-                            'state': 'assigned',
-                            'reservation_id': reservation.id,
-                            }
-                        room_id.write({'isroom': False, 'status': 'occupied'})
-                        reservation_line_obj.create(vals)
+            for line_id in reservation.reservation_line:
+                for room_id in line_id.reserve:
+                    if room_id.room_reservation_line_ids:
+                        for reserv in room_id.room_reservation_line_ids.\
+                                search([('status', '=', 'confirm')]):
+                            reserv_checkin = dtime.\
+                                strptime(reservation.checkin, dt)
+                            reserv_checkout = dtime.\
+                                strptime(reservation.checkout, dt)
+                            check_in = dtime.strptime(reserv.check_in, dt)
+                            check_out = dtime.strptime(reserv.check_out, dt)
+                            range1 = [reserv_checkin, reserv_checkout]
+                            range2 = [check_in, check_out]
+                            overlap_dates = self.check_overlap(*range1) \
+                                & self.check_overlap(*range2)
+                            if overlap_dates:
+                                raise ValidationError(_('You tried to Confirm '
+                                                        'reservation with room'
+                                                        ' those already '
+                                                        'reserved in this '
+                                                        'Reservation Period'))
+                            else:
+                                self.state = 'confirm'
+                                for room_id in line_id.reserve:
+                                    vals = {'room_id': room_id.id,
+                                            'check_in': reservation.checkin,
+                                            'check_out': reservation.checkout,
+                                            'state': 'assigned',
+                                            'reservation_id': reservation.id,
+                                            }
+                                    room_id.write({'isroom': False,
+                                                   'status': 'occupied'})
+                                    reservation_line_obj.create(vals)
+                    else:
+                        self.state = 'confirm'
+                        for room_id in line_id.reserve:
+                            vals = {'room_id': room_id.id,
+                                    'check_in': reservation.checkin,
+                                    'check_out': reservation.checkout,
+                                    'state': 'assigned',
+                                    'reservation_id': reservation.id,
+                                    }
+                            room_id.write({'isroom': False,
+                                           'status': 'occupied'})
+                            reservation_line_obj.create(vals)
+#             self._cr.execute("select count(*) from hotel_reservation as hr "
+#                              "inner join hotel_reservation_line as hrl on \
+#                              hrl.line_id = hr.id "
+#                              "inner join hotel_reservation_line_room_rel as \
+#                              hrlrr on hrlrr.room_id = hrl.id "
+#                              "where (checkin,checkout) overlaps \
+#                              ( timestamp %s, timestamp %s ) "
+#                              "and hr.id <> cast(%s as integer) "
+#                              "and hr.state = 'confirm' "
+#                              "and hrlrr.hotel_reservation_line_id in ("
+#                              "select hrlrr.hotel_reservation_line_id \
+#                              from hotel_reservation as hr "
+#                              "inner join hotel_reservation_line as \
+#                              hrl on hrl.line_id = hr.id "
+#                              "inner join hotel_reservation_line_room_rel \
+#                              as hrlrr on hrlrr.room_id = hrl.id "
+#                              "where hr.id = cast(%s as integer) )",
+#                              (reservation.checkin, reservation.checkout,
+#                               str(reservation.id), str(reservation.id)))
+#             res = self._cr.fetchone()
+#             roomcount = res and res[0] or 0.0
+#             if roomcount:
+#                 raise ValidationError(_('You tried to confirm reservation \
+#                 with room those already reserved in this reservation \
+#                     period'))
+#             else:
+#                 self.state = 'confirm'
+#                 for line_id in reservation.reservation_line:
+#                     line_id = line_id.reserve
+#                     for room_id in line_id:
+#                         vals = {
+#                             'room_id': room_id.id,
+#                             'check_in': reservation.checkin,
+#                             'check_out': reservation.checkout,
+#                             'state': 'assigned',
+#                             'reservation_id': reservation.id,
+#                             }
+#                         room_id.write({'isroom': False,
+#                                          'status': 'occupied'})
+#                         reservation_line_obj.create(vals)
         return True
 
     @api.multi
@@ -646,6 +700,7 @@ class RoomReservationSummary(models.Model):
 
     _name = 'room.reservation.summary'
     _description = 'Room reservation summary'
+    _rec_name = 'id'
 
     date_from = fields.Datetime('Date From')
     date_to = fields.Datetime('Date To')

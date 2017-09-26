@@ -18,7 +18,6 @@
         'report/hotel_reservation_report.xml',
         'views/hotel_reservation_sequence.xml',
         'views/hotel_reservation_view.xml',
-        'views/hotel_scheduler.xml',
         'views/report_checkin.xml',
         'views/report_checkout.xml',
         'views/max_room.xml',
