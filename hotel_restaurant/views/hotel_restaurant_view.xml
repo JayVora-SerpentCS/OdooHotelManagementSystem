@@ -637,7 +637,7 @@
                     <field name="image" widget="image" class="oe_avatar oe_left" />
                     <div class="oe_title">
                         <div class="oe_edit_only">
-                            <label for="name" string="Food Item" />
+                            <label for="name" string="Food Item Name" />
                         </div>
                         <h1>
                             <field name="name" />
@@ -698,8 +698,8 @@
         <field name="arch" type="xml">
             <tree string="Hotel Menucard">
                 <field name="name" />
-                <field name="categ_id" />
-                <field name="list_price" string="Item Rate" />
+                <field name="categ_id" string="Food Item Type" />
+                <field name="list_price" string="Food Item Rate" />
             </tree>
         </field>
     </record>
@@ -711,7 +711,7 @@
         <field name="arch" type="xml">
             <search string="Hotel Menucard">
                 <field name="name" />
-                <field name="categ_id" />
+                <field name="categ_id" string="Food Item Type" />
                 <field name="list_price" />
                 <separator />
                 <group expand="0" string="Group By">

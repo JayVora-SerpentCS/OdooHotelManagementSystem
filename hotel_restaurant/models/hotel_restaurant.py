@@ -85,7 +85,7 @@ class HotelMenucard(models.Model):
     product_id = fields.Many2one('product.product', 'Product', required=True,
                                  delegate=True, ondelete='cascade', index=True)
     categ_id = fields.Many2one('hotel.menucard.type',
-                               string='Food Item Category')
+                               string='Food Item Category', required=True)
     image = fields.Binary("Image",
                           help="This field holds the image used as image "
                           "for the product, limited to 1024x1024px.")

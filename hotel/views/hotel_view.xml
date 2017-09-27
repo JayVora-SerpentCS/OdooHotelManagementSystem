@@ -168,12 +168,10 @@
         <field name="arch" type="xml">
             <form string="Hotel Room Amenities">
                 <sheet>
+                    <label for="name" string="Name" />
                     <h1>
                         <field name="name" />
                     </h1>
-                    <group>
-                        <field name="default_code" />
-                    </group>
                     <notebook>
                         <page string="Information">
                             <group colspan="4" col="4">
@@ -181,6 +179,7 @@
                                 <field name="categ_id" string="Amenities Category" />
                                 <field name="product_manager" select="2" string="Amenity manager" />
                                 <field name="uom_id" />
+                                <field name="default_code" />
                                 <field name="uom_po_id" />
                             </group>
                             <newline />
@@ -229,7 +228,7 @@
         <field name="arch" type="xml">
             <search string="Hotel Room Amenities">
                 <field name="name" />
-                <field name="categ_id" />
+                <field name="categ_id" string="Amenities Category" />
                 <field name="list_price" string="ty rate" />
                 <newline />
                 <group expand="0" string="Group By...">
@@ -247,7 +246,7 @@
         <field name="arch" type="xml">
             <tree string="Hotel Room Amenities">
                 <field name="name" />
-                <field name="categ_id" />
+                <field name="categ_id" string="Amenities Category" />
                 <field name="list_price" string="Amenity Rate" invisible="1" />
             </tree>
         </field>
@@ -624,7 +623,7 @@
                                 <field name="partner_shipping_id" domain="[('parent_id','=',partner_id)]" />
                             </group>
                             <newline />
-                            <group colspan="4" col="4">
+                            <group colspan="4" col="4" invisible="1">
                                 <field name="checkin_date" />
                                 <field name="checkout_date" />
                                 <field name="duration" readonly="1" />
@@ -907,20 +906,19 @@
         <field name="arch" type="xml">
             <form string="Hotel Services">
                 <sheet>
+                    <label for="name" string="Name" />
                     <h1>
                         <field name="name" select="1" />
                     </h1>
-                    <group>
-                        <field name="default_code" />
-                    </group>
                     <notebook>
                         <page string="Information">
                             <group>
                                 <group colspan="4" col="4">
                                     <field name="type" select="2" string="Service Type" />
-                                    <field name="categ_id" string="Services Category" />
+                                    <field name="categ_id" string="Service Category" />
                                     <field name="product_manager" select="2" string="Service Manager" />
                                     <field name="uom_id" />
+                                    <field name="default_code" />
                                     <field name="uom_po_id" />
                                 </group>
                             </group>
@@ -970,7 +968,7 @@
         <field name="arch" type="xml">
             <search string="Hotel Services">
                 <field name="name" />
-                <field name="categ_id" />
+                <field name="categ_id" string="Service Category" />
                 <field name="list_price" string="Service rate" />
                 <newline />
                 <group expand="0" string="Group By...">
@@ -988,7 +986,7 @@
         <field name="arch" type="xml">
             <tree string="Hotel Services">
                 <field name="name" />
-                <field name="categ_id" />
+                <field name="categ_id" string="Service Category" />
                 <field name="list_price" string="Service rate" />
             </tree>
         </field>

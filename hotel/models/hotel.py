@@ -198,7 +198,7 @@ class HotelRoomAmenities(models.Model):
                                  required=True, delegate=True,
                                  ondelete='cascade')
     categ_id = fields.Many2one('hotel.room.amenities.type',
-                               string='Amenities Category')
+                               string='Amenities Category', required=True)
     product_manager = fields.Many2one('res.users', string='Product Manager')
 
 
@@ -1199,7 +1199,8 @@ class HotelServices(models.Model):
     product_id = fields.Many2one('product.product', 'Service_id',
                                  required=True, ondelete='cascade',
                                  delegate=True)
-    categ_id = fields.Many2one('hotel.service.type', string='Service Category')
+    categ_id = fields.Many2one('hotel.service.type', string='Service Category',
+                               required=True)
     product_manager = fields.Many2one('res.users', string='Product Manager')
 
 

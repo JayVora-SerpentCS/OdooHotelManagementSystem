@@ -276,6 +276,7 @@
                         <field name="partner_invoice_id" />
                         <field name="partner_order_id" />
                         <field name="partner_shipping_id" />
+                        <field name="adults" />
                     </group>
                 </sheet>
                 <footer>
@@ -289,15 +290,15 @@
         </field>
     </record>
 
-    <!-- Action for room reservation summary -->
+    <!-- Action for Room Reservation Summary -->
     <record id="action_hotel_reservation_summary" model="ir.actions.act_window">
-        <field name="name">Reservations Summary</field>
+        <field name="name">Reservation Summary</field>
         <field name="res_model">room.reservation.summary</field>
         <field name="view_type">form</field>
         <field name="view_mode">form</field>
     </record>
 
-    <menuitem id="menu_action_hotel_reservation_summary" name="Reservations Summary"
+    <menuitem id="menu_action_hotel_reservation_summary" name="Reservation Summary"
         action="action_hotel_reservation_summary" parent="menu_hotel_reservation"
         sequence="3" />
 
