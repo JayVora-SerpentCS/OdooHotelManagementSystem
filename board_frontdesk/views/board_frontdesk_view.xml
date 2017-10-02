@@ -74,6 +74,7 @@
         <field name="type">form</field>
         <field name="arch" type="xml">
             <form string="FrontDesk board">
+                <h2>Hotel FrontDesk Board</h2>
                 <hpaned>
                     <child1>
                         <action string="Reservation" name="%(action_view_frontdesk_cal)d" />

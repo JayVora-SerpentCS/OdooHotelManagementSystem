@@ -5,10 +5,10 @@ import time
 from odoo import models, fields, api, _
 from odoo.exceptions import except_orm, ValidationError
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.osv import expression
 
 
 class HotelFolio(models.Model):
-
     _inherit = 'hotel.folio'
 
     hotel_reservation_order_ids = fields.Many2many('hotel.reservation.order',
@@ -21,27 +21,60 @@ class HotelFolio(models.Model):
                                                   'reserves_id', 'Orders')
 
 
-class ProductCategory(models.Model):
-
-    _inherit = "product.category"
-
-    ismenutype = fields.Boolean('Is Menu Type')
-
-
-class ProductProduct(models.Model):
-
-    _inherit = "product.product"
-
-    ismenucard = fields.Boolean('Is Menucard')
-
-
 class HotelMenucardType(models.Model):
 
     _name = 'hotel.menucard.type'
-    _description = 'Amenities Type'
+    _description = 'Food Item Type'
 
-    menu_id = fields.Many2one('product.category', 'Category', required=True,
-                              delegate=True, ondelete='cascade')
+    name = fields.Char('Name', size=64, required=True)
+    menu_id = fields.Many2one('hotel.menucard.type', string='Food Item Type')
+    child_id = fields.One2many('hotel.menucard.type', 'menu_id',
+                               'Child Categories')
+
+    @api.multi
+    def name_get(self):
+        def get_names(cat):
+            """ Return the list [cat.name, cat.menu_id.name, ...] """
+            res = []
+            while cat:
+                res.append(cat.name)
+                cat = cat.menu_id
+            return res
+        return [(cat.id, " / ".join(reversed(get_names(cat)))) for cat in self]
+
+    @api.model
+    def name_search(self, name, args=None, operator='ilike', limit=100):
+        if not args:
+            args = []
+        if name:
+            # Be sure name_search is symetric to name_get
+            category_names = name.split(' / ')
+            parents = list(category_names)
+            child = parents.pop()
+            domain = [('name', operator, child)]
+            if parents:
+                names_ids = self.name_search(' / '.join(parents), args=args,
+                                             operator='ilike', limit=limit)
+                category_ids = [name_id[0] for name_id in names_ids]
+                if operator in expression.NEGATIVE_TERM_OPERATORS:
+                    categories = self.search([('id', 'not in', category_ids)])
+                    domain = expression.OR([[('menu_id', 'in',
+                                              categories.ids)], domain])
+                else:
+                    domain = expression.AND([[('menu_id', 'in',
+                                               category_ids)], domain])
+                for i in range(1, len(category_names)):
+                    domain = [[('name', operator,
+                                ' / '.join(category_names[-1 - i:]))], domain]
+                    if operator in expression.NEGATIVE_TERM_OPERATORS:
+                        domain = expression.AND(domain)
+                    else:
+                        domain = expression.OR(domain)
+            categories = self.search(expression.AND([domain, args]),
+                                     limit=limit)
+        else:
+            categories = self.search(args, limit=limit)
+        return categories.name_get()
 
 
 class HotelMenucard(models.Model):
@@ -51,6 +84,8 @@ class HotelMenucard(models.Model):
 
     product_id = fields.Many2one('product.product', 'Product', required=True,
                                  delegate=True, ondelete='cascade', index=True)
+    categ_id = fields.Many2one('hotel.menucard.type',
+                               string='Food Item Category', required=True)
     image = fields.Binary("Image",
                           help="This field holds the image used as image "
                           "for the product, limited to 1024x1024px.")
@@ -248,6 +283,13 @@ class HotelRestaurantReservation(models.Model):
         if self.start_date >= self.end_date:
             raise ValidationError(_('Start Date Should be less \
             than the End Date!'))
+        if self.is_folio is True:
+            if self.start_date < self.folio_id.checkin_date:
+                raise ValidationError(_('Start Date Should be greater than the'
+                                        ' Folio Check-in Date!'))
+            if self.end_date > self.folio_id.checkout_date:
+                raise ValidationError(_('End Date Should be less than the'
+                                        ' Folio Check-out Date!'))
 
 
 class HotelRestaurantKitchenOrderTickets(models.Model):

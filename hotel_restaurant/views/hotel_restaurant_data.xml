@@ -22,96 +22,80 @@
     <!-- Food Item Category -->
     <record id="hotel_menucard_type_0" model="hotel.menucard.type">
         <field name="name">All FoodItems</field>
-        <field name="ismenutype">1</field>
     </record>
     <record id="hotel_menucard_type_1" model="hotel.menucard.type">
-        <field name="parent_id"
-            search="[('ismenutype','=',True), ('name', '=', 'All FoodItems')]" />
+        <field name="menu_id" search="[('name', '=', 'All FoodItems')]" />
         <field name="name">Punjabi</field>
-        <field name="ismenutype">1</field>
     </record>
     <record id="hotel_menucard_type_2" model="hotel.menucard.type">
-        <field name="parent_id"
-            search="[('ismenutype','=',True), ('name', '=', 'All FoodItems')]" />
+        <field name="menu_id" search="[('name', '=', 'All FoodItems')]" />
         <field name="name">South Indian</field>
-        <field name="ismenutype">1</field>
     </record>
     <record id="hotel_menucard_type_3" model="hotel.menucard.type">
-        <field name="parent_id"
-            search="[('ismenutype','=',True), ('name', '=', 'All FoodItems')]" />
+        <field name="menu_id" search="[('name', '=', 'All FoodItems')]" />
         <field name="name">Gujarati</field>
-        <field name="ismenutype">1</field>
     </record>
 
     <!-- Food Item List -->
     <record id="hotel_fooditem_0" model="hotel.menucard">
         <field name="name">Paneer Tikaa</field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'Punjabi')]" />
+        <field name="categ_id" search="[('name', '=', 'Punjabi')]" />
         <field name="list_price">50.00</field>
         <field name="image" type="base64"
             file="hotel_restaurant/static/img/paneer_tikka.png" />
     </record>
     <record id="hotel_fooditem_1" model="hotel.menucard">
         <field name="name">Tanduri Roti</field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'Punjabi')]" />
+        <field name="categ_id" search="[('name', '=', 'Punjabi')]" />
         <field name="list_price">10</field>
         <field name="image" type="base64"
             file="hotel_restaurant/static/img/tandoori-roti.jpg" />
     </record>
     <record id="hotel_fooditem_4" model="hotel.menucard">
         <field name="name">Paneer Butter Masala</field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'Punjabi')]" />
+        <field name="categ_id" search="[('name', '=', 'Punjabi')]" />
         <field name="list_price">60.00</field>
         <field name="image" type="base64"
             file="hotel_restaurant/static/img/paneer_butter_masala.jpg" />
     </record>
     <record id="hotel_fooditem_5" model="hotel.menucard">
         <field name="name">Cheese Masala</field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'Punjabi')]" />
+        <field name="categ_id" search="[('name', '=', 'Punjabi')]" />
         <field name="list_price">110.00</field>
         <field name="image" type="base64"
             file="hotel_restaurant/static/img/chees_masala.jpg" />
     </record>
     <record id="hotel_fooditem_6" model="hotel.menucard">
         <field name="name">Paneer Bhurji</field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'Punjabi')]" />
+        <field name="categ_id" search="[('name', '=', 'Punjabi')]" />
         <field name="list_price">80.00</field>
         <field name="image" type="base64"
             file="hotel_restaurant/static/img/paneer_bhurji.jpg" />
     </record>
     <record id="hotel_fooditem_7" model="hotel.menucard">
         <field name="name">Mutter Paneer</field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'Punjabi')]" />
+        <field name="categ_id" search="[('name', '=', 'Punjabi')]" />
         <field name="list_price">70.00</field>
         <field name="image" type="base64"
             file="hotel_restaurant/static/img/muttter_paneer.png" />
     </record>
     <record id="hotel_fooditem_8" model="hotel.menucard">
         <field name="name">Malai Kofta</field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'Punjabi')]" />
+        <field name="categ_id" search="[('name', '=', 'Punjabi')]" />
         <field name="list_price">85.00</field>
         <field name="image" type="base64"
             file="hotel_restaurant/static/img/malai_kofta.jpg" />
     </record>
     <record id="hotel_fooditem_22" model="hotel.menucard">
         <field name="name">Masala kulcha</field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'Punjabi')]" />
+        <field name="categ_id" search="[('name', '=', 'Punjabi')]" />
         <field name="list_price">30</field>
         <field name="image" type="base64"
             file="hotel_restaurant/static/img/masala_kulcha.jpg" />
     </record>
     <record id="hotel_fooditem_10" model="hotel.menucard">
         <field name="name">Paneer Makhani</field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'Punjabi')]" />
+        <field name="categ_id" search="[('name', '=', 'Punjabi')]" />
         <field name="list_price">90.00</field>
         <field name="image" type="base64"
             file="hotel_restaurant/static/img/paneer_makhani.jpg" />
@@ -120,31 +104,27 @@
     <!-- Gujarati -->
     <record id="hotel_fooditem_21" model="hotel.menucard">
         <field name="name">Chole-Bhature</field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'Gujarati')]" />
+        <field name="categ_id" search="[('name', '=', 'Gujarati')]" />
         <field name="list_price">60.00</field>
         <field name="image" type="base64" file="hotel_restaurant/static/img/chole.png" />
     </record>
     <record id="hotel_fooditem_12" model="hotel.menucard">
         <field name="name">Bahji Pav</field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'Gujarati')]" />
+        <field name="categ_id" search="[('name', '=', 'Gujarati')]" />
         <field name="list_price">60</field>
         <field name="image" type="base64"
             file="hotel_restaurant/static/img/bhaji_paw.jpg" />
     </record>
     <record id="hotel_fooditem_13" model="hotel.menucard">
         <field name="name">Khandvi</field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'Gujarati')]" />
+        <field name="categ_id" search="[('name', '=', 'Gujarati')]" />
         <field name="list_price">40</field>
         <field name="image" type="base64"
             file="hotel_restaurant/static/img/khandvi.jpg" />
     </record>
     <record id="hotel_fooditem_14" model="hotel.menucard">
         <field name="name">Halva</field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'Gujarati')]" />
+        <field name="categ_id" search="[('name', '=', 'Gujarati')]" />
         <field name="list_price">80</field>
         <field name="image" type="base64" file="hotel_restaurant/static/img/Halva.jpg" />
     </record>
@@ -152,54 +132,47 @@
     <!-- South Indian -->
     <record id="hotel_fooditem_2" model="hotel.menucard">
         <field name="name">Dosa</field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'South Indian')]" />
+        <field name="categ_id" search="[('name', '=', 'South Indian')]" />
         <field name="list_price">30.00</field>
         <field name="image" type="base64" file="hotel_restaurant/static/img/dosa.png" />
     </record>
     <record id="hotel_fooditem_15" model="hotel.menucard">
         <field name="name">Idli-Sambar</field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'South Indian')]" />
+        <field name="categ_id" search="[('name', '=', 'South Indian')]" />
         <field name="list_price">40.00</field>
         <field name="image" type="base64"
             file="hotel_restaurant/static/img/Idli_sambar.jpg" />
     </record>
     <record id="hotel_fooditem_16" model="hotel.menucard">
         <field name="name">Upma</field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'South Indian')]" />
+        <field name="categ_id" search="[('name', '=', 'South Indian')]" />
         <field name="list_price">30.00</field>
         <field name="image" type="base64" file="hotel_restaurant/static/img/upma.jpg" />
     </record>
     <record id="hotel_fooditem_17" model="hotel.menucard">
         <field name="name">Vada-Sambar</field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'South Indian')]" />
+        <field name="categ_id" search="[('name', '=', 'South Indian')]" />
         <field name="list_price">50.00</field>
         <field name="image" type="base64"
             file="hotel_restaurant/static/img/vada_sambhar.jpg" />
     </record>
     <record id="hotel_fooditem_18" model="hotel.menucard">
         <field name="name">Uttapam</field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'South Indian')]" />
+        <field name="categ_id" search="[('name', '=', 'South Indian')]" />
         <field name="list_price">70.00</field>
         <field name="image" type="base64"
             file="hotel_restaurant/static/img/uttapam.jpg" />
     </record>
     <record id="hotel_fooditem_19" model="hotel.menucard">
         <field name="name">Appam </field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'South Indian')]" />
+        <field name="categ_id" search="[('name', '=', 'South Indian')]" />
         <field name="list_price">60.00</field>
         <field name="image" type="base64"
             file="hotel_restaurant/static/img/appam1.jpg" />
     </record>
     <record id="hotel_fooditem_20" model="hotel.menucard">
         <field name="name">Pongal</field>
-        <field name="categ_id"
-            search="[('ismenutype','=',True), ('name', '=', 'South Indian')]" />
+        <field name="categ_id" search="[('name', '=', 'South Indian')]" />
         <field name="list_price">50.00</field>
         <field name="image" type="base64"
             file="hotel_restaurant/static/img/pongal.jpg" />

@@ -15,7 +15,7 @@ class HotelHousekeepingActivityType(models.Model):
 
     name = fields.Char('Name', size=64, required=True)
     activity_id = fields.Many2one('hotel.housekeeping.activity.type',
-                                  'Category')
+                                  'Activity Type')
 
     @api.multi
     def name_get(self):
